@@ -14,9 +14,9 @@ Sources de vérité (lues pour rédiger ce document) :
 | `src/controller/presenter.ts` | `GamePresenter` : mise en scène de chaque événement |
 | `src/core/money.ts` | `bookToMoney()` : seule conversion book → monnaie |
 | `public/game-math-config.json`, `src/config/math.ts` | règles fournies par les maths (**provisoires**) |
-| `tools/fixtures/kit.ts`, `validate.ts`, `scenarios.ts`, `build.ts` | kit d'auteur, validateur, 30 books de démonstration |
+| `tools/fixtures/kit.ts`, `validate.ts`, `scenarios.ts`, `build.ts` | kit d'auteur, validateur, 33 books de démonstration |
 | `public/fixtures/fixtures.json` | books de démonstration générés (servis par le mode local et le mock RGS) |
-| `tests/fixtures.test.ts` | 38 tests sur les fixtures |
+| `tests/fixtures.test.ts` | 44 tests sur les fixtures |
 
 ---
 
@@ -366,8 +366,8 @@ Le `winInfo` et `updateTumbleWin` déclarent le **gain réel** (au-delà du plaf
 | Relances (intention, `docs/CONCEPT.md`) | 2 Scatters : **+2** · 3 Scatters : **+5** | 2 : **+2** · 3 : **+5** · 4 et plus : **+8** |
 | Achat | mode `BONUS` (100 ×) | mode `SUPER` (350 ×) |
 
-- `game-math-config.json` ne décrit aujourd'hui qu'**un seul couple de relance** par bonus : `{ "scatters": 3, "spins": 5 }`. Le validateur ne contrôle que « au moins 2 Scatters visibles » et l'arithmétique `totalFs = ancien + extra`.
-- Format prévu pour la table complète : `freeSpins.<standard|super>.retriggers = { "2": 2, "3": 5, "4": 8 }` (le dernier palier se lit « 4 ou plus »). Le menu des règles sait l'afficher (`retriggerTable` dans `src/ui/menu.ts`), **mais le schéma de `src/config/math.ts` ne déclare pas ce champ : zod le supprime au chargement**. Il faut étendre `MathConfigSchema` avant de livrer ce format.
+- `game-math-config.json` porte la table complète : `freeSpins.standard.retriggers = { "2": 2, "3": 5 }`, `freeSpins.super.retriggers = { "2": 2, "3": 5, "4": 8 }` (l'ancien couple `retrigger: { "scatters": 3, "spins": 5 }` reste présent). Le validateur contrôle « au moins 2 Scatters visibles », l'arithmétique `totalFs = ancien + extra` et qu'**un tour de bonus à 2 Scatters ou plus est relancé** ; la conformité de `extra` à la table est contrôlée par les tests des fixtures (§ 12.4).
+- Format prévu pour la table complète : `freeSpins.<standard|super>.retriggers = { "2": 2, "3": 5, "4": 8 }` (le dernier palier se lit « 4 ou plus »). Le menu des règles l'affiche (`retriggerTable` dans `src/ui/menu.ts`) et **`MathConfigSchema` (`src/config/math.ts`) déclare ce champ** (`retriggers`, facultatif) : la config provisoire le porte déjà.
 - Le gain du spin déclencheur **fait partie du total du bonus** : `setTotalWin` pendant le bonus = gain de base + gains des free spins.
 - Les fixtures n'utilisent **aucun bâton (`stick`) en super bonus** (fagots et `keg` seulement) ; c'est une règle des tests, à confirmer par les maths.
 
@@ -394,10 +394,10 @@ D'après `public/game-math-config.json` (**valeurs provisoires**) :
 
 | Mode | Nom joueur | Coût (× mise) | RTP | Type | Détail | Fixtures |
 |---|---|---:|---:|---|---|---|
-| `BASE` | jeu de base | 1 | 96,50 % | `base` | — | F01–F15, F20–F24, F27 |
+| `BASE` | jeu de base | 1 | 96,50 % | `base` | — | F01–F15, F20–F24, F27, F31, F32 |
 | `ANTE` | DOUBLE FUSE | 1,5 | 96,50 % | `ante` | `bonusChanceFactor: 3` (« 3× BONUS CHANCE ») | F28–F30 |
 | `BONUS` | achat SUNDOWN SHIFT | 100 | 96,60 % | `bonus` | `standard`, 10 tours | F16, F25 |
-| `SUPER` | achat FLOODLIGHT SHIFT | 350 | 96,60 % | `bonus` | `super`, 12 tours | F17, F26 |
+| `SUPER` | achat FLOODLIGHT SHIFT | 350 | 96,60 % | `bonus` | `super`, 12 tours | F17, F26, F33 |
 | `BLAST` | TNT SPIN | 25 | 96,55 % | `feature` | une révélation avec **au moins 2 charges** | F18 |
 | `MEGA` | MEGA BLAST SPIN | 60 | 96,55 % | `feature` | une révélation avec **une charge 4 × 4** | F19 |
 
@@ -412,7 +412,7 @@ D'après `public/game-math-config.json` (**valeurs provisoires**) :
 
 Le blocage est porté par **`tools/check-release.mjs`** (ajouté le 28/09, pas encore commité) : `node tools/check-release.mjs --dir dist --stake` sort avec le **code 2 (« BLOQUANT pour Stake »)** si la config de la build est provisoire. **Sans `--stake`, ce n'est qu'un avertissement** ; `tools/package-delivery.mjs` l'appelle aujourd'hui sans `--stake`. Le jeu lui-même ne lit pas ce drapeau, et le menu des règles n'affiche jamais le statut « provisoire ».
 
-Autres écarts à corriger : `contractVersion` vaut `"1.0.0"` dans la config, et `tools/fixtures/build.ts` écrit `"contract": "1.0.0"` dans `fixtures.json`, alors que le code est en **1.1.0** ; la charge 4 × 4 s'appelle `crate` dans la section `tnt` de la config au lieu de **`keg`**.
+Versions et clés alignées : `contractVersion` vaut `"1.1.0"` dans la config, `tools/fixtures/build.ts` écrit `"contract": "1.1.0"` (`CONTRACT_VERSION`) dans `fixtures.json`, et la charge 4 × 4 s'appelle **`keg`** dans la section `tnt` de la config.
 
 ## 12. Invariants vérifiés
 
@@ -508,7 +508,7 @@ Il appelle d'abord `parseBook()` : en cas d'échec, il s'arrête et rend ces err
 40. `super` : 4 Scatters ou plus.
 
 **`freeSpinRetrigger`**
-41. Au moins 2 Scatters visibles.
+41. Au moins 2 Scatters visibles. Réciproquement, un tour de bonus qui montre **2 Scatters ou plus** sans `freeSpinRetrigger` est refusé (contrôle au tour suivant ou à `freeSpinEnd` ; pas après un `wincap`).
 
 **`freeSpinEnd`**
 42. `amount` = total du bonus.
@@ -523,35 +523,41 @@ Il appelle d'abord `parseBook()` : en cas d'échec, il s'arrête et rend ces err
 45. Première révélation avec 3 Scatters ou plus ⇒ un `freeSpinTrigger` existe.
 46. `payoutMultiplier ≤ maxWinX × 100`.
 
-### 12.4 Tests des fixtures (`tests/fixtures.test.ts`, 38 tests)
+### 12.4 Tests des fixtures (`tests/fixtures.test.ts`, 44 tests)
 
-- Chaque scénario se construit et le validateur ne signale rien.
-- Ids F01…F28 présents (30 au total), uniques ; poids ≥ 1, tags et note non vides ; mode connu de la config.
+- Chaque scénario se construit et le validateur ne signale rien (33 scénarios).
+- Ids F01…F33 présents, uniques ; poids ≥ 1, tags et note non vides ; mode connu de la config.
 - **Chaque connexion vaut table × ways** (× multiplicateur, avec `baseWin = table × ways`).
 - Coûts et modes : § 11.
-- Zones de `blast` consécutifs **disjointes** ; **pas de bâton en super bonus**.
+- **Explosions et chaînes**, étape par étape (`reveal` ou `tumbleBoard`) :
+  - dans une **même chaîne**, les zones **peuvent se chevaucher** : la charge prise (`from`) est par construction dans sa zone et dans celle de la charge qui la déclenche ; les zones de charges reliées (`wired`) peuvent aussi se recouvrir ;
+  - `link` = 0, 1, 2… ; lien > 0 : `from` = charge précédente de la chaîne dont la zone contient la charge, ou `wired` (super bonus seulement) ; une charge n'explose qu'une fois ;
+  - `carve` = rectangle englobant des zones de sa chaîne, `cells = w × h` ; aucune chaîne laissée sans `carve` ;
+  - **chaînes distinctes** d'une étape : numérotées 0, 1, 2…, zones et géants **disjoints** ;
+  - super bonus : **pas de bâton**, **une seule chaîne par étape**.
+  Un test dédié vérifie que ce contrôle accepte une chaîne par contact et une chaîne `wired` en super bonus, et rejette chaque cas invalide (chaînes distinctes qui se chevauchent, charge hors de la zone de son `from`, `wired` hors super bonus, géant ≠ rectangle englobant, lien hors séquence, `carve` manquant, bâton ou deux chaînes en super bonus).
+- **Relances** : `extra` conforme à `freeSpins.<bonus>.retriggers` selon les Scatters visibles (2 → +2, 3 → +5, 4 et plus → +8 en super ; le dernier palier vaut « N ou plus ») ; `positions` = Scatters visibles. Un test dédié vérifie que le validateur refuse un tour de bonus à 2 Scatters sans relance.
 - Au plus un Scatter par rouleau **sur toutes les grilles** (révélations et chutes) ; **aucun Scatter dans `newSymbols`** ; toute révélation à 3 Scatters ou plus est suivie d'un déclenchement ou d'une relance.
 - Chaque grille révélée est **unique** dans tout le jeu de fixtures.
-- Les vitrines montrent ce qu'elles annoncent (paliers ×10 à ×1 000, F26 au plafond, F27 à ×0,05…).
+- Les vitrines montrent ce qu'elles annoncent (paliers ×10 à ×1 000, F26 au plafond, F27 à ×0,05…), dont les chaînes :
+  - **F31** (`BASE`, ×16) : bâton → fagot pris dans sa zone (`from`), **un** géant H4 3 × 4 sur le rectangle englobant, 64 ways, chute ;
+  - **F32** (`BASE`, ×937,50) : bâton → fagot → baril (liens 0, 1, 2), géant L4 **5 × 5**, 3 125 ways ;
+  - **F33** (`SUPER`, ×1 955,50) : deux étapes à charges **reliées** (`wired`) en une seule explosion, Cornerstone ×1 → ×10 → ×25 → ×45 (+1 par case sculptée), relance à 2 Scatters **+2** (12 → 14 tours), fin du bonus.
 - Chaque `winInfo` est suivi d'un `tumbleBoard` ou d'un `wincap` ; `wincap` est suivi de `finalWin` ; le plafond est réellement atteint.
-
-> **Attention** : la règle « zones disjointes » rejette toute **chaîne par contact** (`from`) : la charge prise est, par construction, dans sa zone et dans celle de la charge précédente. Aucune fixture ne montre de chaîne (`link > 0`) ni de charges reliées (`wired`). Le validateur, lui, les accepte.
 
 ### 12.5 Attendu mais non contrôlé automatiquement
 
 - `gameType` cohérent (`basegame` hors bonus, `freegame` en bonus).
 - **Au plus une charge par rouleau** (`docs/CONCEPT.md`).
-- En bonus, **un `updateGlobalMult(carve)` après chaque `carve`**.
-- Relance : `extra` conforme à la table 2 → +2, 3 → +5, 4+ → +8.
-- Super bonus : une **seule** chaîne par étape.
-- `chain` numérotées 0, 1, 2… dans l'étape (le kit le fait ; seul le lien entre `blast` et `carve` est vérifié).
+- En bonus, **un `updateGlobalMult(carve)` après chaque `carve`** (le validateur vérifie sa valeur quand il est présent, pas sa présence).
+- Pour un **book externe** : conformité de `extra` à la table de relance, chaîne unique par étape en super bonus, numérotation des chaînes et chaînes distinctes disjointes. Ces règles sont vérifiées par les tests des fixtures (§ 12.4), pas par `validateBook`.
 
 ## 13. Valider un book
 
 | Commande | Effet |
 |---|---|
-| `npm run fixtures` | construit les 30 scénarios (`tools/fixtures/scenarios.ts`), valide chacun, **écrit** `public/fixtures/fixtures.json` et `docs/fixtures-ascii.txt` (grilles imprimées). Liste chaque scénario (✓ ou ✗ avec ses erreurs) et **sort en erreur (code 1) s'il en reste un seul invalide** ; rien n'est « réparé ». |
-| `npx vitest run tests/fixtures.test.ts` | rejoue les 38 tests du § 12.4 (état au 28/09 : **38 réussis**). |
+| `npm run fixtures` | construit les 33 scénarios (`tools/fixtures/scenarios.ts`), valide chacun, **écrit** `public/fixtures/fixtures.json` et `docs/fixtures-ascii.txt` (grilles imprimées). Liste chaque scénario (✓ ou ✗ avec ses erreurs) et **sort en erreur (code 1) s'il en reste un seul invalide** ; rien n'est « réparé ». |
+| `npx vitest run tests/fixtures.test.ts` | rejoue les 44 tests du § 12.4 (état au 28/09 : **44 réussis**). |
 | `npm test` | tous les tests (`tests/*.test.ts`). |
 
 Pour un **book externe** (livré par les maths), aucun script n'existe encore. Exemple minimal, à placer à la racine du dépôt et à lancer avec `npx tsx check-book.ts books.json` :
@@ -802,7 +808,7 @@ Fixture : `SUPER` (coût 350), tags `buy bonus super max-win wincap keg multipli
 ## 15. Ce que l'équipe maths doit livrer
 
 1. **Les books de production** de chaque mode (`BASE`, `ANTE`, `BONUS`, `SUPER`, `BLAST`, `MEGA`) au format v1.1, qui passent **`parseBook` et `validateBook` sans aucune remarque**.
-2. **`game-math-config.json` validé** : `provisional: false`, `contractVersion: "1.1.0"`, table de paiement **par way**, RTP et **coût** de chaque mode, facteur Ante (`bonusChanceFactor`), tours (10 / 12), seuils de célébration, `maxWinX`, tailles des charges avec la clé **`keg`** (pas `crate`).
+2. **`game-math-config.json` validé** : `provisional: false`, `contractVersion: "1.1.0"`, table de paiement **par way**, RTP et **coût** de chaque mode, facteur Ante (`bonusChanceFactor`), tours (10 / 12), seuils de célébration, `maxWinX`, tailles des charges avec la clé **`keg`**.
 3. **La table complète des relances** (2 → +2, 3 → +5, 4+ → +8 en super) dans `freeSpins.<bonus>.retriggers` (§ 8 ; le front doit d'abord étendre `MathConfigSchema`), et respectée dans `freeSpinRetrigger.extra`.
 4. **La valeur de départ du Cornerstone** en super bonus : ×1, ou un `updateGlobalMult` `cause: "start"` juste après `freeSpinTrigger`.
 5. **Des montants rapportés à la mise de base** (jamais au prix payé), entiers, en centièmes.

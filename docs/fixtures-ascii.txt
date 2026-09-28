@@ -596,7 +596,7 @@
  H2  S   L3  L1  L1 
  L4  L4  L2  L1  L1 
 
-==== F15 (BASE) déclenchement du super bonus (4 Scatters), 12 FS : fagots et caisse, Cornerstone ×44, anticipation ratée au 10e tour
+==== F15 (BASE) déclenchement du super bonus (4 Scatters, anticipation), 12 FS : fagots et caisse, Cornerstone ×44
 -- F15 reveal
  L2  H4  L1  S   H3 
  S   L1  H2  L3  L4 
@@ -758,7 +758,7 @@
  L4  H4  L4  H1  H1 
  H3  H3  L3  H4  L4 
  L3  L2  L1  L2  H3 
- S   L1  L2  L1  L3 
+ H2  L1  L2  L1  L3 
 -- F15 reveal
  H4  L1  H3  H3  L4 
  H3  L1  L1  H4  H4 

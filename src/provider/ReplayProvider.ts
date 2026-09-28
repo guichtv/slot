@@ -1,5 +1,5 @@
 import { parseBook, type Book } from '../contract/schema';
-import { fetchReplay } from '../stake/rgs';
+import { fetchReplay, type RgsClientOptions } from '../stake/rgs';
 import type { PlayResult, PlayedRound, RoundProvider, SessionInfo } from './types';
 
 /**
@@ -15,6 +15,7 @@ export class ReplayProvider implements RoundProvider {
     private readonly source:
       | { kind: 'stake'; rgsUrl: string; game: string; version: string; mode: string; event: string; amount?: number; currency?: string }
       | { kind: 'local'; book: Book; bet: number; currency: string },
+    private readonly options?: RgsClientOptions,
   ) {}
 
   async load(): Promise<Book> {
@@ -24,7 +25,7 @@ export class ReplayProvider implements RoundProvider {
       return this.book;
     }
     const s = this.source;
-    const r = await fetchReplay(s.rgsUrl, s.game, s.version, s.mode, s.event);
+    const r = await fetchReplay(s.rgsUrl, s.game, s.version, s.mode, s.event, this.options);
     this.book = parseBook({ id: s.event, mode: s.mode, payoutMultiplier: r.payoutMultiplier, costMultiplier: r.costMultiplier, events: r.events });
     return this.book;
   }

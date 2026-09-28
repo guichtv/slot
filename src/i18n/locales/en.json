@@ -122,7 +122,7 @@
   "dlg.connection.reconnecting": "Reconnecting…",
   "dlg.resume.title": "Round in progress",
   "dlg.resume.text": "Your last round was interrupted. It resumes where it stopped, with no new bet.",
-  "dlg.resume.go": "CONTINUE",
+  "dlg.resume.go": "RESUME ROUND",
   "err.ERR_IS": "Your session has ended. Reload the game to continue.",
   "err.ERR_ATE": "Your session could not be verified. Reload the game to continue.",
   "err.ERR_IPB": "Choose a lower bet to keep playing.",

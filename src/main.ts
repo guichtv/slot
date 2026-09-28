@@ -101,7 +101,8 @@ async function boot(): Promise<void> {
   const buck = new Buck();
   buck.reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   scene.logo.reducedMotion = buck.reducedMotion;
-  scene.mascotLayer.addChild(cornerstone.view, buck.view);
+  // le Cornerstone passe devant Buck (il se tient derrière son bloc)
+  scene.mascotLayer.addChild(buck.view, cornerstone.view);
   scene.onLayout((l) => {
     buck.layout(l);
     cornerstone.layout(l);
@@ -263,10 +264,13 @@ async function boot(): Promise<void> {
   });
   const syncAnte = (): void => {
     const v = anteFromConfig(math(), game.bet, game.ante);
-    if (!v || replayMode) {
+    // pendant les free spins, l'Ante ne s'applique pas : l'encart laisse la place au bonus
+    const inBonus = !!game?.player.model?.fs.active && game.fsm.inRound;
+    if (!v || replayMode || inBonus) {
       ante.setHidden(true);
       return;
     }
+    ante.setHidden(false);
     ante.setState({ on: game.ante, factor: v.factor, nextCost: v.nextCost, disabled: game.fsm.state !== 'ready' });
   };
 

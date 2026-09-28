@@ -594,14 +594,14 @@ const F15_FS: Spin[] = [
       .wins([pay(b, 'L2', 3, 2)])
       .tumble(['L2 L1', 'L1', 'L2', '', ''])
       .endSpin(),
-  // 10 : 2 Scatters, anticipation sans 3e Scatter
+  // 10 : un seul Scatter, sans gain (2 Scatters en bonus déclencheraient une relance +2)
   lose(`
       L4 S  H2 H3 L1
       L4 H4 L4 H1 H1
       H3 H3 L3 H4 L4
       L3 L2 L1 L2 H3
-      S  L1 L2 L1 L3
-    `, { anticipation: [0, 0, 1, 2, 3] }),
+      H2 L1 L2 L1 L3
+    `),
   // 11 : fagot -> géant H3 3x3 sur 4 rouleaux (×44)
   (b) =>
     b
@@ -632,8 +632,8 @@ const F15 = fixture(
   'BASE',
   {
     weight: 1,
-    tags: ['anticipation', 'bonus', 'super', 'tnt', 'multiplier', 'keg', 'near-miss'],
-    note: 'déclenchement du super bonus (4 Scatters), 12 FS : fagots et caisse, Cornerstone ×44, anticipation ratée au 10e tour',
+    tags: ['anticipation', 'bonus', 'super', 'tnt', 'multiplier', 'keg'],
+    note: 'déclenchement du super bonus (4 Scatters, anticipation), 12 FS : fagots et caisse, Cornerstone ×44',
   },
   (b) =>
     freeSpins(

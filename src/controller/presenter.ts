@@ -1,3 +1,4 @@
+import type { GameState } from '../core/fsm';
 import type { gsap } from 'gsap';
 import type { Beat } from '../core/beat';
 import type { EventOf, GameEvent, SymbolName } from '../contract/schema';
@@ -66,6 +67,12 @@ export class GamePresenter implements Presenter {
   spinStarted = false;
   quickStop = false;
   private scatterSeen = 0;
+  /** phase de présentation (machine à états du jeu) : appliquée par le contrôleur si la transition est permise */
+  onPhase: ((s: GameState) => void) | null = null;
+
+  private phase(s: GameState): void {
+    this.onPhase?.(s);
+  }
 
   constructor(private s: Stage) {}
 
@@ -88,6 +95,22 @@ export class GamePresenter implements Presenter {
   }
 
   async present(e: GameEvent, prev: RoundModel, next: RoundModel, beat: Beat): Promise<void> {
+    switch (e.type) {
+      case 'blast':
+      case 'carve':
+        this.phase('feature');
+        break;
+      case 'winInfo':
+      case 'tumbleBoard':
+      case 'updateGlobalMult':
+      case 'setWin':
+      case 'freeSpinRetrigger':
+        this.phase('resolving');
+        break;
+      case 'updateFreeSpin':
+        this.phase('bonus');
+        break;
+    }
     switch (e.type) {
       case 'reveal':
         return this.reveal(e, next, beat);
@@ -146,7 +169,9 @@ export class GamePresenter implements Presenter {
         return this.fsEnd(e, beat);
       case 'wincap':
         this.s.grid.endWinPresentation(beat);
+        this.phase('celebration');
         await this.s.ui.celebrate(bookToMoney(e.amount, this.bet), this.bet, beat, true);
+        this.phase('resolving');
         return;
       case 'finalWin':
         return;
@@ -155,6 +180,7 @@ export class GamePresenter implements Presenter {
 
   private async reveal(e: EventOf<'reveal'>, next: RoundModel, beat: Beat): Promise<void> {
     const g = this.s.grid;
+    this.phase('spinning');
     this.scatterSeen = 0;
     this.s.ui.scatterCount(0);
     if (!g.anySpinning) {
@@ -184,6 +210,7 @@ export class GamePresenter implements Presenter {
       onAnticipate: (col) => {
         if (!zoomed) {
           zoomed = true;
+          this.phase('anticipation');
           this.s.sound.tension(true);
           this.s.mascot.react('anticipation');
           const c = g.cellCenter(col, 2);
@@ -194,6 +221,7 @@ export class GamePresenter implements Presenter {
       },
     });
     g.onColumnStop = null;
+    this.phase('resolving');
     if (zoomed) {
       this.s.sound.tension(false);
       const success = next.scatterCount() >= 3;
@@ -265,7 +293,11 @@ export class GamePresenter implements Presenter {
     const x = bookToX(e.amount);
     const tier = math().celebrationTiersX[0] ?? 10;
     if (e.amount > 0) {
-      if (x >= tier) await this.s.ui.celebrate(bookToMoney(e.amount, this.bet), this.bet, beat, false);
+      if (x >= tier) {
+        this.phase('celebration');
+        await this.s.ui.celebrate(bookToMoney(e.amount, this.bet), this.bet, beat, false);
+        this.phase('resolving');
+      }
       else {
         this.s.mascot.react(x >= 2 ? 'goodWin' : 'smallWin');
         await beat.wait(next.fs.active ? 180 : 120);
@@ -289,13 +321,16 @@ export class GamePresenter implements Presenter {
     this.s.sound.ambience(amb);
     beat.fire(this.s.decor.setAmbience(amb, 0.9));
     await beat.wait(900);
+    this.phase('bonusIntro');
     await this.s.ui.bonusIntro(e.bonus, e.totalFs, beat);
+    this.phase('bonus');
     this.s.ui.setFs(e.totalFs, e.totalFs);
     await this.s.ui.setMultiplier(1, beat, 'start');
   }
 
   private async fsEnd(e: EventOf<'freeSpinEnd'>, beat: Beat): Promise<void> {
     this.s.grid.crackAll();
+    this.phase('bonusOutro');
     await this.s.ui.bonusOutro(bookToMoney(e.amount, this.bet), beat);
     // retour propre au jeu de base : ambiance, multiplicateur, compteur, sculpture
     this.s.ui.setFs(null);

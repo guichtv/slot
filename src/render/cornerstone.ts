@@ -36,16 +36,20 @@ export class Cornerstone {
   }
 
   layout(l: SceneLayout): void {
-    this.size = Math.max(90, Math.min(220, l.cell * 1.25));
-    const x = l.mascot.x;
-    const y = l.mascot.y + this.size * 0.05;
-    this.view.position.set(x, y);
+    this.size = Math.max(110, Math.min(270, l.cell * 1.75));
+    // devant les jambes de Buck, côté grille (il se tient derrière son bloc) ; sans mascotte : sous le logo
+    if (l.mascot.visible) {
+      const dir = l.mascot.side === 'right' ? -1 : 1;
+      this.view.position.set(l.mascot.x + dir * l.mascot.h * 0.16, l.mascot.y + this.size * 0.04);
+    } else {
+      this.view.position.set(l.ante.x + l.ante.w / 2, l.ante.y + Math.min(l.ante.h, this.size) + this.size * 0.2);
+    }
     if (this.stone) {
       const k = this.size / Math.max(this.stone.texture.width, this.stone.texture.height);
       this.stone.scale.set(k);
     }
     this.text.position.set(0, -this.size * 0.42);
-    this.text.style.fontSize = Math.round(this.size * 0.3);
+    this.text.style.fontSize = Math.round(this.size * 0.34);
   }
 
   private tint(v: number): number {

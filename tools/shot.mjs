@@ -1,6 +1,6 @@
-// Capture réelle (canvas + HUD) : node tools/shot.mjs <nom> <l>x<h> [--query=...] [--wait=ms] [--play=F10] [--steps=ms,ms,...] [--mobile]
+// Capture réelle (canvas + HUD) : node tools/shot.mjs <nom> <l>x<h> [--query=...] [--wait=ms] [--play=F10] [--steps=ms,ms,...] [--mobile] [--tap] [--frame=ms]
 // Horloge virtuelle (?qa) : l'animation avance par __qa.step ; chaque valeur de --steps produit une capture.
-import { launch, openGame, step, outDir } from './lib/browser.mjs';
+import { launch, openGame, step, tap, outDir } from './lib/browser.mjs';
 
 const [name = 'shot', size = '1440x900', ...rest] = process.argv.slice(2);
 const [w, h] = size.split('x').map(Number);
@@ -15,6 +15,8 @@ if (opt.play) await page.evaluate((id) => window.__qa.play(id), opt.play);
 const steps = String(opt.steps ?? '0').split(',').map(Number);
 let i = 0;
 for (const s of steps) {
+  // --tap : un toucher dans un coin neutre avant chaque pas (ferme intros, fins de bonus, célébrations)
+  if (opt.tap) await tap(page, 12, 12);
   await step(page, s, frame);
   const file = `${dir}/${name}-${w}x${h}${steps.length > 1 ? `-${String(i).padStart(2, '0')}` : ''}.png`;
   await page.screenshot({ path: file, timeout: 240_000 });

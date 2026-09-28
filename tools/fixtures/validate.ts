@@ -11,6 +11,7 @@
  *   carve = rectangle englobant des zones de la chaîne, sans Scatter ni charge dessous ;
  * - totaux : updateTumbleWin cumulés, setWin, setTotalWin, finalWin = payoutMultiplier ;
  * - free spins : déclencheur = Scatters visibles (3 standard, 4+ super), compteurs exacts ;
+ *   un tour de bonus qui montre 2 Scatters ou plus DOIT être relancé (freeSpinRetrigger, table 2 -> +2, 3 -> +5…) ;
  * - Cornerstone (multiplicateur global du bonus) : +1 par CASE SCULPTÉE (added = cells du dernier carve,
  *   plafond 9 999) ; win = baseWin × mult.
  */
@@ -54,6 +55,13 @@ export function validateBook(raw: unknown, opts: { maxWinX?: number } = {}): { b
   const pendingLinks = new Set<string>();
   let lastCarveCells = 0;
   let lastCarveChain = -1;
+  // tour de bonus en cours : plus grand nombre de Scatters visibles et relance émise
+  let fsSpin: { index: number; scatters: number; retriggered: boolean } | null = null;
+  const closeFsSpin = () => {
+    if (fsSpin && fsSpin.scatters >= 2 && !fsSpin.retriggered) issues.push(`fs#${fsSpin.index}: ${fsSpin.scatters} Scatters visibles dans un tour de bonus sans relance`);
+    fsSpin = null;
+  };
+  const countScatters = () => board.flat().filter((s) => s === 'S').length;
   const inArea = (a: { col: number; row: number; w: number; h: number }, p: [number, number]) => p[0] >= a.col && p[0] < a.col + a.w && p[1] >= a.row && p[1] < a.row + a.h;
   const at = (c: number, r: number) => (board[c] as Sym[] | undefined)?.[r];
 
@@ -91,6 +99,10 @@ export function validateBook(raw: unknown, opts: { maxWinX?: number } = {}): { b
         lastWin = null;
         pendingWinCheck = true;
         chains = new Map();
+        if (inFs) {
+          closeFsSpin();
+          fsSpin = { index: e.index, scatters: countScatters(), retriggered: false };
+        }
         break;
       }
       case 'blast': {
@@ -216,6 +228,7 @@ export function validateBook(raw: unknown, opts: { maxWinX?: number } = {}): { b
         lastWin = null;
         pendingWinCheck = true;
         chains = new Map();
+        if (fsSpin) fsSpin.scatters = Math.max(fsSpin.scatters, countScatters());
         break;
       }
       case 'setWin':
@@ -247,9 +260,11 @@ export function validateBook(raw: unknown, opts: { maxWinX?: number } = {}): { b
         let n = 0;
         for (let c = 0; c < COLS; c++) for (let r = 0; r < ROWS; r++) if (at(c, r) === 'S') n++;
         if (n < 2) issues.push(`retrigger#${e.index}: ${n} Scatters visibles`);
+        if (fsSpin) fsSpin.retriggered = true;
         break;
       }
       case 'freeSpinEnd':
+        closeFsSpin();
         if (e.amount !== bonusWin) issues.push(`fsEnd#${e.index}: ${e.amount} ≠ total bonus ${bonusWin}`);
         inFs = false;
         roundWin = bonusWin;
@@ -258,6 +273,7 @@ export function validateBook(raw: unknown, opts: { maxWinX?: number } = {}): { b
         if (opts.maxWinX && e.amount !== opts.maxWinX * 100) issues.push(`wincap#${e.index}: ${e.amount} ≠ plafond ${opts.maxWinX * 100}`);
         roundWin = e.amount;
         bonusWin = e.amount;
+        fsSpin = null; // le plafond arrête le bonus : plus de relance possible
         break;
       case 'finalWin':
         if (e.amount !== roundWin) issues.push(`finalWin#${e.index}: ${e.amount} ≠ total ${roundWin}`);
@@ -266,7 +282,8 @@ export function validateBook(raw: unknown, opts: { maxWinX?: number } = {}): { b
         break;
     }
   }
-  const scattersAtStart = (book.events[0] as Extract<GameEvent, { type: 'reveal' }>).board.flat().filter((s) => s.name === 'S').length;
+  closeFsSpin();
+  const scattersAtStart =(book.events[0] as Extract<GameEvent, { type: 'reveal' }>).board.flat().filter((s) => s.name === 'S').length;
   if (scattersAtStart >= 3 && !fsTriggered) issues.push(`${scattersAtStart} Scatters sans déclenchement de bonus`);
   if (opts.maxWinX && book.payoutMultiplier > opts.maxWinX * 100) issues.push(`payout ${book.payoutMultiplier} > plafond`);
   return { book, issues };

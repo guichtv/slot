@@ -203,6 +203,18 @@ describe('fixtures (books de démonstration)', () => {
     expect(blastIssues(mk([superFs, reveal, blast(0, 0, [0, 0], 'bundle', 0, 0), carve(0, 0, 0, 3, 3), blast(1, 0, [4, 4], 'bundle', 2, 2), carve(1, 2, 2, 3, 3)])).join()).toMatch(/plusieurs chaînes/);
   });
 
+  it('le validateur refuse un tour de bonus à 2 Scatters sans relance', () => {
+    const f15 = fixtures.find((f) => f.id === 'F15')?.book as Book;
+    const book = structuredClone(f15);
+    // premier tour de bonus perdant à un seul Scatter : un 2e Scatter sur un rouleau qui n'en a pas
+    const spin = book.events.findIndex((e, i) => e.type === 'reveal' && e.gameType === 'freegame' && book.events[i + 1]?.type === 'setWin' && scatters(e) === 1);
+    const reveal = book.events[spin] as Ev<'reveal'>;
+    const col = reveal.board.find((c) => !c.some((s) => s.name === 'S')) as Array<{ name: string }>;
+    (col[0] as { name: string }).name = 'S';
+    expect(validateBook(f15, { maxWinX: cfg.maxWinX }).issues).toEqual([]);
+    expect(validateBook(book, { maxWinX: cfg.maxWinX }).issues.join()).toMatch(/2 Scatters visibles dans un tour de bonus sans relance/);
+  });
+
   it('relances conformes à la table (2 Scatters : +2, 3 : +5, 4 et plus : +8 en super)', () => {
     for (const { f, book } of books) {
       let bonus: 'standard' | 'super' = 'standard';

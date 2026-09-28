@@ -45,6 +45,10 @@ export class GameController {
     readonly hooks: GameHooks,
   ) {
     this.player = new RoundPlayer(presenter);
+    // phases de présentation -> machine à états (entrées permises : arrêt rapide, passer, menu…)
+    presenter.onPhase = (st) => {
+      if (this.fsm.state !== st && this.fsm.can(st)) this.fsm.go(st);
+    };
   }
 
   get bet(): number {
@@ -201,8 +205,9 @@ export class GameController {
     }
     this.hud.setBalance(this.balance);
     this.hooks.onRoundEnd?.(round, this.balance);
-    if (this.fsm.state !== 'returning') this.fsm.go('returning');
-    this.fsm.go('ready');
+    if (this.fsm.state !== 'returning' && this.fsm.can('returning')) this.fsm.go('returning');
+    if (this.fsm.state !== 'ready') this.fsm.go(this.fsm.can('ready') ? 'ready' : 'error');
+    if (this.fsm.state === 'error') this.fsm.go('ready');
     this.busy = false;
     if (this.autoLeft > 0) {
       this.autoLeft--;

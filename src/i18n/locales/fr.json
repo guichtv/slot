@@ -122,7 +122,7 @@
   "dlg.connection.reconnecting": "Reconnexion…",
   "dlg.resume.title": "Manche en cours",
   "dlg.resume.text": "Votre dernière manche a été interrompue. Elle reprend là où elle s'est arrêtée, sans nouvelle mise.",
-  "dlg.resume.go": "CONTINUER",
+  "dlg.resume.go": "REPRENDRE LA PARTIE",
   "err.ERR_IS": "Votre session est terminée. Rechargez le jeu pour continuer.",
   "err.ERR_ATE": "Votre session n'a pas pu être vérifiée. Rechargez le jeu pour continuer.",
   "err.ERR_IPB": "Choisissez une mise plus basse pour continuer à jouer.",

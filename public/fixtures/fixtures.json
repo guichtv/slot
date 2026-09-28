@@ -1,6 +1,6 @@
 {
  "contract": "1.1.0",
- "generated": "2026-09-28T12:22:05.134Z",
+ "generated": "2026-09-28T12:31:23.233Z",
  "fixtures": [
   {
    "id": "F01",
@@ -8123,10 +8123,9 @@
     "super",
     "tnt",
     "multiplier",
-    "keg",
-    "near-miss"
+    "keg"
    ],
-   "note": "déclenchement du super bonus (4 Scatters), 12 FS : fagots et caisse, Cornerstone ×44, anticipation ratée au 10e tour",
+   "note": "déclenchement du super bonus (4 Scatters, anticipation), 12 FS : fagots et caisse, Cornerstone ×44",
    "book": {
     "id": "F15",
     "mode": "BASE",
@@ -10447,7 +10446,7 @@
          "name": "L3"
         },
         {
-         "name": "S"
+         "name": "H2"
         }
        ],
        [
@@ -10522,9 +10521,9 @@
       "anticipation": [
        0,
        0,
-       1,
-       2,
-       3
+       0,
+       0,
+       0
       ],
       "gameType": "freegame",
       "tnt": []

@@ -26,12 +26,22 @@ export interface LaunchParams {
   };
 }
 
-function normalizeRgsUrl(raw: string): string | null {
+/** Hôte de boucle locale (faux RGS de développement) : servi en http. */
+const LOOPBACK = /^(localhost|127(?:\.\d{1,3}){3}|\[::1\])(?::\d+)?(?:[/?#]|$)/i;
+
+/**
+ * rgs_url : `https://` ajouté si le schéma manque (Stake passe « rgs.example.com »), sauf pour une
+ * adresse de boucle locale (« 127.0.0.1:5310 » = faux RGS, en http). Seuls http et https sont acceptés.
+ */
+export function normalizeRgsUrl(raw: string): string | null {
   const v = raw.trim();
   if (!v) return null;
-  const withProto = /^https?:\/\//i.test(v) ? v : `https://${v}`;
+  const hasProto = /^[a-z][a-z0-9+.-]*:\/\//i.test(v);
+  if (hasProto && !/^https?:\/\//i.test(v)) return null;
+  const withProto = hasProto ? v : `${LOOPBACK.test(v) ? 'http' : 'https'}://${v}`;
   try {
     const u = new URL(withProto);
+    if (!u.hostname) return null;
     return u.origin + u.pathname.replace(/\/+$/, '');
   } catch {
     return null;
