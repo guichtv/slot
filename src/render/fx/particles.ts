@@ -1,4 +1,4 @@
-import { Particle, ParticleContainer, type Texture } from 'pixi.js';
+import { Container, Sprite, type Texture } from 'pixi.js';
 
 /**
  * Particules en pool, simulées sur l'horloge de présentation.
@@ -32,7 +32,7 @@ export interface EmitSpec {
 }
 
 interface Live {
-  p: Particle;
+  p: Sprite;
   vx: number;
   vy: number;
   g: number;
@@ -67,17 +67,16 @@ export function rand(): number {
 const between = (r: [number, number] | undefined, d: number): number => (r ? r[0] + (r[1] - r[0]) * rand() : d);
 
 export class ParticleField {
-  readonly view: ParticleContainer;
+  /** sprites en pool (regroupés par le batcher de Pixi) : plusieurs textures possibles, aucun shader dédié */
+  readonly view = new Container();
   private live: Live[] = [];
-  private pool: Particle[] = [];
+  private pool: Sprite[] = [];
   budget: number;
+  private blend: 'normal' | 'add';
 
   constructor(budget = 900, blend: 'normal' | 'add' = 'normal') {
     this.budget = budget;
-    this.view = new ParticleContainer({
-      dynamicProperties: { position: true, rotation: true, vertex: true, color: true, uvs: true },
-    });
-    if (blend === 'add') this.view.blendMode = 'add';
+    this.blend = blend;
   }
 
   get count(): number {
@@ -90,10 +89,11 @@ export class ParticleField {
     const tints = spec.tint === undefined ? [0xffffff] : Array.isArray(spec.tint) ? spec.tint : [spec.tint];
     for (let i = 0; i < n; i++) {
       const tex = textures[(rand() * textures.length) | 0] as Texture;
-      const p = this.pool.pop() ?? new Particle({ texture: tex });
+      const p = this.pool.pop() ?? new Sprite(tex);
       p.texture = tex;
-      p.anchorX = 0.5;
-      p.anchorY = 0.5;
+      p.anchor.set(0.5);
+      p.blendMode = this.blend;
+      p.visible = true;
       const r = (spec.spread ?? 0) * Math.sqrt(rand());
       const th = rand() * Math.PI * 2;
       p.x = spec.x + Math.cos(th) * r;
@@ -101,11 +101,11 @@ export class ParticleField {
       const a = (spec.angle ?? -Math.PI / 2) + (rand() - 0.5) * 2 * (spec.cone ?? Math.PI);
       const sp = between(spec.speed, 200);
       const s0 = between(spec.scale, 1);
-      p.scaleX = p.scaleY = s0;
+      p.scale.set(s0);
       p.rotation = rand() * Math.PI * 2;
       p.tint = tints[(rand() * tints.length) | 0] as number;
       p.alpha = 0;
-      this.view.addParticle(p);
+      this.view.addChild(p);
       this.live.push({
         p,
         vx: Math.cos(a) * sp,
@@ -157,10 +157,11 @@ export class ParticleField {
       }
       p.rotation += l.spin * dt;
       const s = l.s0 + (l.s1 - l.s0) * k;
-      p.scaleX = p.scaleY = s;
+      p.scale.set(s);
       p.alpha = k < l.aIn ? k / l.aIn : k > 1 - l.aOut ? Math.max(0, (1 - k) / l.aOut) : 1;
       if (k >= 1) {
-        this.view.removeParticle(p);
+        p.visible = false;
+        this.view.removeChild(p);
         this.pool.push(p);
         l.onArrive?.();
       } else keep.push(l);
@@ -171,7 +172,8 @@ export class ParticleField {
   /** fin immédiate (skip) : les particules disparaissent, les callbacks d'arrivée sont appelés */
   finish(): void {
     for (const l of this.live) {
-      this.view.removeParticle(l.p);
+      l.p.visible = false;
+      this.view.removeChild(l.p);
       this.pool.push(l.p);
       l.onArrive?.();
     }

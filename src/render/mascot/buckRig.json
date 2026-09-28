@@ -1,0 +1,393 @@
+{
+ "_doc": "Rig de Buck. pivot : px dans la texture de la pi\u00e8ce. attach : px dans la texture du parent. rest : rotation de repos (deg). z : ordre relatif au sprite du parent (n\u00e9gatif = derri\u00e8re). V\u00e9rifi\u00e9 par tools/assets/compose_rig.py -> docs/imagegen/checks/rig-*.png",
+ "parts": [
+  {
+   "id": "torso",
+   "key": "buck.body.torso",
+   "pivot": [
+    272,
+    560
+   ],
+   "z": 0
+  },
+  {
+   "id": "tail",
+   "key": "buck.body.tail",
+   "pivot": [
+    80,
+    300
+   ],
+   "parent": "torso",
+   "attach": [
+    455,
+    540
+   ],
+   "z": -6,
+   "rest": 112
+  },
+  {
+   "id": "thighB",
+   "key": "buck.body.thighR",
+   "pivot": [
+    84,
+    57
+   ],
+   "parent": "torso",
+   "attach": [
+    380,
+    560
+   ],
+   "z": -4,
+   "rest": 12
+  },
+  {
+   "id": "shinB",
+   "key": "buck.body.shinR",
+   "pivot": [
+    69,
+    61
+   ],
+   "parent": "thighB",
+   "attach": [
+    160,
+    284
+   ],
+   "z": -1,
+   "rest": 1
+  },
+  {
+   "id": "thighF",
+   "key": "buck.body.thighL",
+   "pivot": [
+    170,
+    59
+   ],
+   "parent": "torso",
+   "attach": [
+    160,
+    560
+   ],
+   "z": -3,
+   "rest": -16
+  },
+  {
+   "id": "shinF",
+   "key": "buck.body.shinL",
+   "pivot": [
+    238,
+    64
+   ],
+   "parent": "thighF",
+   "attach": [
+    72,
+    282
+   ],
+   "z": -1,
+   "rest": -2
+  },
+  {
+   "id": "armB",
+   "key": "buck.arms.upperR",
+   "pivot": [
+    83,
+    74
+   ],
+   "parent": "torso",
+   "attach": [
+    505,
+    110
+   ],
+   "z": -2,
+   "rest": 18
+  },
+  {
+   "id": "foreB",
+   "key": "buck.arms.foreR",
+   "pivot": [
+    82,
+    53
+   ],
+   "parent": "armB",
+   "attach": [
+    191,
+    236
+   ],
+   "z": 1,
+   "rest": -11
+  },
+  {
+   "id": "handB",
+   "key": "buck.arms.handOpen",
+   "pivot": [
+    169,
+    46
+   ],
+   "parent": "foreB",
+   "attach": [
+    137,
+    294
+   ],
+   "z": 1,
+   "rest": 0
+  },
+  {
+   "id": "armF",
+   "key": "buck.arms.upperL",
+   "pivot": [
+    204,
+    73
+   ],
+   "parent": "torso",
+   "attach": [
+    44,
+    105
+   ],
+   "z": -1,
+   "rest": -22
+  },
+  {
+   "id": "foreF",
+   "key": "buck.arms.foreL",
+   "pivot": [
+    133,
+    53
+   ],
+   "parent": "armF",
+   "attach": [
+    88,
+    229
+   ],
+   "z": 1,
+   "rest": 11
+  },
+  {
+   "id": "handF",
+   "key": "buck.arms.handOpen",
+   "pivot": [
+    169,
+    46
+   ],
+   "parent": "foreF",
+   "attach": [
+    67,
+    294
+   ],
+   "z": 1,
+   "rest": 0
+  },
+  {
+   "id": "head",
+   "key": "buck.heads.rest",
+   "pivot": [
+    200,
+    400
+   ],
+   "parent": "torso",
+   "attach": [
+    272,
+    60
+   ],
+   "z": 3,
+   "rest": 0,
+   "scale": 1.15
+  }
+ ],
+ "alternates": {
+  "head": {
+   "rest": {
+    "key": "buck.heads.rest",
+    "pivot": [
+     200,
+     400
+    ]
+   },
+   "grin": {
+    "key": "buck.heads.grin",
+    "pivot": [
+     201,
+     403
+    ]
+   },
+   "shout": {
+    "key": "buck.heads.shout",
+    "pivot": [
+     189,
+     403
+    ]
+   },
+   "surprise": {
+    "key": "buck.heads.surprise",
+    "pivot": [
+     182,
+     401
+    ]
+   },
+   "wink": {
+    "key": "buck.heads.wink",
+    "pivot": [
+     191,
+     401
+    ]
+   },
+   "focus": {
+    "key": "buck.heads.focus",
+    "pivot": [
+     202,
+     403
+    ]
+   },
+   "blink": {
+    "key": "buck.heads.blink",
+    "pivot": [
+     196,
+     401
+    ]
+   }
+  },
+  "handF": {
+   "open": {
+    "key": "buck.arms.handOpen",
+    "pivot": [
+     169,
+     46
+    ],
+    "r": 0
+   },
+   "fist": {
+    "key": "buck.arms.handFist",
+    "pivot": [
+     177,
+     56
+    ],
+    "r": -15.8
+   },
+   "grip": {
+    "key": "buck.arms.handGrip",
+    "pivot": [
+     184,
+     51
+    ],
+    "r": -10.9
+   },
+   "thumb": {
+    "key": "buck.arms.handThumb",
+    "pivot": [
+     130,
+     255
+    ],
+    "r": -148.5
+   },
+   "point": {
+    "key": "buck.arms.handPoint",
+    "pivot": [
+     50,
+     180
+    ],
+    "r": 144.2
+   },
+   "match": {
+    "key": "buck.arms.handMatch",
+    "pivot": [
+     85,
+     300
+    ],
+    "r": 167.9
+   }
+  },
+  "handB": {
+   "open": {
+    "key": "buck.arms.handOpen",
+    "pivot": [
+     169,
+     46
+    ],
+    "r": 0
+   },
+   "fist": {
+    "key": "buck.arms.handFist",
+    "pivot": [
+     177,
+     56
+    ],
+    "r": -44.0
+   },
+   "grip": {
+    "key": "buck.arms.handGrip",
+    "pivot": [
+     184,
+     51
+    ],
+    "r": -39.1
+   },
+   "thumb": {
+    "key": "buck.arms.handThumb",
+    "pivot": [
+     130,
+     255
+    ],
+    "r": -176.7
+   },
+   "point": {
+    "key": "buck.arms.handPoint",
+    "pivot": [
+     50,
+     180
+    ],
+    "r": 116.0
+   },
+   "match": {
+    "key": "buck.arms.handMatch",
+    "pivot": [
+     85,
+     300
+    ],
+    "r": 139.7
+   }
+  }
+ },
+ "ik": {
+  "armF": {
+   "upper": "armF",
+   "fore": "foreF",
+   "hand": "handF",
+   "shoulder": [
+    44,
+    105
+   ],
+   "upperAxis": 126.6,
+   "upperLen": 194.6,
+   "foreAxis": 105.3,
+   "foreLen": 249.9
+  },
+  "armB": {
+   "upper": "armB",
+   "fore": "foreB",
+   "hand": "handB",
+   "shoulder": [
+    505,
+    110
+   ],
+   "upperAxis": 56.3,
+   "upperLen": 194.7,
+   "foreAxis": 77.1,
+   "foreLen": 247.2
+  }
+ },
+ "points": {
+  "matchTip": {
+   "part": "handF",
+   "alt": "match",
+   "xy": [
+    222,
+    18
+   ]
+  },
+  "goldTooth": {
+   "part": "head",
+   "xy": [
+    178,
+    285
+   ]
+  }
+ }
+}

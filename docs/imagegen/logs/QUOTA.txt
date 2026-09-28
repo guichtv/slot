@@ -1,3 +1,0 @@
-[10:32:06] mascot-rig : QUOTA atteint — arrêt de la génération
-[10:32:10] ui-frame-hud : QUOTA atteint — arrêt de la génération
-[10:32:38] identity : QUOTA atteint — arrêt de la génération

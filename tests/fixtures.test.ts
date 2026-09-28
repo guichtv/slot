@@ -23,7 +23,7 @@ const books = fixtures.flatMap((f) => {
 });
 const paytable = cfg.paytable as unknown as Record<string, Record<string, number>>;
 const modes = cfg.modes as Record<string, { cost: number }>;
-const SIZE = { stick: 2, bundle: 3, crate: 4 } as const;
+const SIZE = { stick: 2, bundle: 3, keg: 4 } as const;
 
 const boardsOf = (book: Book) =>
   book.events.filter((e): e is Ev<'reveal'> | Ev<'tumbleBoard'> => e.type === 'reveal' || e.type === 'tumbleBoard');
@@ -83,7 +83,7 @@ describe('fixtures (books de démonstration)', () => {
         expect(triggers.length, f.id).toBe(0);
         const blasts = book.events.filter((e): e is Ev<'blast'> => e.type === 'blast');
         if (f.mode === 'BLAST') expect(blasts.length, f.id).toBeGreaterThanOrEqual(2);
-        else expect(blasts.some((x) => x.tnt.kind === 'crate'), f.id).toBe(true);
+        else expect(blasts.some((x) => x.tnt.kind === 'keg'), f.id).toBe(true);
       }
     }
   });
@@ -166,7 +166,7 @@ describe('fixtures (books de démonstration)', () => {
     expect(evs(get('F08'), 'tumbleBoard').length).toBeGreaterThanOrEqual(3);
     expect(evs(get('F09'), 'blast').map((x) => [x.tnt.kind, x.area.w])).toEqual([['stick', 2]]);
     expect(evs(get('F10'), 'blast').map((x) => x.tnt.kind)).toEqual(['bundle']);
-    expect(evs(get('F10'), 'blast')[0]?.giant).toMatch(/^H/);
+    expect(evs(get('F10'), 'carve')[0]?.giant).toMatch(/^H/);
     expect(get('F10').payoutMultiplier).toBeGreaterThanOrEqual(1000);
     // F11 : deux charges sur la grille révélée, puis une charge qui tombe pendant une chute et explose à l'étape suivante
     const f11 = get('F11').events;
@@ -174,7 +174,8 @@ describe('fixtures (books de démonstration)', () => {
     const drop = f11.findIndex((e) => e.type === 'tumbleBoard' && e.tnt.length > 0);
     expect(drop).toBeGreaterThan(0);
     expect(f11[drop + 1]?.type).toBe('blast');
-    expect(evs(get('F12'), 'blast').some((x) => x.giant === 'W')).toBe(true);
+    expect(f11[drop + 2]?.type).toBe('carve');
+    expect(evs(get('F12'), 'carve').some((x) => x.giant === 'W')).toBe(true);
     // F13 : anticipation ratée
     const f13 = get('F13');
     expect((f13.events[0] as Ev<'reveal'>).anticipation.some((a) => a > 0)).toBe(true);
@@ -194,7 +195,7 @@ describe('fixtures (books de démonstration)', () => {
     expect(scatters(f15.events[0] as Ev<'reveal'>)).toBeGreaterThanOrEqual(4);
     expect(evs(f15, 'updateFreeSpin').at(-1)).toMatchObject({ amount: 12, total: 12 });
     // F19 : caisse 4x4 ; F26 : plafond exact, suivi uniquement de finalWin ; F27 : x0,05
-    expect(evs(get('F19'), 'blast').some((x) => x.tnt.kind === 'crate' && x.area.w === 4)).toBe(true);
+    expect(evs(get('F19'), 'blast').some((x) => x.tnt.kind === 'keg' && x.area.w === 4)).toBe(true);
     const f26 = get('F26').events;
     expect(f26.at(-2)).toMatchObject({ type: 'wincap', amount: cap });
     expect(get('F26').payoutMultiplier).toBe(cap);

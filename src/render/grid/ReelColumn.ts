@@ -1,4 +1,4 @@
-import { BlurFilter, Container } from 'pixi.js';
+import { Container } from 'pixi.js';
 import { gsap } from 'gsap';
 import type { SymbolName, TntKind } from '../../contract/schema';
 import { SymbolView } from './SymbolView';
@@ -23,7 +23,8 @@ export class ReelColumn {
   private lastInt = 0;
   private landing: Array<{ sym: SymbolName; tnt: TntKind | null }> = [];
   private landedViews: SymbolView[] = [];
-  private blur = new BlurFilter({ strength: 0, quality: 2 });
+  /** étirement cartoon du défilement (remplace un flou : aucun filtre plein écran) */
+  private smear = 0;
   private stopTween: gsap.core.Tween | null = null;
   cell = 100;
 
@@ -37,8 +38,6 @@ export class ReelColumn {
       this.ring.push(v);
       this.view.addChild(v);
     }
-    this.blur.strengthX = 0;
-    this.view.filters = [];
   }
 
   setCell(cell: number): void {
@@ -83,11 +82,14 @@ export class ReelColumn {
   }
 
   layoutRing(): void {
+    const sm = this.smear;
     for (let k = 0; k < this.ring.length; k++) {
       const v = this.ring[k] as SymbolView;
       const r = this.rowOf(k);
       v.position.set(this.cell / 2, (r + 0.5) * this.cell);
       v.row = Math.round(r);
+      v.scale.set(1 - sm * 0.08, 1 + sm * 0.32);
+      v.alpha = 1 - sm * 0.12;
     }
   }
 
@@ -106,7 +108,6 @@ export class ReelColumn {
     tl.add(() => {
       this.spinning = true;
       this.lastInt = Math.floor(this.pos);
-      this.view.filters = [this.blur];
     });
     tl.to(this, { speed: maxSpeed, duration: 0.22, ease: 'power2.in' });
     return tl;
@@ -115,8 +116,8 @@ export class ReelColumn {
   /** avance le défilement (appelé par la grille à chaque image) */
   tick(dtMs: number): void {
     if (!this.spinning || this.stopTween) return;
+    this.smear = Math.min(1, this.speed / 26);
     this.advanceTo(this.pos + (this.speed * dtMs) / 1000);
-    this.blur.strengthY = Math.min(10, this.speed * 0.35) * (this.cell / 120);
   }
 
   private advanceTo(p: number): void {
@@ -160,13 +161,13 @@ export class ReelColumn {
       duration: dur,
       ease: 'power2.out',
       onUpdate: () => {
+        this.smear *= 0.86;
         this.advanceTo(proxy.p);
-        this.blur.strengthY = Math.max(0, this.blur.strengthY * 0.8);
       },
     });
     tl.add(this.stopTween);
     tl.add(() => {
-      this.view.filters = [];
+      this.smear = 0;
       this.spinning = false;
     });
     tl.to(proxy, { p: end, duration: 0.16, ease: 'back.out(2.5)', onUpdate: () => { this.pos = proxy.p; this.layoutRing(); } });

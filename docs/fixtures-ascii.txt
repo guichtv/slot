@@ -177,7 +177,13 @@
  H2  H3  H1  H4  H3 
  T   L4  H2  L1  H4 
  L1  H1  L3  L1  H4 
--- F09 blast stick @0,3 -> H2 2x2
+-- F09 blast stick @0,3
+ H4  H4  L2  L4  L1 
+ L4  H4  L1  L4  H2 
+ H2  H3  H1  H4  H3 
+ T   L4  H2  L1  H4 
+ L1  H1  L3  L1  H4 
+-- F09 carve -> H2 2x2
  H4  H4  L2  L4  L1 
  L4  H4  L1  L4  H2 
  H2  H2  H1  H4  H3 
@@ -203,7 +209,13 @@
  H2  T   L1  L4  H1 
  L3  H4  L4  L1  L4 
  H4  L2  S   H4  L3 
--- F10 blast bundle @1,2 -> H1 3x3
+-- F10 blast bundle @1,2
+ L2  H3  L3  H2  L1 
+ L1  L4  H2  L3  H3 
+ H2  T   L1  L4  H1 
+ L3  H4  L4  L1  L4 
+ H4  L2  S   H4  L3 
+-- F10 carve -> H1 3x3
  L2  H3  L3  H2  L1 
  H1  H1  H1  L3  H3 
  H1  H1  H1  L4  H1 
@@ -229,13 +241,25 @@
  L4  H1  L1  L3  H2 
  T   H2  S   L2  L2 
  L3  L1  H2  L1  L4 
--- F11 blast stick @1,0 -> H3 2x2
+-- F11 blast stick @1,0
+ L2  T   H4  L4  H1 
+ H4  L1  L3  H2  L3 
+ L4  H1  L1  L3  H2 
+ T   H2  S   L2  L2 
+ L3  L1  H2  L1  L4 
+-- F11 carve -> H3 2x2
  L2  H3  H3  L4  H1 
  H4  H3  H3  H2  L3 
  L4  H1  L1  L3  H2 
  T   H2  S   L2  L2 
  L3  L1  H2  L1  L4 
--- F11 blast stick @0,3 -> H3 2x2
+-- F11 blast stick @0,3
+ L2  H3  H3  L4  H1 
+ H4  H3  H3  H2  L3 
+ L4  H1  L1  L3  H2 
+ T   H2  S   L2  L2 
+ L3  L1  H2  L1  L4 
+-- F11 carve -> H3 2x2
  L2  H3  H3  L4  H1 
  H4  H3  H3  H2  L3 
  L4  H1  L1  L3  H2 
@@ -253,7 +277,13 @@
  L2  H1  L1  L3  H2 
  H4  L1  S   L2  L2 
  L4  H1  H2  L1  L4 
--- F11 blast stick @2,0 -> H4 2x2
+-- F11 blast stick @2,0
+ L3  L1  T   L4  H1 
+ H2  H4  L4  H2  L3 
+ L2  H1  L1  L3  H2 
+ H4  L1  S   L2  L2 
+ L4  H1  H2  L1  L4 
+-- F11 carve -> H4 2x2
  L3  L1  H4  H4  H1 
  H2  H4  H4  H4  L3 
  L2  H1  L1  L3  H2 
@@ -279,7 +309,13 @@
  H2  T   L3  H4  L3 
  S   L1  H3  L1  H2 
  L4  H4  L2  H1  H4 
--- F12 blast stick @1,2 -> W 2x2
+-- F12 blast stick @1,2
+ L4  L3  H1  L2  H3 
+ H2  H2  L1  L3  L1 
+ H2  T   L3  H4  L3 
+ S   L1  H3  L1  H2 
+ L4  H4  L2  H1  H4 
+-- F12 carve -> W 2x2
  L4  L3  H1  L2  H3 
  H2  H2  L1  L3  L1 
  H2  W   W   H4  L3 
@@ -325,13 +361,19 @@
  H3  L4  H1  L3  H4 
  L3  L3  T   L1  H2 
  L1  L1  L4  H2  L1 
--- F14 blast stick @2,3 -> H3 2x2
+-- F14 blast stick @2,3
+ H4  H1  L2  H4  L4 
+ L1  H3  L3  H4  H3 
+ H3  L4  H1  L3  H4 
+ L3  L3  T   L1  H2 
+ L1  L1  L4  H2  L1 
+-- F14 carve -> H3 2x2
  H4  H1  L2  H4  L4 
  L1  H3  L3  H4  H3 
  H3  H3  H3  L3  H4 
  L3  H3  H3  L1  H2 
  L1  L1  L4  H2  L1 
--- F14 wins H3x3=360
+-- F14 wins H3x3=900
  H4  H1  L2  H4  L4 
  L1 [H3] L3  H4  H3 
 [H3][H3][H3] L3  H4 
@@ -355,7 +397,7 @@
  L3  H4  L2  L3  L4 
  S   L2  L2  H3  H2 
  L2  L4  H4  H2  L1 
--- F14 wins L2x3=60
+-- F14 wins L2x3=150
  H1  H1  L4  H2  H4 
  L1  H2 [L2] H2  L2 
  L3  H4 [L2] L3  L4 
@@ -373,13 +415,19 @@
  L3  H4  H3  L4  L2 
  L2  L3  H4  L3  S  
  H3  H4  T   L2  H3 
--- F14 blast bundle @2,4 -> H4 3x3
+-- F14 blast bundle @2,4
+ H4  H2  L2  H1  H3 
+ L3  L4  L3  L3  H2 
+ L3  H4  H3  L4  L2 
+ L2  L3  H4  L3  S  
+ H3  H4  T   L2  H3 
+-- F14 carve -> H4 3x3
  H4  H2  L2  H1  H3 
  L3  L4  L3  L3  H2 
  H4  H4  H4  L4  L2 
  H4  H4  H4  L3  S  
  H4  H4  H4  L2  H3 
--- F14 wins H4x3=2700
+-- F14 wins H4x3=12600
 [H4] H2  L2  H1  H3 
  L3  L4  L3  L3  H2 
 [H4][H4][H4] L4  L2 
@@ -409,7 +457,13 @@
  L1  H2  H3  L2  L4 
  H1  H2  L2  L4  H4 
  L1  L3  H2  H3  L2 
--- F14 blast stick @3,1 -> H1 2x2
+-- F14 blast stick @3,1
+ H4  H3  L2  H3  L2 
+ L2  H4  H2  T   H1 
+ L1  H2  H3  L2  L4 
+ H1  H2  L2  L4  H4 
+ L1  L3  H2  H3  L2 
+-- F14 carve -> H1 2x2
  H4  H3  L2  H3  L2 
  L2  H4  H2  H1  H1 
  L1  H2  H3  H1  H1 
@@ -421,7 +475,7 @@
  H3  H1  L3  L3  L2 
  L4  L2  H1  L3  H1 
  H2  L1  L1  L2  L1 
--- F14 wins H1x3=600
+-- F14 wins H1x3=2700
  H3 [H1] S   L3  H4 
 [H1][H1] H4  H2  H2 
  H3 [H1] L3  L3  L2 
@@ -433,7 +487,7 @@
  H3  L2  H4  L3  L2 
  L4  L2  L3  L3  H1 
  H2  L1  L1  L2  L1 
--- F14 wins L4x3=20
+-- F14 wins L4x3=90
  H3 [L4][L4] L3  H4 
  H3  L3  S   H2  H2 
  H3  L2  H4  L3  L2 
@@ -451,19 +505,31 @@
  L1  H2  L1  H3  L1 
  L2  H1  H2  L1  L1 
  L1  T   H1  L2  H2 
--- F14 blast stick @0,1 -> H2 2x2
+-- F14 blast stick @0,1
+ L4  H1  L4  L3  L3 
+ T   L4  L3  H1  H2 
+ L1  H2  L1  H3  L1 
+ L2  H1  H2  L1  L1 
+ L1  T   H1  L2  H2 
+-- F14 carve -> H2 2x2
  H2  H2  L4  L3  L3 
  H2  H2  L3  H1  H2 
  L1  H2  L1  H3  L1 
  L2  H1  H2  L1  L1 
  L1  T   H1  L2  H2 
--- F14 blast stick @1,4 -> H2 2x2
+-- F14 blast stick @1,4
+ H2  H2  L4  L3  L3 
+ H2  H2  L3  H1  H2 
+ L1  H2  L1  H3  L1 
+ L2  H1  H2  L1  L1 
+ L1  T   H1  L2  H2 
+-- F14 carve -> H2 2x2
  H2  H2  L4  L3  L3 
  H2  H2  L3  H1  H2 
  L1  H2  L1  H3  L1 
  L2  H2  H2  L1  L1 
  L1  H2  H2  L2  H2 
--- F14 wins H2x3=4800
+-- F14 wins H2x3=20800
 [H2][H2] L4  L3  L3 
 [H2][H2] L3  H1  H2 
  L1 [H2] L1  H3  L1 
@@ -487,7 +553,7 @@
  H1  L1  L3  L3  L2 
  H4  H4  H2  H4  L4 
  H2  L4  H4  L1  H3 
--- F14 wins H4x4=360
+-- F14 wins H4x4=1560
  L2  L4  L1  L3  L1 
  L4  L2  L3  L1  L2 
  H1  L1  L3  L3  L2 
@@ -511,7 +577,7 @@
  L1  H1  L1  H2  H1 
  L4  L2  H4  H3  L2 
  H4  L3  H2  S   L4 
--- F14 wins L3x3=30
+-- F14 wins L3x3=130
 [L3] H2  H2  L2  H1 
  L4  H1 [L3] L1  L3 
  L1  H1  L1  H2  H1 
@@ -549,13 +615,19 @@
  H3  H2  H2  L3  H3 
  H3  T   L3  L4  L3 
  H4  H1  L2  L4  H4 
--- F15 blast bundle @1,3 -> H2 3x3
+-- F15 blast bundle @1,3
+ L2  L4  L2  L1  L3 
+ L4  L1  H4  L3  L1 
+ H3  H2  H2  L3  H3 
+ H3  T   L3  L4  L3 
+ H4  H1  L2  L4  H4 
+-- F15 carve -> H2 3x3
  L2  L4  L2  L1  L3 
  H2  H2  H2  L3  L1 
  H2  H2  H2  L3  H3 
  H2  H2  H2  L4  L3 
  H4  H1  L2  L4  H4 
--- F15 wins H2x3=2160
+-- F15 wins H2x3=10800
  L2  L4  L2  L1  L3 
 [H2][H2][H2] L3  L1 
 [H2][H2][H2] L3  H3 
@@ -579,7 +651,7 @@
  L1  H4  L1  H2  L1 
  L3  L2  H3  H3  S  
  H1  L2  L3  L2  L4 
--- F15 wins L1x3=40
+-- F15 wins L1x3=200
  H2 [L1] L3  H3  L3 
  H4 [L1] L3  L3  H3 
 [L1] H4 [L1] H2  L1 
@@ -603,13 +675,19 @@
  L4  L3  T   L4  H3 
  L1  H1  H4  L3  L4 
  H2  L3  L3  L3  L1 
--- F15 blast crate @2,2 -> L3 4x4
+-- F15 blast keg @2,2
+ H3  L2  H1  L1  L1 
+ L1  L1  L1  L4  H1 
+ L4  L3  T   L4  H3 
+ L1  H1  H4  L3  L4 
+ H2  L3  L3  L3  L1 
+-- F15 carve -> L3 4x4
  H3  L2  H1  L1  L1 
  L3  L3  L3  L3  H1 
  L3  L3  L3  L3  H3 
  L3  L3  L3  L3  L4 
  L3  L3  L3  L3  L1 
--- F15 wins L3x4=11520
+-- F15 wins L3x4=99840
  H3  L2  H1  L1  L1 
 [L3][L3][L3][L3] H1 
 [L3][L3][L3][L3] H3 
@@ -633,7 +711,13 @@
  L3  H2  T   L3  L1 
  L3  L3  H1  L4  H1 
  H2  H4  L4  H3  L2 
--- F15 blast bundle @2,2 -> H1 3x3
+-- F15 blast bundle @2,2
+ L4  L2  H4  L3  L3 
+ L2  S   L4  L4  H3 
+ L3  H2  T   L3  L1 
+ L3  L3  H1  L4  H1 
+ H2  H4  L4  H3  L2 
+-- F15 carve -> H1 3x3
  L4  L2  H1  H1  H1 
  L2  S   H1  H1  H1 
  L3  H2  H1  H1  H1 
@@ -645,7 +729,7 @@
  H3  L1  L2  H4  L1 
  L2  H3  H3  L4  H1 
  H3  L4  L4  H1  L2 
--- F15 wins H3x3=240
+-- F15 wins H3x3=2100
  L3  L1  L4  H4  L1 
  H1  L3  H1  L1  L2 
 [H3] L1  L2  H4  L1 
@@ -657,7 +741,7 @@
  L3  L3  H1  H4  L1 
  H1  L1  L2  L4  H1 
  L2  L4  L4  H1  L2 
--- F15 wins L2x3=80
+-- F15 wins L2x3=700
  H2 [L2] H2  H4  L1 
 [L2] L1  L4  L1  L2 
  L3  L3  H1  H4  L1 
@@ -681,13 +765,19 @@
  L4  H2  H1  H1  H1 
  H4  L3  L1  H1  H1 
  H1  L1  T   L3  L2 
--- F15 blast bundle @2,4 -> H3 3x3
+-- F15 blast bundle @2,4
+ H4  L1  H3  H3  L4 
+ H3  L1  L1  H4  H4 
+ L4  H2  H1  H1  H1 
+ H4  L3  L1  H1  H1 
+ H1  L1  T   L3  L2 
+-- F15 carve -> H3 3x3
  H4  L1  H3  H3  L4 
  H3  L1  L1  H4  H4 
  L4  H3  H3  H3  H1 
  H4  H3  H3  H3  H1 
  H1  H3  H3  H3  L2 
--- F15 wins H3x4=18000
+-- F15 wins H3x4=158400
  H4  L1 [H3][H3] L4 
 [H3] L1  L1  H4  H4 
  L4 [H3][H3][H3] H1 
@@ -743,13 +833,19 @@
  L3  H2  H2  H2  L4 
  H1  L1  L2  L1  L2 
  L2  H4  L3  L3  L1 
--- F16 blast stick @2,0 -> H4 2x2
+-- F16 blast stick @2,0
+ S   L3  T   L3  H3 
+ H4  L2  H1  L1  L3 
+ L3  H2  H2  H2  L4 
+ H1  L1  L2  L1  L2 
+ L2  H4  L3  L3  L1 
+-- F16 carve -> H4 2x2
  S   H4  H4  L3  H3 
  H4  H4  H4  L1  L3 
  L3  H2  H2  H2  L4 
  H1  L1  L2  L1  L2 
  L2  H4  L3  L3  L1 
--- F16 wins H4x3=300
+-- F16 wins H4x3=750
  S  [H4][H4] L3  H3 
 [H4][H4][H4] L1  L3 
  L3  H2  H2  H2  L4 
@@ -779,13 +875,19 @@
  L2  H3  L3  H3  L1 
  L4  H2  L1  H2  H2 
  H2  H2  L4  H4  L4 
--- F16 blast bundle @0,0 -> H1 3x3
+-- F16 blast bundle @0,0
+ T   L4  H1  H2  H3 
+ L3  H1  L4  L1  L3 
+ L2  H3  L3  H3  L1 
+ L4  H2  L1  H2  H2 
+ H2  H2  L4  H4  L4 
+-- F16 carve -> H1 3x3
  H1  H1  H1  H2  H3 
  H1  H1  H1  L1  L3 
  H1  H1  H1  H3  L1 
  L4  H2  L1  H2  H2 
  H2  H2  L4  H4  L4 
--- F16 wins H1x3=4050
+-- F16 wins H1x3=18900
 [H1][H1][H1] H2  H3 
 [H1][H1][H1] L1  L3 
 [H1][H1][H1] H3  L1 
@@ -809,7 +911,7 @@
  L4  L4  L1  L2  L1 
  H2  L2  L4  L3  H1 
  L2  L3  L1  L2  L3 
--- F16 wins L4x3=15
+-- F16 wins L4x3=70
  L3  L2  H3  H1  L3 
  H3  H2  H1  L1  L3 
 [L4][L4] L1  L2  L1 
@@ -821,7 +923,7 @@
  H3  H2  H1  L2  L1 
  H2  L2  L1  L3  H1 
  L2  L3  L1  L2  L3 
--- F16 wins H3x3=180
+-- F16 wins H3x3=840
 [H3][H3] H4  H1  L3 
  L3  L2 [H3] L1  L3 
 [H3] H2  H1  L2  L1 
@@ -839,19 +941,31 @@
  H1  H3  L3  H2  L3 
  T   H2  L1  L1  H4 
  L1  H2  H2  H4  L3 
--- F16 blast stick @0,3 -> L2 2x2
+-- F16 blast stick @0,3
+ L2  L2  H4  H2  L4 
+ H2  T   L4  L3  L1 
+ H1  H3  L3  H2  L3 
+ T   H2  L1  L1  H4 
+ L1  H2  H2  H4  L3 
+-- F16 carve -> L2 2x2
  L2  L2  H4  H2  L4 
  H2  T   L4  L3  L1 
  H1  H3  L3  H2  L3 
  L2  L2  L1  L1  H4 
  L2  L2  H2  H4  L3 
--- F16 blast stick @1,1 -> L2 2x2
+-- F16 blast stick @1,1
+ L2  L2  H4  H2  L4 
+ H2  T   L4  L3  L1 
+ H1  H3  L3  H2  L3 
+ L2  L2  L1  L1  H4 
+ L2  L2  H2  H4  L3 
+-- F16 carve -> L2 2x2
  L2  L2  L2  H2  L4 
  H2  L2  L2  L3  L1 
  H1  H3  L3  H2  L3 
  L2  L2  L1  L1  H4 
  L2  L2  H2  H4  L3 
--- F16 wins L2x3=1200
+-- F16 wins L2x3=5280
 [L2][L2][L2] H2  L4 
  H2 [L2][L2] L3  L1 
  H1  H3  L3  H2  L3 
@@ -869,7 +983,7 @@
  H1  L2  H2  H3  H4 
  L2  H1  H1  L3  L2 
  L4  L1  H4  S   L3 
--- F16 wins H1x3=500
+-- F16 wins H1x3=2200
  L3  L2  L3  L3  H3 
 [H1] L2  L1  L3  L1 
 [H1] L2  H2  H3  H4 
@@ -913,13 +1027,19 @@
  H2  L4  H1  L4  L3 
  H4  H3  L4  H1  L4 
  T   L3  L1  H1  H1 
--- F17 blast bundle @0,4 -> H4 3x3
+-- F17 blast bundle @0,4
+ H2  H4  L2  L4  L3 
+ L1  H3  L2  L3  L2 
+ H2  L4  H1  L4  L3 
+ H4  H3  L4  H1  L4 
+ T   L3  L1  H1  H1 
+-- F17 carve -> H4 3x3
  H2  H4  L2  L4  L3 
  L1  H3  L2  L3  L2 
  H4  H4  H4  L4  L3 
  H4  H4  H4  H1  L4 
  H4  H4  H4  H1  H1 
--- F17 wins H4x3=1800
+-- F17 wins H4x3=9000
  H2 [H4] L2  L4  L3 
  L1  H3  L2  L3  L2 
 [H4][H4][H4] L4  L3 
@@ -943,7 +1063,13 @@
  L4  L2  H3  H2  H1 
  H4  L2  L1  H1  H4 
  H3  L4  H2  T   L2 
--- F17 blast bundle @3,4 -> H2 3x3
+-- F17 blast bundle @3,4
+ L3  L1  L2  L2  H1 
+ L3  L2  H2  H3  L4 
+ L4  L2  H3  H2  H1 
+ H4  L2  L1  H1  H4 
+ H3  L4  H2  T   L2 
+-- F17 carve -> H2 3x3
  L3  L1  L2  L2  H1 
  L3  L2  H2  H3  L4 
  L4  L2  H2  H2  H2 
@@ -955,7 +1081,7 @@
  H2  H4  H3  L3  L2 
  L2  H2  L1  L4  L4 
  H3  L1  L4  H3  L2 
--- F17 wins H3x4=450
+-- F17 wins H3x4=2850
  L3 [H3] L3  L3  S  
  L3 [H3] L4  L1  L3 
  H2  H4 [H3] L3  L2 
@@ -979,13 +1105,19 @@
  H4  H2  L2  L2  L1 
  L3  L4  L2  L3  L1 
  L4  H1  L4  L1  L1 
--- F17 blast crate @0,1 -> L2 4x4
+-- F17 blast keg @0,1
+ L3  L3  L2  H4  L4 
+ T   H4  L4  L4  H3 
+ H4  H2  L2  L2  L1 
+ L3  L4  L2  L3  L1 
+ L4  H1  L4  L1  L1 
+-- F17 carve -> L2 4x4
  L2  L2  L2  L2  L4 
  L2  L2  L2  L2  H3 
  L2  L2  L2  L2  L1 
  L2  L2  L2  L2  L1 
  L4  H1  L4  L1  L1 
--- F17 wins L2x4=20480
+-- F17 wins L2x4=179200
 [L2][L2][L2][L2] L4 
 [L2][L2][L2][L2] H3 
 [L2][L2][L2][L2] L1 
@@ -1009,13 +1141,19 @@
  L1  L1  H1  L4  H2 
  T   L2  H3  L2  L4 
  L1  L3  L2  H2  L3 
--- F17 blast bundle @0,3 -> H1 3x3
+-- F17 blast bundle @0,3
+ L1  L1  H4  H3  L2 
+ L2  H1  H1  L1  L3 
+ L1  L1  H1  L4  H2 
+ T   L2  H3  L2  L4 
+ L1  L3  L2  H2  L3 
+-- F17 carve -> H1 3x3
  L1  L1  H4  H3  L2 
  H1  H1  H1  L1  L3 
  H1  H1  H1  L4  H2 
  H1  H1  H1  L2  L4 
  L1  L3  L2  H2  L3 
--- F17 wins H1x3=6750
+-- F17 wins H1x3=59400
  L1  L1  H4  H3  L2 
 [H1][H1][H1] L1  L3 
 [H1][H1][H1] L4  H2 
@@ -1033,7 +1171,7 @@
  L3  S   L3  L4  L1 
  L1  H4  L3  H1  L1 
  H4  H2  H2  H1  L4 
--- F17 wins H2x3=200
+-- F17 wins H2x3=1760
 [H2] L4  L4  L4  L3 
  H4  L4  L1  H4  L2 
  L3  S   L3  L4  L1 
@@ -1045,7 +1183,7 @@
  L3  L4  L1  L4  L1 
  L1  S   L3  H1  L1 
  H4  H4  L3  H1  L4 
--- F17 wins L3x3=50
+-- F17 wins L3x3=440
  H2 [L3] H2  L4  L3 
  H4  L4  L4  H4  L2 
 [L3] L4  L1  L4  L1 
@@ -1077,13 +1215,25 @@
  H1  L3  H2  H3  H4 
  L2  H4  L1  T   L4 
  H2  L3  H3  L2  H1 
--- F18 blast stick @1,0 -> H1 2x2
+-- F18 blast stick @1,0
+ H1  T   H4  L4  H2 
+ L3  L4  L2  S   L1 
+ H1  L3  H2  H3  H4 
+ L2  H4  L1  T   L4 
+ H2  L3  H3  L2  H1 
+-- F18 carve -> H1 2x2
  H1  H1  H1  L4  H2 
  L3  H1  H1  S   L1 
  H1  L3  H2  H3  H4 
  L2  H4  L1  T   L4 
  H2  L3  H3  L2  H1 
--- F18 blast bundle @3,3 -> L3 3x3
+-- F18 blast bundle @3,3
+ H1  H1  H1  L4  H2 
+ L3  H1  H1  S   L1 
+ H1  L3  H2  H3  H4 
+ L2  H4  L1  T   L4 
+ H2  L3  H3  L2  H1 
+-- F18 carve -> L3 3x3
  H1  H1  H1  L4  H2 
  L3  H1  H1  S   L1 
  H1  L3  L3  L3  L3 
@@ -1114,14 +1264,20 @@
  L2  L4  H3  L4  H2 
  H2  H3  L1  S   L1 
 
-==== F19 (MEGA) feature MEGA : caisse 4x4 -> géant H4, 256 ways, puis H2
+==== F19 (MEGA) feature MEGA : baril 4x4 -> géant H4, 256 ways, puis H2
 -- F19 reveal
  L1  H3  S   L2  H2 
  H2  L2  H1  H3  L3 
  L4  H4  L3  L1  H1 
  H1  L1  T   H4  L4 
  L3  H4  H2  L4  L1 
--- F19 blast crate @2,3 -> H4 4x4
+-- F19 blast keg @2,3
+ L1  H3  S   L2  H2 
+ H2  L2  H1  H3  L3 
+ L4  H4  L3  L1  H1 
+ H1  L1  T   H4  L4 
+ L3  H4  H2  L4  L1 
+-- F19 carve -> H4 4x4
  L1  H3  S   L2  H2 
  H4  H4  H4  H4  L3 
  H4  H4  H4  H4  H1 
@@ -1255,7 +1411,13 @@
  L2  L3  L4  H1  L2 
  L3  L1  S   L3  H2 
  H2  H4  L2  H3  L1 
--- F23 blast bundle @1,1 -> H1 3x3
+-- F23 blast bundle @1,1
+ L4  H2  L1  H1  L4 
+ H3  T   H4  L4  H3 
+ L2  L3  L4  H1  L2 
+ L3  L1  S   L3  H2 
+ H2  H4  L2  H3  L1 
+-- F23 carve -> H1 3x3
  H1  H1  H1  H1  L4 
  H1  H1  H1  L4  H3 
  H1  H1  H1  H1  L2 
@@ -1286,14 +1448,20 @@
  L1  L1  S   L3  L2 
  L3  H4  L2  H3  L1 
 
-==== F24 (BASE) palier x500 : caisse 4x4 -> géant H3, 5 rouleaux
+==== F24 (BASE) palier x500 : baril 4x4 -> géant H3, 5 rouleaux
 -- F24 reveal
  H4  L4  L3  H1  L1 
  L1  H2  H1  L2  H4 
  H2  T   L1  H2  H3 
  L3  H4  L2  L1  L3 
  L2  H1  L4  S   H2 
--- F24 blast crate @1,2 -> H3 4x4
+-- F24 blast keg @1,2
+ H4  L4  L3  H1  L1 
+ L1  H2  H1  L2  H4 
+ H2  T   L1  H2  H3 
+ L3  H4  L2  L1  L3 
+ L2  H1  L4  S   H2 
+-- F24 carve -> H3 4x4
  H3  H3  H3  H3  L1 
  H3  H3  H3  H3  H4 
  H3  H3  H3  H3  H3 
@@ -1312,7 +1480,7 @@
  H2  L4  L1  L3  L3 
  L2  H1  L4  S   H2 
 
-==== F25 (BONUS) achat bonus : caisse 4x4 H1 sous multiplicateur x3, palier x1000
+==== F25 (BONUS) achat bonus : baril 4x4 H1 sous multiplicateur x3, palier x1000
 -- F25 reveal
  L1  S   H3  L2  H4 
  H4  H2  L2  L4  H1 
@@ -1331,13 +1499,19 @@
  L4  H1  H1  L4  L3 
  H4  L2  H1  H4  L4 
  L2  L1  H2  L4  H4 
--- F25 blast stick @2,1 -> L1 2x2
+-- F25 blast stick @2,1
+ L1  L2  L3  L3  L2 
+ L4  L4  T   H4  S  
+ L4  H1  H1  L4  L3 
+ H4  L2  H1  H4  L4 
+ L2  L1  H2  L4  H4 
+-- F25 carve -> L1 2x2
  L1  L2  L3  L3  L2 
  L4  L1  L1  H4  S  
  L4  L1  L1  L4  L3 
  H4  L2  H1  H4  L4 
  L2  L1  H2  L4  H4 
--- F25 wins L1x3=120
+-- F25 wins L1x3=300
 [L1] L2  L3  L3  L2 
  L4 [L1][L1] H4  S  
  L4 [L1][L1] L4  L3 
@@ -1355,7 +1529,7 @@
  H4  H2  H2  L1  L4 
  H3  H3  L2  H3  L1 
  L4  L2  H1  L3  L4 
--- F25 wins L4x3=20
+-- F25 wins L4x3=50
  H4  L3 [L4] L2  L4 
  L1 [L4][L4] H3  H2 
  H4  H2  H2  L1  L4 
@@ -1379,13 +1553,19 @@
  L2  H3  L4  L4  H4 
  L3  H1  L2  H2  H2 
  H3  T   L4  L2  L1 
--- F25 blast crate @1,4 -> H1 4x4
+-- F25 blast keg @1,4
+ L3  L4  L2  L2  L4 
+ L3  L4  L4  L3  H2 
+ L2  H3  L4  L4  H4 
+ L3  H1  L2  H2  H2 
+ H3  T   L4  L2  L1 
+-- F25 carve -> H1 4x4
  L3  L4  L2  L2  L4 
  H1  H1  H1  H1  H2 
  H1  H1  H1  H1  H4 
  H1  H1  H1  H1  H2 
  H1  H1  H1  H1  L1 
--- F25 wins H1x4=115200
+-- F25 wins H1x4=806400
  L3  L4  L2  L2  L4 
 [H1][H1][H1][H1] H2 
 [H1][H1][H1][H1] H4 
@@ -1409,7 +1589,7 @@
  H2  L3  H4  H3  L3 
  H1  H2  L2  L1  L1 
  L1  H4  H2  L2  L4 
--- F25 wins H2x3=240
+-- F25 wins H2x3=1680
  L1  L3 [H2] H4  L3 
  L4  S   L3  H4  H2 
 [H2] L3  H4  H3  L3 
@@ -1433,7 +1613,7 @@
  L3  L1  H4  H1  H1 
  L2  L1  H2  H1  L4 
  L1  L1  L4  H4  L1 
--- F25 wins L2x3=30
+-- F25 wins L2x3=210
  L4 [L2] L3  L1  L3 
  L1  H3 [L2] H4  L2 
  L3  L1  H4  H1  H1 
@@ -1452,7 +1632,7 @@
  H3  L1  L4  H2  S  
  H1  L2  L3  H2  L4 
 
-==== F26 (SUPER) MAX WIN : caisse H1 4x4 + 4 H1 au rouleau 5 (1024 ways) sous x5 -> plafond x25000
+==== F26 (SUPER) MAX WIN : baril H1 4x4 + 4 H1 au rouleau 5 (1024 ways) sous x5 -> plafond x25000
 -- F26 reveal
  L4  H1  S   H2  L1 
  H2  L3  L2  S   H3 
@@ -1465,13 +1645,19 @@
  L2  T   L4  L3  L4 
  L1  L1  H2  L3  L1 
  H1  H3  L4  H2  L1 
--- F26 blast bundle @1,2 -> L2 3x3
+-- F26 blast bundle @1,2
+ L1  L3  H2  H1  L4 
+ H4  L2  L3  L4  H2 
+ L2  T   L4  L3  L4 
+ L1  L1  H2  L3  L1 
+ H1  H3  L4  H2  L1 
+-- F26 carve -> L2 3x3
  L1  L3  H2  H1  L4 
  H4  L2  L3  L4  H2 
  L2  L2  L2  L3  L4 
  L2  L2  L2  L3  L1 
  L2  L2  L2  H2  L1 
--- F26 wins L2x3=720
+-- F26 wins L2x3=3600
  L1  L3  H2  H1  L4 
  H4 [L2] L3  L4  H2 
 [L2][L2][L2] L3  L4 
@@ -1495,7 +1681,13 @@
  L3  H3  L3  L2  L4 
  L1  H1  L4  L4  L3 
  L1  H1  H3  L3  H2 
--- F26 blast bundle @3,1 -> H3 3x3
+-- F26 blast bundle @3,1
+ H4  L2  L3  H1  L3 
+ L3  H4  L3  T   L4 
+ L3  H3  L3  L2  L4 
+ L1  H1  L4  L4  L3 
+ L1  H1  H3  L3  H2 
+-- F26 carve -> H3 3x3
  H4  L2  L3  H1  L3 
  L3  H4  H3  H3  H3 
  L3  H3  H3  H3  H3 
@@ -1507,7 +1699,7 @@
  H1  L4  H3  L4  L3 
  L4  H3  L3  L2  L4 
  L2  H2  L2  H4  H1 
--- F26 wins L3x3=30
+-- F26 wins L3x3=190
 [L3] H1  H2  L2  L3 
 [L3][L3] L2  S   H3 
  H1  L4  H3  L4  L3 
@@ -1525,13 +1717,19 @@
  L4  H2  L1  L4  L4 
  H4  H3  H2  L2  L4 
  H2  L1  H1  L1  L1 
--- F26 blast bundle @2,0 -> H4 3x3
+-- F26 blast bundle @2,0
+ L3  L1  T   L2  L2 
+ L4  H2  H1  H2  L3 
+ L4  H2  L1  L4  L4 
+ H4  H3  H2  L2  L4 
+ H2  L1  H1  L1  L1 
+-- F26 carve -> H4 3x3
  L3  H4  H4  H4  L2 
  L4  H4  H4  H4  L3 
  L4  H4  H4  H4  L4 
  H4  H3  H2  L2  L4 
  H2  L1  H1  L1  L1 
--- F26 wins H4x4=6480
+-- F26 wins H4x4=45360
  L3 [H4][H4][H4] L2 
  L4 [H4][H4][H4] L3 
  L4 [H4][H4][H4] L4 
@@ -1555,13 +1753,19 @@
  L1  T   H2  L1  H1 
  L3  L2  L3  H4  H1 
  H2  H4  H3  L4  H1 
--- F26 blast crate @1,2 -> H1 4x4
+-- F26 blast keg @1,2
+ L2  H3  L4  H2  S  
+ H4  L4  L1  L3  H1 
+ L1  T   H2  L1  H1 
+ L3  L2  L3  H4  H1 
+ H2  H4  H3  L4  H1 
+-- F26 carve -> H1 4x4
  L2  H3  L4  H2  S  
  H1  H1  H1  H1  H1 
  H1  H1  H1  H1  H1 
  H1  H1  H1  H1  H1 
  H1  H1  H1  H1  H1 
--- F26 wins H1x5=2560000
+-- F26 wins H1x5=22528000
  L2  H3  L4  H2  S  
 [H1][H1][H1][H1][H1]
 [H1][H1][H1][H1][H1]

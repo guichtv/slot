@@ -6,7 +6,7 @@ import { z } from 'zod';
  * - Montants : entiers, centièmes de la mise de base (100 = ×1).
  * - Le front ne déduit, ne recalcule et ne corrige jamais un gain : il valide la forme et la cohérence déclarée.
  */
-export const CONTRACT_VERSION = '1.0.0';
+export const CONTRACT_VERSION = '1.1.0';
 export const COLS = 5;
 export const ROWS = 5;
 
@@ -32,7 +32,9 @@ const Area = z.object({
 });
 export type Area = z.infer<typeof Area>;
 
-export const TntKind = z.enum(['stick', 'bundle', 'crate']);
+export const TntKind = z.enum(['stick', 'bundle', 'keg']);
+/** côté de la zone carrée de chaque charge */
+export const TNT_SIZE: Record<'stick' | 'bundle' | 'keg', number> = { stick: 2, bundle: 3, keg: 4 };
 export type TntKind = z.infer<typeof TntKind>;
 
 const base = { index: z.number().int().nonnegative() };
@@ -51,13 +53,31 @@ export const RevealEv = z.object({
   tnt: z.array(z.object({ pos: Pos, kind: TntKind })).default([]),
 });
 
-/** Une charge explose : la zone est dégagée puis sculptée en UN symbole géant qui la remplit. */
+/**
+ * Une charge explose : sa zone (carrée, de la taille de la charge) est réduite en gravats.
+ * Une chaîne commence au lien 0 ; un lien k > 0 est une charge prise dans la zone d'une charge précédente
+ * de la même chaîne (from), ou reliée par le fil de mise à feu en super bonus (wired).
+ */
 export const BlastEv = z.object({
   ...base,
   type: z.literal('blast'),
+  chain: z.number().int().nonnegative(),
+  link: z.number().int().nonnegative(),
+  from: Pos.optional(),
+  wired: z.boolean().optional(),
   tnt: z.object({ pos: Pos, kind: TntKind }),
   area: Area,
+});
+
+/** Fin de chaîne : les gravats sont sculptés en UN géant qui remplit le rectangle englobant de la chaîne. */
+export const CarveEv = z.object({
+  ...base,
+  type: z.literal('carve'),
+  chain: z.number().int().nonnegative(),
+  area: Area,
   giant: z.enum(['L1', 'L2', 'L3', 'L4', 'H1', 'H2', 'H3', 'H4', 'W']),
+  /** nombre de cases sculptées (= w × h), qui nourrit le Cornerstone en bonus */
+  cells: z.number().int().positive(),
 });
 
 export const WinLine = z.object({
@@ -95,7 +115,15 @@ export const TumbleEv = z.object({
 });
 
 export const TumbleWinEv = z.object({ ...base, type: z.literal('updateTumbleWin'), amount: Amount });
-export const GlobalMultEv = z.object({ ...base, type: z.literal('updateGlobalMult'), globalMult: z.number().int().min(1), cause: z.enum(['blast', 'start']).default('blast') });
+export const GlobalMultEv = z.object({
+  ...base,
+  type: z.literal('updateGlobalMult'),
+  globalMult: z.number().int().min(1).max(9999),
+  /** valeur ajoutée (cases sculptées) ; absente au départ du bonus */
+  added: z.number().int().nonnegative().optional(),
+  chain: z.number().int().nonnegative().optional(),
+  cause: z.enum(['carve', 'start']).default('carve'),
+});
 export const SetWinEv = z.object({ ...base, type: z.literal('setWin'), amount: Amount });
 export const SetTotalWinEv = z.object({ ...base, type: z.literal('setTotalWin'), amount: Amount });
 export const FsTriggerEv = z.object({
@@ -110,7 +138,7 @@ export const FsRetriggerEv = z.object({
   type: z.literal('freeSpinRetrigger'),
   extra: z.number().int().positive(),
   totalFs: z.number().int().positive(),
-  positions: z.array(Pos).min(3),
+  positions: z.array(Pos).min(2),
 });
 export const FsUpdateEv = z.object({ ...base, type: z.literal('updateFreeSpin'), amount: z.number().int().positive(), total: z.number().int().positive() });
 export const FsEndEv = z.object({ ...base, type: z.literal('freeSpinEnd'), amount: Amount });
@@ -120,6 +148,7 @@ export const FinalWinEv = z.object({ ...base, type: z.literal('finalWin'), amoun
 export const GameEvent = z.discriminatedUnion('type', [
   RevealEv,
   BlastEv,
+  CarveEv,
   WinInfoEv,
   TumbleEv,
   TumbleWinEv,
@@ -183,8 +212,15 @@ export function checkBook(b: Book): string[] {
     if (e.type === 'blast') {
       const a = e.area;
       if (a.col + a.w > COLS || a.row + a.h > ROWS) issues.push(`blast#${e.index}: zone hors grille`);
+      if (a.w !== TNT_SIZE[e.tnt.kind] || a.h !== TNT_SIZE[e.tnt.kind]) issues.push(`blast#${e.index}: zone ${a.w}x${a.h} pour ${e.tnt.kind}`);
       const [tc, tr] = e.tnt.pos;
       if (tc < a.col || tc >= a.col + a.w || tr < a.row || tr >= a.row + a.h) issues.push(`blast#${e.index}: la TNT n'est pas dans sa zone`);
+      if (e.link > 0 && !e.from && !e.wired) issues.push(`blast#${e.index}: lien ${e.link} sans origine`);
+    }
+    if (e.type === 'carve') {
+      const a = e.area;
+      if (a.col + a.w > COLS || a.row + a.h > ROWS) issues.push(`carve#${e.index}: zone hors grille`);
+      if (a.w * a.h !== e.cells) issues.push(`carve#${e.index}: cells ${e.cells} ≠ ${a.w}×${a.h}`);
     }
     if (e.type === 'freeSpinTrigger') {
       inFs = true;

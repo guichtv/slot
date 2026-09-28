@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BOOMTOOTH — banc de la mascotte (dev)</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #e9e6dc; font: 14px system-ui, sans-serif; }
+  body.dark { background: #1c1628; }
+  #stage { position: fixed; inset: 0; }
+  #bar { position: fixed; left: 8px; top: 8px; display: flex; flex-wrap: wrap; gap: 4px; max-width: 70vw; z-index: 2; }
+  #bar button { padding: 6px 10px; border-radius: 8px; border: 1px solid #0003; background: #fff; cursor: pointer; }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="stage"></div>
+<script type="module" src="/src/dev/mascotBench.ts"></script>
+</body>
+</html>

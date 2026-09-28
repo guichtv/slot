@@ -73,7 +73,11 @@ export class RoundModel {
         this.spinWin = 0;
         this.lastWins = null;
         break;
-      case 'blast': {
+      case 'blast':
+        // la zone est réduite en gravats ; la charge est consommée (le géant naît au carve)
+        this.tnt.delete(RoundModel.key(e.tnt.pos[0], e.tnt.pos[1]));
+        break;
+      case 'carve': {
         const { col, row, w, h } = e.area;
         for (let c = col; c < col + w; c++) for (let r = row; r < row + h; r++) {
           (this.board[c] as SymbolName[])[r] = e.giant;

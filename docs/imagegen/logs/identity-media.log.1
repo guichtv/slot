@@ -1,0 +1,657 @@
+OpenAI Codex v0.158.0
+--------
+workdir: /home/user/slot
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: none
+reasoning summaries: none
+session id: 01a0e7c6-f6c0-7280-ab1a-bab89f8497f4
+--------
+user
+Utilise $imagegen et l'outil natif de génération d'images (built-in image_gen, PAS un script CLI/API) pour produire réellement les images décrites. Ta mission porte uniquement sur ces images et leur rapport ; ne crée ni ne modifie aucun code du jeu.
+
+Studio : Crownforge. Racine du projet : le répertoire courant.
+
+RÈGLES COMMUNES
+- Style maison Crownforge : BD / cartoon 2D pour adultes, contours noirs épais légèrement irréguliers, cel-shading deux tons, reflets francs, couleurs saturées maîtrisées, formes simples et lisibles. Jamais photo-réaliste, jamais 3D lisse, jamais de rendu « image IA » (pas de néon générique, pas de dégradés par défaut, pas de flou artistique, pas d'effets de bordure).
+- Transparence (quand demandée) : fond RÉELLEMENT transparent (canal alpha), pas de damier dessiné, pas de fond blanc, pas de halo ; sujet complet non coupé, marge de 3 à 6 % tout autour. Si l'outil ne produit pas d'alpha : fond vert chroma uni #00FF00 sans ombre portée, et signale-le dans ta réponse.
+- Aucun texte, logo, filigrane ou signature, sauf le texte exact demandé.
+- Aucune copie de personnage, de logo ou de composition identifiable d'un autre studio ou d'une marque.
+- Reprise : si un fichier cible existe déjà ET que son .prompt.txt existe, ne le régénère pas ; passe au suivant.
+
+PROCÉDURE pour CHAQUE image :
+1) génère avec image_gen (un appel par asset) ;
+2) inspecte (sujet, style, transparence, marges, texte exact) et régénère UNE fois si un défaut évident existe ;
+3) copie le fichier final depuis $CODEX_HOME/generated_images/… vers le chemin indiqué (crée les dossiers) ;
+4) écris à côté <nom>.prompt.txt avec le prompt exact utilisé.
+
+RÉPONSE FINALE : chemins produits, méthode réellement utilisée, dimensions, canal alpha (oui/non), défauts restants.
+Si image_gen n'est pas accessible, dis-le précisément ; ne remplace PAS les images par du SVG, du code ou une liste de prompts.
+
+Projet : BOOMTOOTH, slot 2D « démolition au castor » (Crownforge). Buck Boomtooth, castor chef de chantier vaniteux et casse-cou, fait sauter une montagne de granit pour y sculpter un monument à sa gloire (« Mount Buckmore ») au-dessus d'un barrage en rondins, dans une vallée de pins du Grand Nord.
+
+Direction artistique RETENUE (référence obligatoire) : assets/generated/directions/D1.png — charge-la avec view_image avant de générer et reproduis son style exact :
+- encrage noir épais (4 à 7 px à 1024 px), légèrement irrégulier comme au pinceau, traits intérieurs plus fins ;
+- cel-shading deux tons nets (clair + ombre franche) et un reflet blanc cassé par volume ; pas d'aérographe, pas de flou ;
+- matières dessinées : bois équarri veiné, granit gris-bleu ébréché, métal riveté, flanelle à carreaux rouges et noirs, copeaux ;
+- lumière principale chaude de fin d'après-midi venant de la gauche (orange doré), ombres bleu-violet ;
+- couleurs saturées maîtrisées.
+Palette : orange brûlé #E8742A, orange ciel #F39A3C, vert pin #2F5D46, vert pin sombre #1E3B2E, granit #6F7F92, granit ombre #46526A, rouge TNT #D7332B, or #F2B233, bois miel #C98A45, bois sombre #6B4526, crème #F4E6C8, encre #1B1410.
+Référence d'ambiance NUIT (bonus) : assets/generated/directions/D3.png (aurore turquoise #3FD6B8, bleu nuit #14233A, projecteurs orange #FF9A3C) — même vallée, même trait.
+Jamais photo-réaliste, jamais 3D lisse, jamais de néon générique ni de dégradé par défaut.
+
+LOT identity-media — cartes d'accueil 2 et 3, visuels de promotion, décor portrait (5 images). Dossiers : assets/generated/identity/ (1-4), assets/generated/decor/ (5)
+Mascotte : strictement le Buck de assets/generated/mascot/buck-ref.png (charge-la avec view_image) et de D1.png.
+
+1. card-detonator.png — Carte d'accueil 2, 1024×1536, fond OPAQUE : de nuit (aurore turquoise, projecteurs), Buck frappe de sa queue plate un gros bloc de granit dont la face avant s'illumine ; des éclats de pierre volent vers le bloc. Cadre de bois aux coins arrondis dessiné dans l'image. Aucun texte ni chiffre.
+2. card-bonus.png — Carte d'accueil 3, 1024×1536, fond OPAQUE : trois détonateurs à piston rouge et or (plaque crème vide, sans mot) alignés au premier plan, étincelles ; derrière, la montagne sculptée en tête de castor casquée éclairée par des projecteurs, nuit. Cadre de bois aux coins arrondis. Aucun texte.
+3. cover.png — Visuel promotionnel 16:9, 1536×864 (ou 1536×1024 composé en 16:9 au centre), fond OPAQUE : Buck au premier plan à droite, fier, allumette frottée sur sa dent en or qui jette des étincelles ; à gauche une explosion de TNT dans un nuage de poussière d'où émerge un gros symbole géant (buste de l'élan de l'équipe) sculpté dans la pierre ; au fond la vallée à l'heure dorée avec la montagne sculptée. Laisser une zone calme en haut à gauche (le logo y sera posé ensuite). Aucun texte.
+4. tile.png — Visuel promotionnel 3:4 portrait, 1152×1536, fond OPAQUE : Buck en pied, bras levés en triomphe, pluie d'éclats de granit et de pépites d'or, montagne sculptée derrière lui, ciel orange. Zone calme en haut (logo posé ensuite). Aucun texte.
+5. decor-portrait.png — Décor complet pour mobile portrait, 1024×1536, fond OPAQUE, même vallée que D1 : ciel orange en haut, la montagne à face plate au centre-haut, forêt, barrage et chute d'eau sur la gauche au tiers inférieur, sol de chantier en bas. AUCUN personnage, aucune grille, aucun texte ; le centre (où la grille sera posée) doit rester calme.
+
+warning: Codex could not find bubblewrap on PATH. Install bubblewrap with your OS package manager. See the sandbox prerequisites: https://developers.openai.com/codex/concepts/sandboxing#prerequisites. Codex will use the bundled bubblewrap in the meantime.
+codex
+J’utilise la compétence **imagegen** et l’outil natif `image_gen`. Je vais vérifier les fichiers existants, charger les références, puis générer et inspecter chaque image sans toucher au code du jeu.
+
+exec
+/bin/bash -lc "pwd && rg --files -g 'AGENTS.md' -g '*.png' -g '*.prompt.txt' assets .agents 2>/dev/null" in /home/user/slot
+ succeeded in 0ms:
+/home/user/slot
+assets/generated/screens/banner-tier.prompt.txt
+assets/generated/screens/panel-floodlight.png
+assets/generated/screens/panel-sundown.prompt.txt
+assets/generated/screens/banner-tier.png
+assets/generated/screens/shop-board.png
+assets/generated/screens/shop-board.prompt.txt
+assets/generated/screens/panel-total.prompt.txt
+assets/generated/screens/panel-floodlight.prompt.txt
+assets/generated/screens/panel-sundown.png
+assets/generated/screens/panel-total.png
+assets/generated/directions/D5.png
+assets/generated/directions/D3.prompt.txt
+assets/generated/directions/D1.png
+assets/generated/directions/D4.prompt.txt
+assets/generated/directions/D2.prompt.txt
+assets/generated/directions/D5.prompt.txt
+assets/generated/directions/D3.png
+assets/generated/directions/D1.prompt.txt
+assets/generated/directions/D4.png
+assets/generated/directions/D2.png
+assets/generated/fx/fx-debris.prompt.txt
+assets/generated/fx/fx-dust.png
+assets/generated/fx/fx-dust.prompt.txt
+assets/generated/fx/fx-debris.png
+assets/generated/decor/floodlight.prompt.txt
+assets/generated/decor/ground.prompt.txt
+assets/generated/decor/mid.png
+assets/generated/decor/fg-props.png
+assets/generated/decor/ground.png
+assets/generated/decor/monument-3.prompt.txt
+assets/generated/decor/far.prompt.txt
+assets/generated/decor/birds.png
+assets/generated/decor/floodlight.png
+assets/generated/decor/clouds.png
+assets/generated/decor/monument-3.png
+assets/generated/decor/monument-2.png
+assets/generated/decor/monument-2.prompt.txt
+assets/generated/decor/sky.png
+assets/generated/decor/mid.prompt.txt
+assets/generated/decor/sky-rich.png
+assets/generated/decor/night-sky.png
+assets/generated/decor/far.png
+assets/generated/decor/monument-1.png
+assets/generated/decor/night-sky.prompt.txt
+assets/generated/decor/monument-1.prompt.txt
+assets/generated/decor/sky.prompt.txt
+assets/generated/decor/birds.prompt.txt
+assets/generated/decor/monument-0.prompt.txt
+assets/generated/decor/monument-0.png
+assets/generated/decor/clouds.prompt.txt
+assets/generated/decor/sky-rich.prompt.txt
+assets/generated/decor/fg-props.prompt.txt
+assets/generated/mascot/buck-arms.png
+assets/generated/mascot/buck-heads.png
+assets/generated/mascot/buck-body.prompt.txt
+assets/generated/mascot/buck-ref.png
+assets/generated/mascot/buck-ref.prompt.txt
+assets/generated/mascot/buck-heads.prompt.txt
+assets/generated/mascot/buck-body.png
+assets/generated/mascot/buck-arms.prompt.txt
+assets/generated/identity/card-blast.prompt.txt
+assets/generated/identity/logo.prompt.txt
+assets/generated/identity/crownforge.png
+assets/generated/identity/card-blast.png
+assets/generated/identity/logo.png
+assets/generated/identity/crownforge.prompt.txt
+assets/generated/symbols/T-keg.prompt.txt
+assets/generated/symbols/L1.png
+assets/generated/symbols/T-log.prompt.txt
+assets/generated/symbols/L4.prompt.txt
+assets/generated/symbols/H1.png
+assets/generated/symbols/H2.prompt.txt
+assets/generated/symbols/H2.png
+assets/generated/symbols/T-keg.png
+assets/generated/symbols/L3.png
+assets/generated/symbols/H4.prompt.txt
+assets/generated/symbols/H3.png
+assets/generated/symbols/S.png
+assets/generated/symbols/L4.png
+assets/generated/symbols/T-log.png
+assets/generated/symbols/W.prompt.txt
+assets/generated/symbols/T-stick.png
+assets/generated/symbols/L2.png
+assets/generated/symbols/H1.prompt.txt
+assets/generated/symbols/L2.prompt.txt
+assets/generated/symbols/W.png
+assets/generated/symbols/T-stick.prompt.txt
+assets/generated/symbols/S.prompt.txt
+assets/generated/symbols/L1.prompt.txt
+assets/generated/symbols/L3.prompt.txt
+assets/generated/symbols/T-bundle.png
+assets/generated/symbols/T-bundle.prompt.txt
+assets/generated/symbols/H4.png
+assets/generated/symbols/H3.prompt.txt
+assets/generated/ui/buttons.prompt.txt
+assets/generated/ui/cornerstone.png
+assets/generated/ui/cell.png
+assets/generated/ui/cornerstone-gold.prompt.txt
+assets/generated/ui/buttons.png
+assets/generated/ui/spin.prompt.txt
+assets/generated/ui/spin.png
+assets/generated/ui/topbar.prompt.txt
+assets/generated/ui/cell.prompt.txt
+assets/generated/ui/topbar.png
+assets/generated/ui/frame.png
+assets/generated/ui/icons.png
+assets/generated/ui/icons.prompt.txt
+assets/generated/ui/frame.prompt.txt
+assets/generated/ui/cornerstone.prompt.txt
+assets/generated/ui/cornerstone-gold.png
+
+exec
+/bin/bash -lc 'cat /root/.codex/skills/.system/imagegen/SKILL.md' in /home/user/slot
+ succeeded in 0ms:
+---
+name: "imagegen"
+description: "Generate or edit raster images when the task benefits from AI-created bitmap visuals such as photos, illustrations, textures, sprites, mockups, or transparent-background cutouts. Use when Codex should create a brand-new image, transform an existing image, or derive visual variants from references, and the output should be a bitmap asset rather than repo-native code or vector. Do not use when the task is better handled by editing existing SVG/vector/code-native assets, extending an established icon or logo system, or building the visual directly in HTML/CSS/canvas."
+---
+
+# Image Generation Skill
+
+Generates or edits images for the current project (for example website assets, game assets, UI mockups, product mockups, wireframes, logo design, photorealistic images, or infographics).
+
+## Top-level modes and rules
+
+This skill has exactly two top-level modes:
+
+- **Default built-in tool mode (preferred):** built-in `image_gen` tool for image generation, editing, and transparent-image requests. Does not require `OPENAI_API_KEY`.
+- **Fallback CLI mode:** `scripts/image_gen.py` CLI. Use when the user explicitly asks for or confirms the CLI/API/model path. Requires `OPENAI_API_KEY`.
+
+Within CLI fallback, the CLI exposes three subcommands:
+
+- `generate`
+- `edit`
+- `generate-batch`
+
+Rules:
+- Use the built-in `image_gen` tool by default for normal image generation and editing requests.
+- Do not switch to CLI fallback for ordinary quality, size, or file-path control.
+- For transparent images, ask built-in `image_gen` for a transparent background and preserve the generated alpha.
+- Never silently switch from built-in `image_gen` or CLI `gpt-image-2` to CLI `gpt-image-1.5`; ask the user first unless they explicitly requested `gpt-image-1.5`.
+- The word `batch` by itself does not mean CLI fallback. If the user asks for many assets or says to batch-generate assets without explicitly asking for CLI/API/model controls, stay on the built-in path and issue one built-in call per requested asset or variant.
+- If the built-in tool fails or is unavailable, tell the user the CLI fallback exists and that it requires `OPENAI_API_KEY`. Proceed only if the user explicitly asks for that fallback.
+- If the user explicitly asks for CLI mode, use the bundled `scripts/image_gen.py` workflow. Do not create one-off SDK runners.
+- Never modify `scripts/image_gen.py`. If something is missing, ask the user before doing anything else.
+
+Built-in save-path policy:
+- In built-in tool mode, Codex saves generated images under `$CODEX_HOME/*` by default.
+- Do not describe or rely on OS temp as the default built-in destination.
+- Do not describe or rely on a destination-path argument (if any) on the built-in `image_gen` tool. If a specific location is needed, generate first and then move or copy the selected output from `$CODEX_HOME/generated_images/...`.
+- Save-path precedence in built-in mode:
+  1. If the user names a destination, move or copy the selected output there.
+  2. If the image is meant for the current project, move or copy the final selected image into the workspace before finishing.
+  3. If the image is only for preview or brainstorming, render it inline; the underlying file can remain at the default `$CODEX_HOME/*` path.
+- Never leave a project-referenced asset only at the default `$CODEX_HOME/*` path.
+- Do not overwrite an existing asset unless the user explicitly asked for replacement; otherwise create a sibling versioned filename such as `hero-v2.png` or `item-icon-edited.png`.
+
+Shared prompt guidance for both modes lives in `references/prompting.md` and `references/sample-prompts.md`.
+
+Fallback-only docs/resources for CLI mode:
+- `references/cli.md`
+- `references/image-api.md`
+- `references/codex-network.md`
+- `scripts/image_gen.py`
+
+## When to use
+- Generate a new image (concept art, product shot, cover, website hero)
+- Generate a new image using one or more reference images for style, composition, or mood
+- Edit an existing image (inpainting, lighting or weather transformations, background replacement, object removal, compositing, transparent background)
+- Produce many assets or variants for one task
+
+## When not to use
+- Extending or matching an existing SVG/vector icon set, logo system, or illustration library inside the repo
+- Creating simple shapes, diagrams, wireframes, or icons that are better produced directly in SVG, HTML/CSS, or canvas
+- Making a small project-local asset edit when the source file already exists in an editable native format
+- Any task where the user clearly wants deterministic code-native output instead of a generated bitmap
+
+## Decision tree
+
+Think about two separate questions:
+
+1. **Intent:** is this a new image or an edit of an existing image?
+2. **Execution strategy:** is this one asset or many assets/variants?
+
+Intent:
+- If the user wants to modify an existing image while preserving parts of it, treat the request as **edit**.
+- If the user provides images only as references for style, composition, mood, or subject guidance, treat the request as **generate**.
+- If the user provides no images, treat the request as **generate**.
+
+Built-in edit semantics:
+- Built-in edit mode is for images already visible in the conversation context, such as attached images or images generated earlier in the thread.
+- If the user wants to edit a local image file with the built-in tool, first load it with built-in `view_image` tool so the image is visible in the conversation context, then proceed with the built-in edit flow.
+- Do not promise arbitrary filesystem-path editing through the built-in tool.
+- If a local file still needs direct file-path control, masks, or other explicit CLI-only parameters, use the explicit CLI fallback only when the user asks for it.
+- For edits, preserve invariants aggressively and save non-destructively by default.
+
+Execution strategy:
+- In the built-in default path, produce many assets or variants by issuing one `image_gen` call per requested asset or variant.
+- In the CLI fallback path, use the CLI `generate-batch` subcommand only when the user explicitly chose CLI mode and needs many prompts/assets.
+- For many distinct assets, do not use `n` as a substitute for separate prompts. `n` is for variants of one prompt; distinct assets need distinct built-in calls or distinct CLI `generate-batch` jobs.
+
+Assume the user wants a new image unless they clearly ask to change an existing one.
+
+## Workflow
+1. Decide the top-level mode: built-in by default, including transparent-output requests; fallback CLI only if explicitly requested or confirmed.
+2. Decide the intent: `generate` or `edit`.
+3. Decide whether the output is preview-only or meant to be consumed by the current project.
+4. Decide the execution strategy: single asset vs repeated built-in calls vs CLI `generate-batch`.
+5. Collect inputs up front: prompt(s), exact text (verbatim), constraints/avoid list, and any input images.
+6. For every input image, label its role explicitly:
+   - reference image
+   - edit target
+   - supporting insert/style/compositing input
+7. If the edit target is only on the local filesystem and you are staying on the built-in path, inspect it with `view_image` first so the image is available in conversation context.
+8. If the user asked for a photo, illustration, sprite, product image, banner, or other explicitly raster-style asset, use `image_gen` rather than substituting SVG/HTML/CSS placeholders. If the request is for an icon, logo, or UI graphic that should match existing repo-native SVG/vector/code assets, prefer editing those directly instead.
+9. Augment the prompt based on specificity:
+   - If the user's prompt is already specific and detailed, normalize it into a clear spec without adding creative requirements.
+   - If the user's prompt is generic, add tasteful augmentation only when it materially improves output quality.
+10. Use the built-in `image_gen` tool by default.
+11. For transparent-output requests, ask built-in `image_gen` for a transparent background and preserve the generated alpha channel.
+12. Inspect outputs and validate: subject, style, composition, text accuracy, and invariants/avoid items.
+13. Iterate with a single targeted change, then re-check.
+14. For preview-only work, render the image inline; the underlying file may remain at the default `$CODEX_HOME/generated_images/...` path.
+15. For project-bound work, move or copy the selected artifact into the workspace and update any consuming code or references. Never leave a project-referenced asset only at the default `$CODEX_HOME/generated_images/...` path.
+16. For batches or multi-asset requests, persist every requested deliverable final in the workspace unless the user explicitly asked to keep outputs preview-only. Discarded variants do not need to be kept unless requested.
+17. If the user explicitly chooses or confirms the CLI fallback, then use the fallback-only docs for model, quality, size, `input_fidelity`, masks, output format, output paths, and network setup.
+18. Always report the final saved path(s) for any workspace-bound asset(s), plus the final prompt or prompt set and whether the built-in tool or fallback CLI mode was used.
+
+## Transparent image requests
+
+Ask built-in `image_gen` for a genuinely transparent background and preserve its alpha.
+
+## Prompt augmentation
+
+Reformat user prompts into a structured, production-oriented spec. Make the user's goal clearer and more actionable, but do not blindly add detail.
+
+Treat this as prompt-shaping guidance, not a closed schema. Use only the lines that help, and add a short extra labeled line when it materially improves clarity.
+
+### Specificity policy
+
+Use the user's prompt specificity to decide how much augmentation is appropriate:
+
+- If the prompt is already specific and detailed, preserve that specificity and only normalize/structure it.
+- If the prompt is generic, you may add tasteful augmentation when it will materially improve the result.
+
+Allowed augmentations:
+- composition or framing hints
+- polish level or intended-use hints
+- practical layout guidance
+- reasonable scene concreteness that supports the stated request
+
+Not allowed augmentations:
+- extra characters or objects that are not implied by the request
+- brand names, slogans, palettes, or narrative beats that are not implied
+- arbitrary side-specific placement unless the surrounding layout supports it
+
+## Use-case taxonomy (exact slugs)
+
+Classify each request into one of these buckets and keep the slug consistent across prompts and references.
+
+Generate:
+- photorealistic-natural — candid/editorial lifestyle scenes with real texture and natural lighting.
+- product-mockup — product/packaging shots, catalog imagery, merch concepts.
+- ui-mockup — app/web interface mockups and wireframes; specify the desired fidelity.
+- infographic-diagram — diagrams/infographics with structured layout and text.
+- scientific-educational — classroom explainers, scientific diagrams, and learning visuals with required labels and accuracy constraints.
+- ads-marketing — campaign concepts and ad creatives with audience, brand position, scene, and exact tagline/copy.
+- productivity-visual — slide, chart, workflow, and data-heavy business visuals.
+- logo-brand — logo/mark exploration, vector-friendly.
+- illustration-story — comics, children’s book art, narrative scenes.
+- stylized-concept — style-driven concept art, 3D/stylized renders.
+- historical-scene — period-accurate/world-knowledge scenes.
+
+Edit:
+- text-localization — translate/replace in-image text, preserve layout.
+- identity-preserve — try-on, person-in-scene; lock face/body/pose.
+- precise-object-edit — remove/replace a specific element (including interior swaps).
+- lighting-weather — time-of-day/season/atmosphere changes only.
+- background-extraction — transparent background / clean cutout. Ask built-in `image_gen` for actual transparency.
+- style-transfer — apply reference style while changing subject/scene.
+- compositing — multi-image insert/merge with matched lighting/perspective.
+- sketch-to-render — drawing/line art to photoreal render.
+
+## Shared prompt schema
+
+Use the following labeled spec as shared prompt scaffolding for both top-level modes:
+
+```text
+Use case: <taxonomy slug>
+Asset type: <where the asset will be used>
+Primary request: <user's main prompt>
+Input images: <Image 1: role; Image 2: role> (optional)
+Scene/backdrop: <environment>
+Subject: <main subject>
+Style/medium: <photo/illustration/3D/etc>
+Composition/framing: <wide/close/top-down; placement>
+Lighting/mood: <lighting + mood>
+Color palette: <palette notes>
+Materials/textures: <surface details>
+Text (verbatim): "<exact text>"
+Constraints: <must keep/must avoid>
+Avoid: <negative constraints>
+```
+
+Notes:
+- `Asset type` and `Input images` are prompt scaffolding, not dedicated CLI flags.
+- `Scene/backdrop` refers to the visual setting. It is not the same as the fallback CLI `background` parameter, which controls output transparency behavior.
+- Fallback-only execution notes such as `Quality:`, `Input fidelity:`, masks, output format, and output paths belong in the CLI path only. Do not treat them as built-in `image_gen` tool arguments.
+
+Augmentation rules:
+- Keep it short.
+- Add only the details needed to improve the prompt materially.
+- For edits, explicitly list invariants (`change only X; keep Y unchanged`).
+- If any critical detail is missing and blocks success, ask a question; otherwise proceed.
+
+## Examples
+
+### Generation example (hero image)
+```text
+Use case: product-mockup
+Asset type: landing page hero
+Primary request: a minimal hero image of a ceramic coffee mug
+Style/medium: clean product photography
+Composition/framing: wide composition with usable negative space for page copy if needed
+Lighting/mood: soft studio lighting
+Constraints: no logos, no text, no watermark
+```
+
+### Edit example (invariants)
+```text
+Use case: precise-object-edit
+Asset type: product photo background replacement
+Primary request: replace only the background with a warm sunset gradient
+Constraints: change only the background; keep the product and its edges unchanged; no text; no watermark
+```
+
+## Prompting best practices
+- Structure prompt as scene/backdrop -> subject -> details -> constraints.
+- Include intended use (ad, UI mock, infographic) to set the mode and polish level.
+- Use camera/composition language for photorealism.
+- Only use SVG/vector stand-ins when the user explicitly asked for vector output or a non-image placeholder.
+- Quote exact text and specify typography + placement.
+- For tricky words, spell them letter-by-letter and require verbatim rendering.
+- For multi-image inputs, reference images by index and describe how they should be used.
+- For edits, repeat invariants every iteration to reduce drift.
+- Iterate with single-change follow-ups.
+- If the prompt is generic, add only the extra detail that will materially help.
+- If the prompt is already detailed, normalize it instead of expanding it.
+- For CLI fallback only, see `references/cli.md` and `references/image-api.md` for model, `quality`, `input_fidelity`, masks, output format, and output-path guidance.
+- For transparent images, ask built-in `image_gen` for actual transparency and preserve its alpha.
+
+More principles shared by both modes: `references/prompting.md`.
+Copy/paste specs shared by both modes: `references/sample-prompts.md`.
+
+## Guidance by asset type
+Asset-type templates (website assets, game assets, wireframes, logo) are consolidated in `references/sample-prompts.md`.
+
+## gpt-image-2 guidance for CLI fallback
+
+The fallback CLI defaults to `gpt-image-2`.
+
+- Use `gpt-image-2` for new CLI/API workflows unless the user confirms a different model.
+- CLI `gpt-image-2` does not support `background=transparent`; ask before using `gpt-image-1.5` unless the user explicitly requested that model.
+- `gpt-image-2` always uses high fidelity for image inputs; do not set `input_fidelity` with this model.
+- `gpt-image-2` supports `quality` values `low`, `medium`, `high`, and `auto`.
+- Use `quality low` for fast drafts, thumbnails, and quick iterations. Use `medium`, `high`, or `auto` for final assets, dense text, diagrams, identity-sensitive edits, or high-resolution outputs.
+- Square images are typically fastest to generate. Use `1024x1024` for fast square drafts.
+- If the user asks for 4K-style output, use `3840x2160` for landscape or `2160x3840` for portrait.
+- `gpt-image-2` size may be `auto` or `WIDTHxHEIGHT` if all constraints hold: max edge `<= 3840px`, both edges multiples of `16px`, long-to-short ratio `<= 3:1`, total pixels between `655,360` and `8,294,400`.
+
+Popular `gpt-image-2` sizes:
+- `1024x1024` square
+- `1536x1024` landscape
+- `1024x1536` portrait
+- `2048x2048` 2K square
+- `2048x1152` 2K landscape
+- `3840x2160` 4K landscape
+- `2160x3840` 4K portrait
+- `auto`
+
+## Fallback CLI mode only
+
+### Temp and output conventions
+These conventions apply only to the CLI fallback. They do not describe built-in `image_gen` output behavior.
+- Use `tmp/imagegen/` for intermediate files (for example JSONL batches); delete them when done.
+- Write final artifacts under `output/imagegen/`.
+- Use `--out` or `--out-dir` to control output paths; keep filenames stable and descriptive.
+
+### Dependencies
+Prefer `uv` for dependency management in this repo.
+
+Required Python package:
+```bash
+uv pip install openai
+```
+
+Optional for image inspection and downscaling:
+```bash
+uv pip install pillow
+```
+
+Portability note:
+- If you are using the installed skill outside this repo, install dependencies into that environment with its package manager.
+- In uv-managed environments, `uv pip install ...` remains the preferred path.
+
+### Environment
+- `OPENAI_API_KEY` must be set for live API calls.
+- Do not ask the user for `OPENAI_API_KEY` when using the built-in `image_gen` tool.
+- Never ask the user to paste the full key in chat. Ask them to set it locally and confirm when ready.
+
+If the key is missing, give the user these steps:
+1. Create an API key in the OpenAI platform UI: https://platform.openai.com/api-keys
+2. Set `OPENAI_API_KEY` as an environment variable in their system.
+3. Offer to guide them through setting the environment variable for their OS/shell if needed.
+
+If installation is not possible in this environment, tell the user which dependency is missing and how to install it into their active environment.
+
+### Script-mode notes
+- CLI commands + examples: `references/cli.md`
+- API parameter quick reference: `references/image-api.md`
+- Network approvals / sandbox settings for CLI mode: `references/codex-network.md`
+
+## Reference map
+- `references/prompting.md`: shared prompting principles for both modes.
+- `references/sample-prompts.md`: shared copy/paste prompt recipes for both modes.
+- `references/cli.md`: fallback-only CLI usage via `scripts/image_gen.py`.
+- `references/image-api.md`: fallback-only API/CLI parameter reference.
+- `references/codex-network.md`: fallback-only network/sandbox troubleshooting for CLI mode.
+- `scripts/image_gen.py`: fallback-only CLI implementation. Use only when the user explicitly chooses or confirms CLI mode.
+
+exec
+/bin/bash -lc "rg --files -g AGENTS.md -g '"'!node_modules'"' -g '"'!vendor'"' . /home/user 2>/dev/null | head -40; cat assets/generated/symbols/H1.prompt.txt assets/generated/symbols/H2.prompt.txt" in /home/user/slot
+ succeeded in 0ms:
+Use case: stylized-concept. Create a production sprite sheet for BOOMTOOTH by Crownforge. Output PNG exactly 1536×1024 with REAL transparent alpha background. Input reference D1.png is mandatory STYLE reference only: reproduce its hand-inked adult 2D comic/cartoon game symbols, thick slightly irregular black brush contours (4–7 px at 1024), thinner inner lines, crisp flat TWO-TONE cel shading and one off-white sharp highlight per volume. Simple readable shapes, hand-drawn materials, warm golden-orange afternoon light from upper left, blue-violet shadows. Palette burnt orange #E8742A, pine #2F5D46 / #1E3B2E, granite #6F7F92 / #46526A, TNT red #D7332B, gold #F2B233, honey wood #C98A45 / #6B4526, cream #F4E6C8, ink #1B1410.
+Layout: exactly TWO isolated elements, large main symbol LEFT (about 900 px tall, complete silhouette) and its separate animation component RIGHT, same physical drawing scale and matching perspective as it would have on main symbol. At least 100 px completely empty transparent gap between silhouettes. Keep all content inside 3–6% outer safety margin. No background, grid, cell, frame, ground, drop shadow, checkerboard, white backing, halo, annotations, signature or watermark. No photorealism, smooth 3D, airbrush, gradients, blur, neon, border effects. The detached component must fit its attachment on the main symbol by translation without resizing or rotating. Only specified text allowed.
+LEFT: expressive mischievous raccoon demolition expert bust, head and shoulders in three-quarter view looking at player, bold black eye mask, round welding goggles pushed up on forehead, red bandana tied at neck, leather vest, sly sideways grin revealing one canine. RIGHT: one separate vertical red dynamite stick with short lit fuse and small drawn flame, sized as if brandished beside his cheek. No hand attached to the separate stick. No text.
+CORRECTION PRIORITY: absolutely ZERO glow or haze around either silhouette or flame. All empty pixels fully transparent alpha 0; interiors opaque. Main bust contained within x=70..950 y=62..962, dynamite within x=1150..1400 y=260..850. Draw the dynamite perfectly vertical, shorter fuse, small crisp flame, not a starburst. Keep flat two-tone shapes, reduce tiny fur shading. Outer safety margins mandatory.
+Use case: stylized-concept. Create a production sprite sheet for BOOMTOOTH by Crownforge. Output PNG exactly 1536×1024 with REAL transparent alpha background. Input reference D1.png is mandatory STYLE reference only: reproduce its hand-inked adult 2D comic/cartoon game symbols, thick slightly irregular black brush contours (4–7 px at 1024), thinner inner lines, crisp flat TWO-TONE cel shading and one off-white sharp highlight per volume. Simple readable shapes, hand-drawn materials, warm golden-orange afternoon light from upper left, blue-violet shadows. Palette burnt orange #E8742A, pine #2F5D46 / #1E3B2E, granite #6F7F92 / #46526A, TNT red #D7332B, gold #F2B233, honey wood #C98A45 / #6B4526, cream #F4E6C8, ink #1B1410.
+Layout: exactly TWO isolated elements, large main symbol LEFT (about 900 px tall, complete silhouette) and its separate animation component RIGHT, same physical drawing scale and matching perspective as it would have on main symbol. At least 100 px completely empty transparent gap between silhouettes. Keep all content inside 3–6% outer safety margin. No background, grid, cell, frame, ground, drop shadow, checkerboard, white backing, halo, annotations, signature or watermark. No photorealism, smooth 3D, airbrush, gradients, blur, neon, border effects. The detached component must fit its attachment on the main symbol by translation without resizing or rotating. Only specified text allowed.
+
+Strict production cutouts: zero glow or haze, no atmospheric lighting outside silhouettes. All empty pixels alpha 0. Crisp ink edges. Outer margins at least 50 px.LEFT: burly brown moose bust, big head, broad muzzle, playfully furrowed laughing eyebrows, green plaid flannel shirt and suspenders, three-quarter view looking at player with mischievous expression. NO ANTLERS on main bust: clean smooth fur crown, just two small fur bumps at attachment points. RIGHT: exactly one matching PAIR of large light-beige shaded palmate antlers, both antlers in their correct relative spacing and same perspective ready to translate together onto the moose's head. Allocate enough horizontal space for antler pair at matching scale; do not miniaturize. No text.
+Correction: main bust including shoulders must fit x=70..710 and y=70..950. Antler pair must fit x=830..1460 and y=120..500 with 100 px transparent separation from bust. Draw moose head big relative to narrower shoulders to retain matching scale. Antler bases must match exact distance and angle of two little fur bumps on head (three-quarter perspective), not widely separated disconnected antlers. Fur bumps are fur, not sawn horn stumps. Keep simplified flat cel shading and no halo.
+
+codex
+Les cinq fichiers demandés sont absents. Les références D1, D3 et Buck sont chargées : je conserve le casque orange à lampe, la dent en or, la flanelle rouge et noire et l’encrage épais pour assurer la cohérence du lot.
+
+exec
+/bin/bash -lc 'for p in /AGENTS.md /home/AGENTS.md /home/user/AGENTS.md /home/user/slot/AGENTS.md; do if [ -f "$p" ]; then cat "$p"; fi; done' in /home/user/slot
+ succeeded in 0ms:
+codex
+Les deux premières cartes sont générées. Je reprends chacune une fois : sur la carte 2, le bloc ressemble trop à une paroi ; sur la carte 3, le cadre ne ferme pas correctement le bas de l’image.
+
+codex
+Les cadres sont maintenant fermés et arrondis, et le bloc est bien distinct du décor. Le sens de déplacement des éclats reste ambigu sur la carte 2 ; je le signalerai dans le rapport. Je passe aux visuels promotionnels.
+
+exec
+/bin/bash -lc 'mkdir -p assets/generated/identity assets/generated/decor && cp /root/.codex/generated_images/01a0e7c6-f6c0-7280-ab1a-bab89f8497f4/exec-c6a37f1c-b9bc-45f1-92ba-118701e64508.png assets/generated/identity/card-detonator.png && cp /root/.codex/generated_images/01a0e7c6-f6c0-7280-ab1a-bab89f8497f4/exec-7295b485-62a5-47e3-a59c-fe2145de6fcd.png assets/generated/identity/card-bonus.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/identity/card-detonator.prompt.txt
+diff --git a/assets/generated/identity/card-detonator.prompt.txt b/assets/generated/identity/card-detonator.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..51deb23d37303f26931a65c6b0125d81718addb2
+--- /dev/null
++++ b/assets/generated/identity/card-detonator.prompt.txt
+@@ -0,0 +1,2 @@
++Use case: illustration-story. Créer une seule carte d'accueil BOOMTOOTH, card-detonator, PNG portrait 1024×1536. Références : D1 pour le style et la vallée, D3 pour la nuit uniquement, buck-ref pour l'identité exacte du personnage. Style obligatoire : reproduire exactement le dessin de D1.png, BD/cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau (4 à 7 px à 1024), traits intérieurs fins, aplats cel-shading DEUX tons nets, un reflet crème franc par volume. Formes simples lisibles, bois équarri veiné, granit gris-bleu ébréché, métal riveté. Palette #E8742A #F39A3C #2F5D46 #1E3B2E #6F7F92 #46526A #D7332B #F2B233 #C98A45 #6B4526 #F4E6C8. Aucun texte, chiffre, logo, filigrane ni signature. Ne pas recopier interface, grille ou textes des références. Jamais photoréaliste, 3D, aérographe, flou, dégradés par défaut, néon générique ou effets de bordure. Fond entièrement OPAQUE. Buck doit être strictement le personnage de buck-ref.png : castor brun robuste et vaniteux, joues touffues miel, nez noir, sourcils expressifs, deux grandes incisives dont une en or, casque orange à lampe ronde, chemise flanelle à carreaux rouges et noirs, bretelles noires, jean bleu, ceinture porte-outils miel, grosses bottes brunes à lacets jaunes, grande queue plate brune quadrillée. Même visage, proportions et tenue. Scène nocturne dans la vallée de pins du Grand Nord, ciel bleu nuit #14233A avec aurore turquoise #3FD6B8 en rubans dessinés plats, projecteurs orange #FF9A3C. Action très lisible : Buck pivote et frappe DE SA QUEUE PLATE un gros bloc de granit au premier plan à droite. Queue attachée à son corps, contact visible contre le bloc, mains éloignées du bloc. Face avant du bloc illuminée d'un aplat doré lumineux avec fissures nettes. Plusieurs éclats de pierre volent VERS le bloc, traits de mouvement convergents. Buck entièrement visible avec marge intérieure. Décor barrage et chantier secondaire. Cadre de bois miel aux coins arrondis dessiné dans l'image, entièrement visible, marge extérieure 3–6%, coins extérieurs remplis d'un fond opaque. Pas d'autre cadre. Aucun mot ni chiffre.
++CORRECTION IMPÉRATIVE : le bloc frappé est un CUBE DE GRANIT ISOLÉ entièrement visible au premier plan, trois faces lisibles, détaché de toute falaise, sa face avant entière est un aplat or illuminé. Ne pas dessiner une paroi rocheuse à sa place. Les éclats convergent vers ce cube. Buck entier à gauche, queue attachée frappant le cube à droite. Le cadre est un rectangle vertical FERMÉ aux quatre côtés, coins vraiment ARRONDIS, entièrement contenu à 40 pixels des bords du canevas ; aucun accessoire en dehors du cadre. Le décor continue en fond opaque autour du cadre.
+
+apply patch
+patch: completed
+/home/user/slot/assets/generated/identity/card-bonus.prompt.txt
+diff --git a/assets/generated/identity/card-bonus.prompt.txt b/assets/generated/identity/card-bonus.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..d9c4f8287be7ffb64e46e5ae64d881463a90cdf0
+--- /dev/null
++++ b/assets/generated/identity/card-bonus.prompt.txt
+@@ -0,0 +1,2 @@
++Use case: illustration-story. Créer une seule carte d'accueil BOOMTOOTH card-bonus, PNG portrait exactement 1024×1536. D1.png est référence obligatoire de trait et de vallée ; D3.png référence d'ambiance nuit ; buck-ref.png référence du visage à sculpter dans la montagne. undefined Au premier plan, EXACTEMENT TROIS gros détonateurs à piston distincts rouge TNT et or, alignés côte à côte, tous entièrement visibles et de taille équivalente : trois boîtes rouges rivetées, chacune avec un piston métallique vertical et une poignée transversale, garnitures or, chacune avec UNE plaque crème totalement vide sans aucun mot ni symbole. Étincelles dessinées franches autour des détonateurs. Derrière eux : forêt de pins, barrage et montagne monumentale sculptée en tête de CASTOR AVEC CASQUE de chantier à lampe, grande paire d'incisives et joues de Buck ; les projecteurs orange éclairent cette sculpture la nuit. Ciel bleu nuit #14233A avec aurore turquoise #3FD6B8 en aplats nets, éclairage chaud #FF9A3C, ombres bleu-violet. Cadre en bois miel aux coins arrondis dessiné dans l'image, entièrement visible avec marge extérieure 3–6%, coins extérieurs opaques. Composition accueillante puissante et lisible. Aucun personnage vivant, aucun texte ni chiffre.
++CORRECTION IMPÉRATIVE : le cadre en bois est un rectangle FERMÉ sur les QUATRE côtés autour de toute la scène, coins vraiment arrondis, tous les côtés contenus à 40 pixels du bord de l'image. Barre inférieure du cadre à y=1470, sous tous les objets. Aucun objet coupé devant le cadre, rien ne dépasse du cadre. Les TROIS détonateurs entiers tiennent entre x=100 et x=924, y=950 et y=1370. Plaques crème totalement vierges. Simplifier les détails et conserver aplats nets, sans halos de lumière.
+diff --git a/assets/generated/identity/card-detonator.prompt.txt b/assets/generated/identity/card-detonator.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..51deb23d37303f26931a65c6b0125d81718addb2
+--- /dev/null
++++ b/assets/generated/identity/card-detonator.prompt.txt
+@@ -0,0 +1,2 @@
++Use case: illustration-story. Créer une seule carte d'accueil BOOMTOOTH, card-detonator, PNG portrait 1024×1536. Références : D1 pour le style et la vallée, D3 pour la nuit uniquement, buck-ref pour l'identité exacte du personnage. Style obligatoire : reproduire exactement le dessin de D1.png, BD/cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau (4 à 7 px à 1024), traits intérieurs fins, aplats cel-shading DEUX tons nets, un reflet crème franc par volume. Formes simples lisibles, bois équarri veiné, granit gris-bleu ébréché, métal riveté. Palette #E8742A #F39A3C #2F5D46 #1E3B2E #6F7F92 #46526A #D7332B #F2B233 #C98A45 #6B4526 #F4E6C8. Aucun texte, chiffre, logo, filigrane ni signature. Ne pas recopier interface, grille ou textes des références. Jamais photoréaliste, 3D, aérographe, flou, dégradés par défaut, néon générique ou effets de bordure. Fond entièrement OPAQUE. Buck doit être strictement le personnage de buck-ref.png : castor brun robuste et vaniteux, joues touffues miel, nez noir, sourcils expressifs, deux grandes incisives dont une en or, casque orange à lampe ronde, chemise flanelle à carreaux rouges et noirs, bretelles noires, jean bleu, ceinture porte-outils miel, grosses bottes brunes à lacets jaunes, grande queue plate brune quadrillée. Même visage, proportions et tenue. Scène nocturne dans la vallée de pins du Grand Nord, ciel bleu nuit #14233A avec aurore turquoise #3FD6B8 en rubans dessinés plats, projecteurs orange #FF9A3C. Action très lisible : Buck pivote et frappe DE SA QUEUE PLATE un gros bloc de granit au premier plan à droite. Queue attachée à son corps, contact visible contre le bloc, mains éloignées du bloc. Face avant du bloc illuminée d'un aplat doré lumineux avec fissures nettes. Plusieurs éclats de pierre volent VERS le bloc, traits de mouvement convergents. Buck entièrement visible avec marge intérieure. Décor barrage et chantier secondaire. Cadre de bois miel aux coins arrondis dessiné dans l'image, entièrement visible, marge extérieure 3–6%, coins extérieurs remplis d'un fond opaque. Pas d'autre cadre. Aucun mot ni chiffre.
++CORRECTION IMPÉRATIVE : le bloc frappé est un CUBE DE GRANIT ISOLÉ entièrement visible au premier plan, trois faces lisibles, détaché de toute falaise, sa face avant entière est un aplat or illuminé. Ne pas dessiner une paroi rocheuse à sa place. Les éclats convergent vers ce cube. Buck entier à gauche, queue attachée frappant le cube à droite. Le cadre est un rectangle vertical FERMÉ aux quatre côtés, coins vraiment ARRONDIS, entièrement contenu à 40 pixels des bords du canevas ; aucun accessoire en dehors du cadre. Le décor continue en fond opaque autour du cadre.
+
+diff --git a/assets/generated/identity/card-bonus.prompt.txt b/assets/generated/identity/card-bonus.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..d9c4f8287be7ffb64e46e5ae64d881463a90cdf0
+--- /dev/null
++++ b/assets/generated/identity/card-bonus.prompt.txt
+@@ -0,0 +1,2 @@
++Use case: illustration-story. Créer une seule carte d'accueil BOOMTOOTH card-bonus, PNG portrait exactement 1024×1536. D1.png est référence obligatoire de trait et de vallée ; D3.png référence d'ambiance nuit ; buck-ref.png référence du visage à sculpter dans la montagne. undefined Au premier plan, EXACTEMENT TROIS gros détonateurs à piston distincts rouge TNT et or, alignés côte à côte, tous entièrement visibles et de taille équivalente : trois boîtes rouges rivetées, chacune avec un piston métallique vertical et une poignée transversale, garnitures or, chacune avec UNE plaque crème totalement vide sans aucun mot ni symbole. Étincelles dessinées franches autour des détonateurs. Derrière eux : forêt de pins, barrage et montagne monumentale sculptée en tête de CASTOR AVEC CASQUE de chantier à lampe, grande paire d'incisives et joues de Buck ; les projecteurs orange éclairent cette sculpture la nuit. Ciel bleu nuit #14233A avec aurore turquoise #3FD6B8 en aplats nets, éclairage chaud #FF9A3C, ombres bleu-violet. Cadre en bois miel aux coins arrondis dessiné dans l'image, entièrement visible avec marge extérieure 3–6%, coins extérieurs opaques. Composition accueillante puissante et lisible. Aucun personnage vivant, aucun texte ni chiffre.
++CORRECTION IMPÉRATIVE : le cadre en bois est un rectangle FERMÉ sur les QUATRE côtés autour de toute la scène, coins vraiment arrondis, tous les côtés contenus à 40 pixels du bord de l'image. Barre inférieure du cadre à y=1470, sous tous les objets. Aucun objet coupé devant le cadre, rien ne dépasse du cadre. Les TROIS détonateurs entiers tiennent entre x=100 et x=924, y=950 et y=1370. Plaques crème totalement vierges. Simplifier les détails et conserver aplats nets, sans halos de lumière.
+diff --git a/assets/generated/identity/card-detonator.prompt.txt b/assets/generated/identity/card-detonator.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..51deb23d37303f26931a65c6b0125d81718addb2
+--- /dev/null
++++ b/assets/generated/identity/card-detonator.prompt.txt
+@@ -0,0 +1,2 @@
++Use case: illustration-story. Créer une seule carte d'accueil BOOMTOOTH, card-detonator, PNG portrait 1024×1536. Références : D1 pour le style et la vallée, D3 pour la nuit uniquement, buck-ref pour l'identité exacte du personnage. Style obligatoire : reproduire exactement le dessin de D1.png, BD/cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau (4 à 7 px à 1024), traits intérieurs fins, aplats cel-shading DEUX tons nets, un reflet crème franc par volume. Formes simples lisibles, bois équarri veiné, granit gris-bleu ébréché, métal riveté. Palette #E8742A #F39A3C #2F5D46 #1E3B2E #6F7F92 #46526A #D7332B #F2B233 #C98A45 #6B4526 #F4E6C8. Aucun texte, chiffre, logo, filigrane ni signature. Ne pas recopier interface, grille ou textes des références. Jamais photoréaliste, 3D, aérographe, flou, dégradés par défaut, néon générique ou effets de bordure. Fond entièrement OPAQUE. Buck doit être strictement le personnage de buck-ref.png : castor brun robuste et vaniteux, joues touffues miel, nez noir, sourcils expressifs, deux grandes incisives dont une en or, casque orange à lampe ronde, chemise flanelle à carreaux rouges et noirs, bretelles noires, jean bleu, ceinture porte-outils miel, grosses bottes brunes à lacets jaunes, grande queue plate brune quadrillée. Même visage, proportions et tenue. Scène nocturne dans la vallée de pins du Grand Nord, ciel bleu nuit #14233A avec aurore turquoise #3FD6B8 en rubans dessinés plats, projecteurs orange #FF9A3C. Action très lisible : Buck pivote et frappe DE SA QUEUE PLATE un gros bloc de granit au premier plan à droite. Queue attachée à son corps, contact visible contre le bloc, mains éloignées du bloc. Face avant du bloc illuminée d'un aplat doré lumineux avec fissures nettes. Plusieurs éclats de pierre volent VERS le bloc, traits de mouvement convergents. Buck entièrement visible avec marge intérieure. Décor barrage et chantier secondaire. Cadre de bois miel aux coins arrondis dessiné dans l'image, entièrement visible, marge extérieure 3–6%, coins extérieurs remplis d'un fond opaque. Pas d'autre cadre. Aucun mot ni chiffre.
++CORRECTION IMPÉRATIVE : le bloc frappé est un CUBE DE GRANIT ISOLÉ entièrement visible au premier plan, trois faces lisibles, détaché de toute falaise, sa face avant entière est un aplat or illuminé. Ne pas dessiner une paroi rocheuse à sa place. Les éclats convergent vers ce cube. Buck entier à gauche, queue attachée frappant le cube à droite. Le cadre est un rectangle vertical FERMÉ aux quatre côtés, coins vraiment ARRONDIS, entièrement contenu à 40 pixels des bords du canevas ; aucun accessoire en dehors du cadre. Le décor continue en fond opaque autour du cadre.
+
+diff --git a/assets/generated/identity/card-bonus.prompt.txt b/assets/generated/identity/card-bonus.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..d9c4f8287be7ffb64e46e5ae64d881463a90cdf0
+--- /dev/null
++++ b/assets/generated/identity/card-bonus.prompt.txt
+@@ -0,0 +1,2 @@
++Use case: illustration-story. Créer une seule carte d'accueil BOOMTOOTH card-bonus, PNG portrait exactement 1024×1536. D1.png est référence obligatoire de trait et de vallée ; D3.png référence d'ambiance nuit ; buck-ref.png référence du visage à sculpter dans la montagne. undefined Au premier plan, EXACTEMENT TROIS gros détonateurs à piston distincts rouge TNT et or, alignés côte à côte, tous entièrement visibles et de taille équivalente : trois boîtes rouges rivetées, chacune avec un piston métallique vertical et une poignée transversale, garnitures or, chacune avec UNE plaque crème totalement vide sans aucun mot ni symbole. Étincelles dessinées franches autour des détonateurs. Derrière eux : forêt de pins, barrage et montagne monumentale sculptée en tête de CASTOR AVEC CASQUE de chantier à lampe, grande paire d'incisives et joues de Buck ; les projecteurs orange éclairent cette sculpture la nuit. Ciel bleu nuit #14233A avec aurore turquoise #3FD6B8 en aplats nets, éclairage chaud #FF9A3C, ombres bleu-violet. Cadre en bois miel aux coins arrondis dessiné dans l'image, entièrement visible avec marge extérieure 3–6%, coins extérieurs opaques. Composition accueillante puissante et lisible. Aucun personnage vivant, aucun texte ni chiffre.
++CORRECTION IMPÉRATIVE : le cadre en bois est un rectangle FERMÉ sur les QUATRE côtés autour de toute la scène, coins vraiment arrondis, tous les côtés contenus à 40 pixels du bord de l'image. Barre inférieure du cadre à y=1470, sous tous les objets. Aucun objet coupé devant le cadre, rien ne dépasse du cadre. Les TROIS détonateurs entiers tiennent entre x=100 et x=924, y=950 et y=1370. Plaques crème totalement vierges. Simplifier les détails et conserver aplats nets, sans halos de lumière.
+diff --git a/assets/generated/identity/card-detonator.prompt.txt b/assets/generated/identity/card-detonator.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..51deb23d37303f26931a65c6b0125d81718addb2
+--- /dev/null
++++ b/assets/generated/identity/card-detonator.prompt.txt
+@@ -0,0 +1,2 @@
++Use case: illustration-story. Créer une seule carte d'accueil BOOMTOOTH, card-detonator, PNG portrait 1024×1536. Références : D1 pour le style et la vallée, D3 pour la nuit uniquement, buck-ref pour l'identité exacte du personnage. Style obligatoire : reproduire exactement le dessin de D1.png, BD/cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau (4 à 7 px à 1024), traits intérieurs fins, aplats cel-shading DEUX tons nets, un reflet crème franc par volume. Formes simples lisibles, bois équarri veiné, granit gris-bleu ébréché, métal riveté. Palette #E8742A #F39A3C #2F5D46 #1E3B2E #6F7F92 #46526A #D7332B #F2B233 #C98A45 #6B4526 #F4E6C8. Aucun texte, chiffre, logo, filigrane ni signature. Ne pas recopier interface, grille ou textes des références. Jamais photoréaliste, 3D, aérographe, flou, dégradés par défaut, néon générique ou effets de bordure. Fond entièrement OPAQUE. Buck doit être strictement le personnage de buck-ref.png : castor brun robuste et vaniteux, joues touffues miel, nez noir, sourcils expressifs, deux grandes incisives dont une en or, casque orange à lampe ronde, chemise flanelle à carreaux rouges et noirs, bretelles noires, jean bleu, ceinture porte-outils miel, grosses bottes brunes à lacets jaunes, grande queue plate brune quadrillée. Même visage, proportions et tenue. Scène nocturne dans la vallée de pins du Grand Nord, ciel bleu nuit #14233A avec aurore turquoise #3FD6B8 en rubans dessinés plats, projecteurs orange #FF9A3C. Action très lisible : Buck pivote et frappe DE SA QUEUE PLATE un gros bloc de granit au premier plan à droite. Queue attachée à son corps, contact visible contre le bloc, mains éloignées du bloc. Face avant du bloc illuminée d'un aplat doré lumineux avec fissures nettes. Plusieurs éclats de pierre volent VERS le bloc, traits de mouvement convergents. Buck entièrement visible avec marge intérieure. Décor barrage et chantier secondaire. Cadre de bois miel aux coins arrondis dessiné dans l'image, entièrement visible, marge extérieure 3–6%, coins extérieurs remplis d'un fond opaque. Pas d'autre cadre. Aucun mot ni chiffre.
++CORRECTION IMPÉRATIVE : le bloc frappé est un CUBE DE GRANIT ISOLÉ entièrement visible au premier plan, trois faces lisibles, détaché de toute falaise, sa face avant entière est un aplat or illuminé. Ne pas dessiner une paroi rocheuse à sa place. Les éclats convergent vers ce cube. Buck entier à gauche, queue attachée frappant le cube à droite. Le cadre est un rectangle vertical FERMÉ aux quatre côtés, coins vraiment ARRONDIS, entièrement contenu à 40 pixels des bords du canevas ; aucun accessoire en dehors du cadre. Le décor continue en fond opaque autour du cadre.
+
+exec
+/bin/bash -lc "python - <<'PY'
+from PIL import Image
+from pathlib import Path
+for p in Path('/root/.codex/generated_images/01a0e7c6-f6c0-7280-ab1a-bab89f8497f4').glob('*.png'):
+ im=Image.open(p)
+ print(p.name, im.size, im.mode)
+PY" in /home/user/slot
+ succeeded in 0ms:
+exec-3944acfd-999c-4e5b-b993-1ab8e231f3db.png (1024, 1536) RGB
+exec-7295b485-62a5-47e3-a59c-fe2145de6fcd.png (1024, 1536) RGB
+exec-c6a37f1c-b9bc-45f1-92ba-118701e64508.png (1024, 1536) RGB
+exec-25a2e6e4-3ad1-43f5-82f9-1aeb421dc3eb.png (1672, 941) RGB
+exec-59998ad8-87fc-4e68-9fac-77af9508abd1.png (1024, 1536) RGB
+
+diff --git a/assets/generated/identity/card-bonus.prompt.txt b/assets/generated/identity/card-bonus.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..d9c4f8287be7ffb64e46e5ae64d881463a90cdf0
+--- /dev/null
++++ b/assets/generated/identity/card-bonus.prompt.txt
+@@ -0,0 +1,2 @@
++Use case: illustration-story. Créer une seule carte d'accueil BOOMTOOTH card-bonus, PNG portrait exactement 1024×1536. D1.png est référence obligatoire de trait et de vallée ; D3.png référence d'ambiance nuit ; buck-ref.png référence du visage à sculpter dans la montagne. undefined Au premier plan, EXACTEMENT TROIS gros détonateurs à piston distincts rouge TNT et or, alignés côte à côte, tous entièrement visibles et de taille équivalente : trois boîtes rouges rivetées, chacune avec un piston métallique vertical et une poignée transversale, garnitures or, chacune avec UNE plaque crème totalement vide sans aucun mot ni symbole. Étincelles dessinées franches autour des détonateurs. Derrière eux : forêt de pins, barrage et montagne monumentale sculptée en tête de CASTOR AVEC CASQUE de chantier à lampe, grande paire d'incisives et joues de Buck ; les projecteurs orange éclairent cette sculpture la nuit. Ciel bleu nuit #14233A avec aurore turquoise #3FD6B8 en aplats nets, éclairage chaud #FF9A3C, ombres bleu-violet. Cadre en bois miel aux coins arrondis dessiné dans l'image, entièrement visible avec marge extérieure 3–6%, coins extérieurs opaques. Composition accueillante puissante et lisible. Aucun personnage vivant, aucun texte ni chiffre.
++CORRECTION IMPÉRATIVE : le cadre en bois est un rectangle FERMÉ sur les QUATRE côtés autour de toute la scène, coins vraiment arrondis, tous les côtés contenus à 40 pixels du bord de l'image. Barre inférieure du cadre à y=1470, sous tous les objets. Aucun objet coupé devant le cadre, rien ne dépasse du cadre. Les TROIS détonateurs entiers tiennent entre x=100 et x=924, y=950 et y=1370. Plaques crème totalement vierges. Simplifier les détails et conserver aplats nets, sans halos de lumière.
+diff --git a/assets/generated/identity/card-detonator.prompt.txt b/assets/generated/identity/card-detonator.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..51deb23d37303f26931a65c6b0125d81718addb2
+--- /dev/null
++++ b/assets/generated/identity/card-detonator.prompt.txt
+@@ -0,0 +1,2 @@
++Use case: illustration-story. Créer une seule carte d'accueil BOOMTOOTH, card-detonator, PNG portrait 1024×1536. Références : D1 pour le style et la vallée, D3 pour la nuit uniquement, buck-ref pour l'identité exacte du personnage. Style obligatoire : reproduire exactement le dessin de D1.png, BD/cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau (4 à 7 px à 1024), traits intérieurs fins, aplats cel-shading DEUX tons nets, un reflet crème franc par volume. Formes simples lisibles, bois équarri veiné, granit gris-bleu ébréché, métal riveté. Palette #E8742A #F39A3C #2F5D46 #1E3B2E #6F7F92 #46526A #D7332B #F2B233 #C98A45 #6B4526 #F4E6C8. Aucun texte, chiffre, logo, filigrane ni signature. Ne pas recopier interface, grille ou textes des références. Jamais photoréaliste, 3D, aérographe, flou, dégradés par défaut, néon générique ou effets de bordure. Fond entièrement OPAQUE. Buck doit être strictement le personnage de buck-ref.png : castor brun robuste et vaniteux, joues touffues miel, nez noir, sourcils expressifs, deux grandes incisives dont une en or, casque orange à lampe ronde, chemise flanelle à carreaux rouges et noirs, bretelles noires, jean bleu, ceinture porte-outils miel, grosses bottes brunes à lacets jaunes, grande queue plate brune quadrillée. Même visage, proportions et tenue. Scène nocturne dans la vallée de pins du Grand Nord, ciel bleu nuit #14233A avec aurore turquoise #3FD6B8 en rubans dessinés plats, projecteurs orange #FF9A3C. Action très lisible : Buck pivote et frappe DE SA QUEUE PLATE un gros bloc de granit au premier plan à droite. Queue attachée à son corps, contact visible contre le bloc, mains éloignées du bloc. Face avant du bloc illuminée d'un aplat doré lumineux avec fissures nettes. Plusieurs éclats de pierre volent VERS le bloc, traits de mouvement convergents. Buck entièrement visible avec marge intérieure. Décor barrage et chantier secondaire. Cadre de bois miel aux coins arrondis dessiné dans l'image, entièrement visible, marge extérieure 3–6%, coins extérieurs remplis d'un fond opaque. Pas d'autre cadre. Aucun mot ni chiffre.
++CORRECTION IMPÉRATIVE : le bloc frappé est un CUBE DE GRANIT ISOLÉ entièrement visible au premier plan, trois faces lisibles, détaché de toute falaise, sa face avant entière est un aplat or illuminé. Ne pas dessiner une paroi rocheuse à sa place. Les éclats convergent vers ce cube. Buck entier à gauche, queue attachée frappant le cube à droite. Le cadre est un rectangle vertical FERMÉ aux quatre côtés, coins vraiment ARRONDIS, entièrement contenu à 40 pixels des bords du canevas ; aucun accessoire en dehors du cadre. Le décor continue en fond opaque autour du cadre.
+
+codex
+La couverture reprend bien Buck et l’élan de l’équipe, mais l’allumette touche la dent blanche et la sortie mesure 1672 × 941. Je lance l’unique reprise pour corriger le contact et redemander le format prévu.
+
+diff --git a/assets/generated/identity/card-bonus.prompt.txt b/assets/generated/identity/card-bonus.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..d9c4f8287be7ffb64e46e5ae64d881463a90cdf0
+--- /dev/null
++++ b/assets/generated/identity/card-bonus.prompt.txt
+@@ -0,0 +1,2 @@
++Use case: illustration-story. Créer une seule carte d'accueil BOOMTOOTH card-bonus, PNG portrait exactement 1024×1536. D1.png est référence obligatoire de trait et de vallée ; D3.png référence d'ambiance nuit ; buck-ref.png référence du visage à sculpter dans la montagne. undefined Au premier plan, EXACTEMENT TROIS gros détonateurs à piston distincts rouge TNT et or, alignés côte à côte, tous entièrement visibles et de taille équivalente : trois boîtes rouges rivetées, chacune avec un piston métallique vertical et une poignée transversale, garnitures or, chacune avec UNE plaque crème totalement vide sans aucun mot ni symbole. Étincelles dessinées franches autour des détonateurs. Derrière eux : forêt de pins, barrage et montagne monumentale sculptée en tête de CASTOR AVEC CASQUE de chantier à lampe, grande paire d'incisives et joues de Buck ; les projecteurs orange éclairent cette sculpture la nuit. Ciel bleu nuit #14233A avec aurore turquoise #3FD6B8 en aplats nets, éclairage chaud #FF9A3C, ombres bleu-violet. Cadre en bois miel aux coins arrondis dessiné dans l'image, entièrement visible avec marge extérieure 3–6%, coins extérieurs opaques. Composition accueillante puissante et lisible. Aucun personnage vivant, aucun texte ni chiffre.
++CORRECTION IMPÉRATIVE : le cadre en bois est un rectangle FERMÉ sur les QUATRE côtés autour de toute la scène, coins vraiment arrondis, tous les côtés contenus à 40 pixels du bord de l'image. Barre inférieure du cadre à y=1470, sous tous les objets. Aucun objet coupé devant le cadre, rien ne dépasse du cadre. Les TROIS détonateurs entiers tiennent entre x=100 et x=924, y=950 et y=1370. Plaques crème totalement vierges. Simplifier les détails et conserver aplats nets, sans halos de lumière.
+diff --git a/assets/generated/identity/card-detonator.prompt.txt b/assets/generated/identity/card-detonator.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..51deb23d37303f26931a65c6b0125d81718addb2
+--- /dev/null
++++ b/assets/generated/identity/card-detonator.prompt.txt
+@@ -0,0 +1,2 @@
++Use case: illustration-story. Créer une seule carte d'accueil BOOMTOOTH, card-detonator, PNG portrait 1024×1536. Références : D1 pour le style et la vallée, D3 pour la nuit uniquement, buck-ref pour l'identité exacte du personnage. Style obligatoire : reproduire exactement le dessin de D1.png, BD/cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau (4 à 7 px à 1024), traits intérieurs fins, aplats cel-shading DEUX tons nets, un reflet crème franc par volume. Formes simples lisibles, bois équarri veiné, granit gris-bleu ébréché, métal riveté. Palette #E8742A #F39A3C #2F5D46 #1E3B2E #6F7F92 #46526A #D7332B #F2B233 #C98A45 #6B4526 #F4E6C8. Aucun texte, chiffre, logo, filigrane ni signature. Ne pas recopier interface, grille ou textes des références. Jamais photoréaliste, 3D, aérographe, flou, dégradés par défaut, néon générique ou effets de bordure. Fond entièrement OPAQUE. Buck doit être strictement le personnage de buck-ref.png : castor brun robuste et vaniteux, joues touffues miel, nez noir, sourcils expressifs, deux grandes incisives dont une en or, casque orange à lampe ronde, chemise flanelle à carreaux rouges et noirs, bretelles noires, jean bleu, ceinture porte-outils miel, grosses bottes brunes à lacets jaunes, grande queue plate brune quadrillée. Même visage, proportions et tenue. Scène nocturne dans la vallée de pins du Grand Nord, ciel bleu nuit #14233A avec aurore turquoise #3FD6B8 en rubans dessinés plats, projecteurs orange #FF9A3C. Action très lisible : Buck pivote et frappe DE SA QUEUE PLATE un gros bloc de granit au premier plan à droite. Queue attachée à son corps, contact visible contre le bloc, mains éloignées du bloc. Face avant du bloc illuminée d'un aplat doré lumineux avec fissures nettes. Plusieurs éclats de pierre volent VERS le bloc, traits de mouvement convergents. Buck entièrement visible avec marge intérieure. Décor barrage et chantier secondaire. Cadre de bois miel aux coins arrondis dessiné dans l'image, entièrement visible, marge extérieure 3–6%, coins extérieurs remplis d'un fond opaque. Pas d'autre cadre. Aucun mot ni chiffre.
++CORRECTION IMPÉRATIVE : le bloc frappé est un CUBE DE GRANIT ISOLÉ entièrement visible au premier plan, trois faces lisibles, détaché de toute falaise, sa face avant entière est un aplat or illuminé. Ne pas dessiner une paroi rocheuse à sa place. Les éclats convergent vers ce cube. Buck entier à gauche, queue attachée frappant le cube à droite. Le cadre est un rectangle vertical FERMÉ aux quatre côtés, coins vraiment ARRONDIS, entièrement contenu à 40 pixels des bords du canevas ; aucun accessoire en dehors du cadre. Le décor continue en fond opaque autour du cadre.
+
+diff --git a/assets/generated/identity/card-bonus.prompt.txt b/assets/generated/identity/card-bonus.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..d9c4f8287be7ffb64e46e5ae64d881463a90cdf0
+--- /dev/null
++++ b/assets/generated/identity/card-bonus.prompt.txt
+@@ -0,0 +1,2 @@
++Use case: illustration-story. Créer une seule carte d'accueil BOOMTOOTH card-bonus, PNG portrait exactement 1024×1536. D1.png est référence obligatoire de trait et de vallée ; D3.png référence d'ambiance nuit ; buck-ref.png référence du visage à sculpter dans la montagne. undefined Au premier plan, EXACTEMENT TROIS gros détonateurs à piston distincts rouge TNT et or, alignés côte à côte, tous entièrement visibles et de taille équivalente : trois boîtes rouges rivetées, chacune avec un piston métallique vertical et une poignée transversale, garnitures or, chacune avec UNE plaque crème totalement vide sans aucun mot ni symbole. Étincelles dessinées franches autour des détonateurs. Derrière eux : forêt de pins, barrage et montagne monumentale sculptée en tête de CASTOR AVEC CASQUE de chantier à lampe, grande paire d'incisives et joues de Buck ; les projecteurs orange éclairent cette sculpture la nuit. Ciel bleu nuit #14233A avec aurore turquoise #3FD6B8 en aplats nets, éclairage chaud #FF9A3C, ombres bleu-violet. Cadre en bois miel aux coins arrondis dessiné dans l'image, entièrement visible avec marge extérieure 3–6%, coins extérieurs opaques. Composition accueillante puissante et lisible. Aucun personnage vivant, aucun texte ni chiffre.
++CORRECTION IMPÉRATIVE : le cadre en bois est un rectangle FERMÉ sur les QUATRE côtés autour de toute la scène, coins vraiment arrondis, tous les côtés contenus à 40 pixels du bord de l'image. Barre inférieure du cadre à y=1470, sous tous les objets. Aucun objet coupé devant le cadre, rien ne dépasse du cadre. Les TROIS détonateurs entiers tiennent entre x=100 et x=924, y=950 et y=1370. Plaques crème totalement vierges. Simplifier les détails et conserver aplats nets, sans halos de lumière.
+diff --git a/assets/generated/identity/card-detonator.prompt.txt b/assets/generated/identity/card-detonator.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..51deb23d37303f26931a65c6b0125d81718addb2
+--- /dev/null
++++ b/assets/generated/identity/card-detonator.prompt.txt
+@@ -0,0 +1,2 @@
++Use case: illustration-story. Créer une seule carte d'accueil BOOMTOOTH, card-detonator, PNG portrait 1024×1536. Références : D1 pour le style et la vallée, D3 pour la nuit uniquement, buck-ref pour l'identité exacte du personnage. Style obligatoire : reproduire exactement le dessin de D1.png, BD/cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau (4 à 7 px à 1024), traits intérieurs fins, aplats cel-shading DEUX tons nets, un reflet crème franc par volume. Formes simples lisibles, bois équarri veiné, granit gris-bleu ébréché, métal riveté. Palette #E8742A #F39A3C #2F5D46 #1E3B2E #6F7F92 #46526A #D7332B #F2B233 #C98A45 #6B4526 #F4E6C8. Aucun texte, chiffre, logo, filigrane ni signature. Ne pas recopier interface, grille ou textes des références. Jamais photoréaliste, 3D, aérographe, flou, dégradés par défaut, néon générique ou effets de bordure. Fond entièrement OPAQUE. Buck doit être strictement le personnage de buck-ref.png : castor brun robuste et vaniteux, joues touffues miel, nez noir, sourcils expressifs, deux grandes incisives dont une en or, casque orange à lampe ronde, chemise flanelle à carreaux rouges et noirs, bretelles noires, jean bleu, ceinture porte-outils miel, grosses bottes brunes à lacets jaunes, grande queue plate brune quadrillée. Même visage, proportions et tenue. Scène nocturne dans la vallée de pins du Grand Nord, ciel bleu nuit #14233A avec aurore turquoise #3FD6B8 en rubans dessinés plats, projecteurs orange #FF9A3C. Action très lisible : Buck pivote et frappe DE SA QUEUE PLATE un gros bloc de granit au premier plan à droite. Queue attachée à son corps, contact visible contre le bloc, mains éloignées du bloc. Face avant du bloc illuminée d'un aplat doré lumineux avec fissures nettes. Plusieurs éclats de pierre volent VERS le bloc, traits de mouvement convergents. Buck entièrement visible avec marge intérieure. Décor barrage et chantier secondaire. Cadre de bois miel aux coins arrondis dessiné dans l'image, entièrement visible, marge extérieure 3–6%, coins extérieurs remplis d'un fond opaque. Pas d'autre cadre. Aucun mot ni chiffre.
++CORRECTION IMPÉRATIVE : le bloc frappé est un CUBE DE GRANIT ISOLÉ entièrement visible au premier plan, trois faces lisibles, détaché de toute falaise, sa face avant entière est un aplat or illuminé. Ne pas dessiner une paroi rocheuse à sa place. Les éclats convergent vers ce cube. Buck entier à gauche, queue attachée frappant le cube à droite. Le cadre est un rectangle vertical FERMÉ aux quatre côtés, coins vraiment ARRONDIS, entièrement contenu à 40 pixels des bords du canevas ; aucun accessoire en dehors du cadre. Le décor continue en fond opaque autour du cadre.
+
+codex
+Le contact avec la dent en or est corrigé. La vignette montre Buck entier et garde une zone libre en haut ; je vérifie ses dimensions avant de finaliser le décor portrait.
+

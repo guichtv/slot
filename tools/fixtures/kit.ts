@@ -6,12 +6,11 @@
  *   Le kit ne fait que de la géométrie (sélection des cases déclarées, gravité des chutes).
  * - le validateur (validate.ts) contrôle la cohérence ; un scénario invalide est signalé, jamais réparé.
  */
-import { COLS, ROWS, type SymbolName, type TntKind } from '../../src/contract/schema';
+import { COLS, ROWS, TNT_SIZE, type SymbolName, type TntKind } from '../../src/contract/schema';
 
 type Sym = SymbolName;
 type Pos = [number, number];
 
-const TNT_SIZE: Record<TntKind, number> = { stick: 2, bundle: 3, crate: 4 };
 
 export function grid(text: string): Sym[][] {
   const rows = text
@@ -91,6 +90,7 @@ export class BookBuilder {
     for (const [c, r, k] of opts.tnt ?? []) this.tnt.set(`${c},${r}`, k);
     this.spinWin = 0;
     this.lastWinPositions = [];
+    this.chainId = 0;
     this.push({
       type: 'reveal',
       board: this.board.map((col) => col.map((name) => ({ name }))),
@@ -102,22 +102,58 @@ export class BookBuilder {
     return this;
   }
 
-  /** Explosion d'une charge : la zone (taille fixée par le type) devient un géant. anchor = coin haut-gauche. */
-  blast(at: Pos, giant: Exclude<Sym, 'S' | 'T'>, anchor?: Pos): this {
+  private chainId = 0;
+
+  private zoneOf(at: Pos, anchor?: Pos): { col: number; row: number; w: number; h: number; kind: TntKind } {
     const kind = this.tnt.get(`${at[0]},${at[1]}`);
     if (!kind) throw new Error(`${this.id}: pas de TNT en ${at}`);
     const n = TNT_SIZE[kind];
     const [ac, ar] = anchor ?? [Math.min(Math.max(0, at[0] - Math.floor((n - 1) / 2)), COLS - n), Math.min(Math.max(0, at[1] - Math.floor((n - 1) / 2)), ROWS - n)];
-    const area = { col: ac, row: ar, w: n, h: n };
-    for (let c = ac; c < ac + n; c++) for (let r = ar; r < ar + n; r++) {
+    return { col: ac, row: ar, w: n, h: n, kind };
+  }
+
+  /** Explosion d'une charge seule : sa zone (taille fixée par le type) est sculptée en géant. anchor = coin haut-gauche. */
+  blast(at: Pos, giant: Exclude<Sym, 'S' | 'T'>, anchor?: Pos): this {
+    return this.chain([{ at, ...(anchor ? { anchor } : {}) }], giant);
+  }
+
+  /**
+   * Chaîne d'explosions : chaque lien k > 0 est pris dans la zone d'un lien précédent (from),
+   * ou relié par le fil de mise à feu (wired, super bonus). Les zones fusionnent en UN géant
+   * qui remplit leur rectangle englobant. En bonus, le Cornerstone gagne +1 par case sculptée.
+   */
+  chain(links: Array<{ at: Pos; anchor?: Pos; from?: Pos; wired?: boolean }>, giant: Exclude<Sym, 'S' | 'T'>): this {
+    const chain = this.chainId++;
+    let minC = COLS, minR = ROWS, maxC = 0, maxR = 0;
+    links.forEach((l, k) => {
+      const z = this.zoneOf(l.at, l.anchor);
+      const area = { col: z.col, row: z.row, w: z.w, h: z.h };
+      minC = Math.min(minC, z.col);
+      minR = Math.min(minR, z.row);
+      maxC = Math.max(maxC, z.col + z.w);
+      maxR = Math.max(maxR, z.row + z.h);
+      this.push({
+        type: 'blast',
+        chain,
+        link: k,
+        ...(k > 0 && l.from ? { from: l.from } : {}),
+        ...(k > 0 && (l.wired || !l.from) ? { wired: true } : {}),
+        tnt: { pos: l.at, kind: z.kind },
+        area,
+      });
+      this.log(`${this.id} blast ${z.kind} @${l.at}${k ? ` (lien ${k})` : ''}`);
+    });
+    const area = { col: minC, row: minR, w: maxC - minC, h: maxR - minR };
+    for (let c = area.col; c < area.col + area.w; c++) for (let r = area.row; r < area.row + area.h; r++) {
       (this.board[c] as Sym[])[r] = giant;
       this.tnt.delete(`${c},${r}`);
     }
-    this.push({ type: 'blast', tnt: { pos: at, kind }, area, giant });
-    this.log(`${this.id} blast ${kind} @${at} -> ${giant} ${n}x${n}`);
+    const cells = area.w * area.h;
+    this.push({ type: 'carve', chain, area, giant, cells });
+    this.log(`${this.id} carve -> ${giant} ${area.w}x${area.h}`);
     if (this.inFs) {
-      this.mult += 1;
-      this.push({ type: 'updateGlobalMult', globalMult: this.mult, cause: 'blast' });
+      this.mult = Math.min(9999, this.mult + cells);
+      this.push({ type: 'updateGlobalMult', globalMult: this.mult, added: cells, chain, cause: 'carve' });
     }
     return this;
   }
@@ -191,6 +227,7 @@ export class BookBuilder {
       tnt: [...tntNext].map(([k, kind]) => ({ pos: k.split(',').map(Number) as Pos, kind })),
     });
     this.lastWinPositions = [];
+    this.chainId = 0;
     this.log(`${this.id} tumble`);
     return this;
   }

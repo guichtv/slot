@@ -60,13 +60,13 @@ export function computeLayout(vw: number, vh: number, g: GridSpec, safe = { top:
   const framePad = (cell: number) => cell * g.frame;
 
   if (cls === 'desktop' || cls === 'laptop') {
-    const hudH = clamp(H * 0.13, 92, 128);
+    const hudH = clamp(H * 0.12, 88, 118);
     const hud = { x: ox, y: oy + H - hudH, w: W, h: hudH };
     const stage = { x: ox, y: oy, w: W, h: H - hudH };
     const topBarH = clamp(stage.h * 0.075, 34, 60);
     // grille dominante au centre : hauteur disponible et largeur ~46 % (place pour mascotte et logo)
     const availH = stage.h - topBarH - stage.h * 0.06;
-    const availW = W * (cls === 'desktop' ? 0.46 : 0.5);
+    const availW = W * (cls === 'desktop' ? 0.5 : 0.54);
     const cell = Math.floor(Math.min(availH / (g.rows + 2 * g.frame), availW / (g.cols + 2 * g.frame)));
     const gw = cell * g.cols;
     const gh = cell * g.rows;

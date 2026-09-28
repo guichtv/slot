@@ -1,0 +1,182 @@
+/* ANTE BET : encart bois / acier sous le logo ; tout l'encart est l'interrupteur (grande cible). */
+.cf-ui.ante {
+  position: absolute;
+  z-index: 21;
+  box-sizing: border-box;
+  container-type: size;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.cf-ui.ante[hidden] { display: none; }
+
+.ante-btn {
+  --sw-h: clamp(40px, 40cqh, 56px);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: 'sw info';
+  align-items: center;
+  column-gap: clamp(8px, 4cqi, 16px);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 6px clamp(8px, 5cqi, 18px);
+  border: 3px solid var(--cf-ink);
+  border-radius: 16px;
+  background: var(--cf-wood-deep);
+  box-shadow: inset 0 0 0 2px var(--cf-steel), inset 0 0 0 4px var(--cf-ink), 0 5px 0 rgba(0, 0, 0, 0.38);
+  color: var(--cf-cream);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  overflow: hidden;
+  transition: transform 80ms ease-out, filter 80ms ease-out;
+}
+.ante-btn:hover:not(:disabled) { filter: brightness(1.1); }
+.ante-btn.is-pressed:not(:disabled),
+.ante-btn:active:not(:disabled) { transform: translateY(2px) scale(0.98); filter: brightness(0.93); }
+.ante-btn:focus-visible { outline: 3px solid var(--cf-focus-ring); outline-offset: 3px; }
+.ante-btn:disabled { cursor: default; filter: grayscale(0.7) brightness(0.72); }
+
+/* interrupteur : rail d'acier, curseur = bouton de pas réel ; l'état ON / OFF est écrit dans la partie libre */
+.ante-sw {
+  grid-area: sw;
+  position: relative;
+  height: var(--sw-h);
+  width: calc(var(--sw-h) * 2.1);
+  border: 3px solid var(--cf-ink);
+  border-radius: 999px;
+  box-sizing: border-box;
+  background: var(--cf-slate);
+  box-shadow: inset 0 0 0 2px var(--cf-steel), inset 0 4px 0 rgba(0, 0, 0, 0.45);
+  transition: background-color 120ms ease-out;
+}
+.ante-sw-knob {
+  position: absolute;
+  top: 50%;
+  left: -4px;
+  width: calc(var(--sw-h) + 6px);
+  height: calc(var(--sw-h) + 6px);
+  translate: 0 -50%;
+  background: var(--cf-step) center / contain no-repeat;
+  filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.45));
+  transition: left 120ms ease-out;
+}
+.ante-sw-state {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--sw-h) + 1px);
+  right: 2px;
+  translate: 0 -50%;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: max(10px, calc(var(--sw-h) * 0.36));
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: var(--cf-muted);
+  white-space: nowrap;
+}
+.ante[data-on='true'] .ante-sw { background: var(--cf-red); }
+.ante[data-on='true'] .ante-sw-knob { left: calc(100% - var(--sw-h) - 2px); }
+.ante[data-on='true'] .ante-sw-state { left: 2px; right: calc(var(--sw-h) + 1px); color: var(--cf-cream); -webkit-text-stroke: 3px var(--cf-ink); paint-order: stroke fill; }
+
+.ante-info {
+  grid-area: info;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  line-height: 1.08;
+}
+.ante-label {
+  grid-area: label;
+  font-family: var(--font-display);
+  font-size: clamp(15px, min(8cqi, 22cqh), 28px);
+  letter-spacing: 0.02em;
+  color: var(--cf-cream);
+  -webkit-text-stroke: 3px var(--cf-ink);
+  paint-order: stroke fill;
+  white-space: nowrap;
+  overflow: hidden;
+  min-width: 0;
+}
+.ante[data-on='true'] .ante-label { color: var(--cf-gold); }
+.ante-factor {
+  grid-area: factor;
+  font-size: clamp(11px, min(5.4cqi, 15cqh), 19px);
+  color: var(--cf-muted);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.ante-cost {
+  grid-area: cost;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+.ante-cost-label {
+  flex: 0 0 auto;
+  font-size: clamp(10px, min(3.6cqi, 11cqh), 13px);
+  letter-spacing: 0.06em;
+  color: var(--cf-muted);
+}
+.ante-cost-val {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(12px, min(6.2cqi, 18cqh), 22px);
+  color: var(--cf-cream);
+}
+
+/* encart court (mobile) : interrupteur plus petit, libellé du coût masqué (le montant reste) */
+@container (max-height: 79px) {
+  .ante-btn { --sw-h: min(34px, 56cqh); padding: 3px 10px; border-radius: 14px; }
+  .ante-label { font-size: clamp(12px, min(6.5cqi, 26cqh), 16px); }
+  .ante-factor { font-size: clamp(10px, min(4.6cqi, 18cqh), 12px); }
+  .ante-cost-val { font-size: clamp(11px, min(5cqi, 21cqh), 14px); }
+  .ante-cost-label { display: none; }
+}
+/* encart étroit : le libellé du coût laisse la place au montant */
+@container (max-width: 299px) {
+  .ante-cost-label { display: none; }
+}
+/* encart étroit et court : interrupteur + libellé sur la 1re ligne, facteur puis coût dessous */
+@container (max-width: 259px) and (max-height: 79px) {
+  .ante-btn {
+    --sw-h: min(20px, 34cqh);
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    grid-template-areas: 'sw label' 'factor factor' 'cost cost';
+    align-content: center;
+    row-gap: 0;
+    column-gap: 6px;
+    padding: 2px 10px;
+  }
+  .ante-info { display: contents; }
+  .ante-sw { width: calc(var(--sw-h) * 2.3); border-width: 2px; }
+  .ante-sw-knob { width: calc(var(--sw-h) + 3px); height: calc(var(--sw-h) + 3px); left: -3px; }
+  .ante[data-on='true'] .ante-sw-knob { left: calc(100% - var(--sw-h)); }
+  .ante-sw-state { font-size: 9.5px; left: calc(var(--sw-h) + 1px); }
+  .ante[data-on='true'] .ante-sw-state { right: calc(var(--sw-h) + 1px); -webkit-text-stroke: 2px var(--cf-ink); }
+  .ante-label { font-size: clamp(11px, 9cqi, 14px); line-height: 1.15; }
+  .ante-factor { font-size: clamp(9.5px, 7.4cqi, 11px); white-space: nowrap; overflow: hidden; line-height: 1.15; }
+  .ante-cost-val { font-size: clamp(10.5px, 8.2cqi, 12.5px); line-height: 1.15; }
+  .ante-cost-label { display: none; }
+}
+/* encart étroit mais haut : même disposition en ligne, interrupteur réduit */
+@container (max-width: 259px) and (min-height: 80px) {
+  .ante-btn { --sw-h: clamp(30px, 30cqh, 40px); column-gap: 8px; padding: 6px 10px; }
+  .ante-label { font-size: clamp(14px, 8.4cqi, 20px); }
+  .ante-factor { font-size: clamp(10.5px, 5.4cqi, 14px); }
+  .ante-cost-val { font-size: clamp(12px, 6.4cqi, 16px); }
+}
+
+:root[data-motion='reduced'] .ante-sw, :root[data-motion='reduced'] .ante-sw-knob, :root[data-motion='reduced'] .ante-btn { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion='full']) .ante-sw, :root:not([data-motion='full']) .ante-sw-knob { transition: none; }
+}

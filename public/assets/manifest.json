@@ -519,7 +519,12 @@
    },
    "scale": 1,
    "pivot": null,
-   "nineSlice": null,
+   "nineSlice": [
+    135,
+    147,
+    134,
+    142
+   ],
    "family": "ui",
    "visibleFill": 1
   },
@@ -1288,5 +1293,5 @@
    "family": "mascot"
   }
  },
- "generatedAt": "2026-09-28T10:34:33.876Z"
+ "generatedAt": "2026-09-28T11:16:29.337Z"
 }

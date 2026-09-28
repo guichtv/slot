@@ -14,7 +14,7 @@ import { COLS, ROWS, parseBook, type Book, type GameEvent, type SymbolName } fro
 
 type Sym = SymbolName;
 const PAYING: Sym[] = ['L1', 'L2', 'L3', 'L4', 'H1', 'H2', 'H3', 'H4'];
-const SIZE = { stick: 2, bundle: 3, crate: 4 } as const;
+const SIZE = { stick: 2, bundle: 3, keg: 4 } as const;
 
 function contiguousReels(board: Sym[][], sym: Sym): number {
   let n = 0;
@@ -45,6 +45,12 @@ export function validateBook(raw: unknown, opts: { maxWinX?: number } = {}): { b
   let mult = 1;
   let pendingWinCheck = false;
   let fsTriggered = false;
+  let fsBonus: 'standard' | 'super' | null = null;
+  let chains = new Map<number, Array<{ pos: [number, number]; area: { col: number; row: number; w: number; h: number } }>>();
+  const pendingLinks = new Set<string>();
+  let lastCarveCells = 0;
+  let lastCarveChain = -1;
+  const inArea = (a: { col: number; row: number; w: number; h: number }, p: [number, number]) => p[0] >= a.col && p[0] < a.col + a.w && p[1] >= a.row && p[1] < a.row + a.h;
   const at = (c: number, r: number) => (board[c] as Sym[] | undefined)?.[r];
 
   const checkNoUndeclared = (idx: number, declared: Extract<GameEvent, { type: 'winInfo' }> | null) => {
@@ -80,6 +86,7 @@ export function validateBook(raw: unknown, opts: { maxWinX?: number } = {}): { b
         spinWin = 0;
         lastWin = null;
         pendingWinCheck = true;
+        chains = new Map();
         break;
       }
       case 'blast': {
@@ -88,16 +95,56 @@ export function validateBook(raw: unknown, opts: { maxWinX?: number } = {}): { b
         else if (tnt.get(k) !== e.tnt.kind) issues.push(`blast#${e.index}: type ${e.tnt.kind} ≠ ${tnt.get(k)}`);
         const n = SIZE[e.tnt.kind];
         if (e.area.w !== n || e.area.h !== n) issues.push(`blast#${e.index}: zone ${e.area.w}x${e.area.h} pour ${e.tnt.kind}`);
+        const zones = chains.get(e.chain) ?? [];
+        if (e.link !== zones.length) issues.push(`blast#${e.index}: lien ${e.link} attendu ${zones.length}`);
+        if (e.link > 0) {
+          if (e.wired) {
+            if (fsBonus !== 'super') issues.push(`blast#${e.index}: charges reliées hors super bonus`);
+          } else {
+            const src = zones.find((z) => e.from && z.pos[0] === e.from[0] && z.pos[1] === e.from[1]);
+            if (!src) issues.push(`blast#${e.index}: origine ${e.from} absente de la chaîne`);
+            else if (!inArea(src.area, e.tnt.pos)) issues.push(`blast#${e.index}: la charge n'est pas dans la zone de ${e.from}`);
+          }
+        }
         for (let c = e.area.col; c < e.area.col + e.area.w; c++) for (let r = e.area.row; r < e.area.row + e.area.h; r++) {
           if (at(c, r) === 'S') issues.push(`blast#${e.index}: la zone détruit un Scatter en ${c},${r}`);
-          (board[c] as Sym[])[r] = e.giant;
-          tnt.delete(`${c},${r}`);
+          const other = tnt.has(`${c},${r}`) && `${c},${r}` !== k;
+          if (other && !pendingLinks.has(`${c},${r}`)) pendingLinks.add(`${c},${r}`);
         }
+        tnt.delete(k);
+        pendingLinks.delete(k);
+        zones.push({ pos: e.tnt.pos, area: e.area });
+        chains.set(e.chain, zones);
+        break;
+      }
+      case 'carve': {
+        const zones = chains.get(e.chain) ?? [];
+        if (!zones.length) issues.push(`carve#${e.index}: chaîne ${e.chain} sans explosion`);
+        else {
+          const minC = Math.min(...zones.map((z) => z.area.col));
+          const minR = Math.min(...zones.map((z) => z.area.row));
+          const maxC = Math.max(...zones.map((z) => z.area.col + z.area.w));
+          const maxR = Math.max(...zones.map((z) => z.area.row + z.area.h));
+          if (e.area.col !== minC || e.area.row !== minR || e.area.w !== maxC - minC || e.area.h !== maxR - minR) issues.push(`carve#${e.index}: zone ≠ rectangle englobant de la chaîne`);
+        }
+        if (pendingLinks.size) issues.push(`carve#${e.index}: charges prises dans une zone mais non enchaînées : ${[...pendingLinks].join(' ')}`);
+        for (let c = e.area.col; c < e.area.col + e.area.w; c++) for (let r = e.area.row; r < e.area.row + e.area.h; r++) {
+          if (at(c, r) === 'S') issues.push(`carve#${e.index}: le géant recouvre un Scatter en ${c},${r}`);
+          if (tnt.has(`${c},${r}`)) issues.push(`carve#${e.index}: une charge reste sous le géant en ${c},${r}`);
+          (board[c] as Sym[])[r] = e.giant;
+        }
+        lastCarveCells = e.cells;
+        lastCarveChain = e.chain;
         break;
       }
       case 'updateGlobalMult': {
         if (!inFs) issues.push(`mult#${e.index}: multiplicateur hors bonus`);
-        if (e.globalMult !== mult + 1) issues.push(`mult#${e.index}: ${mult} -> ${e.globalMult} (attendu +1 par explosion)`);
+        if (e.cause === 'carve') {
+          if (e.added !== lastCarveCells) issues.push(`mult#${e.index}: +${e.added} ≠ ${lastCarveCells} cases sculptées`);
+          if (e.chain !== undefined && e.chain !== lastCarveChain) issues.push(`mult#${e.index}: chaîne ${e.chain} ≠ ${lastCarveChain}`);
+          if (e.globalMult !== Math.min(9999, mult + lastCarveCells)) issues.push(`mult#${e.index}: ${mult} -> ${e.globalMult} (attendu +${lastCarveCells})`);
+          lastCarveCells = 0;
+        }
         mult = e.globalMult;
         break;
       }
@@ -164,6 +211,7 @@ export function validateBook(raw: unknown, opts: { maxWinX?: number } = {}): { b
         }
         lastWin = null;
         pendingWinCheck = true;
+        chains = new Map();
         break;
       }
       case 'setWin':
@@ -186,6 +234,7 @@ export function validateBook(raw: unknown, opts: { maxWinX?: number } = {}): { b
         if (e.bonus === 'super' && sc.length < 4) issues.push(`fsTrigger#${e.index}: super avec ${sc.length} Scatters`);
         inFs = true;
         fsTriggered = true;
+        fsBonus = e.bonus;
         mult = 1;
         bonusWin = roundWin;
         break;
@@ -193,7 +242,7 @@ export function validateBook(raw: unknown, opts: { maxWinX?: number } = {}): { b
       case 'freeSpinRetrigger': {
         let n = 0;
         for (let c = 0; c < COLS; c++) for (let r = 0; r < ROWS; r++) if (at(c, r) === 'S') n++;
-        if (n < 3) issues.push(`retrigger#${e.index}: ${n} Scatters visibles`);
+        if (n < 2) issues.push(`retrigger#${e.index}: ${n} Scatters visibles`);
         break;
       }
       case 'freeSpinEnd':

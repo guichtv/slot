@@ -4,7 +4,9 @@ import { clock } from '../core/clock';
 import { Camera } from './camera';
 import { Decor } from './decor';
 import { GridView } from './grid/GridView';
+import { FRAME_BORDER } from './grid/FrameView';
 import { BlastFx } from './fx/blast';
+import { Logo } from './logo';
 import { buildFxTextures } from './fx/textures';
 import { computeLayout, type SceneLayout } from './layout';
 import { COLS, ROWS } from '../contract/schema';
@@ -20,6 +22,7 @@ export class Scene {
   readonly decor: Decor;
   readonly grid: GridView;
   readonly blast: BlastFx;
+  readonly logo: Logo;
   readonly mascotLayer = new Container();
   readonly overlay = new Container();
   readonly veil = new Graphics();
@@ -46,8 +49,9 @@ export class Scene {
     this.decor = new Decor();
     this.grid = new GridView();
     this.blast = new BlastFx(this.grid, this.camera);
+    this.logo = new Logo();
     const w = this.camera.world;
-    w.addChild(this.decor.back, this.decor.ground, this.grid.view, this.mascotLayer, this.blast.outer, this.decor.front);
+    w.addChild(this.decor.back, this.decor.ground, this.logo.view, this.grid.view, this.mascotLayer, this.blast.outer, this.decor.front);
     this.veil.alpha = 0;
     this.overlay.addChild(this.veil, this.banners);
     app.stage.addChild(w, this.overlay);
@@ -73,11 +77,12 @@ export class Scene {
       bottom: parseFloat(cs.getPropertyValue('--sab')) || 0,
       left: parseFloat(cs.getPropertyValue('--sal')) || 0,
     };
-    this.layout = computeLayout(vw, vh, { cols: COLS, rows: ROWS, frame: 0.36 }, safe);
+    this.layout = computeLayout(vw, vh, { cols: COLS, rows: ROWS, frame: FRAME_BORDER + 0.04 }, safe);
     this.host.app.renderer.resize(vw, vh);
     this.camera.resize(vw, vh);
     this.decor.layout(this.layout);
     this.grid.layout(this.layout);
+    this.logo.layout(this.layout);
     this.veil.clear().rect(0, 0, vw, vh).fill({ color: 0x0d0906 });
     for (const l of this.listeners) l(this.layout);
   }

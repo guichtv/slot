@@ -27,12 +27,20 @@ export interface Stage {
     onColumnStop: ((col: number) => void) | null;
   };
   blast: {
+    stakes(area: EventOf<'blast'>['area'], beat: Beat): unknown;
+    clearStakes(): void;
+    showWire(points: Array<{ x: number; y: number }>, beat: Beat): unknown;
+    clearWire(): void;
+    spark(from: { x: number; y: number }, to: { x: number; y: number }, beat: Beat, ms?: number, arc?: number): Promise<void>;
     fuse(pos: [number, number], beat: Beat, ms?: number): Promise<void>;
-    explode(area: EventOf<'blast'>['area'], giant: SymbolName, beat: Beat, opts?: { reduced?: boolean }): Promise<void>;
+    explode(area: EventOf<'blast'>['area'], pos: [number, number], beat: Beat, opts?: { reduced?: boolean; strength?: number }): Promise<void>;
+    carve(area: EventOf<'carve'>['area'], giant: SymbolName, beat: Beat): Promise<void>;
   };
   mascot: {
     perform(name: string, beat: Beat, arg?: unknown): Promise<void>;
     react(name: string): void;
+    /** point de départ des étincelles (bout de l'allumette), coordonnées de scène */
+    matchPoint(): { x: number; y: number };
   };
   camera: { zoomTo(f: number, x: number, y: number, d?: number): gsap.core.Timeline; reset(d?: number): gsap.core.Timeline };
   decor: { setDim(v: number): unknown; setAmbience(a: 'base' | 'bonus' | 'super', d?: number): gsap.core.Timeline; setMonument(stage: number, animate?: boolean): gsap.core.Timeline };
@@ -40,7 +48,8 @@ export interface Stage {
     setSpinWin(amount: number | null, label?: string): void;
     setFs(remaining: number | null, total?: number): void;
     plusFs(n: number, beat: Beat): Promise<void>;
-    setMultiplier(value: number | null, beat: Beat | null, cause?: 'blast' | 'start'): Promise<void>;
+    setMultiplier(value: number | null, beat: Beat | null, cause?: 'carve' | 'start'): Promise<void>;
+    collectChunks(from: { x: number; y: number }, count: number, beat: Beat): Promise<void>;
     bonusIntro(kind: 'standard' | 'super', spins: number, beat: Beat): Promise<void>;
     bonusOutro(total: number, beat: Beat): Promise<void>;
     celebrate(amount: number, bet: number, beat: Beat, maxWin: boolean): Promise<void>;
@@ -83,7 +92,9 @@ export class GamePresenter implements Presenter {
       case 'reveal':
         return this.reveal(e, next, beat);
       case 'blast':
-        return this.blast(e, beat);
+        return this.blast(e, next, beat);
+      case 'carve':
+        return this.carve(e, beat);
       case 'winInfo':
         return this.winInfo(e, beat);
       case 'updateTumbleWin':
@@ -94,7 +105,19 @@ export class GamePresenter implements Presenter {
         await this.s.grid.tumble(e.removed as Array<[number, number]>, e.newSymbols as SymbolName[][], next.board, this.tntMap(next), beat);
         return;
       case 'updateGlobalMult':
-        this.s.sound.play('multUp', { pitch: 1 + Math.min(1, (e.globalMult - 2) * 0.05) });
+        if (e.cause === 'carve' && this.lastCarve) {
+          // cause visible : les éclats de la zone sculptée volent jusqu'au Cornerstone, puis Buck le frappe de la queue
+          const a = this.lastCarve;
+          const c = this.s.grid.cellCenter(a.col, a.row);
+          const cell = this.s.grid.cellCenter(a.col + 1, a.row + 1);
+          const step = { x: cell.x - c.x, y: cell.y - c.y };
+          const from = { x: c.x + (step.x * (a.w - 1)) / 2, y: c.y + (step.y * (a.h - 1)) / 2 };
+          this.s.sound.play('collect');
+          await this.s.ui.collectChunks(from, e.added ?? a.w * a.h, beat);
+          this.s.mascot.react('thump');
+          this.s.sound.play('thump');
+        }
+        this.s.sound.play('multUp', { pitch: 1 + Math.min(1, e.globalMult / 400) });
         await this.s.ui.setMultiplier(e.globalMult, beat, e.cause);
         if (next.fs.active) {
           // la sculpture du Mount Buckmore avance avec le multiplicateur (cosmétique, valeur lue dans le book)
@@ -180,14 +203,46 @@ export class GamePresenter implements Presenter {
     this.quickStop = false;
   }
 
-  private async blast(e: EventOf<'blast'>, beat: Beat): Promise<void> {
-    // la mascotte déclenche la charge (performance articulée), puis la zone saute et se sculpte
-    await this.s.mascot.perform('detonate', beat, { pos: e.tnt.pos, kind: e.tnt.kind });
+  private lastCarve: EventOf<'carve'>['area'] | null = null;
+
+  private async blast(e: EventOf<'blast'>, next: RoundModel, beat: Beat): Promise<void> {
+    const g = this.s.grid;
+    const target = g.cellCenter(e.tnt.pos[0], e.tnt.pos[1]);
+    if (e.link === 0) {
+      // super bonus : le fil de mise à feu relie toutes les charges de l'étape
+      const wiredLinks = next.book.events.filter((x) => x.type === 'blast' && x.index > e.index && x.chain === e.chain && x.wired) as Array<EventOf<'blast'>>;
+      if (wiredLinks.length) {
+        const pts = [e, ...wiredLinks].map((b) => g.cellCenter(b.tnt.pos[0], b.tnt.pos[1]));
+        this.s.blast.showWire(pts, beat);
+      }
+      // lecture de la zone, puis Buck frotte l'allumette sur sa dent en or et l'étincelle file jusqu'à la mèche
+      this.s.blast.stakes(e.area, beat);
+      this.s.sound.play('match');
+      await this.s.mascot.perform('strikeMatch', beat, { target });
+      await this.s.blast.spark(this.s.mascot.matchPoint(), target, beat, 380, g.cellCenter(0, 0).y * 0 + 120);
+      this.s.sound.play('fuse');
+      await this.s.blast.fuse(e.tnt.pos as [number, number], beat, 240);
+    } else {
+      // lien de chaîne : l'étincelle part de la charge qui l'a prise (ou court le long du fil), la mèche crépite 0,4 s
+      const src = e.from ? g.cellCenter(e.from[0], e.from[1]) : target;
+      this.s.blast.stakes(e.area, beat);
+      this.s.sound.play('chain');
+      this.s.mascot.react('chainWince');
+      await this.s.blast.spark(src, target, beat, e.wired ? 360 : 260, 30);
+      await this.s.blast.fuse(e.tnt.pos as [number, number], beat, 400);
+    }
     this.s.sound.play(e.tnt.kind === 'keg' ? 'blastBig' : 'blast');
-    await this.s.blast.fuse(e.tnt.pos as [number, number], beat, 260);
+    this.s.mascot.react('duck');
     this.s.decor.setDim(0);
-    await this.s.blast.explode(e.area, e.giant, beat, { reduced: this.s.reducedMotion });
+    await this.s.blast.explode(e.area, e.tnt.pos as [number, number], beat, { reduced: this.s.reducedMotion, strength: e.link > 0 ? 1.2 : 1 });
+  }
+
+  private async carve(e: EventOf<'carve'>, beat: Beat): Promise<void> {
+    this.s.blast.clearWire();
+    this.s.mascot.react('carve');
     this.s.sound.play('carve');
+    this.lastCarve = e.area;
+    await this.s.blast.carve(e.area, e.giant, beat);
     this.s.mascot.react('proud');
   }
 

@@ -206,32 +206,37 @@
   "decor.monument.0": {
    "src": "assets/generated/decor/monument-0.png",
    "family": "decor",
-   "quality": 86,
-   "margin": 4
+   "quality": 88,
+   "margin": 4,
+   "maxSize": 900
   },
   "decor.monument.1": {
    "src": "assets/generated/decor/monument-1.png",
    "family": "decor",
-   "quality": 86,
-   "margin": 4
+   "quality": 88,
+   "margin": 4,
+   "maxSize": 900
   },
   "decor.monument.2": {
    "src": "assets/generated/decor/monument-2.png",
    "family": "decor",
-   "quality": 86,
-   "margin": 4
+   "quality": 88,
+   "margin": 4,
+   "maxSize": 900
   },
   "decor.monument.3": {
    "src": "assets/generated/decor/monument-3.png",
    "family": "decor",
-   "quality": 86,
-   "margin": 4
+   "quality": 88,
+   "margin": 4,
+   "maxSize": 900
   },
   "decor.floodlight": {
    "src": "assets/generated/decor/floodlight.png",
    "family": "decor",
-   "quality": 86,
-   "margin": 4
+   "quality": 88,
+   "margin": 4,
+   "maxSize": 900
   },
   "decor.birds": {
    "src": "assets/generated/decor/birds.png",
@@ -252,7 +257,13 @@
    "src": "assets/generated/ui/frame.png",
    "family": "ui",
    "quality": 92,
-   "margin": 0
+   "margin": 0,
+   "nineSlice": [
+    135,
+    147,
+    134,
+    142
+   ]
   },
   "ui.cell": {
    "src": "assets/generated/ui/cell.png",
@@ -544,6 +555,135 @@
    "margin": 6,
    "opaque": true,
    "maxSize": 720
+  },
+  "ui.cornerstone": {
+   "src": "assets/generated/ui/cornerstone.png",
+   "family": "ui",
+   "quality": 92,
+   "margin": 6,
+   "maxSize": 520
+  },
+  "ui.cornerstoneGold": {
+   "src": "assets/generated/ui/cornerstone-gold.png",
+   "family": "ui",
+   "quality": 92,
+   "margin": 6,
+   "maxSize": 520
+  },
+  "sym.T.log": {
+   "src": "assets/generated/symbols/T-log.png",
+   "family": "symbols",
+   "maxSize": 640,
+   "margin": 8,
+   "quality": 90
+  },
+  "fx.debris": {
+   "src": "assets/generated/fx/fx-debris.png",
+   "family": "fx",
+   "quality": 90,
+   "maxSize": 1536,
+   "split": {
+    "names": [
+     "g0",
+     "g1",
+     "g2",
+     "g3",
+     "g4",
+     "g5",
+     "w0",
+     "w1",
+     "w2",
+     "n0",
+     "n1",
+     "n2"
+    ],
+    "minArea": 400,
+    "dilate": 4
+   }
+  },
+  "fx.dust": {
+   "src": "assets/generated/fx/fx-dust.png",
+   "family": "fx",
+   "quality": 90,
+   "maxSize": 1536,
+   "split": {
+    "names": [
+     "0",
+     "1",
+     "2",
+     "3"
+    ],
+    "minArea": 2000,
+    "dilate": 6
+   }
+  },
+  "decor.skyRich": {
+   "src": "assets/generated/decor/sky-rich.png",
+   "family": "decor",
+   "quality": 86,
+   "opaque": true
+  },
+  "decor.portrait": {
+   "src": "assets/generated/decor/decor-portrait.png",
+   "family": "decor",
+   "quality": 86,
+   "opaque": true
+  },
+  "scr.sundown": {
+   "src": "assets/generated/screens/panel-sundown.png",
+   "family": "screens",
+   "quality": 88,
+   "margin": 4,
+   "maxSize": 1200
+  },
+  "scr.floodlight": {
+   "src": "assets/generated/screens/panel-floodlight.png",
+   "family": "screens",
+   "quality": 88,
+   "margin": 4,
+   "maxSize": 1200
+  },
+  "scr.total": {
+   "src": "assets/generated/screens/panel-total.png",
+   "family": "screens",
+   "quality": 88,
+   "margin": 4,
+   "maxSize": 1200
+  },
+  "scr.banner": {
+   "src": "assets/generated/screens/banner-tier.png",
+   "family": "screens",
+   "quality": 88,
+   "margin": 4,
+   "maxSize": 1200
+  },
+  "scr.shop": {
+   "src": "assets/generated/screens/shop-board.png",
+   "family": "screens",
+   "quality": 88,
+   "margin": 4,
+   "maxSize": 1200
+  },
+  "scr.card": {
+   "src": "assets/generated/screens/card-frame.png",
+   "family": "screens",
+   "quality": 88,
+   "margin": 4,
+   "maxSize": 1200
+  },
+  "id.cover": {
+   "src": "assets/generated/identity/cover.png",
+   "family": "identity",
+   "quality": 88,
+   "opaque": true,
+   "maxSize": 1536
+  },
+  "id.tile": {
+   "src": "assets/generated/identity/tile.png",
+   "family": "identity",
+   "quality": 88,
+   "opaque": true,
+   "maxSize": 1536
   }
  }
 }

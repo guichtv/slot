@@ -1,0 +1,41 @@
+Utilise $imagegen et l'outil natif de génération d'images (built-in image_gen, PAS un script CLI/API) pour produire réellement les images décrites. Ta mission porte uniquement sur ces images et leur rapport ; ne crée ni ne modifie aucun code du jeu.
+
+Studio : Crownforge. Racine du projet : le répertoire courant.
+
+RÈGLES COMMUNES
+- Style maison Crownforge : BD / cartoon 2D pour adultes, contours noirs épais légèrement irréguliers, cel-shading deux tons, reflets francs, couleurs saturées maîtrisées, formes simples et lisibles. Jamais photo-réaliste, jamais 3D lisse, jamais de rendu « image IA » (pas de néon générique, pas de dégradés par défaut, pas de flou artistique, pas d'effets de bordure).
+- Transparence (quand demandée) : fond RÉELLEMENT transparent (canal alpha), pas de damier dessiné, pas de fond blanc, pas de halo ; sujet complet non coupé, marge de 3 à 6 % tout autour. Si l'outil ne produit pas d'alpha : fond vert chroma uni #00FF00 sans ombre portée, et signale-le dans ta réponse.
+- Aucun texte, logo, filigrane ou signature, sauf le texte exact demandé.
+- Aucune copie de personnage, de logo ou de composition identifiable d'un autre studio ou d'une marque.
+- Reprise : si un fichier cible existe déjà ET que son .prompt.txt existe, ne le régénère pas ; passe au suivant.
+
+PROCÉDURE pour CHAQUE image :
+1) génère avec image_gen (un appel par asset) ;
+2) inspecte (sujet, style, transparence, marges, texte exact) et régénère UNE fois si un défaut évident existe ;
+3) copie le fichier final depuis $CODEX_HOME/generated_images/… vers le chemin indiqué (crée les dossiers) ;
+4) écris à côté <nom>.prompt.txt avec le prompt exact utilisé.
+
+RÉPONSE FINALE : chemins produits, méthode réellement utilisée, dimensions, canal alpha (oui/non), défauts restants.
+Si image_gen n'est pas accessible, dis-le précisément ; ne remplace PAS les images par du SVG, du code ou une liste de prompts.
+
+Projet : BOOMTOOTH, slot 2D « démolition au castor » (Crownforge). Buck Boomtooth, castor chef de chantier vaniteux et casse-cou, fait sauter une montagne de granit pour y sculpter un monument à sa gloire (« Mount Buckmore ») au-dessus d'un barrage en rondins, dans une vallée de pins du Grand Nord.
+
+Direction artistique RETENUE (référence obligatoire) : assets/generated/directions/D1.png — charge-la avec view_image avant de générer et reproduis son style exact :
+- encrage noir épais (4 à 7 px à 1024 px), légèrement irrégulier comme au pinceau, traits intérieurs plus fins ;
+- cel-shading deux tons nets (clair + ombre franche) et un reflet blanc cassé par volume ; pas d'aérographe, pas de flou ;
+- matières dessinées : bois équarri veiné, granit gris-bleu ébréché, métal riveté, flanelle à carreaux rouges et noirs, copeaux ;
+- lumière principale chaude de fin d'après-midi venant de la gauche (orange doré), ombres bleu-violet ;
+- couleurs saturées maîtrisées.
+Palette : orange brûlé #E8742A, orange ciel #F39A3C, vert pin #2F5D46, vert pin sombre #1E3B2E, granit #6F7F92, granit ombre #46526A, rouge TNT #D7332B, or #F2B233, bois miel #C98A45, bois sombre #6B4526, crème #F4E6C8, encre #1B1410.
+Référence d'ambiance NUIT (bonus) : assets/generated/directions/D3.png (aurore turquoise #3FD6B8, bleu nuit #14233A, projecteurs orange #FF9A3C) — même vallée, même trait.
+Jamais photo-réaliste, jamais 3D lisse, jamais de néon générique ni de dégradé par défaut.
+
+LOT screens — panneaux illustrés des écrans de bonus, de célébration et de boutique (6 images). Dossier : assets/generated/screens/
+Tous les panneaux ont une grande zone centrale UNIE et VIDE (le jeu y écrit les textes traduits), des coins arrondis, et aucun texte ni chiffre.
+
+1. panel-sundown.png — Introduction du bonus SUNDOWN SHIFT : grand panneau de chantier en planches clouées suspendu à des cordes, lumière de crépuscule orangée et violette, deux lanternes allumées aux coins supérieurs, trois détonateurs à piston rouge et or posés sur le rebord inférieur. 1536×1024, fond TRANSPARENT autour du panneau.
+2. panel-floodlight.png — Introduction du bonus FLOODLIGHT SHIFT : même format de panneau mais en métal riveté bleu nuit (#14233A) cerclé de planches, deux petits projecteurs allumés aux coins, reflets turquoise d'aurore (#3FD6B8), quatre détonateurs rouge et or sur le rebord. 1536×1024, fond TRANSPARENT autour.
+3. panel-total.png — Fin de bonus « gain total » : grand panneau de planches cerclé d'or et de fer, avec au sommet une petite montagne sculptée en visage de castor à dent dorée en médaillon, éclats de pierre et pépites d'or sur le rebord inférieur. 1536×1024, fond TRANSPARENT autour.
+4. banner-tier.png — Bannière de palier de célébration : longue planche épaisse légèrement cintrée, un bâton de dynamite allumé fixé à chaque extrémité, clous et bandes de fer, zone centrale vide très large. 1536×1024 (bannière environ 1400 × 380 px), fond TRANSPARENT.
+5. shop-board.png — Fond du catalogue BUY BONUS : grand panneau d'affichage de chantier en planches, fixé sur deux poteaux, avec des punaises, un plan roulé et une pioche accrochés sur les bords, grande surface centrale vide et calme pour poser des cartes. 1536×1024, fond TRANSPARENT autour.
+6. card-frame.png — Cadre de carte d'offre, portrait, 1024×1536 : cadre de bois miel aux coins renforcés d'équerres d'acier et de boulons, bordure intérieure encre, intérieur uni vide (légèrement plus sombre), coins arrondis. Fond TRANSPARENT autour du cadre.

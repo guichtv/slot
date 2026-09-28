@@ -543,7 +543,7 @@ const F15_FS: Spin[] = [
       L4 L3 T  L4 H3
       L1 H1 H4 L3 L4
       H2 L3 L3 L3 L1
-      `, { tnt: [[2, 2, 'crate']] })
+      `, { tnt: [[2, 2, 'keg']] })
       .blast([2, 2], 'L3', [0, 1])
       .wins([pay(b, 'L3', 4, 256)])
       .tumble(['H3 L3 H2 H2', 'L4 L4 L2 L1', 'L4 L2 L2 L1', 'L4 L1 H4 L2', ''])
@@ -623,7 +623,7 @@ const F15 = fixture(
   'BASE',
   {
     weight: 1,
-    tags: ['anticipation', 'bonus', 'super', 'tnt', 'multiplier', 'crate', 'near-miss'],
+    tags: ['anticipation', 'bonus', 'super', 'tnt', 'multiplier', 'keg', 'near-miss'],
     note: 'déclenchement du super bonus (4 Scatters), 12 FS : fagots et caisse, multiplicateur x5, anticipation ratée au 10e tour',
   },
   (b) =>
@@ -713,7 +713,7 @@ const F23 = fixture('F23', 'BASE', { weight: 1, tags: ['tier', 'x100', 'tnt', 'b
     .endSpin(),
 );
 
-const F24 = fixture('F24', 'BASE', { weight: 1, tags: ['tier', 'x500', 'tnt', 'crate', 'giant', '5-reels'], note: 'palier x500 : caisse 4x4 -> géant H3, 5 rouleaux' }, (b) =>
+const F24 = fixture('F24', 'BASE', { weight: 1, tags: ['tier', 'x500', 'tnt', 'keg', 'giant', '5-reels'], note: 'palier x500 : baril 4x4 -> géant H3, 5 rouleaux' }, (b) =>
   b
     .reveal(
       `
@@ -723,7 +723,7 @@ const F24 = fixture('F24', 'BASE', { weight: 1, tags: ['tier', 'x500', 'tnt', 'c
     L3 H4 L2 L1 L3
     L2 H1 L4 S  H2
   `,
-      { tnt: [[1, 2, 'crate']] },
+      { tnt: [[1, 2, 'keg']] },
     )
     .blast([1, 2], 'H3', [0, 0])
     .wins([pay(b, 'H3', 5, 256)])
@@ -940,7 +940,7 @@ const F16 = fixture(
     ),
 );
 
-/** F25 : 10 free spins, caisse H1 4x4 sous x3 au 5e tour (palier x1000) */
+/** F25 : 10 free spins, baril H1 4x4 sous x3 au 5e tour (palier x1000) */
 const F25_FS: Spin[] = [
   // 1 : sans gain
   lose(`
@@ -997,7 +997,7 @@ const F25_FS: Spin[] = [
       L2 H3 L4 L4 H4
       L3 H1 L2 H2 H2
       H3 T  L4 L2 L1
-      `, { tnt: [[1, 4, 'crate']] })
+      `, { tnt: [[1, 4, 'keg']] })
       .blast([1, 4], 'H1', [0, 1])
       .wins([pay(b, 'H1', 4, 256)])
       .tumble(['L1 L1 L4 L4', 'H2 H4 H3 L2', 'H4 H1 H1 L3', 'L3 H4 H3 H2', ''])
@@ -1059,7 +1059,7 @@ const F25_FS: Spin[] = [
 const F25 = fixture(
   'F25',
   'BONUS',
-  { weight: 1, cost: cfg.modes.BONUS.cost, tags: ['buy', 'bonus', 'standard', 'tier', 'x1000', 'crate', 'multiplier'], note: 'achat bonus : caisse 4x4 H1 sous multiplicateur x3, palier x1000' },
+  { weight: 1, cost: cfg.modes.BONUS.cost, tags: ['buy', 'bonus', 'standard', 'tier', 'x1000', 'keg', 'multiplier'], note: 'achat bonus : baril 4x4 H1 sous multiplicateur x3, palier x1000' },
   (b) =>
     freeSpins(
       b
@@ -1160,7 +1160,7 @@ const F17_FS: Spin[] = [
       H4 H2 L2 L2 L1
       L3 L4 L2 L3 L1
       L4 H1 L4 L1 L1
-      `, { tnt: [[0, 1, 'crate']] })
+      `, { tnt: [[0, 1, 'keg']] })
       .blast([0, 1], 'L2', [0, 0])
       .wins([pay(b, 'L2', 4, 256)])
       .tumble(['L3 H1 H2 H3', 'H4 L3 L1 H4', 'L2 L4 H3 L4', 'L2 L3 L4 H4', ''])
@@ -1225,7 +1225,7 @@ const F17_FS: Spin[] = [
 const F17 = fixture(
   'F17',
   'SUPER',
-  { weight: 1, cost: cfg.modes.SUPER.cost, tags: ['buy', 'bonus', 'super', 'tnt', 'crate', 'multiplier'], note: 'achat super bonus : 4 Scatters, 12 FS, fagots et caisse, multiplicateur x5' },
+  { weight: 1, cost: cfg.modes.SUPER.cost, tags: ['buy', 'bonus', 'super', 'tnt', 'keg', 'multiplier'], note: 'achat super bonus : 4 Scatters, 12 FS, fagots et caisse, multiplicateur x5' },
   (b) =>
     freeSpins(
       b
@@ -1322,7 +1322,7 @@ const F26_FS: Spin[] = [
 const F26 = fixture(
   'F26',
   'SUPER',
-  { weight: 1, cost: cfg.modes.SUPER.cost, tags: ['buy', 'bonus', 'super', 'max-win', 'wincap', 'crate', 'multiplier'], note: 'MAX WIN : caisse H1 4x4 + 4 H1 au rouleau 5 (1024 ways) sous x5 -> plafond x25000' },
+  { weight: 1, cost: cfg.modes.SUPER.cost, tags: ['buy', 'bonus', 'super', 'max-win', 'wincap', 'keg', 'multiplier'], note: 'MAX WIN : baril H1 4x4 + 4 H1 au rouleau 5 (1024 ways) sous x5 -> plafond x25000' },
   (b) => {
     b.reveal(`
     L4 H1 S  H2 L1
@@ -1345,7 +1345,7 @@ const F26 = fixture(
     L3 L2 L3 H4 H1
     H2 H4 H3 L4 H1
   `,
-        { tnt: [[1, 2, 'crate']] },
+        { tnt: [[1, 2, 'keg']] },
       )
       .blast([1, 2], 'H1', [0, 1])
       .wins([pay(b, 'H1', 5, 1024)])
@@ -1354,7 +1354,7 @@ const F26 = fixture(
 );
 
 // ---------------------------------------------------------------------------------------------
-// Features achetées : BLAST (un spin à 2+ charges) et MEGA (un spin à caisse 4x4)
+// Features achetées : BLAST (un spin à 2+ charges) et MEGA (un spin à baril 4x4)
 // ---------------------------------------------------------------------------------------------
 
 const F18 = fixture(
@@ -1390,7 +1390,7 @@ const F18 = fixture(
 const F19 = fixture(
   'F19',
   'MEGA',
-  { weight: 1, cost: cfg.modes.MEGA.cost, tags: ['buy', 'feature', 'tnt', 'crate', 'giant', 'cascade'], note: 'feature MEGA : caisse 4x4 -> géant H4, 256 ways, puis H2' },
+  { weight: 1, cost: cfg.modes.MEGA.cost, tags: ['buy', 'feature', 'tnt', 'keg', 'giant', 'cascade'], note: 'feature MEGA : baril 4x4 -> géant H4, 256 ways, puis H2' },
   (b) =>
     b
       .reveal(
@@ -1401,7 +1401,7 @@ const F19 = fixture(
     H1 L1 T  H4 L4
     L3 H4 H2 L4 L1
   `,
-        { tnt: [[2, 3, 'crate']] },
+        { tnt: [[2, 3, 'keg']] },
       )
       .blast([2, 3], 'H4', [0, 1])
       .wins([pay(b, 'H4', 4, 256)])

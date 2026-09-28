@@ -12,6 +12,7 @@ import { keys, loadManifest, loadTextures } from './render/assets';
 import { createApp } from './render/app';
 import { Scene } from './render/scene';
 import { Cornerstone } from './render/cornerstone';
+import { Buck } from './render/mascot/Buck';
 import { Hud } from './ui/hud';
 import { Overlays } from './ui/overlays';
 import { GamePresenter, type Stage } from './controller/presenter';
@@ -82,8 +83,14 @@ async function boot(): Promise<void> {
   const host = await createApp($('#stage'), quality);
   const scene = new Scene(host);
   const cornerstone = new Cornerstone();
-  scene.mascotLayer.addChild(cornerstone.view);
-  scene.onLayout((l) => cornerstone.layout(l));
+  const buck = new Buck();
+  buck.reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  scene.logo.reducedMotion = buck.reducedMotion;
+  scene.mascotLayer.addChild(cornerstone.view, buck.view);
+  scene.onLayout((l) => {
+    buck.layout(l);
+    cornerstone.layout(l);
+  });
 
   // fournisseur de manches
   let provider: RoundProvider;
@@ -120,8 +127,9 @@ async function boot(): Promise<void> {
   });
 
   const mascot = {
-    perform: async (_name: string, beat: Beat) => beat.wait(200),
-    react: (_name: string) => undefined,
+    perform: (name: string, beat: Beat, arg?: unknown) => buck.perform(name, beat, arg as { target?: { x: number; y: number }; tier?: number }),
+    react: (name: string) => buck.react(name),
+    matchPoint: () => buck.matchPoint(),
   };
   const stage: Stage = {
     grid: scene.grid as unknown as Stage['grid'],
@@ -162,6 +170,7 @@ async function boot(): Promise<void> {
         return overlays.celebrate(amount, bet, beat, max);
       },
       scatterCount: () => undefined,
+      collectChunks: (from, count, beat) => cornerstone.collect(from, count, beat),
     },
     sound: { play: (n, o) => sfx(n, o), tension, ambience: () => undefined },
     reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,

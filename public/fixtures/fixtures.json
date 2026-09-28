@@ -1,6 +1,6 @@
 {
  "contract": "1.0.0",
- "generated": "2026-09-28T11:03:08.799Z",
+ "generated": "2026-09-28T11:04:48.470Z",
  "fixtures": [
   {
    "id": "F01",
@@ -2766,6 +2766,8 @@
      {
       "index": 1,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         0,
@@ -2778,11 +2780,23 @@
        "row": 2,
        "w": 2,
        "h": 2
-      },
-      "giant": "H2"
+      }
      },
      {
       "index": 2,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 2,
+       "w": 2,
+       "h": 2
+      },
+      "giant": "H2",
+      "cells": 4
+     },
+     {
+      "index": 3,
       "type": "winInfo",
       "totalWin": 160,
       "wins": [
@@ -2818,12 +2832,12 @@
       ]
      },
      {
-      "index": 3,
+      "index": 4,
       "type": "updateTumbleWin",
       "amount": 160
      },
      {
-      "index": 4,
+      "index": 5,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -2952,17 +2966,17 @@
       "tnt": []
      },
      {
-      "index": 5,
+      "index": 6,
       "type": "setWin",
       "amount": 160
      },
      {
-      "index": 6,
+      "index": 7,
       "type": "setTotalWin",
       "amount": 160
      },
      {
-      "index": 7,
+      "index": 8,
       "type": "finalWin",
       "amount": 160
      }
@@ -3096,6 +3110,8 @@
      {
       "index": 1,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         1,
@@ -3108,11 +3124,23 @@
        "row": 1,
        "w": 3,
        "h": 3
-      },
-      "giant": "H1"
+      }
      },
      {
       "index": 2,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 1,
+       "w": 3,
+       "h": 3
+      },
+      "giant": "H1",
+      "cells": 9
+     },
+     {
+      "index": 3,
       "type": "winInfo",
       "totalWin": 1350,
       "wins": [
@@ -3164,12 +3192,12 @@
       ]
      },
      {
-      "index": 3,
+      "index": 4,
       "type": "updateTumbleWin",
       "amount": 1350
      },
      {
-      "index": 4,
+      "index": 5,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -3318,17 +3346,17 @@
       "tnt": []
      },
      {
-      "index": 5,
+      "index": 6,
       "type": "setWin",
       "amount": 1350
      },
      {
-      "index": 6,
+      "index": 7,
       "type": "setTotalWin",
       "amount": 1350
      },
      {
-      "index": 7,
+      "index": 8,
       "type": "finalWin",
       "amount": 1350
      }
@@ -3469,6 +3497,8 @@
      {
       "index": 1,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         1,
@@ -3481,12 +3511,26 @@
        "row": 0,
        "w": 2,
        "h": 2
-      },
-      "giant": "H3"
+      }
      },
      {
       "index": 2,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 1,
+       "row": 0,
+       "w": 2,
+       "h": 2
+      },
+      "giant": "H3",
+      "cells": 4
+     },
+     {
+      "index": 3,
       "type": "blast",
+      "chain": 1,
+      "link": 0,
       "tnt": {
        "pos": [
         0,
@@ -3499,11 +3543,23 @@
        "row": 3,
        "w": 2,
        "h": 2
-      },
-      "giant": "H3"
+      }
      },
      {
-      "index": 3,
+      "index": 4,
+      "type": "carve",
+      "chain": 1,
+      "area": {
+       "col": 0,
+       "row": 3,
+       "w": 2,
+       "h": 2
+      },
+      "giant": "H3",
+      "cells": 4
+     },
+     {
+      "index": 5,
       "type": "winInfo",
       "totalWin": 480,
       "wins": [
@@ -3551,12 +3607,12 @@
       ]
      },
      {
-      "index": 4,
+      "index": 6,
       "type": "updateTumbleWin",
       "amount": 480
      },
      {
-      "index": 5,
+      "index": 7,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -3708,8 +3764,10 @@
       ]
      },
      {
-      "index": 6,
+      "index": 8,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         2,
@@ -3722,11 +3780,23 @@
        "row": 0,
        "w": 2,
        "h": 2
-      },
-      "giant": "H4"
+      }
      },
      {
-      "index": 7,
+      "index": 9,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 2,
+       "row": 0,
+       "w": 2,
+       "h": 2
+      },
+      "giant": "H4",
+      "cells": 4
+     },
+     {
+      "index": 10,
       "type": "winInfo",
       "totalWin": 240,
       "wins": [
@@ -3766,12 +3836,12 @@
       ]
      },
      {
-      "index": 8,
+      "index": 11,
       "type": "updateTumbleWin",
       "amount": 720
      },
      {
-      "index": 9,
+      "index": 12,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -3906,17 +3976,17 @@
       "tnt": []
      },
      {
-      "index": 10,
+      "index": 13,
       "type": "setWin",
       "amount": 720
      },
      {
-      "index": 11,
+      "index": 14,
       "type": "setTotalWin",
       "amount": 720
      },
      {
-      "index": 12,
+      "index": 15,
       "type": "finalWin",
       "amount": 720
      }
@@ -4050,6 +4120,8 @@
      {
       "index": 1,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         1,
@@ -4062,11 +4134,23 @@
        "row": 2,
        "w": 2,
        "h": 2
-      },
-      "giant": "W"
+      }
      },
      {
       "index": 2,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 1,
+       "row": 2,
+       "w": 2,
+       "h": 2
+      },
+      "giant": "W",
+      "cells": 4
+     },
+     {
+      "index": 3,
       "type": "winInfo",
       "totalWin": 520,
       "wins": [
@@ -4143,12 +4227,12 @@
       ]
      },
      {
-      "index": 3,
+      "index": 4,
       "type": "updateTumbleWin",
       "amount": 520
      },
      {
-      "index": 4,
+      "index": 5,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -4297,17 +4381,17 @@
       "tnt": []
      },
      {
-      "index": 5,
+      "index": 6,
       "type": "setWin",
       "amount": 520
      },
      {
-      "index": 6,
+      "index": 7,
       "type": "setTotalWin",
       "amount": 520
      },
      {
-      "index": 7,
+      "index": 8,
       "type": "finalWin",
       "amount": 520
      }
@@ -4463,7 +4547,7 @@
    "book": {
     "id": "F14",
     "mode": "BASE",
-    "payoutMultiplier": 8930,
+    "payoutMultiplier": 38930,
     "events": [
      {
       "index": 0,
@@ -4828,6 +4912,8 @@
      {
       "index": 10,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         2,
@@ -4840,27 +4926,41 @@
        "row": 2,
        "w": 2,
        "h": 2
-      },
-      "giant": "H3"
+      }
      },
      {
       "index": 11,
-      "type": "updateGlobalMult",
-      "globalMult": 2,
-      "cause": "blast"
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 1,
+       "row": 2,
+       "w": 2,
+       "h": 2
+      },
+      "giant": "H3",
+      "cells": 4
      },
      {
       "index": 12,
+      "type": "updateGlobalMult",
+      "globalMult": 5,
+      "added": 4,
+      "chain": 0,
+      "cause": "carve"
+     },
+     {
+      "index": 13,
       "type": "winInfo",
-      "totalWin": 360,
+      "totalWin": 900,
       "wins": [
        {
         "symbol": "H3",
         "kind": "ways",
         "reels": 3,
         "ways": 6,
-        "win": 360,
-        "mult": 2,
+        "win": 900,
+        "mult": 5,
         "baseWin": 180,
         "positions": [
          [
@@ -4892,12 +4992,12 @@
       ]
      },
      {
-      "index": 13,
+      "index": 14,
       "type": "updateTumbleWin",
-      "amount": 360
+      "amount": 900
      },
      {
-      "index": 14,
+      "index": 15,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -5031,23 +5131,23 @@
       "tnt": []
      },
      {
-      "index": 15,
-      "type": "setWin",
-      "amount": 360
-     },
-     {
       "index": 16,
-      "type": "setTotalWin",
-      "amount": 360
+      "type": "setWin",
+      "amount": 900
      },
      {
       "index": 17,
+      "type": "setTotalWin",
+      "amount": 900
+     },
+     {
+      "index": 18,
       "type": "updateFreeSpin",
       "amount": 3,
       "total": 10
      },
      {
-      "index": 18,
+      "index": 19,
       "type": "reveal",
       "board": [
        [
@@ -5147,23 +5247,23 @@
       "tnt": []
      },
      {
-      "index": 19,
+      "index": 20,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 20,
+      "index": 21,
       "type": "setTotalWin",
-      "amount": 360
+      "amount": 900
      },
      {
-      "index": 21,
+      "index": 22,
       "type": "updateFreeSpin",
       "amount": 4,
       "total": 10
      },
      {
-      "index": 22,
+      "index": 23,
       "type": "reveal",
       "board": [
        [
@@ -5263,17 +5363,17 @@
       "tnt": []
      },
      {
-      "index": 23,
+      "index": 24,
       "type": "winInfo",
-      "totalWin": 60,
+      "totalWin": 150,
       "wins": [
        {
         "symbol": "L2",
         "kind": "ways",
         "reels": 3,
         "ways": 3,
-        "win": 60,
-        "mult": 2,
+        "win": 150,
+        "mult": 5,
         "baseWin": 30,
         "positions": [
          [
@@ -5301,12 +5401,12 @@
       ]
      },
      {
-      "index": 24,
+      "index": 25,
       "type": "updateTumbleWin",
-      "amount": 60
+      "amount": 150
      },
      {
-      "index": 25,
+      "index": 26,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -5435,23 +5535,23 @@
       "tnt": []
      },
      {
-      "index": 26,
-      "type": "setWin",
-      "amount": 60
-     },
-     {
       "index": 27,
-      "type": "setTotalWin",
-      "amount": 420
+      "type": "setWin",
+      "amount": 150
      },
      {
       "index": 28,
+      "type": "setTotalWin",
+      "amount": 1050
+     },
+     {
+      "index": 29,
       "type": "updateFreeSpin",
       "amount": 5,
       "total": 10
      },
      {
-      "index": 29,
+      "index": 30,
       "type": "reveal",
       "board": [
        [
@@ -5559,8 +5659,10 @@
       ]
      },
      {
-      "index": 30,
+      "index": 31,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         2,
@@ -5573,27 +5675,41 @@
        "row": 2,
        "w": 3,
        "h": 3
-      },
-      "giant": "H4"
-     },
-     {
-      "index": 31,
-      "type": "updateGlobalMult",
-      "globalMult": 3,
-      "cause": "blast"
+      }
      },
      {
       "index": 32,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 2,
+       "w": 3,
+       "h": 3
+      },
+      "giant": "H4",
+      "cells": 9
+     },
+     {
+      "index": 33,
+      "type": "updateGlobalMult",
+      "globalMult": 14,
+      "added": 9,
+      "chain": 0,
+      "cause": "carve"
+     },
+     {
+      "index": 34,
       "type": "winInfo",
-      "totalWin": 2700,
+      "totalWin": 12600,
       "wins": [
        {
         "symbol": "H4",
         "kind": "ways",
         "reels": 3,
         "ways": 36,
-        "win": 2700,
-        "mult": 3,
+        "win": 12600,
+        "mult": 14,
         "baseWin": 900,
         "positions": [
          [
@@ -5641,12 +5757,12 @@
       ]
      },
      {
-      "index": 33,
+      "index": 35,
       "type": "updateTumbleWin",
-      "amount": 2700
+      "amount": 12600
      },
      {
-      "index": 34,
+      "index": 36,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -5800,23 +5916,23 @@
       "tnt": []
      },
      {
-      "index": 35,
-      "type": "setWin",
-      "amount": 2700
-     },
-     {
-      "index": 36,
-      "type": "setTotalWin",
-      "amount": 3120
-     },
-     {
       "index": 37,
+      "type": "setWin",
+      "amount": 12600
+     },
+     {
+      "index": 38,
+      "type": "setTotalWin",
+      "amount": 13650
+     },
+     {
+      "index": 39,
       "type": "updateFreeSpin",
       "amount": 6,
       "total": 10
      },
      {
-      "index": 38,
+      "index": 40,
       "type": "reveal",
       "board": [
        [
@@ -5916,17 +6032,17 @@
       "tnt": []
      },
      {
-      "index": 39,
+      "index": 41,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 40,
+      "index": 42,
       "type": "setTotalWin",
-      "amount": 3120
+      "amount": 13650
      },
      {
-      "index": 41,
+      "index": 43,
       "type": "freeSpinRetrigger",
       "extra": 5,
       "totalFs": 15,
@@ -5946,13 +6062,13 @@
       ]
      },
      {
-      "index": 42,
+      "index": 44,
       "type": "updateFreeSpin",
       "amount": 7,
       "total": 15
      },
      {
-      "index": 43,
+      "index": 45,
       "type": "reveal",
       "board": [
        [
@@ -6052,23 +6168,23 @@
       "tnt": []
      },
      {
-      "index": 44,
+      "index": 46,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 45,
+      "index": 47,
       "type": "setTotalWin",
-      "amount": 3120
+      "amount": 13650
      },
      {
-      "index": 46,
+      "index": 48,
       "type": "updateFreeSpin",
       "amount": 8,
       "total": 15
      },
      {
-      "index": 47,
+      "index": 49,
       "type": "reveal",
       "board": [
        [
@@ -6176,8 +6292,10 @@
       ]
      },
      {
-      "index": 48,
+      "index": 50,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         3,
@@ -6190,33 +6308,47 @@
        "row": 1,
        "w": 2,
        "h": 2
+      }
+     },
+     {
+      "index": 51,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 3,
+       "row": 1,
+       "w": 2,
+       "h": 2
       },
-      "giant": "H1"
+      "giant": "H1",
+      "cells": 4
      },
      {
-      "index": 49,
+      "index": 52,
       "type": "updateGlobalMult",
-      "globalMult": 4,
-      "cause": "blast"
+      "globalMult": 18,
+      "added": 4,
+      "chain": 0,
+      "cause": "carve"
      },
      {
-      "index": 50,
+      "index": 53,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 51,
+      "index": 54,
       "type": "setTotalWin",
-      "amount": 3120
+      "amount": 13650
      },
      {
-      "index": 52,
+      "index": 55,
       "type": "updateFreeSpin",
       "amount": 9,
       "total": 15
      },
      {
-      "index": 53,
+      "index": 56,
       "type": "reveal",
       "board": [
        [
@@ -6316,17 +6448,17 @@
       "tnt": []
      },
      {
-      "index": 54,
+      "index": 57,
       "type": "winInfo",
-      "totalWin": 600,
+      "totalWin": 2700,
       "wins": [
        {
         "symbol": "H1",
         "kind": "ways",
         "reels": 3,
         "ways": 3,
-        "win": 600,
-        "mult": 4,
+        "win": 2700,
+        "mult": 18,
         "baseWin": 150,
         "positions": [
          [
@@ -6354,12 +6486,12 @@
       ]
      },
      {
-      "index": 55,
+      "index": 58,
       "type": "updateTumbleWin",
-      "amount": 600
+      "amount": 2700
      },
      {
-      "index": 56,
+      "index": 59,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -6488,17 +6620,17 @@
       "tnt": []
      },
      {
-      "index": 57,
+      "index": 60,
       "type": "winInfo",
-      "totalWin": 20,
+      "totalWin": 90,
       "wins": [
        {
         "symbol": "L4",
         "kind": "ways",
         "reels": 3,
         "ways": 1,
-        "win": 20,
-        "mult": 4,
+        "win": 90,
+        "mult": 18,
         "baseWin": 5,
         "positions": [
          [
@@ -6518,12 +6650,12 @@
       ]
      },
      {
-      "index": 58,
+      "index": 61,
       "type": "updateTumbleWin",
-      "amount": 620
+      "amount": 2790
      },
      {
-      "index": 59,
+      "index": 62,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -6642,23 +6774,23 @@
       "tnt": []
      },
      {
-      "index": 60,
+      "index": 63,
       "type": "setWin",
-      "amount": 620
+      "amount": 2790
      },
      {
-      "index": 61,
+      "index": 64,
       "type": "setTotalWin",
-      "amount": 3740
+      "amount": 16440
      },
      {
-      "index": 62,
+      "index": 65,
       "type": "updateFreeSpin",
       "amount": 10,
       "total": 15
      },
      {
-      "index": 63,
+      "index": 66,
       "type": "reveal",
       "board": [
        [
@@ -6773,8 +6905,10 @@
       ]
      },
      {
-      "index": 64,
+      "index": 67,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         0,
@@ -6787,18 +6921,34 @@
        "row": 0,
        "w": 2,
        "h": 2
+      }
+     },
+     {
+      "index": 68,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 0,
+       "w": 2,
+       "h": 2
       },
-      "giant": "H2"
+      "giant": "H2",
+      "cells": 4
      },
      {
-      "index": 65,
+      "index": 69,
       "type": "updateGlobalMult",
-      "globalMult": 5,
-      "cause": "blast"
+      "globalMult": 22,
+      "added": 4,
+      "chain": 0,
+      "cause": "carve"
      },
      {
-      "index": 66,
+      "index": 70,
       "type": "blast",
+      "chain": 1,
+      "link": 0,
       "tnt": {
        "pos": [
         1,
@@ -6811,27 +6961,41 @@
        "row": 3,
        "w": 2,
        "h": 2
+      }
+     },
+     {
+      "index": 71,
+      "type": "carve",
+      "chain": 1,
+      "area": {
+       "col": 1,
+       "row": 3,
+       "w": 2,
+       "h": 2
       },
-      "giant": "H2"
+      "giant": "H2",
+      "cells": 4
      },
      {
-      "index": 67,
+      "index": 72,
       "type": "updateGlobalMult",
-      "globalMult": 6,
-      "cause": "blast"
+      "globalMult": 26,
+      "added": 4,
+      "chain": 1,
+      "cause": "carve"
      },
      {
-      "index": 68,
+      "index": 73,
       "type": "winInfo",
-      "totalWin": 4800,
+      "totalWin": 20800,
       "wins": [
        {
         "symbol": "H2",
         "kind": "ways",
         "reels": 3,
         "ways": 20,
-        "win": 4800,
-        "mult": 6,
+        "win": 20800,
+        "mult": 26,
         "baseWin": 800,
         "positions": [
          [
@@ -6875,12 +7039,12 @@
       ]
      },
      {
-      "index": 69,
+      "index": 74,
       "type": "updateTumbleWin",
-      "amount": 4800
+      "amount": 20800
      },
      {
-      "index": 70,
+      "index": 75,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -7029,23 +7193,23 @@
       "tnt": []
      },
      {
-      "index": 71,
+      "index": 76,
       "type": "setWin",
-      "amount": 4800
+      "amount": 20800
      },
      {
-      "index": 72,
+      "index": 77,
       "type": "setTotalWin",
-      "amount": 8540
+      "amount": 37240
      },
      {
-      "index": 73,
+      "index": 78,
       "type": "updateFreeSpin",
       "amount": 11,
       "total": 15
      },
      {
-      "index": 74,
+      "index": 79,
       "type": "reveal",
       "board": [
        [
@@ -7145,23 +7309,23 @@
       "tnt": []
      },
      {
-      "index": 75,
+      "index": 80,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 76,
+      "index": 81,
       "type": "setTotalWin",
-      "amount": 8540
+      "amount": 37240
      },
      {
-      "index": 77,
+      "index": 82,
       "type": "updateFreeSpin",
       "amount": 12,
       "total": 15
      },
      {
-      "index": 78,
+      "index": 83,
       "type": "reveal",
       "board": [
        [
@@ -7261,17 +7425,17 @@
       "tnt": []
      },
      {
-      "index": 79,
+      "index": 84,
       "type": "winInfo",
-      "totalWin": 360,
+      "totalWin": 1560,
       "wins": [
        {
         "symbol": "H4",
         "kind": "ways",
         "reels": 4,
         "ways": 1,
-        "win": 360,
-        "mult": 6,
+        "win": 1560,
+        "mult": 26,
         "baseWin": 60,
         "positions": [
          [
@@ -7295,12 +7459,12 @@
       ]
      },
      {
-      "index": 80,
+      "index": 85,
       "type": "updateTumbleWin",
-      "amount": 360
+      "amount": 1560
      },
      {
-      "index": 81,
+      "index": 86,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -7425,23 +7589,23 @@
       "tnt": []
      },
      {
-      "index": 82,
+      "index": 87,
       "type": "setWin",
-      "amount": 360
+      "amount": 1560
      },
      {
-      "index": 83,
+      "index": 88,
       "type": "setTotalWin",
-      "amount": 8900
+      "amount": 38800
      },
      {
-      "index": 84,
+      "index": 89,
       "type": "updateFreeSpin",
       "amount": 13,
       "total": 15
      },
      {
-      "index": 85,
+      "index": 90,
       "type": "reveal",
       "board": [
        [
@@ -7541,23 +7705,23 @@
       "tnt": []
      },
      {
-      "index": 86,
+      "index": 91,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 87,
+      "index": 92,
       "type": "setTotalWin",
-      "amount": 8900
+      "amount": 38800
      },
      {
-      "index": 88,
+      "index": 93,
       "type": "updateFreeSpin",
       "amount": 14,
       "total": 15
      },
      {
-      "index": 89,
+      "index": 94,
       "type": "reveal",
       "board": [
        [
@@ -7657,17 +7821,17 @@
       "tnt": []
      },
      {
-      "index": 90,
+      "index": 95,
       "type": "winInfo",
-      "totalWin": 30,
+      "totalWin": 130,
       "wins": [
        {
         "symbol": "L3",
         "kind": "ways",
         "reels": 3,
         "ways": 1,
-        "win": 30,
-        "mult": 6,
+        "win": 130,
+        "mult": 26,
         "baseWin": 5,
         "positions": [
          [
@@ -7687,12 +7851,12 @@
       ]
      },
      {
-      "index": 91,
+      "index": 96,
       "type": "updateTumbleWin",
-      "amount": 30
+      "amount": 130
      },
      {
-      "index": 92,
+      "index": 97,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -7811,23 +7975,23 @@
       "tnt": []
      },
      {
-      "index": 93,
+      "index": 98,
       "type": "setWin",
-      "amount": 30
+      "amount": 130
      },
      {
-      "index": 94,
+      "index": 99,
       "type": "setTotalWin",
-      "amount": 8930
+      "amount": 38930
      },
      {
-      "index": 95,
+      "index": 100,
       "type": "updateFreeSpin",
       "amount": 15,
       "total": 15
      },
      {
-      "index": 96,
+      "index": 101,
       "type": "reveal",
       "board": [
        [
@@ -7927,24 +8091,24 @@
       "tnt": []
      },
      {
-      "index": 97,
+      "index": 102,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 98,
+      "index": 103,
       "type": "setTotalWin",
-      "amount": 8930
+      "amount": 38930
      },
      {
-      "index": 99,
+      "index": 104,
       "type": "freeSpinEnd",
-      "amount": 8930
+      "amount": 38930
      },
      {
-      "index": 100,
+      "index": 105,
       "type": "finalWin",
-      "amount": 8930
+      "amount": 38930
      }
     ]
    }
@@ -7959,14 +8123,14 @@
     "super",
     "tnt",
     "multiplier",
-    "crate",
+    "keg",
     "near-miss"
    ],
    "note": "déclenchement du super bonus (4 Scatters), 12 FS : fagots et caisse, multiplicateur x5, anticipation ratée au 10e tour",
    "book": {
     "id": "F15",
     "mode": "BASE",
-    "payoutMultiplier": 32040,
+    "payoutMultiplier": 272040,
     "events": [
      {
       "index": 0,
@@ -8335,6 +8499,8 @@
      {
       "index": 10,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         1,
@@ -8347,27 +8513,41 @@
        "row": 1,
        "w": 3,
        "h": 3
-      },
-      "giant": "H2"
+      }
      },
      {
       "index": 11,
-      "type": "updateGlobalMult",
-      "globalMult": 2,
-      "cause": "blast"
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 1,
+       "w": 3,
+       "h": 3
+      },
+      "giant": "H2",
+      "cells": 9
      },
      {
       "index": 12,
+      "type": "updateGlobalMult",
+      "globalMult": 10,
+      "added": 9,
+      "chain": 0,
+      "cause": "carve"
+     },
+     {
+      "index": 13,
       "type": "winInfo",
-      "totalWin": 2160,
+      "totalWin": 10800,
       "wins": [
        {
         "symbol": "H2",
         "kind": "ways",
         "reels": 3,
         "ways": 27,
-        "win": 2160,
-        "mult": 2,
+        "win": 10800,
+        "mult": 10,
         "baseWin": 1080,
         "positions": [
          [
@@ -8411,12 +8591,12 @@
       ]
      },
      {
-      "index": 13,
+      "index": 14,
       "type": "updateTumbleWin",
-      "amount": 2160
+      "amount": 10800
      },
      {
-      "index": 14,
+      "index": 15,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -8565,23 +8745,23 @@
       "tnt": []
      },
      {
-      "index": 15,
-      "type": "setWin",
-      "amount": 2160
-     },
-     {
       "index": 16,
-      "type": "setTotalWin",
-      "amount": 2160
+      "type": "setWin",
+      "amount": 10800
      },
      {
       "index": 17,
+      "type": "setTotalWin",
+      "amount": 10800
+     },
+     {
+      "index": 18,
       "type": "updateFreeSpin",
       "amount": 3,
       "total": 12
      },
      {
-      "index": 18,
+      "index": 19,
       "type": "reveal",
       "board": [
        [
@@ -8681,23 +8861,23 @@
       "tnt": []
      },
      {
-      "index": 19,
+      "index": 20,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 20,
+      "index": 21,
       "type": "setTotalWin",
-      "amount": 2160
+      "amount": 10800
      },
      {
-      "index": 21,
+      "index": 22,
       "type": "updateFreeSpin",
       "amount": 4,
       "total": 12
      },
      {
-      "index": 22,
+      "index": 23,
       "type": "reveal",
       "board": [
        [
@@ -8797,17 +8977,17 @@
       "tnt": []
      },
      {
-      "index": 23,
+      "index": 24,
       "type": "winInfo",
-      "totalWin": 40,
+      "totalWin": 200,
       "wins": [
        {
         "symbol": "L1",
         "kind": "ways",
         "reels": 3,
         "ways": 2,
-        "win": 40,
-        "mult": 2,
+        "win": 200,
+        "mult": 10,
         "baseWin": 20,
         "positions": [
          [
@@ -8831,12 +9011,12 @@
       ]
      },
      {
-      "index": 24,
+      "index": 25,
       "type": "updateTumbleWin",
-      "amount": 40
+      "amount": 200
      },
      {
-      "index": 25,
+      "index": 26,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -8960,23 +9140,23 @@
       "tnt": []
      },
      {
-      "index": 26,
-      "type": "setWin",
-      "amount": 40
-     },
-     {
       "index": 27,
-      "type": "setTotalWin",
-      "amount": 2200
+      "type": "setWin",
+      "amount": 200
      },
      {
       "index": 28,
+      "type": "setTotalWin",
+      "amount": 11000
+     },
+     {
+      "index": 29,
       "type": "updateFreeSpin",
       "amount": 5,
       "total": 12
      },
      {
-      "index": 29,
+      "index": 30,
       "type": "reveal",
       "board": [
        [
@@ -9076,23 +9256,23 @@
       "tnt": []
      },
      {
-      "index": 30,
+      "index": 31,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 31,
+      "index": 32,
       "type": "setTotalWin",
-      "amount": 2200
+      "amount": 11000
      },
      {
-      "index": 32,
+      "index": 33,
       "type": "updateFreeSpin",
       "amount": 6,
       "total": 12
      },
      {
-      "index": 33,
+      "index": 34,
       "type": "reveal",
       "board": [
        [
@@ -9195,46 +9375,62 @@
          2,
          2
         ],
-        "kind": "crate"
+        "kind": "keg"
        }
       ]
      },
      {
-      "index": 34,
+      "index": 35,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         2,
         2
        ],
-       "kind": "crate"
+       "kind": "keg"
       },
       "area": {
        "col": 0,
        "row": 1,
        "w": 4,
        "h": 4
-      },
-      "giant": "L3"
-     },
-     {
-      "index": 35,
-      "type": "updateGlobalMult",
-      "globalMult": 3,
-      "cause": "blast"
+      }
      },
      {
       "index": 36,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 1,
+       "w": 4,
+       "h": 4
+      },
+      "giant": "L3",
+      "cells": 16
+     },
+     {
+      "index": 37,
+      "type": "updateGlobalMult",
+      "globalMult": 26,
+      "added": 16,
+      "chain": 0,
+      "cause": "carve"
+     },
+     {
+      "index": 38,
       "type": "winInfo",
-      "totalWin": 11520,
+      "totalWin": 99840,
       "wins": [
        {
         "symbol": "L3",
         "kind": "ways",
         "reels": 4,
         "ways": 256,
-        "win": 11520,
-        "mult": 3,
+        "win": 99840,
+        "mult": 26,
         "baseWin": 3840,
         "positions": [
          [
@@ -9306,12 +9502,12 @@
       ]
      },
      {
-      "index": 37,
+      "index": 39,
       "type": "updateTumbleWin",
-      "amount": 11520
+      "amount": 99840
      },
      {
-      "index": 38,
+      "index": 40,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -9496,23 +9692,23 @@
       "tnt": []
      },
      {
-      "index": 39,
-      "type": "setWin",
-      "amount": 11520
-     },
-     {
-      "index": 40,
-      "type": "setTotalWin",
-      "amount": 13720
-     },
-     {
       "index": 41,
+      "type": "setWin",
+      "amount": 99840
+     },
+     {
+      "index": 42,
+      "type": "setTotalWin",
+      "amount": 110840
+     },
+     {
+      "index": 43,
       "type": "updateFreeSpin",
       "amount": 7,
       "total": 12
      },
      {
-      "index": 42,
+      "index": 44,
       "type": "reveal",
       "board": [
        [
@@ -9612,23 +9808,23 @@
       "tnt": []
      },
      {
-      "index": 43,
+      "index": 45,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 44,
+      "index": 46,
       "type": "setTotalWin",
-      "amount": 13720
+      "amount": 110840
      },
      {
-      "index": 45,
+      "index": 47,
       "type": "updateFreeSpin",
       "amount": 8,
       "total": 12
      },
      {
-      "index": 46,
+      "index": 48,
       "type": "reveal",
       "board": [
        [
@@ -9736,8 +9932,10 @@
       ]
      },
      {
-      "index": 47,
+      "index": 49,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         2,
@@ -9750,33 +9948,47 @@
        "row": 0,
        "w": 3,
        "h": 3
+      }
+     },
+     {
+      "index": 50,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 2,
+       "row": 0,
+       "w": 3,
+       "h": 3
       },
-      "giant": "H1"
+      "giant": "H1",
+      "cells": 9
      },
      {
-      "index": 48,
+      "index": 51,
       "type": "updateGlobalMult",
-      "globalMult": 4,
-      "cause": "blast"
+      "globalMult": 35,
+      "added": 9,
+      "chain": 0,
+      "cause": "carve"
      },
      {
-      "index": 49,
+      "index": 52,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 50,
+      "index": 53,
       "type": "setTotalWin",
-      "amount": 13720
+      "amount": 110840
      },
      {
-      "index": 51,
+      "index": 54,
       "type": "updateFreeSpin",
       "amount": 9,
       "total": 12
      },
      {
-      "index": 52,
+      "index": 55,
       "type": "reveal",
       "board": [
        [
@@ -9876,17 +10088,17 @@
       "tnt": []
      },
      {
-      "index": 53,
+      "index": 56,
       "type": "winInfo",
-      "totalWin": 240,
+      "totalWin": 2100,
       "wins": [
        {
         "symbol": "H3",
         "kind": "ways",
         "reels": 3,
         "ways": 2,
-        "win": 240,
-        "mult": 4,
+        "win": 2100,
+        "mult": 35,
         "baseWin": 60,
         "positions": [
          [
@@ -9910,12 +10122,12 @@
       ]
      },
      {
-      "index": 54,
+      "index": 57,
       "type": "updateTumbleWin",
-      "amount": 240
+      "amount": 2100
      },
      {
-      "index": 55,
+      "index": 58,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -10039,17 +10251,17 @@
       "tnt": []
      },
      {
-      "index": 56,
+      "index": 59,
       "type": "winInfo",
-      "totalWin": 80,
+      "totalWin": 700,
       "wins": [
        {
         "symbol": "L2",
         "kind": "ways",
         "reels": 3,
         "ways": 2,
-        "win": 80,
-        "mult": 4,
+        "win": 700,
+        "mult": 35,
         "baseWin": 20,
         "positions": [
          [
@@ -10073,12 +10285,12 @@
       ]
      },
      {
-      "index": 57,
+      "index": 60,
       "type": "updateTumbleWin",
-      "amount": 320
+      "amount": 2800
      },
      {
-      "index": 58,
+      "index": 61,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -10202,23 +10414,23 @@
       "tnt": []
      },
      {
-      "index": 59,
+      "index": 62,
       "type": "setWin",
-      "amount": 320
+      "amount": 2800
      },
      {
-      "index": 60,
+      "index": 63,
       "type": "setTotalWin",
-      "amount": 14040
+      "amount": 113640
      },
      {
-      "index": 61,
+      "index": 64,
       "type": "updateFreeSpin",
       "amount": 10,
       "total": 12
      },
      {
-      "index": 62,
+      "index": 65,
       "type": "reveal",
       "board": [
        [
@@ -10318,23 +10530,23 @@
       "tnt": []
      },
      {
-      "index": 63,
+      "index": 66,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 64,
+      "index": 67,
       "type": "setTotalWin",
-      "amount": 14040
+      "amount": 113640
      },
      {
-      "index": 65,
+      "index": 68,
       "type": "updateFreeSpin",
       "amount": 11,
       "total": 12
      },
      {
-      "index": 66,
+      "index": 69,
       "type": "reveal",
       "board": [
        [
@@ -10442,8 +10654,10 @@
       ]
      },
      {
-      "index": 67,
+      "index": 70,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         2,
@@ -10456,27 +10670,41 @@
        "row": 2,
        "w": 3,
        "h": 3
+      }
+     },
+     {
+      "index": 71,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 1,
+       "row": 2,
+       "w": 3,
+       "h": 3
       },
-      "giant": "H3"
+      "giant": "H3",
+      "cells": 9
      },
      {
-      "index": 68,
+      "index": 72,
       "type": "updateGlobalMult",
-      "globalMult": 5,
-      "cause": "blast"
+      "globalMult": 44,
+      "added": 9,
+      "chain": 0,
+      "cause": "carve"
      },
      {
-      "index": 69,
+      "index": 73,
       "type": "winInfo",
-      "totalWin": 18000,
+      "totalWin": 158400,
       "wins": [
        {
         "symbol": "H3",
         "kind": "ways",
         "reels": 4,
         "ways": 48,
-        "win": 18000,
-        "mult": 5,
+        "win": 158400,
+        "mult": 44,
         "baseWin": 3600,
         "positions": [
          [
@@ -10532,12 +10760,12 @@
       ]
      },
      {
-      "index": 70,
+      "index": 74,
       "type": "updateTumbleWin",
-      "amount": 18000
+      "amount": 158400
      },
      {
-      "index": 71,
+      "index": 75,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -10702,23 +10930,23 @@
       "tnt": []
      },
      {
-      "index": 72,
+      "index": 76,
       "type": "setWin",
-      "amount": 18000
+      "amount": 158400
      },
      {
-      "index": 73,
+      "index": 77,
       "type": "setTotalWin",
-      "amount": 32040
+      "amount": 272040
      },
      {
-      "index": 74,
+      "index": 78,
       "type": "updateFreeSpin",
       "amount": 12,
       "total": 12
      },
      {
-      "index": 75,
+      "index": 79,
       "type": "reveal",
       "board": [
        [
@@ -10818,24 +11046,24 @@
       "tnt": []
      },
      {
-      "index": 76,
+      "index": 80,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 77,
+      "index": 81,
       "type": "setTotalWin",
-      "amount": 32040
+      "amount": 272040
      },
      {
-      "index": 78,
+      "index": 82,
       "type": "freeSpinEnd",
-      "amount": 32040
+      "amount": 272040
      },
      {
-      "index": 79,
+      "index": 83,
       "type": "finalWin",
-      "amount": 32040
+      "amount": 272040
      }
     ]
    }
@@ -10855,7 +11083,7 @@
    "book": {
     "id": "F16",
     "mode": "BONUS",
-    "payoutMultiplier": 6445,
+    "payoutMultiplier": 28240,
     "costMultiplier": 100,
     "events": [
      {
@@ -11508,6 +11736,8 @@
      {
       "index": 17,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         2,
@@ -11520,27 +11750,41 @@
        "row": 0,
        "w": 2,
        "h": 2
-      },
-      "giant": "H4"
+      }
      },
      {
       "index": 18,
-      "type": "updateGlobalMult",
-      "globalMult": 2,
-      "cause": "blast"
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 1,
+       "row": 0,
+       "w": 2,
+       "h": 2
+      },
+      "giant": "H4",
+      "cells": 4
      },
      {
       "index": 19,
+      "type": "updateGlobalMult",
+      "globalMult": 5,
+      "added": 4,
+      "chain": 0,
+      "cause": "carve"
+     },
+     {
+      "index": 20,
       "type": "winInfo",
-      "totalWin": 300,
+      "totalWin": 750,
       "wins": [
        {
         "symbol": "H4",
         "kind": "ways",
         "reels": 3,
         "ways": 6,
-        "win": 300,
-        "mult": 2,
+        "win": 750,
+        "mult": 5,
         "baseWin": 150,
         "positions": [
          [
@@ -11572,12 +11816,12 @@
       ]
      },
      {
-      "index": 20,
+      "index": 21,
       "type": "updateTumbleWin",
-      "amount": 300
+      "amount": 750
      },
      {
-      "index": 21,
+      "index": 22,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -11711,23 +11955,23 @@
       "tnt": []
      },
      {
-      "index": 22,
-      "type": "setWin",
-      "amount": 300
-     },
-     {
       "index": 23,
-      "type": "setTotalWin",
-      "amount": 500
+      "type": "setWin",
+      "amount": 750
      },
      {
       "index": 24,
+      "type": "setTotalWin",
+      "amount": 950
+     },
+     {
+      "index": 25,
       "type": "updateFreeSpin",
       "amount": 4,
       "total": 10
      },
      {
-      "index": 25,
+      "index": 26,
       "type": "reveal",
       "board": [
        [
@@ -11827,23 +12071,23 @@
       "tnt": []
      },
      {
-      "index": 26,
+      "index": 27,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 27,
+      "index": 28,
       "type": "setTotalWin",
-      "amount": 500
+      "amount": 950
      },
      {
-      "index": 28,
+      "index": 29,
       "type": "updateFreeSpin",
       "amount": 5,
       "total": 10
      },
      {
-      "index": 29,
+      "index": 30,
       "type": "reveal",
       "board": [
        [
@@ -11943,23 +12187,23 @@
       "tnt": []
      },
      {
-      "index": 30,
+      "index": 31,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 31,
+      "index": 32,
       "type": "setTotalWin",
-      "amount": 500
+      "amount": 950
      },
      {
-      "index": 32,
+      "index": 33,
       "type": "updateFreeSpin",
       "amount": 6,
       "total": 10
      },
      {
-      "index": 33,
+      "index": 34,
       "type": "reveal",
       "board": [
        [
@@ -12067,8 +12311,10 @@
       ]
      },
      {
-      "index": 34,
+      "index": 35,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         0,
@@ -12081,27 +12327,41 @@
        "row": 0,
        "w": 3,
        "h": 3
-      },
-      "giant": "H1"
-     },
-     {
-      "index": 35,
-      "type": "updateGlobalMult",
-      "globalMult": 3,
-      "cause": "blast"
+      }
      },
      {
       "index": 36,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 0,
+       "w": 3,
+       "h": 3
+      },
+      "giant": "H1",
+      "cells": 9
+     },
+     {
+      "index": 37,
+      "type": "updateGlobalMult",
+      "globalMult": 14,
+      "added": 9,
+      "chain": 0,
+      "cause": "carve"
+     },
+     {
+      "index": 38,
       "type": "winInfo",
-      "totalWin": 4050,
+      "totalWin": 18900,
       "wins": [
        {
         "symbol": "H1",
         "kind": "ways",
         "reels": 3,
         "ways": 27,
-        "win": 4050,
-        "mult": 3,
+        "win": 18900,
+        "mult": 14,
         "baseWin": 1350,
         "positions": [
          [
@@ -12145,12 +12405,12 @@
       ]
      },
      {
-      "index": 37,
+      "index": 39,
       "type": "updateTumbleWin",
-      "amount": 4050
+      "amount": 18900
      },
      {
-      "index": 38,
+      "index": 40,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -12299,23 +12559,23 @@
       "tnt": []
      },
      {
-      "index": 39,
-      "type": "setWin",
-      "amount": 4050
-     },
-     {
-      "index": 40,
-      "type": "setTotalWin",
-      "amount": 4550
-     },
-     {
       "index": 41,
+      "type": "setWin",
+      "amount": 18900
+     },
+     {
+      "index": 42,
+      "type": "setTotalWin",
+      "amount": 19850
+     },
+     {
+      "index": 43,
       "type": "updateFreeSpin",
       "amount": 7,
       "total": 10
      },
      {
-      "index": 42,
+      "index": 44,
       "type": "reveal",
       "board": [
        [
@@ -12415,23 +12675,23 @@
       "tnt": []
      },
      {
-      "index": 43,
+      "index": 45,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 44,
+      "index": 46,
       "type": "setTotalWin",
-      "amount": 4550
+      "amount": 19850
      },
      {
-      "index": 45,
+      "index": 47,
       "type": "updateFreeSpin",
       "amount": 8,
       "total": 10
      },
      {
-      "index": 46,
+      "index": 48,
       "type": "reveal",
       "board": [
        [
@@ -12531,17 +12791,17 @@
       "tnt": []
      },
      {
-      "index": 47,
+      "index": 49,
       "type": "winInfo",
-      "totalWin": 15,
+      "totalWin": 70,
       "wins": [
        {
         "symbol": "L4",
         "kind": "ways",
         "reels": 3,
         "ways": 1,
-        "win": 15,
-        "mult": 3,
+        "win": 70,
+        "mult": 14,
         "baseWin": 5,
         "positions": [
          [
@@ -12561,12 +12821,12 @@
       ]
      },
      {
-      "index": 48,
+      "index": 50,
       "type": "updateTumbleWin",
-      "amount": 15
+      "amount": 70
      },
      {
-      "index": 49,
+      "index": 51,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -12685,17 +12945,17 @@
       "tnt": []
      },
      {
-      "index": 50,
+      "index": 52,
       "type": "winInfo",
-      "totalWin": 180,
+      "totalWin": 840,
       "wins": [
        {
         "symbol": "H3",
         "kind": "ways",
         "reels": 3,
         "ways": 2,
-        "win": 180,
-        "mult": 3,
+        "win": 840,
+        "mult": 14,
         "baseWin": 60,
         "positions": [
          [
@@ -12719,12 +12979,12 @@
       ]
      },
      {
-      "index": 51,
+      "index": 53,
       "type": "updateTumbleWin",
-      "amount": 195
+      "amount": 910
      },
      {
-      "index": 52,
+      "index": 54,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -12848,23 +13108,23 @@
       "tnt": []
      },
      {
-      "index": 53,
-      "type": "setWin",
-      "amount": 195
-     },
-     {
-      "index": 54,
-      "type": "setTotalWin",
-      "amount": 4745
-     },
-     {
       "index": 55,
+      "type": "setWin",
+      "amount": 910
+     },
+     {
+      "index": 56,
+      "type": "setTotalWin",
+      "amount": 20760
+     },
+     {
+      "index": 57,
       "type": "updateFreeSpin",
       "amount": 9,
       "total": 10
      },
      {
-      "index": 56,
+      "index": 58,
       "type": "reveal",
       "board": [
        [
@@ -12979,8 +13239,10 @@
       ]
      },
      {
-      "index": 57,
+      "index": 59,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         0,
@@ -12993,18 +13255,34 @@
        "row": 3,
        "w": 2,
        "h": 2
+      }
+     },
+     {
+      "index": 60,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 3,
+       "w": 2,
+       "h": 2
       },
-      "giant": "L2"
+      "giant": "L2",
+      "cells": 4
      },
      {
-      "index": 58,
+      "index": 61,
       "type": "updateGlobalMult",
-      "globalMult": 4,
-      "cause": "blast"
+      "globalMult": 18,
+      "added": 4,
+      "chain": 0,
+      "cause": "carve"
      },
      {
-      "index": 59,
+      "index": 62,
       "type": "blast",
+      "chain": 1,
+      "link": 0,
       "tnt": {
        "pos": [
         1,
@@ -13017,27 +13295,41 @@
        "row": 0,
        "w": 2,
        "h": 2
+      }
+     },
+     {
+      "index": 63,
+      "type": "carve",
+      "chain": 1,
+      "area": {
+       "col": 1,
+       "row": 0,
+       "w": 2,
+       "h": 2
       },
-      "giant": "L2"
+      "giant": "L2",
+      "cells": 4
      },
      {
-      "index": 60,
+      "index": 64,
       "type": "updateGlobalMult",
-      "globalMult": 5,
-      "cause": "blast"
+      "globalMult": 22,
+      "added": 4,
+      "chain": 1,
+      "cause": "carve"
      },
      {
-      "index": 61,
+      "index": 65,
       "type": "winInfo",
-      "totalWin": 1200,
+      "totalWin": 5280,
       "wins": [
        {
         "symbol": "L2",
         "kind": "ways",
         "reels": 3,
         "ways": 24,
-        "win": 1200,
-        "mult": 5,
+        "win": 5280,
+        "mult": 22,
         "baseWin": 240,
         "positions": [
          [
@@ -13081,12 +13373,12 @@
       ]
      },
      {
-      "index": 62,
+      "index": 66,
       "type": "updateTumbleWin",
-      "amount": 1200
+      "amount": 5280
      },
      {
-      "index": 63,
+      "index": 67,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -13235,23 +13527,23 @@
       "tnt": []
      },
      {
-      "index": 64,
+      "index": 68,
       "type": "setWin",
-      "amount": 1200
+      "amount": 5280
      },
      {
-      "index": 65,
+      "index": 69,
       "type": "setTotalWin",
-      "amount": 5945
+      "amount": 26040
      },
      {
-      "index": 66,
+      "index": 70,
       "type": "updateFreeSpin",
       "amount": 10,
       "total": 10
      },
      {
-      "index": 67,
+      "index": 71,
       "type": "reveal",
       "board": [
        [
@@ -13351,17 +13643,17 @@
       "tnt": []
      },
      {
-      "index": 68,
+      "index": 72,
       "type": "winInfo",
-      "totalWin": 500,
+      "totalWin": 2200,
       "wins": [
        {
         "symbol": "H1",
         "kind": "ways",
         "reels": 3,
         "ways": 2,
-        "win": 500,
-        "mult": 5,
+        "win": 2200,
+        "mult": 22,
         "baseWin": 100,
         "positions": [
          [
@@ -13385,12 +13677,12 @@
       ]
      },
      {
-      "index": 69,
+      "index": 73,
       "type": "updateTumbleWin",
-      "amount": 500
+      "amount": 2200
      },
      {
-      "index": 70,
+      "index": 74,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -13514,24 +13806,24 @@
       "tnt": []
      },
      {
-      "index": 71,
+      "index": 75,
       "type": "setWin",
-      "amount": 500
+      "amount": 2200
      },
      {
-      "index": 72,
+      "index": 76,
       "type": "setTotalWin",
-      "amount": 6445
+      "amount": 28240
      },
      {
-      "index": 73,
+      "index": 77,
       "type": "freeSpinEnd",
-      "amount": 6445
+      "amount": 28240
      },
      {
-      "index": 74,
+      "index": 78,
       "type": "finalWin",
-      "amount": 6445
+      "amount": 28240
      }
     ]
    }
@@ -13545,14 +13837,14 @@
     "bonus",
     "super",
     "tnt",
-    "crate",
+    "keg",
     "multiplier"
    ],
    "note": "achat super bonus : 4 Scatters, 12 FS, fagots et caisse, multiplicateur x5",
    "book": {
     "id": "F17",
     "mode": "SUPER",
-    "payoutMultiplier": 29750,
+    "payoutMultiplier": 252670,
     "costMultiplier": 350,
     "events": [
      {
@@ -14083,6 +14375,8 @@
      {
       "index": 13,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         0,
@@ -14095,27 +14389,41 @@
        "row": 2,
        "w": 3,
        "h": 3
-      },
-      "giant": "H4"
+      }
      },
      {
       "index": 14,
-      "type": "updateGlobalMult",
-      "globalMult": 2,
-      "cause": "blast"
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 2,
+       "w": 3,
+       "h": 3
+      },
+      "giant": "H4",
+      "cells": 9
      },
      {
       "index": 15,
+      "type": "updateGlobalMult",
+      "globalMult": 10,
+      "added": 9,
+      "chain": 0,
+      "cause": "carve"
+     },
+     {
+      "index": 16,
       "type": "winInfo",
-      "totalWin": 1800,
+      "totalWin": 9000,
       "wins": [
        {
         "symbol": "H4",
         "kind": "ways",
         "reels": 3,
         "ways": 36,
-        "win": 1800,
-        "mult": 2,
+        "win": 9000,
+        "mult": 10,
         "baseWin": 900,
         "positions": [
          [
@@ -14163,12 +14471,12 @@
       ]
      },
      {
-      "index": 16,
+      "index": 17,
       "type": "updateTumbleWin",
-      "amount": 1800
+      "amount": 9000
      },
      {
-      "index": 17,
+      "index": 18,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -14322,23 +14630,23 @@
       "tnt": []
      },
      {
-      "index": 18,
-      "type": "setWin",
-      "amount": 1800
-     },
-     {
       "index": 19,
-      "type": "setTotalWin",
-      "amount": 1820
+      "type": "setWin",
+      "amount": 9000
      },
      {
       "index": 20,
+      "type": "setTotalWin",
+      "amount": 9020
+     },
+     {
+      "index": 21,
       "type": "updateFreeSpin",
       "amount": 3,
       "total": 12
      },
      {
-      "index": 21,
+      "index": 22,
       "type": "reveal",
       "board": [
        [
@@ -14438,23 +14746,23 @@
       "tnt": []
      },
      {
-      "index": 22,
+      "index": 23,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 23,
+      "index": 24,
       "type": "setTotalWin",
-      "amount": 1820
+      "amount": 9020
      },
      {
-      "index": 24,
+      "index": 25,
       "type": "updateFreeSpin",
       "amount": 4,
       "total": 12
      },
      {
-      "index": 25,
+      "index": 26,
       "type": "reveal",
       "board": [
        [
@@ -14562,8 +14870,10 @@
       ]
      },
      {
-      "index": 26,
+      "index": 27,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         3,
@@ -14576,33 +14886,47 @@
        "row": 2,
        "w": 3,
        "h": 3
-      },
-      "giant": "H2"
-     },
-     {
-      "index": 27,
-      "type": "updateGlobalMult",
-      "globalMult": 3,
-      "cause": "blast"
+      }
      },
      {
       "index": 28,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 2,
+       "row": 2,
+       "w": 3,
+       "h": 3
+      },
+      "giant": "H2",
+      "cells": 9
+     },
+     {
+      "index": 29,
+      "type": "updateGlobalMult",
+      "globalMult": 19,
+      "added": 9,
+      "chain": 0,
+      "cause": "carve"
+     },
+     {
+      "index": 30,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 29,
+      "index": 31,
       "type": "setTotalWin",
-      "amount": 1820
+      "amount": 9020
      },
      {
-      "index": 30,
+      "index": 32,
       "type": "updateFreeSpin",
       "amount": 5,
       "total": 12
      },
      {
-      "index": 31,
+      "index": 33,
       "type": "reveal",
       "board": [
        [
@@ -14702,17 +15026,17 @@
       "tnt": []
      },
      {
-      "index": 32,
+      "index": 34,
       "type": "winInfo",
-      "totalWin": 450,
+      "totalWin": 2850,
       "wins": [
        {
         "symbol": "H3",
         "kind": "ways",
         "reels": 4,
         "ways": 2,
-        "win": 450,
-        "mult": 3,
+        "win": 2850,
+        "mult": 19,
         "baseWin": 150,
         "positions": [
          [
@@ -14740,12 +15064,12 @@
       ]
      },
      {
-      "index": 33,
+      "index": 35,
       "type": "updateTumbleWin",
-      "amount": 450
+      "amount": 2850
      },
      {
-      "index": 34,
+      "index": 36,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -14875,23 +15199,23 @@
       "tnt": []
      },
      {
-      "index": 35,
-      "type": "setWin",
-      "amount": 450
-     },
-     {
-      "index": 36,
-      "type": "setTotalWin",
-      "amount": 2270
-     },
-     {
       "index": 37,
+      "type": "setWin",
+      "amount": 2850
+     },
+     {
+      "index": 38,
+      "type": "setTotalWin",
+      "amount": 11870
+     },
+     {
+      "index": 39,
       "type": "updateFreeSpin",
       "amount": 6,
       "total": 12
      },
      {
-      "index": 38,
+      "index": 40,
       "type": "reveal",
       "board": [
        [
@@ -14991,23 +15315,23 @@
       "tnt": []
      },
      {
-      "index": 39,
+      "index": 41,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 40,
+      "index": 42,
       "type": "setTotalWin",
-      "amount": 2270
+      "amount": 11870
      },
      {
-      "index": 41,
+      "index": 43,
       "type": "updateFreeSpin",
       "amount": 7,
       "total": 12
      },
      {
-      "index": 42,
+      "index": 44,
       "type": "reveal",
       "board": [
        [
@@ -15110,46 +15434,62 @@
          0,
          1
         ],
-        "kind": "crate"
+        "kind": "keg"
        }
       ]
      },
      {
-      "index": 43,
+      "index": 45,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         0,
         1
        ],
-       "kind": "crate"
+       "kind": "keg"
       },
       "area": {
        "col": 0,
        "row": 0,
        "w": 4,
        "h": 4
+      }
+     },
+     {
+      "index": 46,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 0,
+       "w": 4,
+       "h": 4
       },
-      "giant": "L2"
+      "giant": "L2",
+      "cells": 16
      },
      {
-      "index": 44,
+      "index": 47,
       "type": "updateGlobalMult",
-      "globalMult": 4,
-      "cause": "blast"
+      "globalMult": 35,
+      "added": 16,
+      "chain": 0,
+      "cause": "carve"
      },
      {
-      "index": 45,
+      "index": 48,
       "type": "winInfo",
-      "totalWin": 20480,
+      "totalWin": 179200,
       "wins": [
        {
         "symbol": "L2",
         "kind": "ways",
         "reels": 4,
         "ways": 256,
-        "win": 20480,
-        "mult": 4,
+        "win": 179200,
+        "mult": 35,
         "baseWin": 5120,
         "positions": [
          [
@@ -15221,12 +15561,12 @@
       ]
      },
      {
-      "index": 46,
+      "index": 49,
       "type": "updateTumbleWin",
-      "amount": 20480
+      "amount": 179200
      },
      {
-      "index": 47,
+      "index": 50,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -15411,23 +15751,23 @@
       "tnt": []
      },
      {
-      "index": 48,
+      "index": 51,
       "type": "setWin",
-      "amount": 20480
+      "amount": 179200
      },
      {
-      "index": 49,
+      "index": 52,
       "type": "setTotalWin",
-      "amount": 22750
+      "amount": 191070
      },
      {
-      "index": 50,
+      "index": 53,
       "type": "updateFreeSpin",
       "amount": 8,
       "total": 12
      },
      {
-      "index": 51,
+      "index": 54,
       "type": "reveal",
       "board": [
        [
@@ -15527,23 +15867,23 @@
       "tnt": []
      },
      {
-      "index": 52,
+      "index": 55,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 53,
+      "index": 56,
       "type": "setTotalWin",
-      "amount": 22750
+      "amount": 191070
      },
      {
-      "index": 54,
+      "index": 57,
       "type": "updateFreeSpin",
       "amount": 9,
       "total": 12
      },
      {
-      "index": 55,
+      "index": 58,
       "type": "reveal",
       "board": [
        [
@@ -15651,8 +15991,10 @@
       ]
      },
      {
-      "index": 56,
+      "index": 59,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         0,
@@ -15665,27 +16007,41 @@
        "row": 1,
        "w": 3,
        "h": 3
+      }
+     },
+     {
+      "index": 60,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 1,
+       "w": 3,
+       "h": 3
       },
-      "giant": "H1"
+      "giant": "H1",
+      "cells": 9
      },
      {
-      "index": 57,
+      "index": 61,
       "type": "updateGlobalMult",
-      "globalMult": 5,
-      "cause": "blast"
+      "globalMult": 44,
+      "added": 9,
+      "chain": 0,
+      "cause": "carve"
      },
      {
-      "index": 58,
+      "index": 62,
       "type": "winInfo",
-      "totalWin": 6750,
+      "totalWin": 59400,
       "wins": [
        {
         "symbol": "H1",
         "kind": "ways",
         "reels": 3,
         "ways": 27,
-        "win": 6750,
-        "mult": 5,
+        "win": 59400,
+        "mult": 44,
         "baseWin": 1350,
         "positions": [
          [
@@ -15729,12 +16085,12 @@
       ]
      },
      {
-      "index": 59,
+      "index": 63,
       "type": "updateTumbleWin",
-      "amount": 6750
+      "amount": 59400
      },
      {
-      "index": 60,
+      "index": 64,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -15883,23 +16239,23 @@
       "tnt": []
      },
      {
-      "index": 61,
+      "index": 65,
       "type": "setWin",
-      "amount": 6750
+      "amount": 59400
      },
      {
-      "index": 62,
+      "index": 66,
       "type": "setTotalWin",
-      "amount": 29500
+      "amount": 250470
      },
      {
-      "index": 63,
+      "index": 67,
       "type": "updateFreeSpin",
       "amount": 10,
       "total": 12
      },
      {
-      "index": 64,
+      "index": 68,
       "type": "reveal",
       "board": [
        [
@@ -15999,17 +16355,17 @@
       "tnt": []
      },
      {
-      "index": 65,
+      "index": 69,
       "type": "winInfo",
-      "totalWin": 200,
+      "totalWin": 1760,
       "wins": [
        {
         "symbol": "H2",
         "kind": "ways",
         "reels": 3,
         "ways": 1,
-        "win": 200,
-        "mult": 5,
+        "win": 1760,
+        "mult": 44,
         "baseWin": 40,
         "positions": [
          [
@@ -16029,12 +16385,12 @@
       ]
      },
      {
-      "index": 66,
+      "index": 70,
       "type": "updateTumbleWin",
-      "amount": 200
+      "amount": 1760
      },
      {
-      "index": 67,
+      "index": 71,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -16153,17 +16509,17 @@
       "tnt": []
      },
      {
-      "index": 68,
+      "index": 72,
       "type": "winInfo",
-      "totalWin": 50,
+      "totalWin": 440,
       "wins": [
        {
         "symbol": "L3",
         "kind": "ways",
         "reels": 3,
         "ways": 2,
-        "win": 50,
-        "mult": 5,
+        "win": 440,
+        "mult": 44,
         "baseWin": 10,
         "positions": [
          [
@@ -16187,12 +16543,12 @@
       ]
      },
      {
-      "index": 69,
+      "index": 73,
       "type": "updateTumbleWin",
-      "amount": 250
+      "amount": 2200
      },
      {
-      "index": 70,
+      "index": 74,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -16316,23 +16672,23 @@
       "tnt": []
      },
      {
-      "index": 71,
+      "index": 75,
       "type": "setWin",
-      "amount": 250
+      "amount": 2200
      },
      {
-      "index": 72,
+      "index": 76,
       "type": "setTotalWin",
-      "amount": 29750
+      "amount": 252670
      },
      {
-      "index": 73,
+      "index": 77,
       "type": "updateFreeSpin",
       "amount": 11,
       "total": 12
      },
      {
-      "index": 74,
+      "index": 78,
       "type": "reveal",
       "board": [
        [
@@ -16432,23 +16788,23 @@
       "tnt": []
      },
      {
-      "index": 75,
+      "index": 79,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 76,
+      "index": 80,
       "type": "setTotalWin",
-      "amount": 29750
+      "amount": 252670
      },
      {
-      "index": 77,
+      "index": 81,
       "type": "updateFreeSpin",
       "amount": 12,
       "total": 12
      },
      {
-      "index": 78,
+      "index": 82,
       "type": "reveal",
       "board": [
        [
@@ -16548,24 +16904,24 @@
       "tnt": []
      },
      {
-      "index": 79,
+      "index": 83,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 80,
+      "index": 84,
       "type": "setTotalWin",
-      "amount": 29750
+      "amount": 252670
      },
      {
-      "index": 81,
+      "index": 85,
       "type": "freeSpinEnd",
-      "amount": 29750
+      "amount": 252670
      },
      {
-      "index": 82,
+      "index": 86,
       "type": "finalWin",
-      "amount": 29750
+      "amount": 252670
      }
     ]
    }
@@ -16707,6 +17063,8 @@
      {
       "index": 1,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         1,
@@ -16719,12 +17077,26 @@
        "row": 0,
        "w": 2,
        "h": 2
-      },
-      "giant": "H1"
+      }
      },
      {
       "index": 2,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 1,
+       "row": 0,
+       "w": 2,
+       "h": 2
+      },
+      "giant": "H1",
+      "cells": 4
+     },
+     {
+      "index": 3,
       "type": "blast",
+      "chain": 1,
+      "link": 0,
       "tnt": {
        "pos": [
         3,
@@ -16737,11 +17109,23 @@
        "row": 2,
        "w": 3,
        "h": 3
-      },
-      "giant": "L3"
+      }
      },
      {
-      "index": 3,
+      "index": 4,
+      "type": "carve",
+      "chain": 1,
+      "area": {
+       "col": 2,
+       "row": 2,
+       "w": 3,
+       "h": 3
+      },
+      "giant": "L3",
+      "cells": 9
+     },
+     {
+      "index": 5,
       "type": "winInfo",
       "totalWin": 2560,
       "wins": [
@@ -16838,12 +17222,12 @@
       ]
      },
      {
-      "index": 4,
+      "index": 6,
       "type": "updateTumbleWin",
       "amount": 2560
      },
      {
-      "index": 5,
+      "index": 7,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -17039,7 +17423,7 @@
       "tnt": []
      },
      {
-      "index": 6,
+      "index": 8,
       "type": "winInfo",
       "totalWin": 50,
       "wins": [
@@ -17071,12 +17455,12 @@
       ]
      },
      {
-      "index": 7,
+      "index": 9,
       "type": "updateTumbleWin",
       "amount": 2610
      },
      {
-      "index": 8,
+      "index": 10,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -17200,17 +17584,17 @@
       "tnt": []
      },
      {
-      "index": 9,
+      "index": 11,
       "type": "setWin",
       "amount": 2610
      },
      {
-      "index": 10,
+      "index": 12,
       "type": "setTotalWin",
       "amount": 2610
      },
      {
-      "index": 11,
+      "index": 13,
       "type": "finalWin",
       "amount": 2610
      }
@@ -17225,11 +17609,11 @@
     "buy",
     "feature",
     "tnt",
-    "crate",
+    "keg",
     "giant",
     "cascade"
    ],
-   "note": "feature MEGA : caisse 4x4 -> géant H4, 256 ways, puis H2",
+   "note": "feature MEGA : baril 4x4 -> géant H4, 256 ways, puis H2",
    "book": {
     "id": "F19",
     "mode": "MEGA",
@@ -17340,30 +17724,44 @@
          2,
          3
         ],
-        "kind": "crate"
+        "kind": "keg"
        }
       ]
      },
      {
       "index": 1,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         2,
         3
        ],
-       "kind": "crate"
+       "kind": "keg"
       },
       "area": {
        "col": 0,
        "row": 1,
        "w": 4,
        "h": 4
-      },
-      "giant": "H4"
+      }
      },
      {
       "index": 2,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 1,
+       "w": 4,
+       "h": 4
+      },
+      "giant": "H4",
+      "cells": 16
+     },
+     {
+      "index": 3,
       "type": "winInfo",
       "totalWin": 15360,
       "wins": [
@@ -17443,12 +17841,12 @@
       ]
      },
      {
-      "index": 3,
+      "index": 4,
       "type": "updateTumbleWin",
       "amount": 15360
      },
      {
-      "index": 4,
+      "index": 5,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -17633,7 +18031,7 @@
       "tnt": []
      },
      {
-      "index": 5,
+      "index": 6,
       "type": "winInfo",
       "totalWin": 40,
       "wins": [
@@ -17661,12 +18059,12 @@
       ]
      },
      {
-      "index": 6,
+      "index": 7,
       "type": "updateTumbleWin",
       "amount": 15400
      },
      {
-      "index": 7,
+      "index": 8,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -17785,17 +18183,17 @@
       "tnt": []
      },
      {
-      "index": 8,
+      "index": 9,
       "type": "setWin",
       "amount": 15400
      },
      {
-      "index": 9,
+      "index": 10,
       "type": "setTotalWin",
       "amount": 15400
      },
      {
-      "index": 10,
+      "index": 11,
       "type": "finalWin",
       "amount": 15400
      }
@@ -19446,6 +19844,8 @@
      {
       "index": 1,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         1,
@@ -19458,11 +19858,23 @@
        "row": 0,
        "w": 3,
        "h": 3
-      },
-      "giant": "H1"
+      }
      },
      {
       "index": 2,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 0,
+       "w": 3,
+       "h": 3
+      },
+      "giant": "H1",
+      "cells": 9
+     },
+     {
+      "index": 3,
       "type": "winInfo",
       "totalWin": 8100,
       "wins": [
@@ -19522,12 +19934,12 @@
       ]
      },
      {
-      "index": 3,
+      "index": 4,
       "type": "updateTumbleWin",
       "amount": 8100
      },
      {
-      "index": 4,
+      "index": 5,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -19687,7 +20099,7 @@
       "tnt": []
      },
      {
-      "index": 5,
+      "index": 6,
       "type": "winInfo",
       "totalWin": 2400,
       "wins": [
@@ -19735,12 +20147,12 @@
       ]
      },
      {
-      "index": 6,
+      "index": 7,
       "type": "updateTumbleWin",
       "amount": 10500
      },
      {
-      "index": 7,
+      "index": 8,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -19886,17 +20298,17 @@
       "tnt": []
      },
      {
-      "index": 8,
+      "index": 9,
       "type": "setWin",
       "amount": 10500
      },
      {
-      "index": 9,
+      "index": 10,
       "type": "setTotalWin",
       "amount": 10500
      },
      {
-      "index": 10,
+      "index": 11,
       "type": "finalWin",
       "amount": 10500
      }
@@ -19911,11 +20323,11 @@
     "tier",
     "x500",
     "tnt",
-    "crate",
+    "keg",
     "giant",
     "5-reels"
    ],
-   "note": "palier x500 : caisse 4x4 -> géant H3, 5 rouleaux",
+   "note": "palier x500 : baril 4x4 -> géant H3, 5 rouleaux",
    "book": {
     "id": "F24",
     "mode": "BASE",
@@ -20025,30 +20437,44 @@
          1,
          2
         ],
-        "kind": "crate"
+        "kind": "keg"
        }
       ]
      },
      {
       "index": 1,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         1,
         2
        ],
-       "kind": "crate"
+       "kind": "keg"
       },
       "area": {
        "col": 0,
        "row": 0,
        "w": 4,
        "h": 4
-      },
-      "giant": "H3"
+      }
      },
      {
       "index": 2,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 0,
+       "w": 4,
+       "h": 4
+      },
+      "giant": "H3",
+      "cells": 16
+     },
+     {
+      "index": 3,
       "type": "winInfo",
       "totalWin": 51200,
       "wins": [
@@ -20132,12 +20558,12 @@
       ]
      },
      {
-      "index": 3,
+      "index": 4,
       "type": "updateTumbleWin",
       "amount": 51200
      },
      {
-      "index": 4,
+      "index": 5,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -20328,17 +20754,17 @@
       "tnt": []
      },
      {
-      "index": 5,
+      "index": 6,
       "type": "setWin",
       "amount": 51200
      },
      {
-      "index": 6,
+      "index": 7,
       "type": "setTotalWin",
       "amount": 51200
      },
      {
-      "index": 7,
+      "index": 8,
       "type": "finalWin",
       "amount": 51200
      }
@@ -20355,14 +20781,14 @@
     "standard",
     "tier",
     "x1000",
-    "crate",
+    "keg",
     "multiplier"
    ],
-   "note": "achat bonus : caisse 4x4 H1 sous multiplicateur x3, palier x1000",
+   "note": "achat bonus : baril 4x4 H1 sous multiplicateur x3, palier x1000",
    "book": {
     "id": "F25",
     "mode": "BONUS",
-    "payoutMultiplier": 115610,
+    "payoutMultiplier": 808640,
     "costMultiplier": 100,
     "events": [
      {
@@ -20728,6 +21154,8 @@
      {
       "index": 10,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         2,
@@ -20740,27 +21168,41 @@
        "row": 1,
        "w": 2,
        "h": 2
-      },
-      "giant": "L1"
+      }
      },
      {
       "index": 11,
-      "type": "updateGlobalMult",
-      "globalMult": 2,
-      "cause": "blast"
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 1,
+       "row": 1,
+       "w": 2,
+       "h": 2
+      },
+      "giant": "L1",
+      "cells": 4
      },
      {
       "index": 12,
+      "type": "updateGlobalMult",
+      "globalMult": 5,
+      "added": 4,
+      "chain": 0,
+      "cause": "carve"
+     },
+     {
+      "index": 13,
       "type": "winInfo",
-      "totalWin": 120,
+      "totalWin": 300,
       "wins": [
        {
         "symbol": "L1",
         "kind": "ways",
         "reels": 3,
         "ways": 6,
-        "win": 120,
-        "mult": 2,
+        "win": 300,
+        "mult": 5,
         "baseWin": 60,
         "positions": [
          [
@@ -20792,12 +21234,12 @@
       ]
      },
      {
-      "index": 13,
+      "index": 14,
       "type": "updateTumbleWin",
-      "amount": 120
+      "amount": 300
      },
      {
-      "index": 14,
+      "index": 15,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -20931,23 +21373,23 @@
       "tnt": []
      },
      {
-      "index": 15,
-      "type": "setWin",
-      "amount": 120
-     },
-     {
       "index": 16,
-      "type": "setTotalWin",
-      "amount": 120
+      "type": "setWin",
+      "amount": 300
      },
      {
       "index": 17,
+      "type": "setTotalWin",
+      "amount": 300
+     },
+     {
+      "index": 18,
       "type": "updateFreeSpin",
       "amount": 3,
       "total": 10
      },
      {
-      "index": 18,
+      "index": 19,
       "type": "reveal",
       "board": [
        [
@@ -21047,17 +21489,17 @@
       "tnt": []
      },
      {
-      "index": 19,
+      "index": 20,
       "type": "winInfo",
-      "totalWin": 20,
+      "totalWin": 50,
       "wins": [
        {
         "symbol": "L4",
         "kind": "ways",
         "reels": 3,
         "ways": 2,
-        "win": 20,
-        "mult": 2,
+        "win": 50,
+        "mult": 5,
         "baseWin": 10,
         "positions": [
          [
@@ -21081,12 +21523,12 @@
       ]
      },
      {
-      "index": 20,
+      "index": 21,
       "type": "updateTumbleWin",
-      "amount": 20
+      "amount": 50
      },
      {
-      "index": 21,
+      "index": 22,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -21210,23 +21652,23 @@
       "tnt": []
      },
      {
-      "index": 22,
-      "type": "setWin",
-      "amount": 20
-     },
-     {
       "index": 23,
-      "type": "setTotalWin",
-      "amount": 140
+      "type": "setWin",
+      "amount": 50
      },
      {
       "index": 24,
+      "type": "setTotalWin",
+      "amount": 350
+     },
+     {
+      "index": 25,
       "type": "updateFreeSpin",
       "amount": 4,
       "total": 10
      },
      {
-      "index": 25,
+      "index": 26,
       "type": "reveal",
       "board": [
        [
@@ -21326,23 +21768,23 @@
       "tnt": []
      },
      {
-      "index": 26,
+      "index": 27,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 27,
+      "index": 28,
       "type": "setTotalWin",
-      "amount": 140
+      "amount": 350
      },
      {
-      "index": 28,
+      "index": 29,
       "type": "updateFreeSpin",
       "amount": 5,
       "total": 10
      },
      {
-      "index": 29,
+      "index": 30,
       "type": "reveal",
       "board": [
        [
@@ -21445,46 +21887,62 @@
          1,
          4
         ],
-        "kind": "crate"
+        "kind": "keg"
        }
       ]
      },
      {
-      "index": 30,
+      "index": 31,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         1,
         4
        ],
-       "kind": "crate"
+       "kind": "keg"
       },
       "area": {
        "col": 0,
        "row": 1,
        "w": 4,
        "h": 4
-      },
-      "giant": "H1"
-     },
-     {
-      "index": 31,
-      "type": "updateGlobalMult",
-      "globalMult": 3,
-      "cause": "blast"
+      }
      },
      {
       "index": 32,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 1,
+       "w": 4,
+       "h": 4
+      },
+      "giant": "H1",
+      "cells": 16
+     },
+     {
+      "index": 33,
+      "type": "updateGlobalMult",
+      "globalMult": 21,
+      "added": 16,
+      "chain": 0,
+      "cause": "carve"
+     },
+     {
+      "index": 34,
       "type": "winInfo",
-      "totalWin": 115200,
+      "totalWin": 806400,
       "wins": [
        {
         "symbol": "H1",
         "kind": "ways",
         "reels": 4,
         "ways": 256,
-        "win": 115200,
-        "mult": 3,
+        "win": 806400,
+        "mult": 21,
         "baseWin": 38400,
         "positions": [
          [
@@ -21556,12 +22014,12 @@
       ]
      },
      {
-      "index": 33,
+      "index": 35,
       "type": "updateTumbleWin",
-      "amount": 115200
+      "amount": 806400
      },
      {
-      "index": 34,
+      "index": 36,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -21746,23 +22204,23 @@
       "tnt": []
      },
      {
-      "index": 35,
-      "type": "setWin",
-      "amount": 115200
-     },
-     {
-      "index": 36,
-      "type": "setTotalWin",
-      "amount": 115340
-     },
-     {
       "index": 37,
+      "type": "setWin",
+      "amount": 806400
+     },
+     {
+      "index": 38,
+      "type": "setTotalWin",
+      "amount": 806750
+     },
+     {
+      "index": 39,
       "type": "updateFreeSpin",
       "amount": 6,
       "total": 10
      },
      {
-      "index": 38,
+      "index": 40,
       "type": "reveal",
       "board": [
        [
@@ -21862,23 +22320,23 @@
       "tnt": []
      },
      {
-      "index": 39,
+      "index": 41,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 40,
+      "index": 42,
       "type": "setTotalWin",
-      "amount": 115340
+      "amount": 806750
      },
      {
-      "index": 41,
+      "index": 43,
       "type": "updateFreeSpin",
       "amount": 7,
       "total": 10
      },
      {
-      "index": 42,
+      "index": 44,
       "type": "reveal",
       "board": [
        [
@@ -21978,17 +22436,17 @@
       "tnt": []
      },
      {
-      "index": 43,
+      "index": 45,
       "type": "winInfo",
-      "totalWin": 240,
+      "totalWin": 1680,
       "wins": [
        {
         "symbol": "H2",
         "kind": "ways",
         "reels": 3,
         "ways": 2,
-        "win": 240,
-        "mult": 3,
+        "win": 1680,
+        "mult": 21,
         "baseWin": 80,
         "positions": [
          [
@@ -22012,12 +22470,12 @@
       ]
      },
      {
-      "index": 44,
+      "index": 46,
       "type": "updateTumbleWin",
-      "amount": 240
+      "amount": 1680
      },
      {
-      "index": 45,
+      "index": 47,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -22141,23 +22599,23 @@
       "tnt": []
      },
      {
-      "index": 46,
-      "type": "setWin",
-      "amount": 240
-     },
-     {
-      "index": 47,
-      "type": "setTotalWin",
-      "amount": 115580
-     },
-     {
       "index": 48,
+      "type": "setWin",
+      "amount": 1680
+     },
+     {
+      "index": 49,
+      "type": "setTotalWin",
+      "amount": 808430
+     },
+     {
+      "index": 50,
       "type": "updateFreeSpin",
       "amount": 8,
       "total": 10
      },
      {
-      "index": 49,
+      "index": 51,
       "type": "reveal",
       "board": [
        [
@@ -22257,23 +22715,23 @@
       "tnt": []
      },
      {
-      "index": 50,
+      "index": 52,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 51,
+      "index": 53,
       "type": "setTotalWin",
-      "amount": 115580
+      "amount": 808430
      },
      {
-      "index": 52,
+      "index": 54,
       "type": "updateFreeSpin",
       "amount": 9,
       "total": 10
      },
      {
-      "index": 53,
+      "index": 55,
       "type": "reveal",
       "board": [
        [
@@ -22373,17 +22831,17 @@
       "tnt": []
      },
      {
-      "index": 54,
+      "index": 56,
       "type": "winInfo",
-      "totalWin": 30,
+      "totalWin": 210,
       "wins": [
        {
         "symbol": "L2",
         "kind": "ways",
         "reels": 3,
         "ways": 1,
-        "win": 30,
-        "mult": 3,
+        "win": 210,
+        "mult": 21,
         "baseWin": 10,
         "positions": [
          [
@@ -22403,12 +22861,12 @@
       ]
      },
      {
-      "index": 55,
+      "index": 57,
       "type": "updateTumbleWin",
-      "amount": 30
+      "amount": 210
      },
      {
-      "index": 56,
+      "index": 58,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -22527,23 +22985,23 @@
       "tnt": []
      },
      {
-      "index": 57,
-      "type": "setWin",
-      "amount": 30
-     },
-     {
-      "index": 58,
-      "type": "setTotalWin",
-      "amount": 115610
-     },
-     {
       "index": 59,
+      "type": "setWin",
+      "amount": 210
+     },
+     {
+      "index": 60,
+      "type": "setTotalWin",
+      "amount": 808640
+     },
+     {
+      "index": 61,
       "type": "updateFreeSpin",
       "amount": 10,
       "total": 10
      },
      {
-      "index": 60,
+      "index": 62,
       "type": "reveal",
       "board": [
        [
@@ -22643,24 +23101,24 @@
       "tnt": []
      },
      {
-      "index": 61,
+      "index": 63,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 62,
-      "type": "setTotalWin",
-      "amount": 115610
-     },
-     {
-      "index": 63,
-      "type": "freeSpinEnd",
-      "amount": 115610
-     },
-     {
       "index": 64,
+      "type": "setTotalWin",
+      "amount": 808640
+     },
+     {
+      "index": 65,
+      "type": "freeSpinEnd",
+      "amount": 808640
+     },
+     {
+      "index": 66,
       "type": "finalWin",
-      "amount": 115610
+      "amount": 808640
      }
     ]
    }
@@ -22675,10 +23133,10 @@
     "super",
     "max-win",
     "wincap",
-    "crate",
+    "keg",
     "multiplier"
    ],
-   "note": "MAX WIN : caisse H1 4x4 + 4 H1 au rouleau 5 (1024 ways) sous x5 -> plafond x25000",
+   "note": "MAX WIN : baril H1 4x4 + 4 H1 au rouleau 5 (1024 ways) sous x5 -> plafond x25000",
    "book": {
     "id": "F26",
     "mode": "SUPER",
@@ -22936,6 +23394,8 @@
      {
       "index": 6,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         1,
@@ -22948,27 +23408,41 @@
        "row": 2,
        "w": 3,
        "h": 3
-      },
-      "giant": "L2"
+      }
      },
      {
       "index": 7,
-      "type": "updateGlobalMult",
-      "globalMult": 2,
-      "cause": "blast"
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 2,
+       "w": 3,
+       "h": 3
+      },
+      "giant": "L2",
+      "cells": 9
      },
      {
       "index": 8,
+      "type": "updateGlobalMult",
+      "globalMult": 10,
+      "added": 9,
+      "chain": 0,
+      "cause": "carve"
+     },
+     {
+      "index": 9,
       "type": "winInfo",
-      "totalWin": 720,
+      "totalWin": 3600,
       "wins": [
        {
         "symbol": "L2",
         "kind": "ways",
         "reels": 3,
         "ways": 36,
-        "win": 720,
-        "mult": 2,
+        "win": 3600,
+        "mult": 10,
         "baseWin": 360,
         "positions": [
          [
@@ -23016,12 +23490,12 @@
       ]
      },
      {
-      "index": 9,
+      "index": 10,
       "type": "updateTumbleWin",
-      "amount": 720
+      "amount": 3600
      },
      {
-      "index": 10,
+      "index": 11,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -23175,23 +23649,23 @@
       "tnt": []
      },
      {
-      "index": 11,
-      "type": "setWin",
-      "amount": 720
-     },
-     {
       "index": 12,
-      "type": "setTotalWin",
-      "amount": 720
+      "type": "setWin",
+      "amount": 3600
      },
      {
       "index": 13,
+      "type": "setTotalWin",
+      "amount": 3600
+     },
+     {
+      "index": 14,
       "type": "updateFreeSpin",
       "amount": 2,
       "total": 12
      },
      {
-      "index": 14,
+      "index": 15,
       "type": "reveal",
       "board": [
        [
@@ -23291,23 +23765,23 @@
       "tnt": []
      },
      {
-      "index": 15,
+      "index": 16,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 16,
+      "index": 17,
       "type": "setTotalWin",
-      "amount": 720
+      "amount": 3600
      },
      {
-      "index": 17,
+      "index": 18,
       "type": "updateFreeSpin",
       "amount": 3,
       "total": 12
      },
      {
-      "index": 18,
+      "index": 19,
       "type": "reveal",
       "board": [
        [
@@ -23415,8 +23889,10 @@
       ]
      },
      {
-      "index": 19,
+      "index": 20,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         3,
@@ -23429,33 +23905,47 @@
        "row": 1,
        "w": 3,
        "h": 3
-      },
-      "giant": "H3"
-     },
-     {
-      "index": 20,
-      "type": "updateGlobalMult",
-      "globalMult": 3,
-      "cause": "blast"
+      }
      },
      {
       "index": 21,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 2,
+       "row": 1,
+       "w": 3,
+       "h": 3
+      },
+      "giant": "H3",
+      "cells": 9
+     },
+     {
+      "index": 22,
+      "type": "updateGlobalMult",
+      "globalMult": 19,
+      "added": 9,
+      "chain": 0,
+      "cause": "carve"
+     },
+     {
+      "index": 23,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 22,
+      "index": 24,
       "type": "setTotalWin",
-      "amount": 720
+      "amount": 3600
      },
      {
-      "index": 23,
+      "index": 25,
       "type": "updateFreeSpin",
       "amount": 4,
       "total": 12
      },
      {
-      "index": 24,
+      "index": 26,
       "type": "reveal",
       "board": [
        [
@@ -23555,17 +24045,17 @@
       "tnt": []
      },
      {
-      "index": 25,
+      "index": 27,
       "type": "winInfo",
-      "totalWin": 30,
+      "totalWin": 190,
       "wins": [
        {
         "symbol": "L3",
         "kind": "ways",
         "reels": 3,
         "ways": 2,
-        "win": 30,
-        "mult": 3,
+        "win": 190,
+        "mult": 19,
         "baseWin": 10,
         "positions": [
          [
@@ -23589,12 +24079,12 @@
       ]
      },
      {
-      "index": 26,
+      "index": 28,
       "type": "updateTumbleWin",
-      "amount": 30
+      "amount": 190
      },
      {
-      "index": 27,
+      "index": 29,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -23718,23 +24208,23 @@
       "tnt": []
      },
      {
-      "index": 28,
-      "type": "setWin",
-      "amount": 30
-     },
-     {
-      "index": 29,
-      "type": "setTotalWin",
-      "amount": 750
-     },
-     {
       "index": 30,
+      "type": "setWin",
+      "amount": 190
+     },
+     {
+      "index": 31,
+      "type": "setTotalWin",
+      "amount": 3790
+     },
+     {
+      "index": 32,
       "type": "updateFreeSpin",
       "amount": 5,
       "total": 12
      },
      {
-      "index": 31,
+      "index": 33,
       "type": "reveal",
       "board": [
        [
@@ -23842,8 +24332,10 @@
       ]
      },
      {
-      "index": 32,
+      "index": 34,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         2,
@@ -23856,27 +24348,41 @@
        "row": 0,
        "w": 3,
        "h": 3
+      }
+     },
+     {
+      "index": 35,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 1,
+       "row": 0,
+       "w": 3,
+       "h": 3
       },
-      "giant": "H4"
+      "giant": "H4",
+      "cells": 9
      },
      {
-      "index": 33,
+      "index": 36,
       "type": "updateGlobalMult",
-      "globalMult": 4,
-      "cause": "blast"
+      "globalMult": 28,
+      "added": 9,
+      "chain": 0,
+      "cause": "carve"
      },
      {
-      "index": 34,
+      "index": 37,
       "type": "winInfo",
-      "totalWin": 6480,
+      "totalWin": 45360,
       "wins": [
        {
         "symbol": "H4",
         "kind": "ways",
         "reels": 4,
         "ways": 27,
-        "win": 6480,
-        "mult": 4,
+        "win": 45360,
+        "mult": 28,
         "baseWin": 1620,
         "positions": [
          [
@@ -23924,12 +24430,12 @@
       ]
      },
      {
-      "index": 35,
+      "index": 38,
       "type": "updateTumbleWin",
-      "amount": 6480
+      "amount": 45360
      },
      {
-      "index": 36,
+      "index": 39,
       "type": "tumbleBoard",
       "removed": [
        [
@@ -24084,23 +24590,23 @@
       "tnt": []
      },
      {
-      "index": 37,
+      "index": 40,
       "type": "setWin",
-      "amount": 6480
+      "amount": 45360
      },
      {
-      "index": 38,
+      "index": 41,
       "type": "setTotalWin",
-      "amount": 7230
+      "amount": 49150
      },
      {
-      "index": 39,
+      "index": 42,
       "type": "updateFreeSpin",
       "amount": 6,
       "total": 12
      },
      {
-      "index": 40,
+      "index": 43,
       "type": "reveal",
       "board": [
        [
@@ -24200,23 +24706,23 @@
       "tnt": []
      },
      {
-      "index": 41,
+      "index": 44,
       "type": "setWin",
       "amount": 0
      },
      {
-      "index": 42,
+      "index": 45,
       "type": "setTotalWin",
-      "amount": 7230
+      "amount": 49150
      },
      {
-      "index": 43,
+      "index": 46,
       "type": "updateFreeSpin",
       "amount": 7,
       "total": 12
      },
      {
-      "index": 44,
+      "index": 47,
       "type": "reveal",
       "board": [
        [
@@ -24319,46 +24825,62 @@
          1,
          2
         ],
-        "kind": "crate"
+        "kind": "keg"
        }
       ]
      },
      {
-      "index": 45,
+      "index": 48,
       "type": "blast",
+      "chain": 0,
+      "link": 0,
       "tnt": {
        "pos": [
         1,
         2
        ],
-       "kind": "crate"
+       "kind": "keg"
       },
       "area": {
        "col": 0,
        "row": 1,
        "w": 4,
        "h": 4
+      }
+     },
+     {
+      "index": 49,
+      "type": "carve",
+      "chain": 0,
+      "area": {
+       "col": 0,
+       "row": 1,
+       "w": 4,
+       "h": 4
       },
-      "giant": "H1"
+      "giant": "H1",
+      "cells": 16
      },
      {
-      "index": 46,
+      "index": 50,
       "type": "updateGlobalMult",
-      "globalMult": 5,
-      "cause": "blast"
+      "globalMult": 44,
+      "added": 16,
+      "chain": 0,
+      "cause": "carve"
      },
      {
-      "index": 47,
+      "index": 51,
       "type": "winInfo",
-      "totalWin": 2560000,
+      "totalWin": 22528000,
       "wins": [
        {
         "symbol": "H1",
         "kind": "ways",
         "reels": 5,
         "ways": 1024,
-        "win": 2560000,
-        "mult": 5,
+        "win": 22528000,
+        "mult": 44,
         "baseWin": 512000,
         "positions": [
          [
@@ -24446,17 +24968,17 @@
       ]
      },
      {
-      "index": 48,
+      "index": 52,
       "type": "updateTumbleWin",
-      "amount": 2560000
+      "amount": 22528000
      },
      {
-      "index": 49,
+      "index": 53,
       "type": "wincap",
       "amount": 2500000
      },
      {
-      "index": 50,
+      "index": 54,
       "type": "finalWin",
       "amount": 2500000
      }

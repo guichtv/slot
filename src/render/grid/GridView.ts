@@ -1,7 +1,7 @@
-import { BitmapText, Container, Graphics, NineSliceSprite, Sprite } from 'pixi.js';
+import { BitmapText, Container, Graphics, Sprite } from 'pixi.js';
 import { gsap } from 'gsap';
 import { COLS, ROWS, type Area, type SymbolName, type TntKind, type WinLine } from '../../contract/schema';
-import { hasTex, tex } from '../assets';
+import { entry, hasTex, tex } from '../assets';
 import { ParticleField, rand } from '../fx/particles';
 import { fxTextures } from '../fx/textures';
 import { clock } from '../../core/clock';
@@ -11,6 +11,7 @@ import { ReelColumn } from './ReelColumn';
 import { SymbolView } from './SymbolView';
 import { FILLER, SYMBOL_DEFS, TNT_DEFS } from './symbolConfig';
 import { T } from '../../config/timings';
+import { FRAME_BORDER, FrameView } from './FrameView';
 
 /**
  * Grille 5 × 5 : cadre 9-slice, cases, rouleaux masqués, géants, effets internes, montants de connexion.
@@ -26,7 +27,9 @@ export interface GiantView {
 export class GridView {
   readonly view = new Container();
   readonly behind = new Container();
-  private frame: NineSliceSprite | null = null;
+  private frame: FrameView | null = null;
+  /** bords du cadre (px de texture) : l'ouverture intérieure est calée exactement sur la grille */
+  private frameInsets: [number, number, number, number] = [135, 147, 134, 142];
   private cellBgs: Sprite[] = [];
   private bgFallback = new Graphics();
   readonly reels = new Container();
@@ -71,8 +74,10 @@ export class GridView {
     this.reels.mask = this.mask;
     this.giantsLayer.mask = this.mask;
     if (hasTex('ui.frame')) {
-      this.frame = new NineSliceSprite({ texture: tex('ui.frame'), leftWidth: 150, rightWidth: 150, topHeight: 150, bottomHeight: 150 });
-      this.view.addChild(this.frame);
+      const ns = entry('ui.frame')?.nineSlice;
+      if (ns) this.frameInsets = ns as [number, number, number, number];
+      this.frame = new FrameView(tex('ui.frame'), this.frameInsets);
+      this.view.addChild(this.frame.view);
     }
     for (let i = 0; i < 8; i++) {
       const t = new BitmapText({ text: '', style: { fontFamily: 'WinDigits', fontSize: 48 } });
@@ -105,16 +110,8 @@ export class GridView {
       const k = (l.cell * 0.97) / (s.texture.width || 1);
       s.scale.set(k);
     });
-    if (this.frame) {
-      // l'ouverture du cadre (texture 1024) correspond à la grille ; épaisseur relative à la case
-      const pad = l.cell * 0.36;
-      const tw = this.frame.texture.width || 1024;
-      const scale = (w + pad * 2) / tw;
-      this.frame.scale.set(scale);
-      this.frame.width = (w + pad * 2) / scale;
-      this.frame.height = (h + pad * 2) / scale;
-      this.frame.position.set(-pad, -pad);
-    }
+    // ouverture intérieure du cadre = grille, avec un recouvrement de 1 % pour masquer les bords des cases
+    this.frame?.layout(w * 1.02, h * 1.02, l.cell * FRAME_BORDER, -w * 0.01, -h * 0.01);
     for (const g of this.giants) this.placeGiant(g);
     for (const t of this.labelPool) t.style.fontSize = Math.round(l.cell * 0.36);
   }

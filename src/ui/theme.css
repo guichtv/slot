@@ -30,6 +30,23 @@
   --panel-shadow: 0 10px 0 rgba(0, 0, 0, 0.35), 0 0 0 4px var(--ink-dark);
   --chip-bg: #5a3a22;
   --hud-bar-bg: none;
+  /* peau HUD : images ImageGen (public/assets/ui), jamais de dessin en CSS */
+  --hud-bar-img: url('/assets/ui/ui.btn.bar.webp');
+  --spin-bg: url('/assets/ui/ui.spin.webp');
+  --spin-arrows: url('/assets/ui/ui.ico.spin.webp');
+  --spin-stop: url('/assets/ui/ui.ico.stop.webp');
+  --ico-bg: url('/assets/ui/ui.btn.round.webp');
+  --step-bg: url('/assets/ui/ui.btn.step.webp');
+  --buy-bg: url('/assets/ui/ui.btn.buy.webp');
+  --plaque-bg: url('/assets/ui/ui.btn.plaque.webp');
+  --ico-menu: url('/assets/ui/ui.ico.menu.webp');
+  --ico-info: url('/assets/ui/ui.ico.info.webp');
+  --ico-sound-on: url('/assets/ui/ui.ico.soundOn.webp');
+  --ico-sound-off: url('/assets/ui/ui.ico.soundOff.webp');
+  --ico-turbo: url('/assets/ui/ui.ico.turbo.webp');
+  --ico-auto: url('/assets/ui/ui.ico.auto.webp');
+  --ico-plus: url('/assets/ui/ui.ico.plus.webp');
+  --ico-minus: url('/assets/ui/ui.ico.minus.webp');
   --sat: env(safe-area-inset-top, 0px);
   --sar: env(safe-area-inset-right, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
