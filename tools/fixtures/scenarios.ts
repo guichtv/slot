@@ -99,7 +99,7 @@ const F04 = fixture('F04', 'BASE', { weight: 2, tags: ['premium', 'H1', '5-reels
   b
     .reveal(`
     L3 L2 H4 L1 H1
-    H1 L4 H1 L3 L2
+    H1 L4 H1 L3 L1
     H2 H3 L2 H1 H4
     L1 H1 L3 H2 L3
     H4 L4 S  L4 H3
@@ -331,16 +331,16 @@ const F14_FS: Spin[] = [
       .wins([pay(b, 'H4', 3, 36)])
       .tumble(['L3 L3 L2 H3', 'H4 L4 H4', 'L1 L2 L4', '', ''])
       .endSpin(),
-  // 6 : 3 Scatters -> +5 free spins (10 -> 15)
+  // 6 : 2 Scatters, rouleaux 4-5 ralentis, le 3e Scatter tombe au rouleau 5 -> +5 free spins (10 -> 15)
   (b) =>
     b
       .fsSpin()
       .reveal(`
-      L2 L1 L3 L4 L1
+      L2 S  L3 L4 L1
       H2 L2 H4 H3 H1
-      L3 L1 H2 L1 L3
-      L3 H1 L3 H2 L3
-      L4 S  S  S  L4
+      L3 L1 S  L1 L3
+      L3 H1 L3 H2 S
+      L4 L1 H2 L2 L4
       `, { anticipation: [0, 0, 0, 1, 2] })
       .endSpin()
       .fsRetrigger(RETRIGGER_FS),
