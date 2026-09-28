@@ -1,0 +1,9 @@
+STYLE MAISON CROWNFORGE (phase directions : aucune direction n'est encore retenue)
+- BD / cartoon 2D pour adultes, lisible en petit : silhouettes simples, formes franches, lecture immédiate.
+- Contours noirs épais (4 à 7 px à 1536 px de large), légèrement irréguliers comme un encrage au pinceau ; traits intérieurs plus fins.
+- Cel-shading deux tons (clair / ombre) + un reflet franc blanc cassé par volume ; aucune ombre floue ni aérographe.
+- Couleurs saturées mais maîtrisées : une couleur dominante, une complémentaire d'accent, des neutres chauds ; jamais d'arc-en-ciel.
+- Matières dessinées (bois veiné, pierre ébréchée, métal martelé, tissu à carreaux) par des hachures et des taches, pas par des textures photo.
+- Lumière dirigée, une source principale claire, contre-jour franc sur les silhouettes importantes.
+- Interdits : photo-réalisme, 3D lisse ou plastique, néon générique, dégradés par défaut, glow flou partout, bokeh, polices système, emojis, cadres « dashboard » à angles droits.
+
