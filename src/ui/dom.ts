@@ -36,11 +36,13 @@ export function pressable(el: HTMLElement): void {
  * Écran « clic n'importe où » : un pointerdown/clic ou Entrée/Espace ferme l'écran.
  * Le geste est consommé (stopPropagation + preventDefault) : il ne déclenche ni spin, ni achat, ni l'écran suivant.
  */
-export function anywhereToDismiss(target: HTMLElement, onDismiss: () => void, opts: { armDelayMs?: number } = {}): () => void {
+export function anywhereToDismiss(target: HTMLElement, onDismiss: () => void, opts: { armDelayMs?: number; ignore?: string } = {}): () => void {
   let armed = false;
   let done = false;
   const armTimer = window.setTimeout(() => (armed = true), opts.armDelayMs ?? 250);
   const finish = (e: Event) => {
+    // éléments interactifs internes (case « ne plus afficher ») : leur clic ne ferme pas
+    if (opts.ignore && (e.target as Element | null)?.closest?.(opts.ignore)) return;
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
@@ -58,9 +60,11 @@ export function anywhereToDismiss(target: HTMLElement, onDismiss: () => void, op
     onDismiss();
   };
   const onKey = (e: KeyboardEvent) => {
+    if (opts.ignore && (document.activeElement as Element | null)?.closest?.(opts.ignore)) return;
     if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') finish(e);
   };
   const block = (e: Event) => {
+    if (opts.ignore && (e.target as Element | null)?.closest?.(opts.ignore)) return;
     e.stopPropagation();
     e.stopImmediatePropagation();
   };

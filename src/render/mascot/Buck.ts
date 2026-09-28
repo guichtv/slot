@@ -121,6 +121,18 @@ export class Buck {
     return { [a.upper]: { r: norm(upperNode - restU) }, [a.fore]: { r: norm(foreNode - restF) } };
   }
 
+  /** comme ik, mais le bras reste plié (fraction de l'allonge) : la main désigne sans entrer dans la grille */
+  reach(arm: 'armF' | 'armB', target: [number, number], frac = 0.75): Pose {
+    const a = RIG.ik[arm];
+    const [sx, sy] = a.shoulder;
+    const dx = target[0] - sx;
+    const dy = target[1] - sy;
+    const d = Math.hypot(dx, dy) || 1;
+    const lim = (a.upperLen + a.foreLen) * frac;
+    const k = d > lim ? lim / d : 1;
+    return this.ik(arm, [sx + dx * k, sy + dy * k]);
+  }
+
   // ------------------------------------------------------------------ repos
 
   private startIdle(): void {
@@ -273,7 +285,7 @@ export class Buck {
         R.to({ foreF: { r: (toMouth.foreF?.r ?? 0) - 16 } }, 0.07, 'power3.in', tl, 0.3);
         R.to({ foreF: { r: (toMouth.foreF?.r ?? 0) + 4 } }, 0.09, 'power2.out', tl, 0.37);
         const t = arg?.target ? this.toTorso(arg.target) : [-500, -200];
-        const aim = this.ik('armF', [t[0], t[1]] as [number, number]);
+        const aim = this.reach('armF', [t[0], t[1]] as [number, number], 0.8);
         R.to({ ...aim, head: { r: -6, alt: 'wink' }, torso: { r: -3 } }, 0.2, 'back.out(1.6)', tl, 0.5);
         tl.addLabel('flick', 0.72);
         this.run(tl, 3);
@@ -328,7 +340,7 @@ export class Buck {
     switch (name) {
       case 'scatter':
         R.to({ head: { alt: 'surprise', r: -3 } }, 0.08, 'power2.out', tl, 0);
-        R.to({ ...this.ik('armF', [-300, -60]), handF: { alt: 'point' } }, 0.18, 'back.out(2)', tl, 0.05);
+        R.to({ ...this.reach('armF', [-300, -60], 0.66), handF: { alt: 'point' } }, 0.18, 'back.out(2)', tl, 0.05);
         tl.call(() => R.setAlt('head', 'grin'), [], 0.4);
         this.back(tl, 0.8);
         break;
@@ -365,12 +377,11 @@ export class Buck {
         this.back(tl, 0.45, 0.25);
         break;
       case 'carve':
-        R.to({ ...this.ik('armF', [-420, -80]), handF: { alt: 'point' }, head: { alt: 'wink', r: -4 } }, 0.2, 'back.out(1.8)', tl, 0);
+        R.to({ ...this.reach('armF', [-420, -80], 0.68), handF: { alt: 'point' }, head: { alt: 'wink', r: -4 } }, 0.2, 'back.out(1.8)', tl, 0);
         this.back(tl, 0.9);
         break;
       case 'proud':
-        this.front(tl, 0, ['B']);
-        R.to({ ...this.ik('armB', [360, 40]), handB: { alt: 'thumb' }, head: { alt: 'grin', r: 3 } }, 0.2, 'back.out(2)', tl, 0);
+        R.to({ ...this.ik('armB', [585, 60]), handB: { alt: 'thumb' }, head: { alt: 'grin', r: 3 } }, 0.2, 'back.out(2)', tl, 0);
         this.back(tl, 0.9);
         break;
       case 'thump':
@@ -380,8 +391,7 @@ export class Buck {
         this.back(tl, 0.45, 0.25);
         break;
       case 'smallWin':
-        this.front(tl, 0, ['B']);
-        R.to({ ...this.ik('armB', [380, 60]), handB: { alt: 'thumb' }, head: { alt: 'rest', r: 2 } }, 0.2, 'back.out(2)', tl, 0);
+        R.to({ ...this.ik('armB', [600, 110]), handB: { alt: 'thumb' }, head: { alt: 'rest', r: 2 } }, 0.2, 'back.out(2)', tl, 0);
         this.back(tl, 0.7);
         pri = 1.5;
         break;
@@ -421,7 +431,7 @@ export class Buck {
       // pose de vanité : désigne son monument, clin d'œil, pouce levé
       const at = 0.3 + n * 0.26;
       this.front(tl, at, ['B']);
-      R.to({ ...this.ik('armF', [-380, -300]), handF: { alt: 'point' }, ...this.ik('armB', [380, 40]), handB: { alt: 'thumb' }, head: { alt: 'wink', r: 6 }, torso: { r: 0 }, thighF: { r: 0 }, thighB: { r: 0 }, tail: { r: 0 } }, 0.25, 'back.out(1.6)', tl, at);
+      R.to({ ...this.reach('armF', [-380, -300], 0.75), handF: { alt: 'point' }, ...this.ik('armB', [585, 60]), handB: { alt: 'thumb' }, head: { alt: 'wink', r: 6 }, torso: { r: 0 }, thighF: { r: 0 }, thighB: { r: 0 }, tail: { r: 0 } }, 0.25, 'back.out(1.6)', tl, at);
       tl.to({}, { duration: 0.9 });
     }
     this.back(tl, '>', 0.5);

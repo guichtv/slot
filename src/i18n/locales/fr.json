@@ -138,5 +138,14 @@
   "err.TIMEOUT": "Le serveur met trop de temps à répondre.",
   "err.NETWORK": "Vérifiez votre connexion internet.",
   "err.BAD_RESPONSE": "Le serveur a envoyé une réponse inattendue.",
-  "err.uncertain": "Votre dernière manche sera vérifiée avant de continuer."
+  "err.uncertain": "Votre dernière manche sera vérifiée avant de continuer.",
+  "welcome.label": "Bienvenue dans BOOMTOOTH",
+  "welcome.blast.title": "BLAST & CARVE",
+  "welcome.blast.body": "Chaque charge de TNT qui tombe explose et taille un symbole géant sur toute sa zone : 2×2, 3×3 ou 4×4.",
+  "welcome.bonus.title": "SUNDOWN SHIFT",
+  "welcome.bonus.body": "3 Scatters : 10 free spins. Chaque case taillée ajoute +1 au multiplicateur du Cornerstone, qui ne redescend jamais.",
+  "welcome.super.title": "FLOODLIGHT SHIFT",
+  "welcome.super.body": "4 Scatters : 12 free spins, et toutes les charges d'un même tour sont reliées en une seule explosion.",
+  "welcome.max": "Gain maximal {x}× la mise",
+  "welcome.skip": "Ne plus afficher"
 }

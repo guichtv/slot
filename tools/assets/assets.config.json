@@ -384,14 +384,8 @@
    "family": "ui",
    "quality": 92,
    "maxSize": 900,
-   "margin": 4
-  },
-  "ui.multiplier": {
-   "src": "assets/generated/ui/multiplier.png",
-   "family": "ui",
-   "quality": 92,
-   "maxSize": 420,
-   "margin": 4
+   "margin": 4,
+   "solidInterior": true
   },
   "buck.ref": {
    "src": "assets/generated/mascot/buck-ref.png",
@@ -634,42 +628,48 @@
    "family": "screens",
    "quality": 88,
    "margin": 4,
-   "maxSize": 1200
+   "maxSize": 1200,
+   "solidInterior": true
   },
   "scr.floodlight": {
    "src": "assets/generated/screens/panel-floodlight.png",
    "family": "screens",
    "quality": 88,
    "margin": 4,
-   "maxSize": 1200
+   "maxSize": 1200,
+   "solidInterior": true
   },
   "scr.total": {
    "src": "assets/generated/screens/panel-total.png",
    "family": "screens",
    "quality": 88,
    "margin": 4,
-   "maxSize": 1200
+   "maxSize": 1200,
+   "solidInterior": true
   },
   "scr.banner": {
    "src": "assets/generated/screens/banner-tier.png",
    "family": "screens",
    "quality": 88,
    "margin": 4,
-   "maxSize": 1200
+   "maxSize": 1200,
+   "solidInterior": true
   },
   "scr.shop": {
    "src": "assets/generated/screens/shop-board.png",
    "family": "screens",
    "quality": 88,
    "margin": 4,
-   "maxSize": 1200
+   "maxSize": 1200,
+   "solidInterior": true
   },
   "scr.card": {
    "src": "assets/generated/screens/card-frame.png",
    "family": "screens",
    "quality": 88,
    "margin": 4,
-   "maxSize": 1200
+   "maxSize": 1200,
+   "solidInterior": true
   },
   "id.cover": {
    "src": "assets/generated/identity/cover.png",

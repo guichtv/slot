@@ -1,0 +1,13 @@
+Use case: stylized-concept
+Asset type: BOOMTOOTH / Crownforge cut-out animation prop sprite sheet, buck-props.png.
+Generate ONE landscape PNG, exactly 1536×1024 pixels, with genuinely TRANSPARENT alpha background. Four isolated complete accessories only. No character, no scene, no ground, no cast shadows.
+Reference images: Image 1 (D1.png) is the mandatory exact style reference, especially the red wooden plunger detonator beside Buck. Image 2 (buck-ref.png) establishes Buck's scale; Image 3 (buck-arms.png) establishes hand scale. Do not reproduce their backgrounds, glow, characters, lettering, logos or UI.
+Style: adult 2D comic cartoon, thick slightly irregular black brush ink outlines 4–7 px at 1024 px, thinner interior lines. Strict crisp TWO-TONE cel shading per material, a single off-white hard-edged highlight per volume. Warm golden-orange late afternoon light from the LEFT, blue-violet shadows. Hand-drawn wood grain and riveted iron. Controlled saturated palette: TNT red #D7332B, honey wood #C98A45, dark wood #6B4526, gold brass #F2B233, blue-gray steel #6F7F92 with shadow #46526A, cream #F4E6C8, ink #1B1410.
+Exactly four separate pieces, proportional to one another for Buck's rig:
+(a) Large waist-high plunger detonator BOX WITHOUT HANDLE OR SHAFT: tall red-painted timber box, visible squared wood grain and chipped paint, iron bands with rivets, TWO brass electrical terminals and attached red wires exiting its side. On top a clearly visible EMPTY brass circular shaft socket. No label, no emblem. Slight three-quarter view matching D1's detonator.
+(b) Its separate T-shaped plunger handle: horizontal varnished wooden grip attached to a LONG straight vertical steel shaft, entire piece upright and complete, shaft narrower than box socket.
+(c) A single red dynamite stick with a short unlit fuse, sized to be held in Buck's hand; substantially smaller than the waist-high box.
+(d) One small wooden match with red head, unlit, much smaller than dynamite.
+Composition: spread the four pieces across the canvas with ample empty alpha. Large box on left, upright T handle in middle, dynamite toward right, tiny match farther right. Box roughly 700 pixels tall, handle roughly 600 pixels tall, dynamite roughly 260 pixels long, match roughly 100 pixels long. Keep at least 60 pixels of fully transparent separation between EVERY piece including wires. Maintain outer canvas safety margins of 3–6%, no clipped strokes or objects.
+Text: NONE. No letters including TNT, no logos, watermark or signature.
+Avoid: photorealism, smooth 3D, airbrush, gradients, blur, generic neon, glow, border effects, checkerboard pattern, opaque white/black backdrop, halos, extra accessories. Preserve actual transparent alpha.

@@ -138,5 +138,14 @@
   "err.TIMEOUT": "The server is taking too long to respond.",
   "err.NETWORK": "Check your internet connection.",
   "err.BAD_RESPONSE": "The server sent an unexpected response.",
-  "err.uncertain": "Your last round will be checked before you continue."
+  "err.uncertain": "Your last round will be checked before you continue.",
+  "welcome.label": "Welcome to BOOMTOOTH",
+  "welcome.blast.title": "BLAST & CARVE",
+  "welcome.blast.body": "Every TNT charge that lands blows up and carves one giant symbol across its whole zone: 2×2, 3×3 or 4×4.",
+  "welcome.bonus.title": "SUNDOWN SHIFT",
+  "welcome.bonus.body": "3 Scatters: 10 free spins. Every carved cell adds +1 to the Cornerstone multiplier, which never goes down.",
+  "welcome.super.title": "FLOODLIGHT SHIFT",
+  "welcome.super.body": "4 Scatters: 12 free spins, and every charge in a spin is wired into one single blast.",
+  "welcome.max": "Max win {x}× the bet",
+  "welcome.skip": "Don't show again"
 }

@@ -1,5 +1,707 @@
 [
  {
+  "key": "sym.L1",
+  "status": "ok",
+  "src": "assets/generated/symbols/L1.png",
+  "outputs": 1,
+  "alphaBefore": [
+   955791,
+   601,
+   477,
+   435,
+   472,
+   478,
+   681,
+   613581
+  ],
+  "alphaAfter": [
+   955791,
+   601,
+   477,
+   435,
+   472,
+   478,
+   681,
+   613581
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "sym.L2",
+  "status": "ok",
+  "src": "assets/generated/symbols/L2.png",
+  "outputs": 1,
+  "alphaBefore": [
+   1305882,
+   783,
+   615,
+   573,
+   581,
+   659,
+   786,
+   262637
+  ],
+  "alphaAfter": [
+   1305882,
+   783,
+   615,
+   573,
+   581,
+   659,
+   786,
+   262637
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "sym.L3",
+  "status": "ok",
+  "src": "assets/generated/symbols/L3.png",
+  "outputs": 1,
+  "alphaBefore": [
+   1115567,
+   1352,
+   1063,
+   1002,
+   997,
+   1065,
+   1362,
+   450108
+  ],
+  "alphaAfter": [
+   1115567,
+   1352,
+   1063,
+   1002,
+   997,
+   1065,
+   1362,
+   450108
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "sym.L4",
+  "status": "ok",
+  "src": "assets/generated/symbols/L4.png",
+  "outputs": 1,
+  "alphaBefore": [
+   974232,
+   787,
+   713,
+   611,
+   656,
+   723,
+   884,
+   593910
+  ],
+  "alphaAfter": [
+   974232,
+   787,
+   713,
+   611,
+   656,
+   723,
+   884,
+   593910
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "sym.T.stick",
+  "status": "ok",
+  "src": "assets/generated/symbols/T-stick.png",
+  "outputs": 1,
+  "alphaBefore": [
+   1296871,
+   617,
+   497,
+   436,
+   440,
+   470,
+   617,
+   272568
+  ],
+  "alphaAfter": [
+   1296871,
+   617,
+   497,
+   436,
+   440,
+   470,
+   617,
+   272568
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "sym.T.bundle",
+  "status": "ok",
+  "src": "assets/generated/symbols/T-bundle.png",
+  "outputs": 1,
+  "alphaBefore": [
+   1065795,
+   824,
+   649,
+   590,
+   594,
+   610,
+   759,
+   502695
+  ],
+  "alphaAfter": [
+   1065795,
+   824,
+   649,
+   590,
+   594,
+   610,
+   759,
+   502695
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "sym.T.keg",
+  "status": "ok",
+  "src": "assets/generated/symbols/T-keg.png",
+  "outputs": 1,
+  "alphaBefore": [
+   871269,
+   821,
+   697,
+   670,
+   680,
+   751,
+   951,
+   696677
+  ],
+  "alphaAfter": [
+   871269,
+   821,
+   697,
+   670,
+   680,
+   751,
+   951,
+   696677
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "sym.H1",
+  "status": "ok",
+  "src": "assets/generated/symbols/H1.png",
+  "outputs": 2,
+  "alphaBefore": [
+   901385,
+   1186,
+   1005,
+   874,
+   873,
+   912,
+   1278,
+   665351
+  ],
+  "alphaAfter": [
+   901385,
+   1186,
+   1005,
+   874,
+   873,
+   912,
+   1278,
+   665351
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "sym.H2",
+  "status": "ok",
+  "src": "assets/generated/symbols/H2.png",
+  "outputs": 3,
+  "alphaBefore": [
+   993023,
+   1378,
+   1114,
+   942,
+   1001,
+   1091,
+   1582,
+   572733
+  ],
+  "alphaAfter": [
+   993023,
+   1378,
+   1114,
+   942,
+   1001,
+   1091,
+   1582,
+   572733
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "sym.H3",
+  "status": "ok",
+  "src": "assets/generated/symbols/H3.png",
+  "outputs": 2,
+  "alphaBefore": [
+   749286,
+   1193,
+   964,
+   906,
+   932,
+   1011,
+   1401,
+   817171
+  ],
+  "alphaAfter": [
+   749286,
+   1193,
+   964,
+   906,
+   932,
+   1011,
+   1401,
+   817171
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "sym.H4",
+  "status": "ok",
+  "src": "assets/generated/symbols/H4.png",
+  "outputs": 2,
+  "alphaBefore": [
+   977309,
+   1050,
+   859,
+   790,
+   787,
+   934,
+   1151,
+   589984
+  ],
+  "alphaAfter": [
+   977309,
+   1050,
+   859,
+   790,
+   787,
+   934,
+   1151,
+   589984
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "sym.W",
+  "status": "ok",
+  "src": "assets/generated/symbols/W.png",
+  "outputs": 2,
+  "alphaBefore": [
+   928990,
+   834,
+   702,
+   665,
+   654,
+   613,
+   892,
+   639514
+  ],
+  "alphaAfter": [
+   928990,
+   834,
+   702,
+   665,
+   654,
+   613,
+   892,
+   639514
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "sym.S",
+  "status": "ok",
+  "src": "assets/generated/symbols/S.png",
+  "outputs": 2,
+  "alphaBefore": [
+   920297,
+   1027,
+   971,
+   899,
+   1020,
+   956,
+   1105,
+   646589
+  ],
+  "alphaAfter": [
+   920297,
+   1027,
+   971,
+   899,
+   1020,
+   956,
+   1105,
+   646589
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "decor.sky",
+  "status": "ok",
+  "src": "assets/generated/decor/sky.png",
+  "outputs": 1,
+  "alphaBefore": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "alphaAfter": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "opaqueCorners": 4
+ },
+ {
+  "key": "decor.nightSky",
+  "status": "ok",
+  "src": "assets/generated/decor/night-sky.png",
+  "outputs": 1,
+  "alphaBefore": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "alphaAfter": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "opaqueCorners": 4
+ },
+ {
+  "key": "decor.clouds",
+  "status": "ok",
+  "src": "assets/generated/decor/clouds.png",
+  "outputs": 5,
+  "alphaBefore": [
+   1162462,
+   1387,
+   998,
+   885,
+   967,
+   1105,
+   1449,
+   403611
+  ],
+  "alphaAfter": [
+   1162462,
+   1387,
+   998,
+   885,
+   967,
+   1105,
+   1449,
+   403611
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "decor.far",
+  "status": "ok",
+  "src": "assets/generated/decor/far.png",
+  "outputs": 1,
+  "alphaBefore": [
+   600559,
+   962,
+   729,
+   600,
+   697,
+   809,
+   1159,
+   967349
+  ],
+  "alphaAfter": [
+   600559,
+   962,
+   729,
+   600,
+   697,
+   809,
+   1159,
+   967349
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "decor.mid",
+  "status": "ok",
+  "src": "assets/generated/decor/mid.png",
+  "outputs": 1,
+  "alphaBefore": [
+   1097061,
+   2408,
+   1800,
+   1678,
+   1864,
+   2206,
+   3628,
+   462219
+  ],
+  "alphaAfter": [
+   1097061,
+   2408,
+   1800,
+   1678,
+   1864,
+   2206,
+   3628,
+   462219
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "decor.ground",
+  "status": "ok",
+  "src": "assets/generated/decor/ground.png",
+  "outputs": 1,
+  "alphaBefore": [
+   1336884,
+   841,
+   682,
+   593,
+   586,
+   674,
+   996,
+   231608
+  ],
+  "alphaAfter": [
+   1336884,
+   841,
+   682,
+   593,
+   586,
+   674,
+   996,
+   231608
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "decor.fg",
+  "status": "ok",
+  "src": "assets/generated/decor/fg-props.png",
+  "outputs": 3,
+  "alphaBefore": [
+   936446,
+   1919,
+   1418,
+   1461,
+   1467,
+   1738,
+   2749,
+   625666
+  ],
+  "alphaAfter": [
+   936446,
+   1919,
+   1418,
+   1461,
+   1467,
+   1738,
+   2749,
+   625666
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "decor.monument.0",
+  "status": "ok",
+  "src": "assets/generated/decor/monument-0.png",
+  "outputs": 1,
+  "alphaBefore": [
+   489200,
+   1432,
+   1055,
+   968,
+   1014,
+   1222,
+   1254,
+   1076371
+  ],
+  "alphaAfter": [
+   489200,
+   1432,
+   1055,
+   968,
+   1014,
+   1222,
+   1254,
+   1076371
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "decor.monument.1",
+  "status": "ok",
+  "src": "assets/generated/decor/monument-1.png",
+  "outputs": 1,
+  "alphaBefore": [
+   480864,
+   1181,
+   1036,
+   981,
+   1100,
+   952,
+   1190,
+   1085212
+  ],
+  "alphaAfter": [
+   480864,
+   1181,
+   1036,
+   981,
+   1100,
+   952,
+   1190,
+   1085212
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "decor.monument.2",
+  "status": "ok",
+  "src": "assets/generated/decor/monument-2.png",
+  "outputs": 1,
+  "alphaBefore": [
+   595960,
+   1127,
+   844,
+   740,
+   739,
+   775,
+   947,
+   971384
+  ],
+  "alphaAfter": [
+   595960,
+   1127,
+   844,
+   740,
+   739,
+   775,
+   947,
+   971384
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "decor.monument.3",
+  "status": "ok",
+  "src": "assets/generated/decor/monument-3.png",
+  "outputs": 1,
+  "alphaBefore": [
+   606726,
+   1201,
+   820,
+   776,
+   810,
+   910,
+   995,
+   960278
+  ],
+  "alphaAfter": [
+   606726,
+   1201,
+   820,
+   776,
+   810,
+   910,
+   995,
+   960278
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "decor.floodlight",
+  "status": "ok",
+  "src": "assets/generated/decor/floodlight.png",
+  "outputs": 1,
+  "alphaBefore": [
+   1229473,
+   3024,
+   2194,
+   2236,
+   2054,
+   2468,
+   3613,
+   327802
+  ],
+  "alphaAfter": [
+   1229473,
+   3024,
+   2194,
+   2236,
+   2054,
+   2468,
+   3613,
+   327802
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "decor.birds",
+  "status": "ok",
+  "src": "assets/generated/decor/birds.png",
+  "outputs": 3,
+  "alphaBefore": [
+   1466687,
+   820,
+   625,
+   600,
+   669,
+   684,
+   928,
+   101851
+  ],
+  "alphaAfter": [
+   1466687,
+   820,
+   625,
+   600,
+   669,
+   684,
+   928,
+   101851
+  ],
+  "opaqueCorners": 0
+ },
+ {
   "key": "ui.frame",
   "status": "ok",
   "src": "assets/generated/ui/frame.png",
@@ -25,5 +727,798 @@
    463145
   ],
   "opaqueCorners": 0
+ },
+ {
+  "key": "ui.cell",
+  "status": "ok",
+  "src": "assets/generated/ui/cell.png",
+  "outputs": 1,
+  "alphaBefore": [
+   454453,
+   157,
+   742,
+   1491,
+   1083,
+   567,
+   180,
+   1113843
+  ],
+  "alphaAfter": [
+   454453,
+   157,
+   742,
+   1491,
+   1083,
+   567,
+   180,
+   1113843
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "ui.spin",
+  "status": "ok",
+  "src": "assets/generated/ui/spin.png",
+  "outputs": 1,
+  "alphaBefore": [
+   597233,
+   729,
+   583,
+   596,
+   594,
+   670,
+   794,
+   971317
+  ],
+  "alphaAfter": [
+   597233,
+   729,
+   583,
+   596,
+   594,
+   670,
+   794,
+   971317
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "ui.btn",
+  "status": "ok",
+  "src": "assets/generated/ui/buttons.png",
+  "outputs": 5,
+  "alphaBefore": [
+   939358,
+   1376,
+   932,
+   1951,
+   1178,
+   2316,
+   1237,
+   624516
+  ],
+  "alphaAfter": [
+   939358,
+   1376,
+   932,
+   1951,
+   1178,
+   2316,
+   1237,
+   624516
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "ui.ico",
+  "status": "ok",
+  "src": "assets/generated/ui/icons.png",
+  "outputs": 10,
+  "alphaBefore": [
+   1226538,
+   2305,
+   2198,
+   1418,
+   1606,
+   1594,
+   2358,
+   334847
+  ],
+  "alphaAfter": [
+   1226538,
+   2305,
+   2198,
+   1418,
+   1606,
+   1594,
+   2358,
+   334847
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "ui.topbar",
+  "status": "ok",
+  "src": "assets/generated/ui/topbar.png",
+  "outputs": 1,
+  "alphaBefore": [
+   1245150,
+   959,
+   639,
+   612,
+   601,
+   699,
+   1140,
+   323064
+  ],
+  "alphaAfter": [
+   1243649,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   329215
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "ui.multiplier",
+  "status": "missing",
+  "src": "assets/generated/ui/multiplier.png"
+ },
+ {
+  "key": "buck.ref",
+  "status": "ok",
+  "src": "assets/generated/mascot/buck-ref.png",
+  "outputs": 1,
+  "alphaBefore": [
+   799286,
+   1402,
+   1152,
+   978,
+   1047,
+   1160,
+   1607,
+   766232
+  ],
+  "alphaAfter": [
+   799286,
+   1402,
+   1152,
+   978,
+   1047,
+   1160,
+   1607,
+   766232
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "buck.heads",
+  "status": "ok",
+  "src": "assets/generated/mascot/buck-heads.png",
+  "outputs": 7,
+  "alphaBefore": [
+   761542,
+   2066,
+   1657,
+   1372,
+   1502,
+   1652,
+   2276,
+   800797
+  ],
+  "alphaAfter": [
+   761542,
+   2066,
+   1657,
+   1372,
+   1502,
+   1652,
+   2276,
+   800797
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "buck.body",
+  "status": "ok",
+  "src": "assets/generated/mascot/buck-body.png",
+  "outputs": 6,
+  "alphaBefore": [
+   1018442,
+   1512,
+   1184,
+   1138,
+   1040,
+   1192,
+   1663,
+   546693
+  ],
+  "alphaAfter": [
+   1018442,
+   1512,
+   1184,
+   1138,
+   1040,
+   1192,
+   1663,
+   546693
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "buck.arms",
+  "status": "ok",
+  "src": "assets/generated/mascot/buck-arms.png",
+  "outputs": 10,
+  "alphaBefore": [
+   1108828,
+   1979,
+   1464,
+   1285,
+   1416,
+   1567,
+   2288,
+   454037
+  ],
+  "alphaAfter": [
+   1108828,
+   1979,
+   1464,
+   1285,
+   1416,
+   1567,
+   2288,
+   454037
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "buck.props",
+  "status": "missing",
+  "src": "assets/generated/mascot/buck-props.png"
+ },
+ {
+  "key": "id.logo",
+  "status": "ok",
+  "src": "assets/generated/identity/logo.png",
+  "outputs": 1,
+  "alphaBefore": [
+   995874,
+   1206,
+   912,
+   838,
+   871,
+   1003,
+   1356,
+   570804
+  ],
+  "alphaAfter": [
+   995874,
+   1206,
+   912,
+   838,
+   871,
+   1003,
+   1356,
+   570804
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "id.crownforge",
+  "status": "ok",
+  "src": "assets/generated/identity/crownforge.png",
+  "outputs": 1,
+  "alphaBefore": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "alphaAfter": [
+   898654,
+   313,
+   220,
+   192,
+   84,
+   24,
+   28,
+   673349
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "id.card.blast",
+  "status": "ok",
+  "src": "assets/generated/identity/card-blast.png",
+  "outputs": 1,
+  "alphaBefore": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "alphaAfter": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "opaqueCorners": 4
+ },
+ {
+  "key": "id.card.detonator",
+  "status": "ok",
+  "src": "assets/generated/identity/card-detonator.png",
+  "outputs": 1,
+  "alphaBefore": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "alphaAfter": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "opaqueCorners": 4
+ },
+ {
+  "key": "id.card.bonus",
+  "status": "ok",
+  "src": "assets/generated/identity/card-bonus.png",
+  "outputs": 1,
+  "alphaBefore": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "alphaAfter": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "opaqueCorners": 4
+ },
+ {
+  "key": "ui.cornerstone",
+  "status": "ok",
+  "src": "assets/generated/ui/cornerstone.png",
+  "outputs": 1,
+  "alphaBefore": [
+   673425,
+   1053,
+   836,
+   837,
+   850,
+   997,
+   1298,
+   893220
+  ],
+  "alphaAfter": [
+   673425,
+   1053,
+   836,
+   837,
+   850,
+   997,
+   1298,
+   893220
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "ui.cornerstoneGold",
+  "status": "ok",
+  "src": "assets/generated/ui/cornerstone-gold.png",
+  "outputs": 1,
+  "alphaBefore": [
+   664193,
+   1011,
+   814,
+   817,
+   768,
+   938,
+   1195,
+   902780
+  ],
+  "alphaAfter": [
+   664193,
+   1011,
+   814,
+   817,
+   768,
+   938,
+   1195,
+   902780
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "sym.T.log",
+  "status": "ok",
+  "src": "assets/generated/symbols/T-log.png",
+  "outputs": 1,
+  "alphaBefore": [
+   748466,
+   1391,
+   1096,
+   1011,
+   1052,
+   1188,
+   1562,
+   816750
+  ],
+  "alphaAfter": [
+   748466,
+   1391,
+   1096,
+   1011,
+   1052,
+   1188,
+   1562,
+   816750
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "fx.debris",
+  "status": "ok",
+  "src": "assets/generated/fx/fx-debris.png",
+  "outputs": 12,
+  "alphaBefore": [
+   1281777,
+   1654,
+   1278,
+   1121,
+   1179,
+   1323,
+   1775,
+   282757
+  ],
+  "alphaAfter": [
+   1281777,
+   1654,
+   1278,
+   1121,
+   1179,
+   1323,
+   1775,
+   282757
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "fx.dust",
+  "status": "ok",
+  "src": "assets/generated/fx/fx-dust.png",
+  "outputs": 4,
+  "alphaBefore": [
+   1036427,
+   1132,
+   914,
+   870,
+   822,
+   944,
+   1228,
+   530527
+  ],
+  "alphaAfter": [
+   1036427,
+   1132,
+   914,
+   870,
+   822,
+   944,
+   1228,
+   530527
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "decor.skyRich",
+  "status": "ok",
+  "src": "assets/generated/decor/sky-rich.png",
+  "outputs": 1,
+  "alphaBefore": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "alphaAfter": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "opaqueCorners": 4
+ },
+ {
+  "key": "decor.portrait",
+  "status": "ok",
+  "src": "assets/generated/decor/decor-portrait.png",
+  "outputs": 1,
+  "alphaBefore": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "alphaAfter": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572864
+  ],
+  "opaqueCorners": 4
+ },
+ {
+  "key": "scr.sundown",
+  "status": "ok",
+  "src": "assets/generated/screens/panel-sundown.png",
+  "outputs": 1,
+  "alphaBefore": [
+   412030,
+   7625,
+   6738,
+   21409,
+   37106,
+   45754,
+   70294,
+   971908
+  ],
+  "alphaAfter": [
+   410430,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1162434
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "scr.floodlight",
+  "status": "ok",
+  "src": "assets/generated/screens/panel-floodlight.png",
+  "outputs": 1,
+  "alphaBefore": [
+   378184,
+   741,
+   737,
+   684,
+   755,
+   1239,
+   842,
+   1189682
+  ],
+  "alphaAfter": [
+   377952,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1194912
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "scr.total",
+  "status": "ok",
+  "src": "assets/generated/screens/panel-total.png",
+  "outputs": 1,
+  "alphaBefore": [
+   586105,
+   1301,
+   747,
+   667,
+   678,
+   812,
+   1707,
+   980847
+  ],
+  "alphaAfter": [
+   585138,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   987726
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "scr.banner",
+  "status": "ok",
+  "src": "assets/generated/screens/banner-tier.png",
+  "outputs": 1,
+  "alphaBefore": [
+   1083184,
+   1185,
+   852,
+   726,
+   771,
+   839,
+   1311,
+   483996
+  ],
+  "alphaAfter": [
+   1082566,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   490298
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "scr.shop",
+  "status": "ok",
+  "src": "assets/generated/screens/shop-board.png",
+  "outputs": 1,
+  "alphaBefore": [
+   456954,
+   1015,
+   786,
+   833,
+   1041,
+   1037,
+   2939,
+   1108259
+  ],
+  "alphaAfter": [
+   456669,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1116195
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "scr.card",
+  "status": "ok",
+  "src": "assets/generated/screens/card-frame.png",
+  "outputs": 1,
+  "alphaBefore": [
+   270047,
+   1356,
+   439,
+   1027,
+   559,
+   677,
+   2028,
+   1296731
+  ],
+  "alphaAfter": [
+   269805,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1303059
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "id.cover",
+  "status": "ok",
+  "src": "assets/generated/identity/cover.png",
+  "outputs": 1,
+  "alphaBefore": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1573352
+  ],
+  "alphaAfter": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1573352
+  ],
+  "opaqueCorners": 4
+ },
+ {
+  "key": "id.tile",
+  "status": "ok",
+  "src": "assets/generated/identity/tile.png",
+  "outputs": 1,
+  "alphaBefore": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572528
+  ],
+  "alphaAfter": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1572528
+  ],
+  "opaqueCorners": 4
  }
 ]

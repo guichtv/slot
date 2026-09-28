@@ -39,6 +39,11 @@ export class Decor {
   private mid: Sprite | null;
   private groundS: Sprite | null;
   private fg: Sprite[] = [];
+  /** tours de projecteurs (visibles la nuit) : les faisceaux partent de leurs lampes */
+  private towers: Sprite[] = [];
+  private birdsLayer = new Container();
+  private flock: Array<{ s: Sprite; vx: number; vy: number; phase: number; rate: number }> = [];
+  private birdFrames: Texture[] = [];
   private waterfall = new Graphics();
   private beams = new Graphics();
   private motes = new Graphics();
@@ -57,7 +62,7 @@ export class Decor {
   waterfallRect = { x: 0.1, y: 0.42, w: 0.12, h: 0.28 };
 
   constructor() {
-    this.skyDay = sprite('decor.sky');
+    this.skyDay = sprite('decor.skyRich') ?? sprite('decor.sky');
     this.skyNight = sprite('decor.nightSky');
     this.far = sprite('decor.far');
     this.farBack = sprite('decor.far');
@@ -90,10 +95,21 @@ export class Decor {
       m.visible = false;
       land.addChild(m);
     }
+    for (let i = 0; i < 2; i++) {
+      const tw = sprite('decor.floodlight');
+      if (!tw) break;
+      tw.anchor.set(0.5, 1);
+      tw.alpha = 0;
+      if (i === 1) tw.scale.x = -1;
+      this.towers.push(tw);
+      land.addChild(tw);
+    }
     land.addChild(this.beams);
     if (this.mid) land.addChild(this.mid);
     land.addChild(this.waterfall);
     back.addChild(land);
+    for (let i = 0; i < 3; i++) if (hasTex(`decor.birds.${i}`)) this.birdFrames.push(tex(`decor.birds.${i}`));
+    back.addChild(this.birdsLayer);
     back.addChild(this.motes);
     if (this.groundS) this.ground.addChild(this.groundS);
     this.ground.filters = [this.grade];
@@ -138,11 +154,14 @@ export class Decor {
       this.far.anchor.set(0.52, 1);
       const cliffX = portrait ? vw * 0.5 : Math.max(l.grid.x + l.grid.w + (vw - l.grid.x - l.grid.w) * 0.45, vw * 0.78);
       this.far.position.set(cliffX, portrait ? l.grid.y + l.cell * 0.4 : vh * 0.98);
+      // Mount Buckmore : la sculpture se dresse sur le massif de gauche, visible à côté de la grille
+      const leftFree = l.grid.x - l.cell * 0.7;
       for (const m of this.monument) {
-        m.anchor.set(0.5, 0.5);
-        m.scale.set(k);
-        // la sculpture se pose sur la face plate de la falaise (réglée sur l'asset réel)
-        m.position.set(this.far.x, this.far.y - th * k * 0.62);
+        m.anchor.set(0.5, 1);
+        const mh = portrait ? Math.min(l.stage.h * 0.16, vw * 0.3) : Math.min(leftFree * 0.62, vh * 0.3);
+        m.scale.set(mh / (m.texture.height || 1));
+        if (portrait) m.position.set(vw * 0.5, l.grid.y - l.cell * 1.05);
+        else m.position.set(leftFree * 0.5, l.grid.y + l.grid.h * 0.62);
       }
       if (this.farBack) {
         const kb = k * (portrait ? 0.8 : 0.72);
@@ -181,6 +200,13 @@ export class Decor {
       b.visible = !portrait;
     }
     if (c) c.visible = false;
+    // tours de projecteurs sur les côtés, pied au niveau du sol
+    const towerH = portrait ? l.stage.h * 0.22 : vh * 0.42;
+    this.towers.forEach((tw, i) => {
+      const k = towerH / (tw.texture.height || 1);
+      tw.scale.set(i === 1 ? -k : k, k);
+      tw.position.set(i === 0 ? vw * (portrait ? 0.06 : 0.1) : vw * (portrait ? 0.94 : 0.93), portrait ? l.grid.y + l.grid.h * 0.1 : l.hud.y - vh * 0.02);
+    });
     for (const cl of this.clouds) {
       const k = (portrait ? vh : vw) * 0.00032;
       cl.s.scale.set(k * 1.0);
@@ -210,6 +236,7 @@ export class Decor {
     this.ambience = a;
     const tl = gsap.timeline();
     const night = a === 'base' ? 0 : 1;
+    for (const tw of this.towers) tl.to(tw, { alpha: night, duration: duration * 0.8, ease: 'sine.inOut' }, 0);
     const gold = a === 'super' ? 1 : 0;
     tl.to(this, { night, gold, duration, ease: 'sine.inOut', onUpdate: () => this.applyGrade() }, 0);
     if (this.skyNight) tl.to(this.skyNight, { alpha: night, duration, ease: 'sine.inOut' }, 0);
@@ -245,6 +272,7 @@ export class Decor {
       if (c.s.x - c.s.width / 2 > l.vw) c.s.x = -c.s.width / 2;
     }
     this.drawWaterfall();
+    this.updateFlock(dt);
     this.drawBeams();
     this.drawMotes();
     this.nextEvent -= dt;
@@ -281,21 +309,22 @@ export class Decor {
     const g = this.beams;
     g.clear();
     if (this.night < 0.05 || !this.l) return;
-    const { vw } = this.l;
-    const baseY = this.l.stage.y + this.l.stage.h * 0.72;
-    const beams = [
-      { x: vw * 0.72, a: -1.9 + Math.sin(this.t / 2600) * 0.35 },
-      { x: vw * 0.9, a: -1.35 + Math.sin(this.t / 3100 + 1.4) * 0.3 },
-      { x: vw * 0.12, a: -1.25 + Math.sin(this.t / 2900 + 2.2) * 0.3 },
-    ];
-    const len = this.l.vh * 0.9;
-    for (const b of beams) {
-      const spread = 0.09;
-      g.moveTo(b.x, baseY)
-        .lineTo(b.x + Math.cos(b.a - spread) * len, baseY + Math.sin(b.a - spread) * len)
-        .lineTo(b.x + Math.cos(b.a + spread) * len, baseY + Math.sin(b.a + spread) * len)
-        .closePath();
-    }
+    // deux faisceaux par tour, depuis les lampes (haut de l'illustration)
+    const len = this.l.vh * 1.1;
+    const spread = 0.08;
+    this.towers.forEach((tw, i) => {
+      const h = tw.texture.height * tw.scale.y;
+      const ox = tw.x;
+      const oy = tw.y - h * 0.93;
+      const base = i === 0 ? -1.2 : -1.94;
+      for (let j = 0; j < 2; j++) {
+        const a = base + (j - 0.5) * 0.3 + Math.sin(this.t / (2600 + j * 500) + i * 1.7 + j) * 0.28;
+        g.moveTo(ox, oy)
+          .lineTo(ox + Math.cos(a - spread) * len, oy + Math.sin(a - spread) * len)
+          .lineTo(ox + Math.cos(a + spread) * len, oy + Math.sin(a + spread) * len)
+          .closePath();
+      }
+    });
     g.fill({ color: this.gold > 0.5 ? 0xffd27a : 0xffb35c, alpha: 0.13 * this.night });
   }
 
@@ -316,7 +345,48 @@ export class Decor {
   }
 
   private rareEvent(): void {
-    this.onRareEvent?.(Math.floor(rand() * 3));
+    const kind = Math.floor(rand() * 3);
+    if (kind === 0 || !this.onRareEvent) this.launchFlock();
+    else this.onRareEvent(kind);
+  }
+
+  /** vol d'oies en V qui traverse le ciel (3 poses d'ailes ImageGen en boucle) */
+  launchFlock(): void {
+    const l = this.l;
+    if (!l || !this.birdFrames.length || this.flock.length) return;
+    const n = 3 + Math.floor(rand() * 3);
+    const dir = rand() < 0.5 ? 1 : -1;
+    const size = Math.min(l.vw, l.vh) * 0.045;
+    const y0 = l.vh * (0.08 + rand() * 0.14);
+    for (let i = 0; i < n; i++) {
+      const s = new Sprite(this.birdFrames[0]);
+      s.anchor.set(0.5);
+      const k = (size * (0.85 + rand() * 0.3)) / (s.texture.height || 1);
+      s.scale.set(dir * k, k);
+      const rank = Math.ceil(i / 2) * (i % 2 ? 1 : -1);
+      s.x = dir > 0 ? -size * 2 - Math.abs(rank) * size * 1.4 : l.vw + size * 2 + Math.abs(rank) * size * 1.4;
+      s.y = y0 + rank * size * 0.9;
+      s.tint = this.night > 0.5 ? 0x5a6a86 : 0xffffff;
+      this.birdsLayer.addChild(s);
+      this.flock.push({ s, vx: dir * l.vw * (0.07 + rand() * 0.01), vy: -l.vh * 0.004, phase: rand() * 3, rate: 7 + rand() * 2 });
+    }
+  }
+
+  private updateFlock(dt: number): void {
+    if (!this.flock.length || !this.l) return;
+    const vw = this.l.vw;
+    const keep: typeof this.flock = [];
+    for (const b of this.flock) {
+      b.s.x += (b.vx * dt) / 1000;
+      b.s.y += (b.vy * dt) / 1000;
+      b.phase += (b.rate * dt) / 1000;
+      const f = Math.floor(b.phase) % 4; // 0 1 2 1
+      b.s.texture = this.birdFrames[f === 3 ? 1 : f] ?? b.s.texture;
+      const out = b.vx > 0 ? b.s.x > vw + 200 : b.s.x < -200;
+      if (out) b.s.destroy();
+      else keep.push(b);
+    }
+    this.flock = keep;
   }
 
   /** branché par la scène (oiseaux, explosion lointaine, étincelles) */

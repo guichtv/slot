@@ -20,7 +20,7 @@ export interface CelebrationHooks {
   coins(intensity: number): void;
 }
 
-function assetUrl(key: string): string | null {
+export function assetUrl(key: string): string | null {
   const e = entry(key);
   return e ? e.url : null;
 }
@@ -97,9 +97,13 @@ export class Overlays {
   }
 
   /** dialogue centré dans la zone de jeu, au-dessus des commandes ; fermé par un clic n'importe où */
-  async dialog(kind: 'intro' | 'outro', opts: { title: string; big?: string; rule?: string; spins?: string; art?: string | null; variant?: string }, beat: Beat, onClose?: (el: HTMLElement) => gsap.core.Timeline | void): Promise<void> {
-    const panel = h('div', { class: `ovl-dialog ovl-${kind} ${opts.variant ?? ''}`, role: 'dialog', 'aria-modal': 'true', 'aria-label': opts.title, tabindex: '-1' });
-    if (opts.art) panel.style.backgroundImage = `url(${opts.art})`;
+  async dialog(kind: 'intro' | 'outro', opts: { title: string; big?: string; rule?: string; spins?: string; art?: string | null; artKey?: string; variant?: string }, beat: Beat, onClose?: (el: HTMLElement) => gsap.core.Timeline | void): Promise<void> {
+    const panel = h('div', { class: `ovl-dialog ovl-${kind} ${opts.variant ?? ''}${opts.art ? ' has-art' : ''}`, role: 'dialog', 'aria-modal': 'true', 'aria-label': opts.title, tabindex: '-1' });
+    if (opts.art) {
+      panel.style.backgroundImage = `url(${opts.art})`;
+      const e = opts.artKey ? entry(opts.artKey) : undefined;
+      if (e) panel.style.aspectRatio = `${e.w} / ${e.h}`;
+    }
     panel.append(h('div', { class: 'ovl-title' }, opts.title));
     if (opts.spins) panel.append(h('div', { class: 'ovl-spins' }, opts.spins));
     if (opts.big) panel.append(h('div', { class: 'ovl-big' }, opts.big));
@@ -136,9 +140,13 @@ export class Overlays {
     for (let i = 0; i < tiers.length; i++) if (x >= (tiers[i] as number)) reached = i;
     const box = h('div', { class: `ovl-celebrate${maxWin ? ' is-max' : ''}`, role: 'status' });
     const title = h('div', { class: 'ovl-cel-title' });
+    const banner = h('div', { class: 'ovl-cel-banner' }, title);
+    const bannerUrl = assetUrl('scr.banner');
+    if (bannerUrl) banner.style.backgroundImage = `url(${bannerUrl})`;
     const value = h('div', { class: 'ovl-cel-value' });
-    box.append(title, value);
-    const veil = h('div', { class: 'ovl-veil soft' });
+    box.append(banner, value);
+    // la scène gère l'assombrissement (décor seul) quand elle est branchée ; sinon voile HTML léger
+    const veil = h('div', { class: `ovl-veil soft${this.celebration ? ' none' : ''}` });
     this.layer.append(veil, box);
     this.celebration?.onStart(maxWin);
     const state = { shown: 0, tier: -1 };

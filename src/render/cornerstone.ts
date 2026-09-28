@@ -73,7 +73,13 @@ export class Cornerstone {
     this.value = v;
     this.text.text = v > 0 ? `×${v}` : '';
     this.text.tint = this.tint(v);
-    if (this.stone) this.stone.tint = this.tint(v);
+    if (this.stone) {
+      // matière : granit, puis bloc veiné d'or (illustration dédiée) à partir de ×250
+      const gold = v >= 250 && hasTex('ui.cornerstoneGold');
+      const key = gold ? 'ui.cornerstoneGold' : hasTex('ui.cornerstone') ? 'ui.cornerstone' : null;
+      if (key && this.stone.texture !== tex(key)) this.stone.texture = tex(key);
+      this.stone.tint = gold ? (v >= 1000 ? 0xffe9a8 : 0xffffff) : this.tint(v);
+    }
   }
 
   /** éclats qui volent de la zone sculptée jusqu'au bloc (la valeur change à leur arrivée) */

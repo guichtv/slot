@@ -1,6 +1,7 @@
 import './ui/theme.css';
 import './ui/hud.css';
 import './ui/overlays.css';
+import './ui/welcome.css';
 import { gsap } from 'gsap';
 import { clock } from './core/clock';
 import { Beat } from './core/beat';
@@ -14,7 +15,9 @@ import { Scene } from './render/scene';
 import { Cornerstone } from './render/cornerstone';
 import { Buck } from './render/mascot/Buck';
 import { Hud } from './ui/hud';
-import { Overlays } from './ui/overlays';
+import { Overlays, assetUrl } from './ui/overlays';
+import { CelebrationFx } from './render/celebration';
+import { showWelcome, welcomeSkipped } from './ui/welcome';
 import { GamePresenter, type Stage } from './controller/presenter';
 import { GameController } from './controller/game';
 import { DemoProvider, type Fixture } from './provider/DemoProvider';
@@ -121,6 +124,10 @@ async function boot(): Promise<void> {
     ante: () => undefined,
   });
   ui.append(overlays.root, hud.root);
+  const celebration = new CelebrationFx(scene, buck);
+  celebration.reducedMotion = buck.reducedMotion;
+  scene.overlay.addChild(celebration.view);
+  overlays.celebration = celebration;
   scene.onLayout((l) => {
     hud.layout(l);
     overlays.setLayout(l);
@@ -159,11 +166,12 @@ async function boot(): Promise<void> {
         else cornerstone.setValue(v);
       },
       bonusIntro: async (kind, spins, beat) => {
-        await overlays.dialog('intro', { title: t(`bonus.${kind}.name`), spins: t('bonus.spins', { n: spins }), rule: t(`bonus.${kind}.rule`), variant: kind }, beat);
+        const artKey = kind === 'super' ? 'scr.floodlight' : 'scr.sundown';
+        await overlays.dialog('intro', { title: t(`bonus.${kind}.name`), spins: t('bonus.spins', { n: spins }), rule: t(`bonus.${kind}.rule`), variant: kind, art: assetUrl(artKey), artKey }, beat);
       },
       bonusOutro: async (total, beat) => {
         const { formatMoney } = await import('./core/money');
-        await overlays.dialog('outro', { title: t('bonus.end'), big: formatMoney(total) }, beat);
+        await overlays.dialog('outro', { title: t('bonus.end'), big: formatMoney(total), art: assetUrl('scr.total'), artKey: 'scr.total' }, beat);
       },
       celebrate: (amount, bet, beat, max) => {
         sfx('tier');
@@ -210,18 +218,33 @@ async function boot(): Promise<void> {
     if (e.clientX >= l.grid.x && e.clientX <= l.grid.x + l.grid.w && e.clientY >= l.grid.y && e.clientY <= l.grid.y + l.grid.h) game.skipPresentation();
   });
 
-  game.fsm.go('welcome');
-  game.fsm.go('entering');
-  game.fsm.go('ready');
-  const loader = document.getElementById('loader');
-  loader?.classList.add('done');
-  window.setTimeout(() => loader?.remove(), 500);
-
   if (__DEV_TOOLS__) {
     const dev = await import('./dev/qa');
     dev.installQa({ scene, game, provider, presenter, clock, params, math: math(), T, gsap });
   }
   clock.start();
+  const loader = document.getElementById('loader');
+  loader?.classList.add('done');
+  window.setTimeout(() => loader?.remove(), 500);
+
+  // accueil (cartes) puis entrée thématique : Buck balaie la scène, la caméra recule, le logo sursaute
+  game.fsm.go('welcome');
+  const forceWelcome = new URLSearchParams(location.search).has('welcome');
+  const skipWelcome = !forceWelcome && (params.dev.skipIntro || params.dev.qa || welcomeSkipped());
+  const enter = () => {
+    const beat = new Beat();
+    void buck.perform('introSwipe', beat);
+    scene.logo.thump(1.2);
+    if (!buck.reducedMotion) {
+      const l = scene.layout;
+      scene.camera.zoomTo(1.06, l.grid.x + l.grid.w / 2, l.grid.y + l.grid.h / 2, 0).progress(1);
+      scene.camera.reset(0.9);
+    }
+  };
+  if (!skipWelcome) await showWelcome(ui, { maxWinX: math().maxWinX, onDismissStart: enter });
+  else enter();
+  game.fsm.go('entering');
+  game.fsm.go('ready');
 }
 
 boot().catch((e) => {

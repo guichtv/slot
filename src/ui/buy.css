@@ -47,11 +47,12 @@
   white-space: nowrap;
 }
 
+/* au-dessus de l'ombre de confirmation : X ferme toujours vers le jeu */
 .bm-board > .cf-close {
   position: absolute;
   top: -12px;
   right: -10px;
-  z-index: 3;
+  z-index: 6;
 }
 
 .bm-notice {
@@ -290,11 +291,11 @@
 @container bmarea (max-height: 560px) {
   .bm-board { gap: 4px; padding: 0 12px 10px; }
   .bm-cards { gap: 8px; padding: 6px 2px 4px; }
-  .bm-card { gap: 3px; padding: 5px 4px 6px; }
+  .bm-card { gap: 3px; padding: 5px 3px 6px; }
   .bm-visual { aspect-ratio: 5 / 2; }
   .bm-name { font-size: clamp(13px, 10cqi, 16px); }
   .bm-line { font-size: clamp(10.5px, 8cqi, 13px); }
-  .bm-price { --bh: 32px; }
+  .bm-price { --bh: 32px; padding-inline: 4px; }
   .bm-confirm .bm-visual { aspect-ratio: 16 / 10; width: min(160px, 56%); }
 }
 @container bmarea (max-height: 560px) and (min-width: 440px) {

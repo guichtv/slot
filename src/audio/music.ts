@@ -11,6 +11,9 @@ import { audio } from './engine';
  * - 'super' : nuit sous projecteurs (112 BPM, mi mineur) : basse en croches, toms graves type taiko,
  *             coups de cuivres, banjo en doubles-croches en fond.
  *
+ * Synthèse : cordes pincées par Karplus-Strong, percussions et cuivres calculés une fois en JavaScript dans des
+ * tampons (coût CPU divisé par deux), nappes / sifflet / harmonica en oscillateurs temps réel. Voir docs/AUDIO.md.
+ *
  * Ordonnancement : horloge AudioContext, planificateur « lookahead » (setInterval 25 ms, 0,12 s d'avance),
  * jamais de setTimeout par note. La forme est générée par sections A/B/C de 4 à 8 mesures avec breaks
  * (fills) en fin de section et variations tirées d'un générateur à graine : jamais 16 mesures identiques.
@@ -1434,14 +1437,18 @@ export class Music {
   setMood(m: Mood): void {
     if (m === this.mood) return;
     this.mood = m;
-    if (!this.running || this.paused || !audio.ctx) return;
-    const now = audio.ctx.currentTime;
+    if (!this.running || this.paused || !audio.ctx) return; // en pause : appliqué à la reprise
+    this.crossfadeTo(m, audio.ctx.currentTime + 0.06);
+    this.pump();
+  }
+
+  private crossfadeTo(m: Mood, after: number): void {
     const live = this.tracks.filter((tr) => tr.endAt === null);
     const lead = live[live.length - 1];
-    const t0 = lead ? lead.clock.nextBeat(now + 0.06) : now + 0.06;
+    if (lead && lead.mood === m && live.length === 1) return;
+    const t0 = lead ? lead.clock.nextBeat(after) : after;
     for (const tr of live) tr.fadeOut(t0, CROSSFADE_S);
     this.addTrack(m, t0, CROSSFADE_S);
-    this.pump();
   }
 
   /** arrêt en fondu */
@@ -1471,6 +1478,7 @@ export class Music {
     } else {
       g.linearRampToValueAtTime(OUT_LEVEL, t + 0.6);
       for (const tr of this.tracks) tr.clock.rebase(tr.clock.nextBeat(t + 0.08));
+      if (this.running) this.crossfadeTo(this.mood, t + 0.08); // humeur changée pendant la pause
       this.ensureTimer();
     }
   }

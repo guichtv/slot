@@ -255,6 +255,8 @@ describe('music scheduler', () => {
     expect(violations).toBe(0);
     expect(tracks().map((t) => t.mood)).toEqual(['super']);
     expect(music.currentMood).toBe('super');
+    music.setMood('super'); // même humeur : aucun changement
+    expect(tracks().length).toBe(1);
     music.pause(true);
     const paused = stats.starts.length;
     for (let k = 0; k < 40; k++) {
@@ -262,10 +264,16 @@ describe('music scheduler', () => {
       music.pump();
     }
     expect(stats.starts.length).toBe(paused);
+    music.setMood('base'); // changée pendant la pause : appliquée à la reprise
     music.pause(false);
     ctx.currentTime += 0.5;
     music.pump();
     expect(stats.starts.length).toBeGreaterThan(paused);
+    for (let k = 0; k < 120; k++) {
+      ctx.currentTime += 0.025;
+      music.pump();
+    }
+    expect(tracks().map((t) => t.mood)).toEqual(['base']);
     music.stop(500);
     for (let k = 0; k < 60; k++) {
       ctx.currentTime += 0.025;

@@ -69,6 +69,35 @@ function normalizeAlpha(buf, hi = 250, lo = 3) {
   }
 }
 
+/** intérieur plein : tout pixel non relié au bord de l'image par des pixels transparents devient opaque
+ *  (panneaux dont le modèle a laissé un centre à demi transparent ; la couleur est conservée) */
+function solidInterior(buf, threshold = 24) {
+  const { width: W, height: H, data } = buf;
+  const outside = new Uint8Array(W * H);
+  const stack = [];
+  const push = (x, y) => {
+    const i = y * W + x;
+    if (outside[i] || data[i * 4 + 3] > threshold) return;
+    outside[i] = 1;
+    stack.push(i);
+  };
+  for (let x = 0; x < W; x++) { push(x, 0); push(x, H - 1); }
+  for (let y = 0; y < H; y++) { push(0, y); push(W - 1, y); }
+  while (stack.length) {
+    const i = stack.pop();
+    const x = i % W, y = (i - x) / W;
+    if (x > 0) push(x - 1, y);
+    if (x < W - 1) push(x + 1, y);
+    if (y > 0) push(x, y - 1);
+    if (y < H - 1) push(x, y + 1);
+  }
+  let filled = 0;
+  for (let i = 0; i < W * H; i++) {
+    if (!outside[i] && data[i * 4 + 3] < 255) { data[i * 4 + 3] = 255; filled++; }
+  }
+  return filled;
+}
+
 function bbox(buf, threshold = 8, rect = null) {
   const { width, height, data } = buf;
   const x0 = rect ? rect.x : 0, y0 = rect ? rect.y : 0;
@@ -186,6 +215,7 @@ async function processAsset(key, spec) {
   if (!spec.opaque) {
     if (!hasUsefulAlpha(buf)) chromaKey(buf);
     normalizeAlpha(buf);
+    if (spec.solidInterior) solidInterior(buf);
   }
   const outputs = [];
   if (spec.split && spec.split.rects) {
