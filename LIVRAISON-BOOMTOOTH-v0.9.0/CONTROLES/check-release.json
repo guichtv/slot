@@ -1,0 +1,219 @@
+{
+  "dir": "/home/user/slot/dist",
+  "generatedAt": "2026-09-28T13:36:34.293Z",
+  "stake": false,
+  "result": "ok",
+  "stakeBlocked": false,
+  "sections": [
+    {
+      "id": "a",
+      "title": "Config maths (game-math-config.json)",
+      "status": "avertissement",
+      "items": [
+        {
+          "level": "avertissement",
+          "msg": "BLOQUANT pour Stake : provisional=true (valeurs de maths provisoires) — relancer avec --stake pour en faire une erreur"
+        },
+        {
+          "level": "info",
+          "msg": "modes : BASE 1×, ANTE 1.5×, BONUS 100×, SUPER 350×, BLAST 25×, MEGA 60× ; gain max 25000×"
+        }
+      ]
+    },
+    {
+      "id": "b",
+      "title": "Traces d'outils de dev",
+      "status": "ok",
+      "items": []
+    },
+    {
+      "id": "c",
+      "title": "Manifeste des assets",
+      "status": "ok",
+      "items": [
+        {
+          "level": "info",
+          "msg": "127 entrées vérifiées"
+        }
+      ]
+    },
+    {
+      "id": "d",
+      "title": "URL externes et polices",
+      "status": "avertissement",
+      "items": [
+        {
+          "level": "avertissement",
+          "msg": "assets/gsap-xgxdCp6f.js : https://gsap.com — tolérée (message d'avertissement GSAP), aucune requête",
+          "file": "assets/gsap-xgxdCp6f.js",
+          "url": "https://gsap.com",
+          "count": 1,
+          "context": "?ni(y):oe(\"GSAP target \"+i+\" not found. https://gsap.com\",!nt.nullTargetWarn)||[",
+          "kind": "tolérée (message d'avertissement GSAP)"
+        },
+        {
+          "level": "avertissement",
+          "msg": "assets/pixi-C3lUAt3c.js : http://www.pixijs.com/ ×2 — tolérée (bannière console PixiJS), aucune requête",
+          "file": "assets/pixi-C3lUAt3c.js",
+          "url": "http://www.pixijs.com/",
+          "count": 2,
+          "context": " %c %c %c %c PixiJS %c v${Dr} (${r}) http://www.pixijs.com/ `,\"background: #",
+          "kind": "tolérée (bannière console PixiJS)"
+        }
+      ]
+    },
+    {
+      "id": "e",
+      "title": "Mots interdits (locales et JS livrés)",
+      "status": "ok",
+      "items": [
+        {
+          "level": "info",
+          "msg": "17 locale(s) : ar.json, da.json, de.json, en.json, es.json, fi.json, fr.json, hi.json, id.json, ja.json, ko.json, pl.json, pt.json, ru.json, tr.json, vi.json, zh.json"
+        },
+        {
+          "level": "info",
+          "msg": "assets/index-UJfDe0LB.js : 2 terme(s) du dictionnaire social ignoré(s)"
+        }
+      ]
+    },
+    {
+      "id": "f",
+      "title": "Mode social (dictionnaire de social.ts sur en.json)",
+      "status": "ok",
+      "items": [
+        {
+          "level": "info",
+          "msg": "150 chaînes, 19 transformée(s), 37 termes au dictionnaire"
+        }
+      ]
+    },
+    {
+      "id": "g",
+      "title": "Poids de la build",
+      "status": "ok",
+      "items": [
+        {
+          "level": "info",
+          "msg": "total 10.66 Mo en 237 fichiers",
+          "totalBytes": 11181414,
+          "files": 237
+        },
+        {
+          "level": "info",
+          "msg": "par type : .webp 7.46 Mo, .woff2 1.49 Mo, .js 1.08 Mo, .json 440.5 Ko, .css 119.9 Ko, .png 61.1 Ko, .txt 29.9 Ko, .html 1.2 Ko",
+          "byExt": {
+            ".png": 62595,
+            ".js": 1132518,
+            ".webp": 7817412,
+            ".css": 122729,
+            ".json": 451097,
+            ".txt": 30585,
+            ".woff2": 1563260,
+            ".html": 1218
+          }
+        },
+        {
+          "level": "info",
+          "msg": "  623.7 Ko  assets/pixi-C3lUAt3c.js"
+        },
+        {
+          "level": "info",
+          "msg": "  413.7 Ko  assets/index-UJfDe0LB.js"
+        },
+        {
+          "level": "info",
+          "msg": "  406.3 Ko  assets/identity/id.tile.webp"
+        },
+        {
+          "level": "info",
+          "msg": "  398.2 Ko  fixtures/fixtures.json"
+        },
+        {
+          "level": "info",
+          "msg": "  380.2 Ko  assets/identity/id.cover.webp"
+        },
+        {
+          "level": "info",
+          "msg": "  379.0 Ko  assets/decor/decor.portrait.webp"
+        },
+        {
+          "level": "info",
+          "msg": "  216.0 Ko  assets/decor/decor.mid.webp"
+        },
+        {
+          "level": "info",
+          "msg": "  169.8 Ko  assets/symbols/sym.S.body.webp"
+        },
+        {
+          "level": "info",
+          "msg": "  162.7 Ko  assets/identity/id.card.detonator.webp"
+        },
+        {
+          "level": "info",
+          "msg": "  152.0 Ko  assets/decor/decor.monument.0.webp"
+        }
+      ]
+    }
+  ],
+  "weights": {
+    "totalBytes": 11181414,
+    "count": 237,
+    "byExt": {
+      ".png": 62595,
+      ".js": 1132518,
+      ".webp": 7817412,
+      ".css": 122729,
+      ".json": 451097,
+      ".txt": 30585,
+      ".woff2": 1563260,
+      ".html": 1218
+    },
+    "top": [
+      {
+        "file": "assets/pixi-C3lUAt3c.js",
+        "bytes": 638620
+      },
+      {
+        "file": "assets/index-UJfDe0LB.js",
+        "bytes": 423612
+      },
+      {
+        "file": "assets/identity/id.tile.webp",
+        "bytes": 416066
+      },
+      {
+        "file": "fixtures/fixtures.json",
+        "bytes": 407731
+      },
+      {
+        "file": "assets/identity/id.cover.webp",
+        "bytes": 389366
+      },
+      {
+        "file": "assets/decor/decor.portrait.webp",
+        "bytes": 388102
+      },
+      {
+        "file": "assets/decor/decor.mid.webp",
+        "bytes": 221158
+      },
+      {
+        "file": "assets/symbols/sym.S.body.webp",
+        "bytes": 173904
+      },
+      {
+        "file": "assets/identity/id.card.detonator.webp",
+        "bytes": 166624
+      },
+      {
+        "file": "assets/decor/decor.monument.0.webp",
+        "bytes": 155694
+      }
+    ]
+  },
+  "counts": {
+    "failures": 0,
+    "warnings": 3
+  }
+}

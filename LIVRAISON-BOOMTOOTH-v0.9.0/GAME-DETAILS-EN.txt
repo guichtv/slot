@@ -1,0 +1,47 @@
+BOOMTOOTH - GAME DETAILS
+========================
+
+Game ............ BOOMTOOTH
+Studio .......... Crownforge
+Front-end build . v0.9.0 (2026-09-28)
+Math status ..... PROVISIONAL - costs and values below are placeholders until the maths team delivers the final configuration
+Platforms ....... desktop, tablet, mobile portrait and landscape (HTML5, WebGL)
+Languages ....... ar, da, de, en, es, fi, fr, hi, id, ja, ko, pl, pt, ru, tr, vi, zh; social mode (social=true) supported
+
+GRID AND PAYS
+- 5×5 grid, 3,125 ways. Wins pay left to right from the leftmost reel, same symbol on 3 or more adjacent reels.
+- Tumbles: winning cells crumble, survivors fall and new symbols drop in. The sequence goes on as long as there is a win or a charge.
+- Symbols: 4 premium (Blaster raccoon, Burly moose, Surveyor otter, Driller woodpecker), 4 low (Hard hat, Pickaxe,
+  Storm lantern, Canteen), WILD (substitutes for every paying symbol, with its own values) and SCATTER (at most one
+  per reel, never destroyed by a blast).
+
+BLAST & CARVE
+- TNT charges blast before wins are counted, each clearing a square zone: stick 2×2, bundle 3×3, keg 4×4.
+- A charge caught in a blast zone goes off too. The whole chain is carved into ONE giant symbol (any paying symbol,
+  WILD included) filling the area, up to 5×5, that counts on every cell it covers.
+
+FREE SPINS
+- SUNDOWN SHIFT: 3 Scatters award 10 free spins. Cornerstone multiplier: every carved cell adds +1;
+  it applies to every bonus win and never goes down.
+  Retrigger: 3 Scatters, +5 free spins.
+- FLOODLIGHT SHIFT: 4 Scatters award 12 free spins. All charges in a spin are wired together into one
+  single blast; the Cornerstone multiplier grows the same way.
+  Retrigger: 3 Scatters, +5 free spins.
+
+FEATURES
+- BLAST (TNT SPIN): one spin with at least two charges that chain.
+- MEGA (MEGA BLAST SPIN): one spin with a 4×4 keg charge that carves a premium symbol or a WILD.
+- Ante DOUBLE FUSE: each spin costs 1.5× the bet with 3× the chance to trigger a bonus.
+  Bonus buys are not available while the Ante is on.
+
+MODES AND COSTS (game-math-config.json, cost in × base bet)
+  BASE          1×   Base game spin
+  ANTE        1.5×   Ante bet DOUBLE FUSE (3× bonus chance)
+  BONUS       100×   Bonus buy: SUNDOWN SHIFT, 10 free spins
+  SUPER       350×   Bonus buy: FLOODLIGHT SHIFT, 12 free spins
+  BLAST        25×   Feature spin BLAST: one spin with 2+ chained charges
+  MEGA         60×   Feature spin MEGA: one spin with a 4×4 keg charge
+
+MAX WIN ......... 25,000× the bet (the round ends as soon as it is reached)
+Win tiers ....... 10×, 25×, 100×, 500×, 1,000×
+RTP ............. provided by the maths team

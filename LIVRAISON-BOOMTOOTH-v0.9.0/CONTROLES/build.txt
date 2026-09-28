@@ -1,0 +1,20 @@
+
+> crownforge-slot@0.9.0 build
+> vite build --mode production
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 812 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         1.22 kB │ gzip:   0.55 kB
+dist/assets/index--CmwWMbE.css        122.73 kB │ gzip:  31.64 kB
+dist/assets/webworkerAll-CPSBZCKk.js    0.08 kB │ gzip:   0.09 kB
+dist/assets/browserAll-DziVAjJ-.js      0.17 kB │ gzip:   0.15 kB
+dist/assets/gsap-xgxdCp6f.js           70.04 kB │ gzip:  27.53 kB
+dist/assets/index-UJfDe0LB.js         423.61 kB │ gzip: 132.28 kB
+dist/assets/pixi-C3lUAt3c.js          638.62 kB │ gzip: 184.20 kB
+✓ built in 5.39s
+[plugin vite:reporter] 
+(!) /home/user/slot/src/core/money.ts is dynamically imported by /home/user/slot/src/main.ts but also statically imported by /home/user/slot/src/controller/game.ts, /home/user/slot/src/controller/presenter.ts, /home/user/slot/src/main.ts, /home/user/slot/src/provider/DemoProvider.ts, /home/user/slot/src/ui/ante.ts, /home/user/slot/src/ui/buy.ts, /home/user/slot/src/ui/hud.ts, /home/user/slot/src/ui/menu.ts, /home/user/slot/src/ui/overlays.ts, dynamic import will not move module into another chunk.
+

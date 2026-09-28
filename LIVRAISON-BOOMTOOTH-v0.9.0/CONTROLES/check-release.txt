@@ -1,0 +1,29 @@
+check-release — dist (237 fichiers, 10.66 Mo)
+[a] Config maths (game-math-config.json)................ AVERTISSEMENT
+    ! BLOQUANT pour Stake : provisional=true (valeurs de maths provisoires) — relancer avec --stake pour en faire une erreur
+[b] Traces d'outils de dev.............................. OK
+[c] Manifeste des assets................................ OK
+    · 127 entrées vérifiées
+[d] URL externes et polices............................. AVERTISSEMENT
+    ! assets/gsap-xgxdCp6f.js : https://gsap.com — tolérée (message d'avertissement GSAP), aucune requête
+    ! assets/pixi-C3lUAt3c.js : http://www.pixijs.com/ ×2 — tolérée (bannière console PixiJS), aucune requête
+[e] Mots interdits (locales et JS livrés)............... OK
+    · 17 locale(s) : ar.json, da.json, de.json, en.json, es.json, fi.json, fr.json, hi.json, id.json, ja.json, ko.json, pl.json, pt.json, ru.json, tr.json, vi.json, zh.json
+    · assets/index-UJfDe0LB.js : 2 terme(s) du dictionnaire social ignoré(s)
+[f] Mode social (dictionnaire de social.ts sur en.json). OK
+    · 150 chaînes, 19 transformée(s), 37 termes au dictionnaire
+[g] Poids de la build................................... OK
+    · total 10.66 Mo en 237 fichiers
+    · par type : .webp 7.46 Mo, .woff2 1.49 Mo, .js 1.08 Mo, .json 440.5 Ko, .css 119.9 Ko, .png 61.1 Ko, .txt 29.9 Ko, .html 1.2 Ko
+    ·   623.7 Ko  assets/pixi-C3lUAt3c.js
+    ·   413.7 Ko  assets/index-UJfDe0LB.js
+    ·   406.3 Ko  assets/identity/id.tile.webp
+    ·   398.2 Ko  fixtures/fixtures.json
+    ·   380.2 Ko  assets/identity/id.cover.webp
+    ·   379.0 Ko  assets/decor/decor.portrait.webp
+    ·   216.0 Ko  assets/decor/decor.mid.webp
+    ·   169.8 Ko  assets/symbols/sym.S.body.webp
+    ·   162.7 Ko  assets/identity/id.card.detonator.webp
+    ·   152.0 Ko  assets/decor/decor.monument.0.webp
+Résultat : OK (0 échec(s), 3 avertissement(s))
+JSON : /tmp/boomtooth-pkg-7fmf2E/check-release.json

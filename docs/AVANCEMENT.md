@@ -21,6 +21,11 @@ Mis à jour le 28/09/2026. Branche `claude/funny-lamport-2y5sp6`.
 | **Outils QA** | Horloge virtuelle `?qa`, `shot.mjs`, `record.mjs` (vidéo), `hud-check.mjs`, `ui-states.mjs`, `check-release.mjs`, `package-delivery.mjs`, `serve-stable.mjs`, `LANCER-BOOMTOOTH.cmd` |
 | **Docs** | CONCEPT, ART-DIRECTION, ARCHITECTURE, CONTRAT-EVENTS, ANIMATIONS, AUDIO, IMAGEGEN, ASSETS, UI-FLOWS, VERIFICATION, DECISIONS, AVANCEMENT |
 
+## Livraison
+
+- **`LIVRAISON-BOOMTOOTH-v0.9.0/`** : FRONTEND (build de production), zip (237 fichiers, `index.html` à la racine), MEDIA (couverture, vignette, logo, décors BG/FG, 3 vidéos 1280×720), CONTROLES, GAME-DETAILS-EN.txt, LIRE-AVANT-IMPORT.md, SHA256SUMS (vérifiées).
+- **Build figée** : `LANCER-BOOMTOOTH.cmd` (Windows) ou `npm run serve-stable` → http://127.0.0.1:5320/?v=0.9.0
+
 ## Bloquant externe
 
 - **Maths définitives** : `public/game-math-config.json` porte `provisional: true` ; l'import Stake reste bloqué (`check-release --stake` → code 2) jusqu'à la config et aux books de l'équipe maths.

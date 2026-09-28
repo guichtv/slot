@@ -1,0 +1,31 @@
+
+ RUN  v3.2.7 /home/user/slot
+
+ ✓ tests/rgs-provider.test.ts (20 tests) 646ms
+ ✓ tests/rgs-client.test.ts (28 tests) 928ms
+   ✓ erreurs > délai dépassé : TIMEOUT incertain sur un pari, certain ailleurs  311ms
+ ✓ tests/i18n-locales.test.ts (121 tests) 431ms
+ ✓ tests/audio-render.test.ts (10 tests) 390ms
+ ✓ tests/audio-ambience.test.ts (7 tests) 334ms
+ ✓ tests/fixtures.test.ts (44 tests) 124ms
+ ✓ tests/social.test.ts (3 tests) 43ms
+ ✓ tests/ui-i18n.test.ts (5 tests) 155ms
+ ✓ tests/money.test.ts (3 tests) 20ms
+ ✓ tests/ui-menu.test.ts (9 tests) 25ms
+ ✓ tests/ui-dialogs.test.ts (5 tests) 10ms
+ ✓ tests/beat.test.ts (4 tests) 8ms
+ ✓ tests/ui-ante.test.ts (3 tests) 14ms
+ ✓ tests/fsm.test.ts (3 tests) 4ms
+ ✓ tests/ui-buy.test.ts (9 tests) 6ms
+ ✓ tests/audio-music.test.ts (20 tests) 7110ms
+   ✓ composer > never repeats the same 8 bars (so never loops identically for more than 16 bars)  387ms
+   ✓ composer > events are well formed  1213ms
+   ✓ karplus-strong > produces a decaying, bounded string tone at the requested pitch  2069ms
+   ✓ pre-rendered voices > drums are finite, bounded, and die out cleanly  1584ms
+   ✓ pre-rendered voices > brass notes attack then sustain at a steady, modest level  1403ms
+
+ Test Files  16 passed (16)
+      Tests  294 passed (294)
+   Start at  13:36:35
+   Duration  7.75s (transform 1.40s, setup 0ms, collect 3.87s, tests 10.25s, environment 4ms, prepare 1.45s)
+
