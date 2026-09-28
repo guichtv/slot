@@ -6,22 +6,1620 @@
  L3  H4  H2  L2  L3 
  H3  L4  H1  H2  L4 
 
-==== F02 (BASE) petit gain H4 sur 3 rouleaux
+==== F02 (BASE) petit gain L1 sur 4 rouleaux, 2 ways (x0,50)
 -- F02 reveal
- H4  L2  H3  L4  H1 
- H2  L3  H4  L1  L2 
- L4  H4  L2  H2  S  
- L3  H1  L1  L2  L3 
- H3  L4  H1  H2  L4 
--- F02 wins H4x3=25
-[H4] L2  H3  L4  H1 
- H2  L3 [H4] L1  L2 
- L4 [H4] L2  H2  S  
- L3  H1  L1  L2  L3 
- H3  L4  H1  H2  L4 
+ H2  S   L1  L1  L4 
+ L1  H1  H2  L3  H3 
+ H2  L2  H1  H4  L3 
+ H4  H1  L2  L1  H3 
+ H2  L1  L3  L4  L2 
+-- F02 wins L1x4=50
+ H2  S  [L1][L1] L4 
+[L1] H1  H2  L3  H3 
+ H2  L2  H1  H4  L3 
+ H4  H1  L2 [L1] H3 
+ H2 [L1] L3  L4  L2 
 -- F02 tumble
- L2  L1  H3  L4  H1 
- H2  L2  H3  L1  L2 
- L4  L3  L2  H2  S  
- L3  H1  L1  L2  L3 
- H3  L4  H1  H2  L4 
+ L3  L2  L2  L2  L4 
+ H2  S   H2  L2  H3 
+ H2  H1  H1  L3  L3 
+ H4  L2  L2  H4  H3 
+ H2  H1  L3  L4  L2 
+
+==== F03 (BASE) trois connexions à la fois : H2, L1, L4
+-- F03 reveal
+ H2  L4  H2  H3  H1 
+ L1  H1  L1  L1  L3 
+ H3  H2  H2  L2  H2 
+ L4  L1  L4  H4  L2 
+ S   L2  H4  L3  H4 
+-- F03 wins H2x3=80 L1x4=25 L4x3=5
+[H2][L4][H2] H3  H1 
+[L1] H1 [L1][L1] L3 
+ H3 [H2][H2] L2  H2 
+[L4][L1][L4] H4  L2 
+ S   L2  H4  L3  H4 
+-- F03 tumble
+ L3  L4  L2  H1  H1 
+ L1  H2  H1  H3  L3 
+ H4  L4  L3  L2  H2 
+ H3  H1  H3  H4  L2 
+ S   L2  H4  L3  H4 
+
+==== F04 (BASE) raton H1 sur 5 rouleaux (x5)
+-- F04 reveal
+ L3  L2  H4  L1  H1 
+ H1  L4  H1  L3  L2 
+ H2  H3  L2  H1  H4 
+ L1  H1  L3  H2  L3 
+ H4  L4  S   L4  H3 
+-- F04 wins H1x5=500
+ L3  L2  H4  L1 [H1]
+[H1] L4 [H1] L3  L2 
+ H2  H3  L2 [H1] H4 
+ L1 [H1] L3  H2  L3 
+ H4  L4  S   L4  H3 
+-- F04 tumble
+ L1  H3  H2  H1  L1 
+ L3  L2  H4  L1  L2 
+ H2  L4  L2  L3  H4 
+ L1  H3  L3  H2  L3 
+ H4  L4  S   L4  H3 
+
+==== F05 (BASE) élan H2 sur 4 rouleaux, 2 ways (x2)
+-- F05 reveal
+ L1  L4  H2  L3  L4 
+ H2  L2  L4  H4  H1 
+ L3  H2  S   L2  H3 
+ H2  H3  L1  H2  L2 
+ H4  H1  H3  L1  L3 
+-- F05 wins H2x4=200
+ L1  L4 [H2] L3  L4 
+[H2] L2  L4  H4  H1 
+ L3 [H2] S   L2  H3 
+[H2] H3  L1 [H2] L2 
+ H4  H1  H3  L1  L3 
+-- F05 tumble
+ H2  L2  H4  H1  L4 
+ L1  L4  L4  L3  H1 
+ L1  L2  S   H4  H3 
+ L3  H3  L1  L2  L2 
+ H4  H1  H3  L1  L3 
+
+==== F06 (BASE) loutre H3 sur 3 rouleaux, 3 ways (x0,90)
+-- F06 reveal
+ L2  H3  L3  H1  L3 
+ H3  L1  H3  L4  H2 
+ L4  H3  H4  L2  L1 
+ H1  H2  L1  H4  L4 
+ L2  H3  S   L1  H4 
+-- F06 wins H3x3=90
+ L2 [H3] L3  H1  L3 
+[H3] L1 [H3] L4  H2 
+ L4 [H3] H4  L2  L1 
+ H1  H2  L1  H4  L4 
+ L2 [H3] S   L1  H4 
+-- F06 tumble
+ L4  L3  H2  H1  L3 
+ L2  H4  L3  L4  H2 
+ L4  L1  H4  L2  L1 
+ H1  L1  L1  H4  L4 
+ L2  H2  S   L1  H4 
+
+==== F07 (BASE) pic-vert H4 sur 4 rouleaux, 2 ways (x1,20)
+-- F07 reveal
+ L1  H4  L2  H4  L3 
+ H3  L3  H4  L1  H2 
+ H4  H1  L3  H2  L1 
+ L2  H4  S   L4  H1 
+ L1  L4  H2  H3  L4 
+-- F07 wins H4x4=120
+ L1 [H4] L2 [H4] L3 
+ H3  L3 [H4] L1  H2 
+[H4] H1  L3  H2  L1 
+ L2 [H4] S   L4  H1 
+ L1  L4  H2  H3  L4 
+-- F07 tumble
+ H2  L4  L1  H1  L3 
+ L1  H1  L2  L1  H2 
+ H3  L3  L3  H2  L1 
+ L2  H1  S   L4  H1 
+ L1  L4  H2  H3  L4 
+
+==== F08 (BASE) réaction en chaîne : L2, H4, H1 (3 chutes)
+-- F08 reveal
+ H2  L4  L2  H2  L3 
+ L2  H3  H1  L3  H1 
+ L3  L2  L4  H4  L4 
+ H4  H1  L1  L4  H3 
+ L1  S   H3  L1  H2 
+-- F08 wins L2x3=10
+ H2  L4 [L2] H2  L3 
+[L2] H3  H1  L3  H1 
+ L3 [L2] L4  H4  L4 
+ H4  H1  L1  L4  H3 
+ L1  S   H3  L1  H2 
+-- F08 tumble
+ H4  H4  H4  H2  L3 
+ H2  L4  H1  L3  H1 
+ L3  H3  L4  H4  L4 
+ H4  H1  L1  L4  H3 
+ L1  S   H3  L1  H2 
+-- F08 wins H4x4=120
+[H4][H4][H4] H2  L3 
+ H2  L4  H1  L3  H1 
+ L3  H3  L4 [H4] L4 
+[H4] H1  L1  L4  H3 
+ L1  S   H3  L1  H2 
+-- F08 tumble
+ H1  L2  H2  L2  L3 
+ H1  L4  H1  H2  H1 
+ H2  H3  L4  L3  L4 
+ L3  H1  L1  L4  H3 
+ L1  S   H3  L1  H2 
+-- F08 wins H1x3=100
+[H1] L2  H2  L2  L3 
+[H1] L4 [H1] H2  H1 
+ H2  H3  L4  L3  L4 
+ L3 [H1] L1  L4  H3 
+ L1  S   H3  L1  H2 
+-- F08 tumble
+ H4  H1  L3  L2  L3 
+ L1  L2  H2  H2  H1 
+ H2  L4  L4  L3  L4 
+ L3  H3  L1  L4  H3 
+ L1  S   H3  L1  H2 
+
+==== F09 (BASE) bâton de TNT -> géant H2 2x2 sur les rouleaux 1-2
+-- F09 reveal
+ H4  H4  L2  L4  L1 
+ L4  H4  L1  L4  H2 
+ H2  H3  H1  H4  H3 
+ T   L4  H2  L1  H4 
+ L1  H1  L3  L1  H4 
+-- F09 blast stick @0,3 -> H2 2x2
+ H4  H4  L2  L4  L1 
+ L4  H4  L1  L4  H2 
+ H2  H2  H1  H4  H3 
+ H2  H2  H2  L1  H4 
+ L1  H1  L3  L1  H4 
+-- F09 wins H2x3=160
+ H4  H4  L2  L4  L1 
+ L4  H4  L1  L4  H2 
+[H2][H2] H1  H4  H3 
+[H2][H2][H2] L1  H4 
+ L1  H1  L3  L1  H4 
+-- F09 tumble
+ L3  H3  L1  L4  L1 
+ H3  L2  L2  L4  H2 
+ H4  H4  L1  H4  H3 
+ L4  H4  H1  L1  H4 
+ L1  H1  L3  L1  H4 
+
+==== F10 (BASE) fagot de TNT -> géant H1 3x3, 27 ways (x13,50)
+-- F10 reveal
+ L2  H3  L3  H2  L1 
+ L1  L4  H2  L3  H3 
+ H2  T   L1  L4  H1 
+ L3  H4  L4  L1  L4 
+ H4  L2  S   H4  L3 
+-- F10 blast bundle @1,2 -> H1 3x3
+ L2  H3  L3  H2  L1 
+ H1  H1  H1  L3  H3 
+ H1  H1  H1  L4  H1 
+ H1  H1  H1  L1  L4 
+ H4  L2  S   H4  L3 
+-- F10 wins H1x3=1350
+ L2  H3  L3  H2  L1 
+[H1][H1][H1] L3  H3 
+[H1][H1][H1] L4  H1 
+[H1][H1][H1] L1  L4 
+ H4  L2  S   H4  L3 
+-- F10 tumble
+ L1  H2  H2  H2  L1 
+ H3  L3  L1  L3  H3 
+ L4  H2  H4  L4  H1 
+ L2  H3  L3  L1  L4 
+ H4  L2  S   H4  L3 
+
+==== F11 (BASE) deux bâtons dans la même étape, puis un bâton tombe pendant la chute
+-- F11 reveal
+ L2  T   H4  L4  H1 
+ H4  L1  L3  H2  L3 
+ L4  H1  L1  L3  H2 
+ T   H2  S   L2  L2 
+ L3  L1  H2  L1  L4 
+-- F11 blast stick @1,0 -> H3 2x2
+ L2  H3  H3  L4  H1 
+ H4  H3  H3  H2  L3 
+ L4  H1  L1  L3  H2 
+ T   H2  S   L2  L2 
+ L3  L1  H2  L1  L4 
+-- F11 blast stick @0,3 -> H3 2x2
+ L2  H3  H3  L4  H1 
+ H4  H3  H3  H2  L3 
+ L4  H1  L1  L3  H2 
+ H3  H3  S   L2  L2 
+ H3  H3  H2  L1  L4 
+-- F11 wins H3x3=480
+ L2 [H3][H3] L4  H1 
+ H4 [H3][H3] H2  L3 
+ L4  H1  L1  L3  H2 
+[H3][H3] S   L2  L2 
+[H3][H3] H2  L1  L4 
+-- F11 tumble
+ L3  L1  T   L4  H1 
+ H2  H4  L4  H2  L3 
+ L2  H1  L1  L3  H2 
+ H4  L1  S   L2  L2 
+ L4  H1  H2  L1  L4 
+-- F11 blast stick @2,0 -> H4 2x2
+ L3  L1  H4  H4  H1 
+ H2  H4  H4  H4  L3 
+ L2  H1  L1  L3  H2 
+ H4  L1  S   L2  L2 
+ L4  H1  H2  L1  L4 
+-- F11 wins H4x4=240
+ L3  L1 [H4][H4] H1 
+ H2 [H4][H4][H4] L3 
+ L2  H1  L1  L3  H2 
+[H4] L1  S   L2  L2 
+ L4  H1  H2  L1  L4 
+-- F11 tumble
+ H4  H3  L3  H1  H1 
+ L3  L1  H3  L4  L3 
+ H2  H1  L1  L3  H2 
+ L2  L1  S   L2  L2 
+ L4  H1  H2  L1  L4 
+
+==== F12 (BASE) bâton -> géant WILD 2x2 qui relie H2 et L4
+-- F12 reveal
+ L4  L3  H1  L2  H3 
+ H2  H2  L1  L3  L1 
+ H2  T   L3  H4  L3 
+ S   L1  H3  L1  H2 
+ L4  H4  L2  H1  H4 
+-- F12 blast stick @1,2 -> W 2x2
+ L4  L3  H1  L2  H3 
+ H2  H2  L1  L3  L1 
+ H2  W   W   H4  L3 
+ S   W   W   L1  H2 
+ L4  H4  L2  H1  H4 
+-- F12 wins H2x3=480 L4x3=40
+[L4] L3  H1  L2  H3 
+[H2][H2] L1  L3  L1 
+[H2][W ][W ] H4  L3 
+ S  [W ][W ] L1  H2 
+[L4] H4  L2  H1  H4 
+-- F12 tumble
+ H1  L4  H3  L2  H3 
+ L2  H2  L3  L3  L1 
+ L1  L4  H1  H4  L3 
+ H3  L3  L1  L1  H2 
+ S   H4  L2  H1  H4 
+
+==== F13 (BASE) anticipation ratée : 2 Scatters, rouleaux 4-5 ralentis, pas de 3e
+-- F13 reveal
+ H3  L2  L4  H1  L3 
+ S   H1  H2  L4  H2 
+ L1  L3  L2  H4  L1 
+ H2  H4  S   L3  H4 
+ L4  H1  H3  L1  L2 
+
+==== F14 (BASE) anticipation réussie -> bonus standard : explosions, multiplicateur x6, relance +5 (15 FS)
+-- F14 reveal
+ L2  H3  S   L4  H2 
+ H4  L1  L3  H3  L4 
+ S   H2  H1  L1  L3 
+ L3  L4  L2  H4  S  
+ H1  L1  H4  L2  H3 
+-- F14 reveal
+ H4  L2  L4  L1  L1 
+ L3  L3  L4  H3  L1 
+ L4  L3  L1  H1  H1 
+ L4  L1  H2  S   H4 
+ H4  H3  L4  L4  L4 
+-- F14 reveal
+ H4  H1  L2  H4  L4 
+ L1  H3  L3  H4  H3 
+ H3  L4  H1  L3  H4 
+ L3  L3  T   L1  H2 
+ L1  L1  L4  H2  L1 
+-- F14 blast stick @2,3 -> H3 2x2
+ H4  H1  L2  H4  L4 
+ L1  H3  L3  H4  H3 
+ H3  H3  H3  L3  H4 
+ L3  H3  H3  L1  H2 
+ L1  L1  L4  H2  L1 
+-- F14 wins H3x3=360
+ H4  H1  L2  H4  L4 
+ L1 [H3] L3  H4  H3 
+[H3][H3][H3] L3  H4 
+ L3 [H3][H3] L1  H2 
+ L1  L1  L4  H2  L1 
+-- F14 tumble
+ L1  H4  L4  H4  L4 
+ H4  L2  L3  H4  H3 
+ L1  L4  L2  L3  H4 
+ L3  H1  L3  L1  H2 
+ L1  L1  L4  H2  L1 
+-- F14 reveal
+ L1  H4  H4  L3  L2 
+ L1  L4  H4  L3  L2 
+ L1  L4  L2  H2  L1 
+ H1  H4  L3  L2  H4 
+ L2  L3  L2  H2  H3 
+-- F14 reveal
+ H1  H1  L4  H2  H4 
+ L1  H2  L2  H2  L2 
+ L3  H4  L2  L3  L4 
+ S   L2  L2  H3  H2 
+ L2  L4  H4  H2  L1 
+-- F14 wins L2x3=60
+ H1  H1  L4  H2  H4 
+ L1  H2 [L2] H2  L2 
+ L3  H4 [L2] L3  L4 
+ S  [L2][L2] H3  H2 
+[L2] L4  H4  H2  L1 
+-- F14 tumble
+ H2  H1  L1  H2  H4 
+ H1  H1  H3  H2  L2 
+ L1  H2  L2  L3  L4 
+ L3  H4  L4  H3  H2 
+ S   L4  H4  H2  L1 
+-- F14 reveal
+ H4  H2  L2  H1  H3 
+ L3  L4  L3  L3  H2 
+ L3  H4  H3  L4  L2 
+ L2  L3  H4  L3  S  
+ H3  H4  T   L2  H3 
+-- F14 blast bundle @2,4 -> H4 3x3
+ H4  H2  L2  H1  H3 
+ L3  L4  L3  L3  H2 
+ H4  H4  H4  L4  L2 
+ H4  H4  H4  L3  S  
+ H4  H4  H4  L2  H3 
+-- F14 wins H4x3=2700
+[H4] H2  L2  H1  H3 
+ L3  L4  L3  L3  H2 
+[H4][H4][H4] L4  L2 
+[H4][H4][H4] L3  S  
+[H4][H4][H4] L2  H3 
+-- F14 tumble
+ L3  H4  L1  H1  H3 
+ L3  L4  L2  L3  H2 
+ L2  H4  L4  L4  L2 
+ H3  H2  L2  L3  S  
+ L3  L4  L3  L2  H3 
+-- F14 reveal
+ L2  L1  L3  L4  L1 
+ H2  L2  H4  H3  H1 
+ L3  L1  H2  L1  L3 
+ L3  H1  L3  H2  L3 
+ L4  S   S   S   L4 
+-- F14 reveal
+ L3  H1  H1  H2  L2 
+ L4  L2  L1  L2  H4 
+ S   L2  L2  L2  H4 
+ L4  L2  L3  L2  H4 
+ L3  H4  H2  L3  L3 
+-- F14 reveal
+ H4  H3  L2  H3  L2 
+ L2  H4  H2  T   H1 
+ L1  H2  H3  L2  L4 
+ H1  H2  L2  L4  H4 
+ L1  L3  H2  H3  L2 
+-- F14 blast stick @3,1 -> H1 2x2
+ H4  H3  L2  H3  L2 
+ L2  H4  H2  H1  H1 
+ L1  H2  H3  H1  H1 
+ H1  H2  L2  L4  H4 
+ L1  L3  H2  H3  L2 
+-- F14 reveal
+ H3  H1  S   L3  H4 
+ H1  H1  H4  H2  H2 
+ H3  H1  L3  L3  L2 
+ L4  L2  H1  L3  H1 
+ H2  L1  L1  L2  L1 
+-- F14 wins H1x3=600
+ H3 [H1] S   L3  H4 
+[H1][H1] H4  H2  H2 
+ H3 [H1] L3  L3  L2 
+ L4  L2 [H1] L3  H1 
+ H2  L1  L1  L2  L1 
+-- F14 tumble
+ H3  L4  L4  L3  H4 
+ H3  L3  S   H2  H2 
+ H3  L2  H4  L3  L2 
+ L4  L2  L3  L3  H1 
+ H2  L1  L1  L2  L1 
+-- F14 wins L4x3=20
+ H3 [L4][L4] L3  H4 
+ H3  L3  S   H2  H2 
+ H3  L2  H4  L3  L2 
+[L4] L2  L3  L3  H1 
+ H2  L1  L1  L2  L1 
+-- F14 tumble
+ H1  L2  L3  L3  H4 
+ H3  L3  S   H2  H2 
+ H3  L2  H4  L3  L2 
+ H3  L2  L3  L3  H1 
+ H2  L1  L1  L2  L1 
+-- F14 reveal
+ L4  H1  L4  L3  L3 
+ T   L4  L3  H1  H2 
+ L1  H2  L1  H3  L1 
+ L2  H1  H2  L1  L1 
+ L1  T   H1  L2  H2 
+-- F14 blast stick @0,1 -> H2 2x2
+ H2  H2  L4  L3  L3 
+ H2  H2  L3  H1  H2 
+ L1  H2  L1  H3  L1 
+ L2  H1  H2  L1  L1 
+ L1  T   H1  L2  H2 
+-- F14 blast stick @1,4 -> H2 2x2
+ H2  H2  L4  L3  L3 
+ H2  H2  L3  H1  H2 
+ L1  H2  L1  H3  L1 
+ L2  H2  H2  L1  L1 
+ L1  H2  H2  L2  H2 
+-- F14 wins H2x3=4800
+[H2][H2] L4  L3  L3 
+[H2][H2] L3  H1  H2 
+ L1 [H2] L1  H3  L1 
+ L2 [H2][H2] L1  L1 
+ L1 [H2][H2] L2  H2 
+-- F14 tumble
+ L2  L4  L3  L3  L3 
+ H4  H4  L4  H1  H2 
+ L1  H2  L4  H3  L1 
+ L2  L3  L3  L1  L1 
+ L1  H1  L1  L2  H2 
+-- F14 reveal
+ H3  L2  L2  L2  H4 
+ H4  H2  L1  L4  L1 
+ L1  H4  L3  H3  S  
+ H2  H1  L4  H4  L1 
+ H2  L3  L1  L3  H3 
+-- F14 reveal
+ L2  L4  L1  L3  L1 
+ L4  L2  L3  L1  L2 
+ H1  L1  L3  L3  L2 
+ H4  H4  H2  H4  L4 
+ H2  L4  H4  L1  H3 
+-- F14 wins H4x4=360
+ L2  L4  L1  L3  L1 
+ L4  L2  L3  L1  L2 
+ H1  L1  L3  L3  L2 
+[H4][H4] H2 [H4] L4 
+ H2  L4 [H4] L1  H3 
+-- F14 tumble
+ L2  L1  L1  L2  L1 
+ L2  L4  L1  L3  L2 
+ L4  L2  L3  L1  L2 
+ H1  L1  L3  L3  L4 
+ H2  L4  H2  L1  H3 
+-- F14 reveal
+ H1  L4  L3  L2  L2 
+ L2  L1  L1  H2  H2 
+ L4  L4  L3  L4  L3 
+ H2  L1  H2  L2  H2 
+ L2  H4  L1  L3  H4 
+-- F14 reveal
+ L3  H2  H2  L2  H1 
+ L4  H1  L3  L1  L3 
+ L1  H1  L1  H2  H1 
+ L4  L2  H4  H3  L2 
+ H4  L3  H2  S   L4 
+-- F14 wins L3x3=30
+[L3] H2  H2  L2  H1 
+ L4  H1 [L3] L1  L3 
+ L1  H1  L1  H2  H1 
+ L4  L2  H4  H3  L2 
+ H4 [L3] H2  S   L4 
+-- F14 tumble
+ L3  L3  H3  L2  H1 
+ L4  H2  H2  L1  L3 
+ L1  H1  L1  H2  H1 
+ L4  H1  H4  H3  L2 
+ H4  L2  H2  S   L4 
+-- F14 reveal
+ H2  H4  L2  L1  L2 
+ L3  H3  H4  L2  L2 
+ L2  H3  H1  H1  H2 
+ H2  S   L3  L1  L1 
+ L4  L4  L2  L1  L1 
+
+==== F15 (BASE) déclenchement du super bonus (4 Scatters), 12 FS : fagots et caisse, multiplicateur x5, anticipation ratée au 10e tour
+-- F15 reveal
+ L2  H4  L1  S   H3 
+ S   L1  H2  L3  L4 
+ H3  L3  L4  H1  S  
+ L4  S   H3  L2  L1 
+ H1  H2  L2  H4  L3 
+-- F15 reveal
+ L1  H2  S   L4  L2 
+ L4  L1  H4  L1  L1 
+ H1  L4  H4  H3  L4 
+ H4  L1  L3  H3  L1 
+ H2  H3  L2  L2  H2 
+-- F15 reveal
+ L2  L4  L2  L1  L3 
+ L4  L1  H4  L3  L1 
+ H3  H2  H2  L3  H3 
+ H3  T   L3  L4  L3 
+ H4  H1  L2  L4  H4 
+-- F15 blast bundle @1,3 -> H2 3x3
+ L2  L4  L2  L1  L3 
+ H2  H2  H2  L3  L1 
+ H2  H2  H2  L3  H3 
+ H2  H2  H2  L4  L3 
+ H4  H1  L2  L4  H4 
+-- F15 wins H2x3=2160
+ L2  L4  L2  L1  L3 
+[H2][H2][H2] L3  L1 
+[H2][H2][H2] L3  H3 
+[H2][H2][H2] L4  L3 
+ H4  H1  L2  L4  H4 
+-- F15 tumble
+ L3  L4  H3  L1  L3 
+ L3  L1  L3  L3  L1 
+ H1  H3  L1  L3  H3 
+ L2  L4  L2  L4  L3 
+ H4  H1  L2  L4  H4 
+-- F15 reveal
+ L4  L2  L1  L2  H3 
+ L1  L4  L2  L4  L2 
+ H4  L4  L3  L1  H2 
+ L4  H2  H4  L2  L2 
+ L4  L2  L2  H3  L1 
+-- F15 reveal
+ H2  L1  L3  H3  L3 
+ H4  L1  L3  L3  H3 
+ L1  H4  L1  H2  L1 
+ L3  L2  H3  H3  S  
+ H1  L2  L3  L2  L4 
+-- F15 wins L1x3=40
+ H2 [L1] L3  H3  L3 
+ H4 [L1] L3  L3  H3 
+[L1] H4 [L1] H2  L1 
+ L3  L2  H3  H3  S  
+ H1  L2  L3  L2  L4 
+-- F15 tumble
+ L2  H3  H1  H3  L3 
+ H2  H3  L3  L3  H3 
+ H4  H4  L3  H2  L1 
+ L3  L2  H3  H3  S  
+ H1  L2  L3  L2  L4 
+-- F15 reveal
+ L1  H1  L4  S   H2 
+ H4  L1  L2  L4  H1 
+ L3  H3  H1  L3  L1 
+ H2  L1  H4  L2  L4 
+ L4  L2  L2  L2  L2 
+-- F15 reveal
+ H3  L2  H1  L1  L1 
+ L1  L1  L1  L4  H1 
+ L4  L3  T   L4  H3 
+ L1  H1  H4  L3  L4 
+ H2  L3  L3  L3  L1 
+-- F15 blast crate @2,2 -> L3 4x4
+ H3  L2  H1  L1  L1 
+ L3  L3  L3  L3  H1 
+ L3  L3  L3  L3  H3 
+ L3  L3  L3  L3  L4 
+ L3  L3  L3  L3  L1 
+-- F15 wins L3x4=11520
+ H3  L2  H1  L1  L1 
+[L3][L3][L3][L3] H1 
+[L3][L3][L3][L3] H3 
+[L3][L3][L3][L3] L4 
+[L3][L3][L3][L3] L1 
+-- F15 tumble
+ H3  L4  L4  L4  L1 
+ L3  L4  L2  L1  H1 
+ H2  L2  L2  H4  H3 
+ H2  L1  L1  L2  L4 
+ H3  L2  H1  L1  L1 
+-- F15 reveal
+ S   L4  L4  L3  L4 
+ L3  L4  H3  L4  L2 
+ H2  H2  H4  L3  H2 
+ H1  L1  L1  L3  H1 
+ L2  L1  L4  H1  L4 
+-- F15 reveal
+ L4  L2  H4  L3  L3 
+ L2  S   L4  L4  H3 
+ L3  H2  T   L3  L1 
+ L3  L3  H1  L4  H1 
+ H2  H4  L4  H3  L2 
+-- F15 blast bundle @2,2 -> H1 3x3
+ L4  L2  H1  H1  H1 
+ L2  S   H1  H1  H1 
+ L3  H2  H1  H1  H1 
+ L3  L3  H1  L4  H1 
+ H2  H4  L4  H3  L2 
+-- F15 reveal
+ L3  L1  L4  H4  L1 
+ H1  L3  H1  L1  L2 
+ H3  L1  L2  H4  L1 
+ L2  H3  H3  L4  H1 
+ H3  L4  L4  H1  L2 
+-- F15 wins H3x3=240
+ L3  L1  L4  H4  L1 
+ H1  L3  H1  L1  L2 
+[H3] L1  L2  H4  L1 
+ L2 [H3][H3] L4  H1 
+[H3] L4  L4  H1  L2 
+-- F15 tumble
+ H2  L2  H2  H4  L1 
+ L2  L1  L4  L1  L2 
+ L3  L3  H1  H4  L1 
+ H1  L1  L2  L4  H1 
+ L2  L4  L4  H1  L2 
+-- F15 wins L2x3=80
+ H2 [L2] H2  H4  L1 
+[L2] L1  L4  L1  L2 
+ L3  L3  H1  H4  L1 
+ H1  L1 [L2] L4  H1 
+[L2] L4  L4  H1  L2 
+-- F15 tumble
+ L2  L1  L2  H4  L1 
+ L1  L1  H2  L1  L2 
+ H2  L3  L4  H4  L1 
+ L3  L1  H1  L4  H1 
+ H1  L4  L4  H1  L2 
+-- F15 reveal
+ L4  S   H2  H3  L1 
+ L4  H4  L4  H1  H1 
+ H3  H3  L3  H4  L4 
+ L3  L2  L1  L2  H3 
+ S   L1  L2  L1  L3 
+-- F15 reveal
+ H4  L1  H3  H3  L4 
+ H3  L1  L1  H4  H4 
+ L4  H2  H1  H1  H1 
+ H4  L3  L1  H1  H1 
+ H1  L1  T   L3  L2 
+-- F15 blast bundle @2,4 -> H3 3x3
+ H4  L1  H3  H3  L4 
+ H3  L1  L1  H4  H4 
+ L4  H3  H3  H3  H1 
+ H4  H3  H3  H3  H1 
+ H1  H3  H3  H3  L2 
+-- F15 wins H3x4=18000
+ H4  L1 [H3][H3] L4 
+[H3] L1  L1  H4  H4 
+ L4 [H3][H3][H3] H1 
+ H4 [H3][H3][H3] H1 
+ H1 [H3][H3][H3] L2 
+-- F15 tumble
+ L4  L2  L4  H1  L4 
+ H4  L3  L1  L1  H4 
+ L4  L3  H4  L2  H1 
+ H4  L1  L1  H3  H1 
+ H1  L1  L1  H4  L2 
+-- F15 reveal
+ L2  H1  L3  L4  L3 
+ H2  H1  L2  H2  L3 
+ L4  L3  L1  H1  L4 
+ L4  L3  H4  H4  H4 
+ L4  H2  H3  L2  L1 
+
+==== F16 (BONUS) achat bonus : 3 Scatters, 10 FS complets, multiplicateur x5
+-- F16 reveal
+ H2  L3  S   L4  H1 
+ L4  H1  L1  H3  L2 
+ S   L2  H4  L1  H2 
+ L1  H4  L2  H1  L3 
+ H3  L3  H2  S   L4 
+-- F16 reveal
+ H3  L1  L4  H1  L2 
+ L2  L1  L1  L4  L1 
+ H4  L1  L1  L4  H3 
+ H2  S   L4  H2  L4 
+ L4  H1  H3  L2  L1 
+-- F16 reveal
+ L4  H1  L1  H1  L2 
+ L2  H2  H3  H2  L1 
+ H4  L3  H4  H2  L1 
+ H1  H1  H2  L1  L4 
+ H2  L3  L2  L4  H3 
+-- F16 wins H2x4=200
+ L4  H1  L1  H1  L2 
+ L2 [H2] H3 [H2] L1 
+ H4  L3  H4 [H2] L1 
+ H1  H1 [H2] L1  L4 
+[H2] L3  L2  L4  H3 
+-- F16 tumble
+ H2  H2  H3  L3  L2 
+ L4  H1  L1  H2  L1 
+ L2  L3  H3  H1  L1 
+ H4  H1  H4  L1  L4 
+ H1  L3  L2  L4  H3 
+-- F16 reveal
+ S   L3  T   L3  H3 
+ H4  L2  H1  L1  L3 
+ L3  H2  H2  H2  L4 
+ H1  L1  L2  L1  L2 
+ L2  H4  L3  L3  L1 
+-- F16 blast stick @2,0 -> H4 2x2
+ S   H4  H4  L3  H3 
+ H4  H4  H4  L1  L3 
+ L3  H2  H2  H2  L4 
+ H1  L1  L2  L1  L2 
+ L2  H4  L3  L3  L1 
+-- F16 wins H4x3=300
+ S  [H4][H4] L3  H3 
+[H4][H4][H4] L1  L3 
+ L3  H2  H2  H2  L4 
+ H1  L1  L2  L1  L2 
+ L2 [H4] L3  L3  L1 
+-- F16 tumble
+ H1  H4  H4  L3  H3 
+ S   L4  L2  L1  L3 
+ L3  L1  H2  H2  L4 
+ H1  H2  L2  L1  L2 
+ L2  L1  L3  L3  L1 
+-- F16 reveal
+ H1  L4  H4  L3  L2 
+ L1  L2  L2  L2  H3 
+ H4  L3  L3  H1  L4 
+ H1  H2  L4  L2  L2 
+ L1  L3  H3  H3  H2 
+-- F16 reveal
+ H3  L4  L1  L4  L2 
+ H3  H1  H3  H2  L1 
+ L1  H4  L1  L3  L4 
+ H1  H4  H2  H1  L1 
+ H1  L4  S   L4  H3 
+-- F16 reveal
+ T   L4  H1  H2  H3 
+ L3  H1  L4  L1  L3 
+ L2  H3  L3  H3  L1 
+ L4  H2  L1  H2  H2 
+ H2  H2  L4  H4  L4 
+-- F16 blast bundle @0,0 -> H1 3x3
+ H1  H1  H1  H2  H3 
+ H1  H1  H1  L1  L3 
+ H1  H1  H1  H3  L1 
+ L4  H2  L1  H2  H2 
+ H2  H2  L4  H4  L4 
+-- F16 wins H1x3=4050
+[H1][H1][H1] H2  H3 
+[H1][H1][H1] L1  L3 
+[H1][H1][H1] H3  L1 
+ L4  H2  L1  H2  H2 
+ H2  H2  L4  H4  L4 
+-- F16 tumble
+ L1  H2  H3  H2  H3 
+ L4  H3  H1  L1  L3 
+ L2  H1  L2  H3  L1 
+ L4  H2  L1  H2  H2 
+ H2  H2  L4  H4  L4 
+-- F16 reveal
+ L1  L2  H1  L2  S  
+ H1  L3  L4  L2  L4 
+ H3  L2  L4  L3  L2 
+ H3  L3  L1  L3  L4 
+ H2  L4  L1  L1  H4 
+-- F16 reveal
+ L3  L2  H3  H1  L3 
+ H3  H2  H1  L1  L3 
+ L4  L4  L1  L2  L1 
+ H2  L2  L4  L3  H1 
+ L2  L3  L1  L2  L3 
+-- F16 wins L4x3=15
+ L3  L2  H3  H1  L3 
+ H3  H2  H1  L1  L3 
+[L4][L4] L1  L2  L1 
+ H2  L2 [L4] L3  H1 
+ L2  L3  L1  L2  L3 
+-- F16 tumble
+ H3  H3  H4  H1  L3 
+ L3  L2  H3  L1  L3 
+ H3  H2  H1  L2  L1 
+ H2  L2  L1  L3  H1 
+ L2  L3  L1  L2  L3 
+-- F16 wins H3x3=180
+[H3][H3] H4  H1  L3 
+ L3  L2 [H3] L1  L3 
+[H3] H2  H1  L2  L1 
+ H2  L2  L1  L3  H1 
+ L2  L3  L1  L2  L3 
+-- F16 tumble
+ L4  L4  H1  H1  L3 
+ L1  L2  H4  L1  L3 
+ L3  H2  H1  L2  L1 
+ H2  L2  L1  L3  H1 
+ L2  L3  L1  L2  L3 
+-- F16 reveal
+ L2  L2  H4  H2  L4 
+ H2  T   L4  L3  L1 
+ H1  H3  L3  H2  L3 
+ T   H2  L1  L1  H4 
+ L1  H2  H2  H4  L3 
+-- F16 blast stick @0,3 -> L2 2x2
+ L2  L2  H4  H2  L4 
+ H2  T   L4  L3  L1 
+ H1  H3  L3  H2  L3 
+ L2  L2  L1  L1  H4 
+ L2  L2  H2  H4  L3 
+-- F16 blast stick @1,1 -> L2 2x2
+ L2  L2  L2  H2  L4 
+ H2  L2  L2  L3  L1 
+ H1  H3  L3  H2  L3 
+ L2  L2  L1  L1  H4 
+ L2  L2  H2  H4  L3 
+-- F16 wins L2x3=1200
+[L2][L2][L2] H2  L4 
+ H2 [L2][L2] L3  L1 
+ H1  H3  L3  H2  L3 
+[L2][L2] L1  L1  H4 
+[L2][L2] H2  H4  L3 
+-- F16 tumble
+ H2  L4  H4  H2  L4 
+ L2  L1  L4  L3  L1 
+ H1  L3  L3  H2  L3 
+ H2  H4  L1  L1  H4 
+ H1  H3  H2  H4  L3 
+-- F16 reveal
+ L3  L2  L3  L3  H3 
+ H1  L2  L1  L3  L1 
+ H1  L2  H2  H3  H4 
+ L2  H1  H1  L3  L2 
+ L4  L1  H4  S   L3 
+-- F16 wins H1x3=500
+ L3  L2  L3  L3  H3 
+[H1] L2  L1  L3  L1 
+[H1] L2  H2  H3  H4 
+ L2 [H1][H1] L3  L2 
+ L4  L1  H4  S   L3 
+-- F16 tumble
+ L2  H4  L4  L3  H3 
+ H1  L2  L3  L3  L1 
+ L3  L2  L1  H3  H4 
+ L2  L2  H2  L3  L2 
+ L4  L1  H4  S   L3 
+
+==== F17 (SUPER) achat super bonus : 4 Scatters, 12 FS, fagots et caisse, multiplicateur x5
+-- F17 reveal
+ H1  L1  L4  S   L3 
+ L3  S   H2  H1  H4 
+ L2  H3  L1  L3  H2 
+ S   L4  H4  L2  L1 
+ H4  H2  S   L1  L4 
+-- F17 reveal
+ L1  L4  L2  L4  H3 
+ L2  L2  L3  H3  L2 
+ H2  L1  L3  L3  H4 
+ L2  L4  L3  L4  L1 
+ L1  L1  S   L4  L2 
+-- F17 wins L2x3=20
+ L1  L4 [L2] L4  H3 
+[L2][L2] L3  H3  L2 
+ H2  L1  L3  L3  H4 
+[L2] L4  L3  L4  L1 
+ L1  L1  S   L4  L2 
+-- F17 tumble
+ L2  H4  H2  L4  H3 
+ H4  L4  L3  H3  L2 
+ L1  L1  L3  L3  H4 
+ H2  L4  L3  L4  L1 
+ L1  L1  S   L4  L2 
+-- F17 reveal
+ H2  H4  L2  L4  L3 
+ L1  H3  L2  L3  L2 
+ H2  L4  H1  L4  L3 
+ H4  H3  L4  H1  L4 
+ T   L3  L1  H1  H1 
+-- F17 blast bundle @0,4 -> H4 3x3
+ H2  H4  L2  L4  L3 
+ L1  H3  L2  L3  L2 
+ H4  H4  H4  L4  L3 
+ H4  H4  H4  H1  L4 
+ H4  H4  H4  H1  H1 
+-- F17 wins H4x3=1800
+ H2 [H4] L2  L4  L3 
+ L1  H3  L2  L3  L2 
+[H4][H4][H4] L4  L3 
+[H4][H4][H4] H1  L4 
+[H4][H4][H4] H1  H1 
+-- F17 tumble
+ L3  L3  L2  L4  L3 
+ L3  L2  H3  L3  L2 
+ L3  H4  L1  L4  L3 
+ H2  L2  L2  H1  L4 
+ L1  H3  L2  H1  H1 
+-- F17 reveal
+ H1  H3  L2  S   H4 
+ H1  L4  L1  L2  H3 
+ L2  L4  H3  H1  L4 
+ H4  H3  L4  H1  H3 
+ L1  H3  L1  H2  L2 
+-- F17 reveal
+ L3  L1  L2  L2  H1 
+ L3  L2  H2  H3  L4 
+ L4  L2  H3  H2  H1 
+ H4  L2  L1  H1  H4 
+ H3  L4  H2  T   L2 
+-- F17 blast bundle @3,4 -> H2 3x3
+ L3  L1  L2  L2  H1 
+ L3  L2  H2  H3  L4 
+ L4  L2  H2  H2  H2 
+ H4  L2  H2  H2  H2 
+ H3  L4  H2  H2  H2 
+-- F17 reveal
+ L3  H3  L3  L3  S  
+ L3  H3  L4  L1  L3 
+ H2  H4  H3  L3  L2 
+ L2  H2  L1  L4  L4 
+ H3  L1  L4  H3  L2 
+-- F17 wins H3x4=450
+ L3 [H3] L3  L3  S  
+ L3 [H3] L4  L1  L3 
+ H2  H4 [H3] L3  L2 
+ L2  H2  L1  L4  L4 
+[H3] L1  L4 [H3] L2 
+-- F17 tumble
+ L4  H1  H4  H1  S  
+ L3  L2  L3  L3  L3 
+ L3  H4  L4  L1  L2 
+ H2  H2  L1  L3  L4 
+ L2  L1  L4  L4  L2 
+-- F17 reveal
+ H4  H4  H3  H4  H1 
+ L4  L4  L3  L1  L2 
+ L4  H2  H1  L2  H2 
+ H4  L2  L2  H3  L4 
+ L1  H4  L3  H4  H3 
+-- F17 reveal
+ L3  L3  L2  H4  L4 
+ T   H4  L4  L4  H3 
+ H4  H2  L2  L2  L1 
+ L3  L4  L2  L3  L1 
+ L4  H1  L4  L1  L1 
+-- F17 blast crate @0,1 -> L2 4x4
+ L2  L2  L2  L2  L4 
+ L2  L2  L2  L2  H3 
+ L2  L2  L2  L2  L1 
+ L2  L2  L2  L2  L1 
+ L4  H1  L4  L1  L1 
+-- F17 wins L2x4=20480
+[L2][L2][L2][L2] L4 
+[L2][L2][L2][L2] H3 
+[L2][L2][L2][L2] L1 
+[L2][L2][L2][L2] L1 
+ L4  H1  L4  L1  L1 
+-- F17 tumble
+ L3  H4  L2  L2  L4 
+ H1  L3  L4  L3  H3 
+ H2  L1  H3  L4  L1 
+ H3  H4  L4  H4  L1 
+ L4  H1  L4  L1  L1 
+-- F17 reveal
+ L2  H2  H3  L4  L2 
+ S   H2  L3  L4  H1 
+ L2  H4  H2  L3  H4 
+ L1  H4  H4  L1  L3 
+ L1  L3  H3  H2  L3 
+-- F17 reveal
+ L1  L1  H4  H3  L2 
+ L2  H1  H1  L1  L3 
+ L1  L1  H1  L4  H2 
+ T   L2  H3  L2  L4 
+ L1  L3  L2  H2  L3 
+-- F17 blast bundle @0,3 -> H1 3x3
+ L1  L1  H4  H3  L2 
+ H1  H1  H1  L1  L3 
+ H1  H1  H1  L4  H2 
+ H1  H1  H1  L2  L4 
+ L1  L3  L2  H2  L3 
+-- F17 wins H1x3=6750
+ L1  L1  H4  H3  L2 
+[H1][H1][H1] L1  L3 
+[H1][H1][H1] L4  H2 
+[H1][H1][H1] L2  L4 
+ L1  L3  L2  H2  L3 
+-- F17 tumble
+ H2  L4  H1  H3  L2 
+ H2  L1  H2  L1  L3 
+ H4  L3  L3  L4  H2 
+ L1  L1  H4  L2  L4 
+ L1  L3  L2  H2  L3 
+-- F17 reveal
+ H2  L4  L4  L4  L3 
+ H4  L4  L1  H4  L2 
+ L3  S   L3  L4  L1 
+ L1  H4  L3  H1  L1 
+ H4  H2  H2  H1  L4 
+-- F17 wins H2x3=200
+[H2] L4  L4  L4  L3 
+ H4  L4  L1  H4  L2 
+ L3  S   L3  L4  L1 
+ L1  H4  L3  H1  L1 
+ H4 [H2][H2] H1  L4 
+-- F17 tumble
+ H2  L3  H2  L4  L3 
+ H4  L4  L4  H4  L2 
+ L3  L4  L1  L4  L1 
+ L1  S   L3  H1  L1 
+ H4  H4  L3  H1  L4 
+-- F17 wins L3x3=50
+ H2 [L3] H2  L4  L3 
+ H4  L4  L4  H4  L2 
+[L3] L4  L1  L4  L1 
+ L1  S  [L3] H1  L1 
+ H4  H4 [L3] H1  L4 
+-- F17 tumble
+ L2  L2  H1  L4  L3 
+ H2  L4  L4  H4  L2 
+ H4  L4  H2  L4  L1 
+ L1  S   L4  H1  L1 
+ H4  H4  L1  H1  L4 
+-- F17 reveal
+ H3  H2  H4  L4  L1 
+ L3  H1  S   H1  H1 
+ L4  L3  L1  L2  L2 
+ L2  H4  H3  L4  H3 
+ L4  L3  H2  L2  L1 
+-- F17 reveal
+ H4  L1  H4  L4  H4 
+ H2  H3  L2  L4  L2 
+ H2  L2  L2  L4  H2 
+ H4  L1  L2  L2  H3 
+ L4  L2  L3  H2  H2 
+
+==== F18 (BLAST) feature BLAST : bâton -> H1 2x2 + fagot -> L3 3x3, puis cascade H4
+-- F18 reveal
+ H1  T   H4  L4  H2 
+ L3  L4  L2  S   L1 
+ H1  L3  H2  H3  H4 
+ L2  H4  L1  T   L4 
+ H2  L3  H3  L2  H1 
+-- F18 blast stick @1,0 -> H1 2x2
+ H1  H1  H1  L4  H2 
+ L3  H1  H1  S   L1 
+ H1  L3  H2  H3  H4 
+ L2  H4  L1  T   L4 
+ H2  L3  H3  L2  H1 
+-- F18 blast bundle @3,3 -> L3 3x3
+ H1  H1  H1  L4  H2 
+ L3  H1  H1  S   L1 
+ H1  L3  L3  L3  L3 
+ L2  H4  L3  L3  L3 
+ H2  L3  L3  L3  L3 
+-- F18 wins H1x3=400 L3x5=2160
+[H1][H1][H1] L4  H2 
+[L3][H1][H1] S   L1 
+[H1][L3][L3][L3][L3]
+ L2  H4 [L3][L3][L3]
+ H2 [L3][L3][L3][L3]
+-- F18 tumble
+ H4  L2  H1  H1  L4 
+ L1  H3  H4  L2  H3 
+ H4  L4  L4  H3  L2 
+ L2  H3  H3  L4  H2 
+ H2  H4  L1  S   L1 
+-- F18 wins H4x3=50
+[H4] L2  H1  H1  L4 
+ L1  H3 [H4] L2  H3 
+[H4] L4  L4  H3  L2 
+ L2  H3  H3  L4  H2 
+ H2 [H4] L1  S   L1 
+-- F18 tumble
+ H1  L4  H2  H1  L4 
+ L1  L2  H1  L2  H3 
+ L1  H3  L4  H3  L2 
+ L2  L4  H3  L4  H2 
+ H2  H3  L1  S   L1 
+
+==== F19 (MEGA) feature MEGA : caisse 4x4 -> géant H4, 256 ways, puis H2
+-- F19 reveal
+ L1  H3  S   L2  H2 
+ H2  L2  H1  H3  L3 
+ L4  H4  L3  L1  H1 
+ H1  L1  T   H4  L4 
+ L3  H4  H2  L4  L1 
+-- F19 blast crate @2,3 -> H4 4x4
+ L1  H3  S   L2  H2 
+ H4  H4  H4  H4  L3 
+ H4  H4  H4  H4  H1 
+ H4  H4  H4  H4  L4 
+ H4  H4  H4  H4  L1 
+-- F19 wins H4x4=15360
+ L1  H3  S   L2  H2 
+[H4][H4][H4][H4] L3 
+[H4][H4][H4][H4] H1 
+[H4][H4][H4][H4] L4 
+[H4][H4][H4][H4] L1 
+-- F19 tumble
+ L3  L2  H2  H1  H2 
+ H2  H4  L1  L3  L3 
+ L4  H2  H3  L4  H1 
+ H1  L2  L4  H3  L4 
+ L1  H3  S   L2  L1 
+-- F19 wins H2x3=40
+ L3  L2 [H2] H1  H2 
+[H2] H4  L1  L3  L3 
+ L4 [H2] H3  L4  H1 
+ H1  L2  L4  H3  L4 
+ L1  H3  S   L2  L1 
+-- F19 tumble
+ L1  L2  H4  H1  H2 
+ L3  L2  L1  L3  L3 
+ L4  H4  H3  L4  H1 
+ H1  L2  L4  H3  L4 
+ L1  H3  S   L2  L1 
+
+==== F20 (BASE) juste sous x10 : H2 5 rouleaux puis H3 + H4 (990)
+-- F20 reveal
+ L3  H1  H2  L1  H3 
+ H2  L2  L4  H2  L3 
+ L1  H2  H2  L3  H2 
+ H4  H3  S   H1  L2 
+ L4  L2  H2  H4  L1 
+-- F20 wins H2x5=900
+ L3  H1 [H2] L1  H3 
+[H2] L2  L4 [H2] L3 
+ L1 [H2][H2] L3 [H2]
+ H4  H3  S   H1  L2 
+ L4  L2 [H2] H4  L1 
+-- F20 tumble
+ H3  H4  H3  L2  L4 
+ L3  H1  H4  L1  H3 
+ L1  L2  L1  L3  L3 
+ H4  H3  L4  H1  L2 
+ L4  L2  S   H4  L1 
+-- F20 wins H3x3=30 H4x4=60
+[H3][H4][H3] L2  L4 
+ L3  H1 [H4] L1  H3 
+ L1  L2  L1  L3  L3 
+[H4][H3] L4  H1  L2 
+ L4  L2  S  [H4] L1 
+-- F20 tumble
+ H2  H3  H1  H4  L4 
+ H4  L2  H2  L2  H3 
+ L3  H1  L1  L1  L3 
+ L1  L2  L4  L3  L2 
+ L4  L2  S   H1  L1 
+
+==== F21 (BASE) exactement x10 : H1 4 rouleaux puis H2 4 rouleaux (1000)
+-- F21 reveal
+ H1  L4  H1  L3  L2 
+ L3  H3  L2  L4  H4 
+ H1  L1  S   H1  L1 
+ L2  H1  H1  H3  L4 
+ H2  L4  H2  L2  L3 
+-- F21 wins H1x4=600
+[H1] L4 [H1] L3  L2 
+ L3  H3  L2  L4  H4 
+[H1] L1  S  [H1] L1 
+ L2 [H1][H1] H3  L4 
+ H2  L4  H2  L2  L3 
+-- F21 tumble
+ H2  H2  H2  H2  L2 
+ L1  L4  L4  L3  H4 
+ L3  H3  L2  L4  L1 
+ L2  L1  S   H3  L4 
+ H2  L4  H2  L2  L3 
+-- F21 wins H2x4=400
+[H2][H2][H2][H2] L2 
+ L1  L4  L4  L3  H4 
+ L3  H3  L2  L4  L1 
+ L2  L1  S   H3  L4 
+[H2] L4 [H2] L2  L3 
+-- F21 tumble
+ H4  H2  H3  H4  L2 
+ H1  L4  H1  L3  H4 
+ L1  H3  L4  L4  L1 
+ L3  L1  L2  H3  L4 
+ L2  L4  S   L2  L3 
+
+==== F22 (BASE) palier x25 : H1 4 rouleaux 16 ways puis H3
+-- F22 reveal
+ H1  L1  H1  L4  H3 
+ L2  H1  S   H1  L2 
+ H1  L3  L2  H2  L4 
+ L4  H1  L3  H1  H4 
+ H3  H4  H1  L1  L3 
+-- F22 wins H1x4=2400
+[H1] L1 [H1] L4  H3 
+ L2 [H1] S  [H1] L2 
+[H1] L3  L2  H2  L4 
+ L4 [H1] L3 [H1] H4 
+ H3  H4 [H1] L1  L3 
+-- F22 tumble
+ H3  H3  H3  L2  H3 
+ L1  L3  H3  H1  L2 
+ L2  L1  S   L4  L4 
+ L4  L3  L2  H2  H4 
+ H3  H4  L3  L1  L3 
+-- F22 wins H3x3=120
+[H3][H3][H3] L2  H3 
+ L1  L3 [H3] H1  L2 
+ L2  L1  S   L4  L4 
+ L4  L3  L2  H2  H4 
+[H3] H4  L3  L1  L3 
+-- F22 tumble
+ H2  H1  H1  L2  H3 
+ H4  L3  H2  H1  L2 
+ L1  L1  S   L4  L4 
+ L2  L3  L2  H2  H4 
+ L4  H4  L3  L1  L3 
+
+==== F23 (BASE) palier x100 : fagot H1 3x3 sur 4 rouleaux puis H2 5 rouleaux
+-- F23 reveal
+ L4  H2  L1  H1  L4 
+ H3  T   H4  L4  H3 
+ L2  L3  L4  H1  L2 
+ L3  L1  S   L3  H2 
+ H2  H4  L2  H3  L1 
+-- F23 blast bundle @1,1 -> H1 3x3
+ H1  H1  H1  H1  L4 
+ H1  H1  H1  L4  H3 
+ H1  H1  H1  H1  L2 
+ L3  L1  S   L3  H2 
+ H2  H4  L2  H3  L1 
+-- F23 wins H1x4=8100
+[H1][H1][H1][H1] L4 
+[H1][H1][H1] L4  H3 
+[H1][H1][H1][H1] L2 
+ L3  L1  S   L3  H2 
+ H2  H4  L2  H3  L1 
+-- F23 tumble
+ H2  L2  H2  L2  L4 
+ L4  H2  L3  H2  H3 
+ L1  H2  H2  L4  L2 
+ L3  L1  S   L3  H2 
+ H2  H4  L2  H3  L1 
+-- F23 wins H2x5=2400
+[H2] L2 [H2] L2  L4 
+ L4 [H2] L3 [H2] H3 
+ L1 [H2][H2] L4  L2 
+ L3  L1  S   L3 [H2]
+[H2] H4  L2  H3  L1 
+-- F23 tumble
+ H3  H2  H4  H1  H2 
+ H1  L2  H1  L2  L4 
+ L4  L2  L3  L4  H3 
+ L1  L1  S   L3  L2 
+ L3  H4  L2  H3  L1 
+
+==== F24 (BASE) palier x500 : caisse 4x4 -> géant H3, 5 rouleaux
+-- F24 reveal
+ H4  L4  L3  H1  L1 
+ L1  H2  H1  L2  H4 
+ H2  T   L1  H2  H3 
+ L3  H4  L2  L1  L3 
+ L2  H1  L4  S   H2 
+-- F24 blast crate @1,2 -> H3 4x4
+ H3  H3  H3  H3  L1 
+ H3  H3  H3  H3  H4 
+ H3  H3  H3  H3  H3 
+ H3  H3  H3  H3  L3 
+ L2  H1  L4  S   H2 
+-- F24 wins H3x5=51200
+[H3][H3][H3][H3] L1 
+[H3][H3][H3][H3] H4 
+[H3][H3][H3][H3][H3]
+[H3][H3][H3][H3] L3 
+ L2  H1  L4  S   H2 
+-- F24 tumble
+ L3  L4  H1  H4  H1 
+ H4  H3  L3  L2  L1 
+ L1  L2  H2  H1  H4 
+ H2  L4  L1  L3  L3 
+ L2  H1  L4  S   H2 
+
+==== F25 (BONUS) achat bonus : caisse 4x4 H1 sous multiplicateur x3, palier x1000
+-- F25 reveal
+ L1  S   H3  L2  H4 
+ H4  H2  L2  L4  H1 
+ L3  L4  S   H2  L1 
+ S   H1  L1  H3  L3 
+ L2  H3  H4  L1  H2 
+-- F25 reveal
+ L1  L4  H2  L4  H3 
+ L3  L4  H3  H3  L3 
+ L4  L4  H3  L1  L4 
+ L3  L3  H4  L2  L3 
+ H1  L3  L1  L3  H2 
+-- F25 reveal
+ L1  L2  L3  L3  L2 
+ L4  L4  T   H4  S  
+ L4  H1  H1  L4  L3 
+ H4  L2  H1  H4  L4 
+ L2  L1  H2  L4  H4 
+-- F25 blast stick @2,1 -> L1 2x2
+ L1  L2  L3  L3  L2 
+ L4  L1  L1  H4  S  
+ L4  L1  L1  L4  L3 
+ H4  L2  H1  H4  L4 
+ L2  L1  H2  L4  H4 
+-- F25 wins L1x3=120
+[L1] L2  L3  L3  L2 
+ L4 [L1][L1] H4  S  
+ L4 [L1][L1] L4  L3 
+ H4  L2  H1  H4  L4 
+ L2 [L1] H2  L4  H4 
+-- F25 tumble
+ H3  L1  L4  L3  L2 
+ L4  L3  H2  H4  S  
+ L4  L2  L3  L4  L3 
+ H4  L2  H1  H4  L4 
+ L2  L2  H2  L4  H4 
+-- F25 reveal
+ H4  L3  L4  L2  L4 
+ L1  L4  L4  H3  H2 
+ H4  H2  H2  L1  L4 
+ H3  H3  L2  H3  L1 
+ L4  L2  H1  L3  L4 
+-- F25 wins L4x3=20
+ H4  L3 [L4] L2  L4 
+ L1 [L4][L4] H3  H2 
+ H4  H2  H2  L1  L4 
+ H3  H3  L2  H3  L1 
+[L4] L2  H1  L3  L4 
+-- F25 tumble
+ H4  L4  L1  L2  L4 
+ H4  L3  L3  H3  H2 
+ L1  H2  H2  L1  L4 
+ H4  H3  L2  H3  L1 
+ H3  L2  H1  L3  L4 
+-- F25 reveal
+ H1  H4  L3  L4  L1 
+ S   L3  H1  H4  H2 
+ L4  H2  H3  L1  L2 
+ L2  H2  H4  L2  L4 
+ L2  H4  H4  H1  L4 
+-- F25 reveal
+ L3  L4  L2  L2  L4 
+ L3  L4  L4  L3  H2 
+ L2  H3  L4  L4  H4 
+ L3  H1  L2  H2  H2 
+ H3  T   L4  L2  L1 
+-- F25 blast crate @1,4 -> H1 4x4
+ L3  L4  L2  L2  L4 
+ H1  H1  H1  H1  H2 
+ H1  H1  H1  H1  H4 
+ H1  H1  H1  H1  H2 
+ H1  H1  H1  H1  L1 
+-- F25 wins H1x4=115200
+ L3  L4  L2  L2  L4 
+[H1][H1][H1][H1] H2 
+[H1][H1][H1][H1] H4 
+[H1][H1][H1][H1] H2 
+[H1][H1][H1][H1] L1 
+-- F25 tumble
+ L1  H2  H4  L3  L4 
+ L1  H4  H1  H4  H2 
+ L4  H3  H1  H3  H4 
+ L4  L2  L3  H2  H2 
+ L3  L4  L2  L2  L1 
+-- F25 reveal
+ L2  L2  S   L3  L1 
+ L2  H4  L3  L4  H2 
+ H1  H2  L4  L1  L4 
+ H2  L2  L4  L2  L4 
+ L2  H1  H4  H2  H4 
+-- F25 reveal
+ L1  L3  H2  H4  L3 
+ L4  S   L3  H4  H2 
+ H2  L3  H4  H3  L3 
+ H1  H2  L2  L1  L1 
+ L1  H4  H2  L2  L4 
+-- F25 wins H2x3=240
+ L1  L3 [H2] H4  L3 
+ L4  S   L3  H4  H2 
+[H2] L3  H4  H3  L3 
+ H1 [H2] L2  L1  L1 
+ L1  H4 [H2] L2  L4 
+-- F25 tumble
+ H3  L2  L4  H4  L3 
+ L1  L3  L3  H4  H2 
+ L4  S   L3  H3  L3 
+ H1  L3  H4  L1  L1 
+ L1  H4  L2  L2  L4 
+-- F25 reveal
+ L1  L1  H3  L4  H4 
+ L4  L2  H2  H2  L1 
+ H4  L1  L3  L4  H3 
+ L3  H2  L3  H4  L1 
+ L3  H1  H2  L3  L4 
+-- F25 reveal
+ L4  L2  L3  L1  L3 
+ L1  H3  L2  H4  L2 
+ L3  L1  H4  H1  H1 
+ L2  L1  H2  H1  L4 
+ L1  L1  L4  H4  L1 
+-- F25 wins L2x3=30
+ L4 [L2] L3  L1  L3 
+ L1  H3 [L2] H4  L2 
+ L3  L1  H4  H1  H1 
+[L2] L1  H2  H1  L4 
+ L1  L1  L4  H4  L1 
+-- F25 tumble
+ L2  H4  L4  L1  L3 
+ L4  H3  L3  H4  L2 
+ L1  L1  H4  H1  H1 
+ L3  L1  H2  H1  L4 
+ L1  L1  L4  H4  L1 
+-- F25 reveal
+ H3  H2  L2  L1  L3 
+ H4  L1  H2  L3  L4 
+ L4  L2  L2  H3  L4 
+ H3  L1  L4  H2  S  
+ H1  L2  L3  H2  L4 
+
+==== F26 (SUPER) MAX WIN : caisse H1 4x4 + 4 H1 au rouleau 5 (1024 ways) sous x5 -> plafond x25000
+-- F26 reveal
+ L4  H1  S   H2  L1 
+ H2  L3  L2  S   H3 
+ L1  S   H4  L4  L2 
+ H3  H4  L3  H1  S  
+ L2  L3  H1  L3  H4 
+-- F26 reveal
+ L1  L3  H2  H1  L4 
+ H4  L2  L3  L4  H2 
+ L2  T   L4  L3  L4 
+ L1  L1  H2  L3  L1 
+ H1  H3  L4  H2  L1 
+-- F26 blast bundle @1,2 -> L2 3x3
+ L1  L3  H2  H1  L4 
+ H4  L2  L3  L4  H2 
+ L2  L2  L2  L3  L4 
+ L2  L2  L2  L3  L1 
+ L2  L2  L2  H2  L1 
+-- F26 wins L2x3=720
+ L1  L3  H2  H1  L4 
+ H4 [L2] L3  L4  H2 
+[L2][L2][L2] L3  L4 
+[L2][L2][L2] L3  L1 
+[L2][L2][L2] H2  L1 
+-- F26 tumble
+ L2  L4  L2  H1  L4 
+ H4  L3  H3  L4  H2 
+ L4  L4  H2  L3  L4 
+ L1  L4  H2  L3  L1 
+ H4  L3  L3  H2  L1 
+-- F26 reveal
+ H1  S   L2  L3  L4 
+ L4  L3  H2  L3  L3 
+ L2  L3  L4  L3  H2 
+ L2  L1  L2  L1  L3 
+ L3  H3  H3  L1  L2 
+-- F26 reveal
+ H4  L2  L3  H1  L3 
+ L3  H4  L3  T   L4 
+ L3  H3  L3  L2  L4 
+ L1  H1  L4  L4  L3 
+ L1  H1  H3  L3  H2 
+-- F26 blast bundle @3,1 -> H3 3x3
+ H4  L2  L3  H1  L3 
+ L3  H4  H3  H3  H3 
+ L3  H3  H3  H3  H3 
+ L1  H1  H3  H3  H3 
+ L1  H1  H3  L3  H2 
+-- F26 reveal
+ L3  H1  H2  L2  L3 
+ L3  L3  L2  S   H3 
+ H1  L4  H3  L4  L3 
+ L4  H3  L3  L2  L4 
+ L2  H2  L2  H4  H1 
+-- F26 wins L3x3=30
+[L3] H1  H2  L2  L3 
+[L3][L3] L2  S   H3 
+ H1  L4  H3  L4  L3 
+ L4  H3 [L3] L2  L4 
+ L2  H2  L2  H4  H1 
+-- F26 tumble
+ L2  H3  L2  L2  L3 
+ L2  H1  H2  S   H3 
+ H1  L4  L2  L4  L3 
+ L4  H3  H3  L2  L4 
+ L2  H2  L2  H4  H1 
+-- F26 reveal
+ L3  L1  T   L2  L2 
+ L4  H2  H1  H2  L3 
+ L4  H2  L1  L4  L4 
+ H4  H3  H2  L2  L4 
+ H2  L1  H1  L1  L1 
+-- F26 blast bundle @2,0 -> H4 3x3
+ L3  H4  H4  H4  L2 
+ L4  H4  H4  H4  L3 
+ L4  H4  H4  H4  L4 
+ H4  H3  H2  L2  L4 
+ H2  L1  H1  L1  L1 
+-- F26 wins H4x4=6480
+ L3 [H4][H4][H4] L2 
+ L4 [H4][H4][H4] L3 
+ L4 [H4][H4][H4] L4 
+[H4] H3  H2  L2  L4 
+ H2  L1  H1  L1  L1 
+-- F26 tumble
+ H1  L4  L1  L1  L2 
+ L3  L2  L3  H3  L3 
+ L4  L4  H2  L2  L4 
+ L4  H3  H2  L2  L4 
+ H2  L1  H1  L1  L1 
+-- F26 reveal
+ S   H3  L3  H4  H3 
+ L3  H4  L4  H2  L1 
+ H4  L2  H2  L4  H3 
+ H1  L2  L2  L3  L1 
+ L1  L2  H3  H3  H1 
+-- F26 reveal
+ L2  H3  L4  H2  S  
+ H4  L4  L1  L3  H1 
+ L1  T   H2  L1  H1 
+ L3  L2  L3  H4  H1 
+ H2  H4  H3  L4  H1 
+-- F26 blast crate @1,2 -> H1 4x4
+ L2  H3  L4  H2  S  
+ H1  H1  H1  H1  H1 
+ H1  H1  H1  H1  H1 
+ H1  H1  H1  H1  H1 
+ H1  H1  H1  H1  H1 
+-- F26 wins H1x5=2560000
+ L2  H3  L4  H2  S  
+[H1][H1][H1][H1][H1]
+[H1][H1][H1][H1][H1]
+[H1][H1][H1][H1][H1]
+[H1][H1][H1][H1][H1]
+
+==== F27 (BASE) gain minuscule x0,05 (0,005 € à 0,10 € de mise)
+-- F27 reveal
+ L4  H2  H1  H3  L2 
+ H1  L3  L4  L2  H4 
+ L2  L4  H3  L1  L3 
+ H3  L1  H2  H4  L1 
+ L1  H4  L2  L3  H2 
+-- F27 wins L4x3=5
+[L4] H2  H1  H3  L2 
+ H1  L3 [L4] L2  H4 
+ L2 [L4] H3  L1  L3 
+ H3  L1  H2  H4  L1 
+ L1  H4  L2  L3  H2 
+-- F27 tumble
+ L4  L1  L3  H3  L2 
+ H1  H2  H1  L2  H4 
+ L2  L3  H3  L1  L3 
+ H3  L1  H2  H4  L1 
+ L1  H4  L2  L3  H2 
+
+==== F28 (ANTE) ANTE : perte sèche
+-- F28 reveal
+ H4  L2  L1  H2  L3 
+ L1  H3  H1  L4  H2 
+ H2  L4  L3  H3  L1 
+ L3  S   H4  L1  H3 
+ H1  L2  L2  L2  L4 
+
+==== F29 (ANTE) ANTE : petit gain L2, 2 ways
+-- F29 reveal
+ L2  H2  L3  H4  L1 
+ H3  L2  H1  L1  L2 
+ L4  L1  L2  H3  H2 
+ L2  H4  S   L4  L3 
+ H1  L3  H4  H2  H3 
+-- F29 wins L2x3=20
+[L2] H2  L3  H4  L1 
+ H3 [L2] H1  L1  L2 
+ L4  L1 [L2] H3  H2 
+[L2] H4  S   L4  L3 
+ H1  L3  H4  H2  H3 
+-- F29 tumble
+ L2  L1  L2  H4  L1 
+ H2  H2  L3  L1  L2 
+ H3  L1  H1  H3  H2 
+ L4  H4  S   L4  L3 
+ H1  L3  H4  H2  H3 
+
+==== F30 (ANTE) ANTE : anticipation ratée (2 Scatters)
+-- F30 reveal
+ L3  H2  L1  H4  L2 
+ H1  S   H3  L2  H1 
+ L2  L4  H2  L1  L3 
+ H4  L1  L4  H3  H2 
+ L3  H3  S   L4  H4 

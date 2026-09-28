@@ -1,0 +1,693 @@
+OpenAI Codex v0.158.0
+--------
+workdir: /home/user/slot
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: none
+reasoning summaries: none
+session id: 01a0e78b-9955-75d0-9cbc-d37b99a6c960
+--------
+user
+Utilise $imagegen et l'outil natif de génération d'images (built-in image_gen, PAS un script CLI/API) pour produire réellement les images décrites. Ta mission porte uniquement sur ces images et leur rapport ; ne crée ni ne modifie aucun code du jeu.
+
+Studio : Crownforge. Racine du projet : le répertoire courant.
+
+RÈGLES COMMUNES
+- Style maison Crownforge : BD / cartoon 2D pour adultes, contours noirs épais légèrement irréguliers, cel-shading deux tons, reflets francs, couleurs saturées maîtrisées, formes simples et lisibles. Jamais photo-réaliste, jamais 3D lisse, jamais de rendu « image IA » (pas de néon générique, pas de dégradés par défaut, pas de flou artistique, pas d'effets de bordure).
+- Transparence (quand demandée) : fond RÉELLEMENT transparent (canal alpha), pas de damier dessiné, pas de fond blanc, pas de halo ; sujet complet non coupé, marge de 3 à 6 % tout autour. Si l'outil ne produit pas d'alpha : fond vert chroma uni #00FF00 sans ombre portée, et signale-le dans ta réponse.
+- Aucun texte, logo, filigrane ou signature, sauf le texte exact demandé.
+- Aucune copie de personnage, de logo ou de composition identifiable d'un autre studio ou d'une marque.
+- Reprise : si un fichier cible existe déjà ET que son .prompt.txt existe, ne le régénère pas ; passe au suivant.
+
+PROCÉDURE pour CHAQUE image :
+1) génère avec image_gen (un appel par asset) ;
+2) inspecte (sujet, style, transparence, marges, texte exact) et régénère UNE fois si un défaut évident existe ;
+3) copie le fichier final depuis $CODEX_HOME/generated_images/… vers le chemin indiqué (crée les dossiers) ;
+4) écris à côté <nom>.prompt.txt avec le prompt exact utilisé.
+
+RÉPONSE FINALE : chemins produits, méthode réellement utilisée, dimensions, canal alpha (oui/non), défauts restants.
+Si image_gen n'est pas accessible, dis-le précisément ; ne remplace PAS les images par du SVG, du code ou une liste de prompts.
+
+Projet : BOOMTOOTH, slot 2D « démolition au castor » (Crownforge). Buck Boomtooth, castor chef de chantier vaniteux et casse-cou, fait sauter une montagne de granit pour y sculpter un monument à sa gloire (« Mount Buckmore ») au-dessus d'un barrage en rondins, dans une vallée de pins du Grand Nord.
+
+Direction artistique RETENUE (référence obligatoire) : assets/generated/directions/D1.png — charge-la avec view_image avant de générer et reproduis son style exact :
+- encrage noir épais (4 à 7 px à 1024 px), légèrement irrégulier comme au pinceau, traits intérieurs plus fins ;
+- cel-shading deux tons nets (clair + ombre franche) et un reflet blanc cassé par volume ; pas d'aérographe, pas de flou ;
+- matières dessinées : bois équarri veiné, granit gris-bleu ébréché, métal riveté, flanelle à carreaux rouges et noirs, copeaux ;
+- lumière principale chaude de fin d'après-midi venant de la gauche (orange doré), ombres bleu-violet ;
+- couleurs saturées maîtrisées.
+Palette : orange brûlé #E8742A, orange ciel #F39A3C, vert pin #2F5D46, vert pin sombre #1E3B2E, granit #6F7F92, granit ombre #46526A, rouge TNT #D7332B, or #F2B233, bois miel #C98A45, bois sombre #6B4526, crème #F4E6C8, encre #1B1410.
+Référence d'ambiance NUIT (bonus) : assets/generated/directions/D3.png (aurore turquoise #3FD6B8, bleu nuit #14233A, projecteurs orange #FF9A3C) — même vallée, même trait.
+Jamais photo-réaliste, jamais 3D lisse, jamais de néon générique ni de dégradé par défaut.
+
+LOT identity — logo du jeu, marque Crownforge, cartes d'accueil (5 images). Dossier : assets/generated/identity/
+
+1. logo.png — Logo du jeu, 1536×1024, fond TRANSPARENT, lettrage « BOOMTOOTH » (texte exact, un seul mot) comme dans D1.png mais plus soigné et lisible en petit : grosses lettres taillées dans des planches de bois miel (#C98A45) clouées, contour encre épais, reflets francs, les deux « O » du milieu remplacés par des incisives de castor (celle de droite en or) OU décorés d'une petite charge ; une mèche allumée sort de la dernière lettre avec une étincelle dessinée ; petits éclats de bois qui volent. Le logo occupe 90 % de la largeur, lisible à 220 px de large.
+2. crownforge.png — Marque du studio, 1536×1024, fond TRANSPARENT : emblème d'une couronne dorée posée sur une enclume de forge sombre, avec des étincelles orangées et un marteau, au-dessus du mot exact « CROWNFORGE » en capitales massives crème cernées d'encre. Style BD épais cohérent avec le jeu mais sobre et élégant (c'est la marque du studio). Aucun autre texte.
+3. card-blast.png — Carte d'accueil 1, 1024×1536, fond OPAQUE : illustration verticale montrant une case de grille où un bâton de TNT explose (flash, éclats de granit, poussière ocre) et, au centre, un symbole géant (le buste de l'élan) qui sort de la poussière comme sculpté dans la pierre, occupant quatre cases. Cadre de bois aux coins arrondis dessiné dans l'image. Aucun texte.
+4. card-detonator.png — Carte d'accueil 2, 1024×1536, fond OPAQUE : de nuit (aurore turquoise), Buck Boomtooth enfonce la poignée d'un détonateur à piston ; les fils rouges crépitent ; un compteur de laiton sur le détonateur s'illumine. Cadre de bois aux coins arrondis. Aucun texte ni chiffre.
+5. card-bonus.png — Carte d'accueil 3, 1024×1536, fond OPAQUE : trois détonateurs à piston rouge et or (les Scatters) alignés, derrière eux la montagne sculptée en tête de castor illuminée par des projecteurs, nuit, étincelles. Cadre de bois aux coins arrondis. Aucun texte.
+
+warning: Codex could not find bubblewrap on PATH. Install bubblewrap with your OS package manager. See the sandbox prerequisites: https://developers.openai.com/codex/concepts/sandboxing#prerequisites. Codex will use the bundled bubblewrap in the meantime.
+codex
+J’utilise le skill **imagegen** et l’outil natif pour ce lot. Je vais charger les références, vérifier les fichiers déjà présents, puis générer et inspecter chaque image sans toucher au code du jeu.
+
+exec
+/bin/bash -lc "pwd && rg --files -g 'AGENTS.md' -g 'assets/generated/**' -g '"'!node_modules'"' | head -100" in /home/user/slot
+ succeeded in 0ms:
+/home/user/slot
+assets/generated/directions/rapport-dir-d2-d5.md
+assets/generated/directions/D5.png
+assets/generated/directions/D3.prompt.txt
+assets/generated/directions/D1.png
+assets/generated/directions/D4.prompt.txt
+assets/generated/directions/D2.prompt.txt
+assets/generated/directions/D5.prompt.txt
+assets/generated/directions/D3.png
+assets/generated/directions/D1.prompt.txt
+assets/generated/directions/D4.png
+assets/generated/directions/D2.png
+assets/generated/decor/ground.prompt.txt
+assets/generated/decor/mid.png
+assets/generated/decor/fg-props.png
+assets/generated/decor/rapport-decor-base.md
+assets/generated/decor/ground.png
+assets/generated/decor/far.prompt.txt
+assets/generated/decor/clouds.png
+assets/generated/decor/sky.png
+assets/generated/decor/mid.prompt.txt
+assets/generated/decor/night-sky.png
+assets/generated/decor/far.png
+assets/generated/decor/night-sky.prompt.txt
+assets/generated/decor/sky.prompt.txt
+assets/generated/decor/clouds.prompt.txt
+assets/generated/decor/fg-props.prompt.txt
+assets/generated/symbols/W.prompt.txt
+assets/generated/symbols/T-stick.png
+assets/generated/symbols/L2.png
+assets/generated/symbols/H1.prompt.txt
+assets/generated/symbols/L2.prompt.txt
+assets/generated/symbols/W.png
+assets/generated/symbols/T-stick.prompt.txt
+assets/generated/symbols/S.prompt.txt
+assets/generated/symbols/L1.prompt.txt
+assets/generated/symbols/sym-lows-tnt.report.md
+assets/generated/symbols/rapport-sym-premiums.md
+assets/generated/symbols/L3.prompt.txt
+assets/generated/symbols/T-bundle.png
+assets/generated/symbols/T-bundle.prompt.txt
+assets/generated/symbols/H4.png
+assets/generated/symbols/H3.prompt.txt
+assets/generated/symbols/T-keg.prompt.txt
+assets/generated/symbols/L1.png
+assets/generated/symbols/L4.prompt.txt
+assets/generated/symbols/H1.png
+assets/generated/symbols/H2.prompt.txt
+assets/generated/symbols/H2.png
+assets/generated/symbols/T-keg.png
+assets/generated/symbols/L3.png
+assets/generated/symbols/H4.prompt.txt
+assets/generated/symbols/H3.png
+assets/generated/symbols/S.png
+assets/generated/symbols/L4.png
+
+exec
+/bin/bash -lc 'cat /root/.codex/skills/.system/imagegen/SKILL.md' in /home/user/slot
+ succeeded in 0ms:
+---
+name: "imagegen"
+description: "Generate or edit raster images when the task benefits from AI-created bitmap visuals such as photos, illustrations, textures, sprites, mockups, or transparent-background cutouts. Use when Codex should create a brand-new image, transform an existing image, or derive visual variants from references, and the output should be a bitmap asset rather than repo-native code or vector. Do not use when the task is better handled by editing existing SVG/vector/code-native assets, extending an established icon or logo system, or building the visual directly in HTML/CSS/canvas."
+---
+
+# Image Generation Skill
+
+Generates or edits images for the current project (for example website assets, game assets, UI mockups, product mockups, wireframes, logo design, photorealistic images, or infographics).
+
+## Top-level modes and rules
+
+This skill has exactly two top-level modes:
+
+- **Default built-in tool mode (preferred):** built-in `image_gen` tool for image generation, editing, and transparent-image requests. Does not require `OPENAI_API_KEY`.
+- **Fallback CLI mode:** `scripts/image_gen.py` CLI. Use when the user explicitly asks for or confirms the CLI/API/model path. Requires `OPENAI_API_KEY`.
+
+Within CLI fallback, the CLI exposes three subcommands:
+
+- `generate`
+- `edit`
+- `generate-batch`
+
+Rules:
+- Use the built-in `image_gen` tool by default for normal image generation and editing requests.
+- Do not switch to CLI fallback for ordinary quality, size, or file-path control.
+- For transparent images, ask built-in `image_gen` for a transparent background and preserve the generated alpha.
+- Never silently switch from built-in `image_gen` or CLI `gpt-image-2` to CLI `gpt-image-1.5`; ask the user first unless they explicitly requested `gpt-image-1.5`.
+- The word `batch` by itself does not mean CLI fallback. If the user asks for many assets or says to batch-generate assets without explicitly asking for CLI/API/model controls, stay on the built-in path and issue one built-in call per requested asset or variant.
+- If the built-in tool fails or is unavailable, tell the user the CLI fallback exists and that it requires `OPENAI_API_KEY`. Proceed only if the user explicitly asks for that fallback.
+- If the user explicitly asks for CLI mode, use the bundled `scripts/image_gen.py` workflow. Do not create one-off SDK runners.
+- Never modify `scripts/image_gen.py`. If something is missing, ask the user before doing anything else.
+
+Built-in save-path policy:
+- In built-in tool mode, Codex saves generated images under `$CODEX_HOME/*` by default.
+- Do not describe or rely on OS temp as the default built-in destination.
+- Do not describe or rely on a destination-path argument (if any) on the built-in `image_gen` tool. If a specific location is needed, generate first and then move or copy the selected output from `$CODEX_HOME/generated_images/...`.
+- Save-path precedence in built-in mode:
+  1. If the user names a destination, move or copy the selected output there.
+  2. If the image is meant for the current project, move or copy the final selected image into the workspace before finishing.
+  3. If the image is only for preview or brainstorming, render it inline; the underlying file can remain at the default `$CODEX_HOME/*` path.
+- Never leave a project-referenced asset only at the default `$CODEX_HOME/*` path.
+- Do not overwrite an existing asset unless the user explicitly asked for replacement; otherwise create a sibling versioned filename such as `hero-v2.png` or `item-icon-edited.png`.
+
+Shared prompt guidance for both modes lives in `references/prompting.md` and `references/sample-prompts.md`.
+
+Fallback-only docs/resources for CLI mode:
+- `references/cli.md`
+- `references/image-api.md`
+- `references/codex-network.md`
+- `scripts/image_gen.py`
+
+## When to use
+- Generate a new image (concept art, product shot, cover, website hero)
+- Generate a new image using one or more reference images for style, composition, or mood
+- Edit an existing image (inpainting, lighting or weather transformations, background replacement, object removal, compositing, transparent background)
+- Produce many assets or variants for one task
+
+## When not to use
+- Extending or matching an existing SVG/vector icon set, logo system, or illustration library inside the repo
+- Creating simple shapes, diagrams, wireframes, or icons that are better produced directly in SVG, HTML/CSS, or canvas
+- Making a small project-local asset edit when the source file already exists in an editable native format
+- Any task where the user clearly wants deterministic code-native output instead of a generated bitmap
+
+## Decision tree
+
+Think about two separate questions:
+
+1. **Intent:** is this a new image or an edit of an existing image?
+2. **Execution strategy:** is this one asset or many assets/variants?
+
+Intent:
+- If the user wants to modify an existing image while preserving parts of it, treat the request as **edit**.
+- If the user provides images only as references for style, composition, mood, or subject guidance, treat the request as **generate**.
+- If the user provides no images, treat the request as **generate**.
+
+Built-in edit semantics:
+- Built-in edit mode is for images already visible in the conversation context, such as attached images or images generated earlier in the thread.
+- If the user wants to edit a local image file with the built-in tool, first load it with built-in `view_image` tool so the image is visible in the conversation context, then proceed with the built-in edit flow.
+- Do not promise arbitrary filesystem-path editing through the built-in tool.
+- If a local file still needs direct file-path control, masks, or other explicit CLI-only parameters, use the explicit CLI fallback only when the user asks for it.
+- For edits, preserve invariants aggressively and save non-destructively by default.
+
+Execution strategy:
+- In the built-in default path, produce many assets or variants by issuing one `image_gen` call per requested asset or variant.
+- In the CLI fallback path, use the CLI `generate-batch` subcommand only when the user explicitly chose CLI mode and needs many prompts/assets.
+- For many distinct assets, do not use `n` as a substitute for separate prompts. `n` is for variants of one prompt; distinct assets need distinct built-in calls or distinct CLI `generate-batch` jobs.
+
+Assume the user wants a new image unless they clearly ask to change an existing one.
+
+## Workflow
+1. Decide the top-level mode: built-in by default, including transparent-output requests; fallback CLI only if explicitly requested or confirmed.
+2. Decide the intent: `generate` or `edit`.
+3. Decide whether the output is preview-only or meant to be consumed by the current project.
+4. Decide the execution strategy: single asset vs repeated built-in calls vs CLI `generate-batch`.
+5. Collect inputs up front: prompt(s), exact text (verbatim), constraints/avoid list, and any input images.
+6. For every input image, label its role explicitly:
+   - reference image
+   - edit target
+   - supporting insert/style/compositing input
+7. If the edit target is only on the local filesystem and you are staying on the built-in path, inspect it with `view_image` first so the image is available in conversation context.
+8. If the user asked for a photo, illustration, sprite, product image, banner, or other explicitly raster-style asset, use `image_gen` rather than substituting SVG/HTML/CSS placeholders. If the request is for an icon, logo, or UI graphic that should match existing repo-native SVG/vector/code assets, prefer editing those directly instead.
+9. Augment the prompt based on specificity:
+   - If the user's prompt is already specific and detailed, normalize it into a clear spec without adding creative requirements.
+   - If the user's prompt is generic, add tasteful augmentation only when it materially improves output quality.
+10. Use the built-in `image_gen` tool by default.
+11. For transparent-output requests, ask built-in `image_gen` for a transparent background and preserve the generated alpha channel.
+12. Inspect outputs and validate: subject, style, composition, text accuracy, and invariants/avoid items.
+13. Iterate with a single targeted change, then re-check.
+14. For preview-only work, render the image inline; the underlying file may remain at the default `$CODEX_HOME/generated_images/...` path.
+15. For project-bound work, move or copy the selected artifact into the workspace and update any consuming code or references. Never leave a project-referenced asset only at the default `$CODEX_HOME/generated_images/...` path.
+16. For batches or multi-asset requests, persist every requested deliverable final in the workspace unless the user explicitly asked to keep outputs preview-only. Discarded variants do not need to be kept unless requested.
+17. If the user explicitly chooses or confirms the CLI fallback, then use the fallback-only docs for model, quality, size, `input_fidelity`, masks, output format, output paths, and network setup.
+18. Always report the final saved path(s) for any workspace-bound asset(s), plus the final prompt or prompt set and whether the built-in tool or fallback CLI mode was used.
+
+## Transparent image requests
+
+Ask built-in `image_gen` for a genuinely transparent background and preserve its alpha.
+
+## Prompt augmentation
+
+Reformat user prompts into a structured, production-oriented spec. Make the user's goal clearer and more actionable, but do not blindly add detail.
+
+Treat this as prompt-shaping guidance, not a closed schema. Use only the lines that help, and add a short extra labeled line when it materially improves clarity.
+
+### Specificity policy
+
+Use the user's prompt specificity to decide how much augmentation is appropriate:
+
+- If the prompt is already specific and detailed, preserve that specificity and only normalize/structure it.
+- If the prompt is generic, you may add tasteful augmentation when it will materially improve the result.
+
+Allowed augmentations:
+- composition or framing hints
+- polish level or intended-use hints
+- practical layout guidance
+- reasonable scene concreteness that supports the stated request
+
+Not allowed augmentations:
+- extra characters or objects that are not implied by the request
+- brand names, slogans, palettes, or narrative beats that are not implied
+- arbitrary side-specific placement unless the surrounding layout supports it
+
+## Use-case taxonomy (exact slugs)
+
+Classify each request into one of these buckets and keep the slug consistent across prompts and references.
+
+Generate:
+- photorealistic-natural — candid/editorial lifestyle scenes with real texture and natural lighting.
+- product-mockup — product/packaging shots, catalog imagery, merch concepts.
+- ui-mockup — app/web interface mockups and wireframes; specify the desired fidelity.
+- infographic-diagram — diagrams/infographics with structured layout and text.
+- scientific-educational — classroom explainers, scientific diagrams, and learning visuals with required labels and accuracy constraints.
+- ads-marketing — campaign concepts and ad creatives with audience, brand position, scene, and exact tagline/copy.
+- productivity-visual — slide, chart, workflow, and data-heavy business visuals.
+- logo-brand — logo/mark exploration, vector-friendly.
+- illustration-story — comics, children’s book art, narrative scenes.
+- stylized-concept — style-driven concept art, 3D/stylized renders.
+- historical-scene — period-accurate/world-knowledge scenes.
+
+Edit:
+- text-localization — translate/replace in-image text, preserve layout.
+- identity-preserve — try-on, person-in-scene; lock face/body/pose.
+- precise-object-edit — remove/replace a specific element (including interior swaps).
+- lighting-weather — time-of-day/season/atmosphere changes only.
+- background-extraction — transparent background / clean cutout. Ask built-in `image_gen` for actual transparency.
+- style-transfer — apply reference style while changing subject/scene.
+- compositing — multi-image insert/merge with matched lighting/perspective.
+- sketch-to-render — drawing/line art to photoreal render.
+
+## Shared prompt schema
+
+Use the following labeled spec as shared prompt scaffolding for both top-level modes:
+
+```text
+Use case: <taxonomy slug>
+Asset type: <where the asset will be used>
+Primary request: <user's main prompt>
+Input images: <Image 1: role; Image 2: role> (optional)
+Scene/backdrop: <environment>
+Subject: <main subject>
+Style/medium: <photo/illustration/3D/etc>
+Composition/framing: <wide/close/top-down; placement>
+Lighting/mood: <lighting + mood>
+Color palette: <palette notes>
+Materials/textures: <surface details>
+Text (verbatim): "<exact text>"
+Constraints: <must keep/must avoid>
+Avoid: <negative constraints>
+```
+
+Notes:
+- `Asset type` and `Input images` are prompt scaffolding, not dedicated CLI flags.
+- `Scene/backdrop` refers to the visual setting. It is not the same as the fallback CLI `background` parameter, which controls output transparency behavior.
+- Fallback-only execution notes such as `Quality:`, `Input fidelity:`, masks, output format, and output paths belong in the CLI path only. Do not treat them as built-in `image_gen` tool arguments.
+
+Augmentation rules:
+- Keep it short.
+- Add only the details needed to improve the prompt materially.
+- For edits, explicitly list invariants (`change only X; keep Y unchanged`).
+- If any critical detail is missing and blocks success, ask a question; otherwise proceed.
+
+## Examples
+
+### Generation example (hero image)
+```text
+Use case: product-mockup
+Asset type: landing page hero
+Primary request: a minimal hero image of a ceramic coffee mug
+Style/medium: clean product photography
+Composition/framing: wide composition with usable negative space for page copy if needed
+Lighting/mood: soft studio lighting
+Constraints: no logos, no text, no watermark
+```
+
+### Edit example (invariants)
+```text
+Use case: precise-object-edit
+Asset type: product photo background replacement
+Primary request: replace only the background with a warm sunset gradient
+Constraints: change only the background; keep the product and its edges unchanged; no text; no watermark
+```
+
+## Prompting best practices
+- Structure prompt as scene/backdrop -> subject -> details -> constraints.
+- Include intended use (ad, UI mock, infographic) to set the mode and polish level.
+- Use camera/composition language for photorealism.
+- Only use SVG/vector stand-ins when the user explicitly asked for vector output or a non-image placeholder.
+- Quote exact text and specify typography + placement.
+- For tricky words, spell them letter-by-letter and require verbatim rendering.
+- For multi-image inputs, reference images by index and describe how they should be used.
+- For edits, repeat invariants every iteration to reduce drift.
+- Iterate with single-change follow-ups.
+- If the prompt is generic, add only the extra detail that will materially help.
+- If the prompt is already detailed, normalize it instead of expanding it.
+- For CLI fallback only, see `references/cli.md` and `references/image-api.md` for model, `quality`, `input_fidelity`, masks, output format, and output-path guidance.
+- For transparent images, ask built-in `image_gen` for actual transparency and preserve its alpha.
+
+More principles shared by both modes: `references/prompting.md`.
+Copy/paste specs shared by both modes: `references/sample-prompts.md`.
+
+## Guidance by asset type
+Asset-type templates (website assets, game assets, wireframes, logo) are consolidated in `references/sample-prompts.md`.
+
+## gpt-image-2 guidance for CLI fallback
+
+The fallback CLI defaults to `gpt-image-2`.
+
+- Use `gpt-image-2` for new CLI/API workflows unless the user confirms a different model.
+- CLI `gpt-image-2` does not support `background=transparent`; ask before using `gpt-image-1.5` unless the user explicitly requested that model.
+- `gpt-image-2` always uses high fidelity for image inputs; do not set `input_fidelity` with this model.
+- `gpt-image-2` supports `quality` values `low`, `medium`, `high`, and `auto`.
+- Use `quality low` for fast drafts, thumbnails, and quick iterations. Use `medium`, `high`, or `auto` for final assets, dense text, diagrams, identity-sensitive edits, or high-resolution outputs.
+- Square images are typically fastest to generate. Use `1024x1024` for fast square drafts.
+- If the user asks for 4K-style output, use `3840x2160` for landscape or `2160x3840` for portrait.
+- `gpt-image-2` size may be `auto` or `WIDTHxHEIGHT` if all constraints hold: max edge `<= 3840px`, both edges multiples of `16px`, long-to-short ratio `<= 3:1`, total pixels between `655,360` and `8,294,400`.
+
+Popular `gpt-image-2` sizes:
+- `1024x1024` square
+- `1536x1024` landscape
+- `1024x1536` portrait
+- `2048x2048` 2K square
+- `2048x1152` 2K landscape
+- `3840x2160` 4K landscape
+- `2160x3840` 4K portrait
+- `auto`
+
+## Fallback CLI mode only
+
+### Temp and output conventions
+These conventions apply only to the CLI fallback. They do not describe built-in `image_gen` output behavior.
+- Use `tmp/imagegen/` for intermediate files (for example JSONL batches); delete them when done.
+- Write final artifacts under `output/imagegen/`.
+- Use `--out` or `--out-dir` to control output paths; keep filenames stable and descriptive.
+
+### Dependencies
+Prefer `uv` for dependency management in this repo.
+
+Required Python package:
+```bash
+uv pip install openai
+```
+
+Optional for image inspection and downscaling:
+```bash
+uv pip install pillow
+```
+
+Portability note:
+- If you are using the installed skill outside this repo, install dependencies into that environment with its package manager.
+- In uv-managed environments, `uv pip install ...` remains the preferred path.
+
+### Environment
+- `OPENAI_API_KEY` must be set for live API calls.
+- Do not ask the user for `OPENAI_API_KEY` when using the built-in `image_gen` tool.
+- Never ask the user to paste the full key in chat. Ask them to set it locally and confirm when ready.
+
+If the key is missing, give the user these steps:
+1. Create an API key in the OpenAI platform UI: https://platform.openai.com/api-keys
+2. Set `OPENAI_API_KEY` as an environment variable in their system.
+3. Offer to guide them through setting the environment variable for their OS/shell if needed.
+
+If installation is not possible in this environment, tell the user which dependency is missing and how to install it into their active environment.
+
+### Script-mode notes
+- CLI commands + examples: `references/cli.md`
+- API parameter quick reference: `references/image-api.md`
+- Network approvals / sandbox settings for CLI mode: `references/codex-network.md`
+
+## Reference map
+- `references/prompting.md`: shared prompting principles for both modes.
+- `references/sample-prompts.md`: shared copy/paste prompt recipes for both modes.
+- `references/cli.md`: fallback-only CLI usage via `scripts/image_gen.py`.
+- `references/image-api.md`: fallback-only API/CLI parameter reference.
+- `references/codex-network.md`: fallback-only network/sandbox troubleshooting for CLI mode.
+- `scripts/image_gen.py`: fallback-only CLI implementation. Use only when the user explicitly chooses or confirms CLI mode.
+
+exec
+/bin/bash -lc 'ls -la assets/generated/identity; printenv CODEX_HOME; find .. -name AGENTS.md -print' in /home/user/slot
+ succeeded in 0ms:
+total 8
+drwxr-xr-x 2 root root 4096 Sep 28 10:23 .
+drwxr-xr-x 8 root root 4096 Sep 28 10:23 ..
+
+exec
+/bin/bash -lc "python - <<'PY'
+from PIL import Image
+p='/root/.codex/generated_images/01a0e78b-9955-75d0-9cbc-d37b99a6c960/exec-d1b77ca3-746e-40d2-a3bc-76273915d49b.png'
+im=Image.open(p)
+print(im.size,im.mode,im.getextrema())
+PY" in /home/user/slot
+ succeeded in 21ms:
+(1536, 1024) RGBA ((0, 255), (0, 255), (0, 255), (0, 254))
+
+codex
+Le premier logo reprend bien le lettrage de D1, mais présente un halo et des marges trop étroites. Je lance l’unique correction prévue pour obtenir une découpe propre.
+
+exec
+/bin/bash -lc 'mkdir -p assets/generated/identity && cp /root/.codex/generated_images/01a0e78b-9955-75d0-9cbc-d37b99a6c960/exec-bcdd7aad-e840-4155-8eeb-f0dfd5d0a466.png assets/generated/identity/logo.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/identity/logo.prompt.txt
+diff --git a/assets/generated/identity/logo.prompt.txt b/assets/generated/identity/logo.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..c5b8c35ed27319d1663cff278c8f9165545a2fa4
+--- /dev/null
++++ b/assets/generated/identity/logo.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul asset final PNG paysage EXACTEMENT 1536×1024 : logo BOOMTOOTH sur fond réellement transparent alpha. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est uniquement une référence stylistique, ne pas reproduire son écran de jeu. Texte exact unique « BOOMTOOTH », neuf lettres B O O M T O O T H sur une seule ligne, très lisible même réduit à 220 px. Grosses lettres taillées dans des planches bois miel clouées, contour encre épais, reflets francs. Choisir la variante qui préserve toutes les lettres : les deux O centraux après T sont en bois, chacun décoré d'une petite charge rouge discrète, avec une minuscule décoration incisive crème et or si nécessaire mais sans masquer les contreformes. Une mèche allumée part de la dernière lettre H, avec étincelle dessinée et quelques petits éclats de bois. Ensemble compact centré, logo occupant 90 % de la largeur. Sujet intégral sans coupe, minimum 5 % de marge transparente latérale, larges marges transparentes verticales adaptées au logo horizontal. Aucun texte supplémentaire, aucun décor, aucun damier dessiné, aucun fond blanc, aucune ombre portée ni halo. Véritable canal alpha.
++CORRECTION IMPÉRATIVE : réduire tout le dessin pour conserver au moins 5 % de vide à gauche et à droite, y compris éclats et étincelle. Ne dessiner AUCUN halo lumineux ni ombre diffuse ni nuage noir autour du logo : contours secs, étincelle en aplat. Alpha zéro partout hors des formes dessinées et alpha 255 au cœur du bois. Si impossible de produire un vrai fond transparent propre, utiliser uniquement un fond chroma parfaitement uni #00FF00 sans aucune ombre. Dessiner les petites charges sur les deux O après la lettre T.
+
+diff --git a/assets/generated/identity/logo.prompt.txt b/assets/generated/identity/logo.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..c5b8c35ed27319d1663cff278c8f9165545a2fa4
+--- /dev/null
++++ b/assets/generated/identity/logo.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul asset final PNG paysage EXACTEMENT 1536×1024 : logo BOOMTOOTH sur fond réellement transparent alpha. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est uniquement une référence stylistique, ne pas reproduire son écran de jeu. Texte exact unique « BOOMTOOTH », neuf lettres B O O M T O O T H sur une seule ligne, très lisible même réduit à 220 px. Grosses lettres taillées dans des planches bois miel clouées, contour encre épais, reflets francs. Choisir la variante qui préserve toutes les lettres : les deux O centraux après T sont en bois, chacun décoré d'une petite charge rouge discrète, avec une minuscule décoration incisive crème et or si nécessaire mais sans masquer les contreformes. Une mèche allumée part de la dernière lettre H, avec étincelle dessinée et quelques petits éclats de bois. Ensemble compact centré, logo occupant 90 % de la largeur. Sujet intégral sans coupe, minimum 5 % de marge transparente latérale, larges marges transparentes verticales adaptées au logo horizontal. Aucun texte supplémentaire, aucun décor, aucun damier dessiné, aucun fond blanc, aucune ombre portée ni halo. Véritable canal alpha.
++CORRECTION IMPÉRATIVE : réduire tout le dessin pour conserver au moins 5 % de vide à gauche et à droite, y compris éclats et étincelle. Ne dessiner AUCUN halo lumineux ni ombre diffuse ni nuage noir autour du logo : contours secs, étincelle en aplat. Alpha zéro partout hors des formes dessinées et alpha 255 au cœur du bois. Si impossible de produire un vrai fond transparent propre, utiliser uniquement un fond chroma parfaitement uni #00FF00 sans aucune ombre. Dessiner les petites charges sur les deux O après la lettre T.
+
+codex
+Le logo corrigé est enregistré ; un halo diffus reste visible et sera signalé dans le rapport. Je passe à l’emblème Crownforge, puis aux trois cartes illustrées.
+
+diff --git a/assets/generated/identity/logo.prompt.txt b/assets/generated/identity/logo.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..c5b8c35ed27319d1663cff278c8f9165545a2fa4
+--- /dev/null
++++ b/assets/generated/identity/logo.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul asset final PNG paysage EXACTEMENT 1536×1024 : logo BOOMTOOTH sur fond réellement transparent alpha. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est uniquement une référence stylistique, ne pas reproduire son écran de jeu. Texte exact unique « BOOMTOOTH », neuf lettres B O O M T O O T H sur une seule ligne, très lisible même réduit à 220 px. Grosses lettres taillées dans des planches bois miel clouées, contour encre épais, reflets francs. Choisir la variante qui préserve toutes les lettres : les deux O centraux après T sont en bois, chacun décoré d'une petite charge rouge discrète, avec une minuscule décoration incisive crème et or si nécessaire mais sans masquer les contreformes. Une mèche allumée part de la dernière lettre H, avec étincelle dessinée et quelques petits éclats de bois. Ensemble compact centré, logo occupant 90 % de la largeur. Sujet intégral sans coupe, minimum 5 % de marge transparente latérale, larges marges transparentes verticales adaptées au logo horizontal. Aucun texte supplémentaire, aucun décor, aucun damier dessiné, aucun fond blanc, aucune ombre portée ni halo. Véritable canal alpha.
++CORRECTION IMPÉRATIVE : réduire tout le dessin pour conserver au moins 5 % de vide à gauche et à droite, y compris éclats et étincelle. Ne dessiner AUCUN halo lumineux ni ombre diffuse ni nuage noir autour du logo : contours secs, étincelle en aplat. Alpha zéro partout hors des formes dessinées et alpha 255 au cœur du bois. Si impossible de produire un vrai fond transparent propre, utiliser uniquement un fond chroma parfaitement uni #00FF00 sans aucune ombre. Dessiner les petites charges sur les deux O après la lettre T.
+
+diff --git a/assets/generated/identity/logo.prompt.txt b/assets/generated/identity/logo.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..c5b8c35ed27319d1663cff278c8f9165545a2fa4
+--- /dev/null
++++ b/assets/generated/identity/logo.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul asset final PNG paysage EXACTEMENT 1536×1024 : logo BOOMTOOTH sur fond réellement transparent alpha. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est uniquement une référence stylistique, ne pas reproduire son écran de jeu. Texte exact unique « BOOMTOOTH », neuf lettres B O O M T O O T H sur une seule ligne, très lisible même réduit à 220 px. Grosses lettres taillées dans des planches bois miel clouées, contour encre épais, reflets francs. Choisir la variante qui préserve toutes les lettres : les deux O centraux après T sont en bois, chacun décoré d'une petite charge rouge discrète, avec une minuscule décoration incisive crème et or si nécessaire mais sans masquer les contreformes. Une mèche allumée part de la dernière lettre H, avec étincelle dessinée et quelques petits éclats de bois. Ensemble compact centré, logo occupant 90 % de la largeur. Sujet intégral sans coupe, minimum 5 % de marge transparente latérale, larges marges transparentes verticales adaptées au logo horizontal. Aucun texte supplémentaire, aucun décor, aucun damier dessiné, aucun fond blanc, aucune ombre portée ni halo. Véritable canal alpha.
++CORRECTION IMPÉRATIVE : réduire tout le dessin pour conserver au moins 5 % de vide à gauche et à droite, y compris éclats et étincelle. Ne dessiner AUCUN halo lumineux ni ombre diffuse ni nuage noir autour du logo : contours secs, étincelle en aplat. Alpha zéro partout hors des formes dessinées et alpha 255 au cœur du bois. Si impossible de produire un vrai fond transparent propre, utiliser uniquement un fond chroma parfaitement uni #00FF00 sans aucune ombre. Dessiner les petites charges sur les deux O après la lettre T.
+
+diff --git a/assets/generated/identity/logo.prompt.txt b/assets/generated/identity/logo.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..c5b8c35ed27319d1663cff278c8f9165545a2fa4
+--- /dev/null
++++ b/assets/generated/identity/logo.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul asset final PNG paysage EXACTEMENT 1536×1024 : logo BOOMTOOTH sur fond réellement transparent alpha. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est uniquement une référence stylistique, ne pas reproduire son écran de jeu. Texte exact unique « BOOMTOOTH », neuf lettres B O O M T O O T H sur une seule ligne, très lisible même réduit à 220 px. Grosses lettres taillées dans des planches bois miel clouées, contour encre épais, reflets francs. Choisir la variante qui préserve toutes les lettres : les deux O centraux après T sont en bois, chacun décoré d'une petite charge rouge discrète, avec une minuscule décoration incisive crème et or si nécessaire mais sans masquer les contreformes. Une mèche allumée part de la dernière lettre H, avec étincelle dessinée et quelques petits éclats de bois. Ensemble compact centré, logo occupant 90 % de la largeur. Sujet intégral sans coupe, minimum 5 % de marge transparente latérale, larges marges transparentes verticales adaptées au logo horizontal. Aucun texte supplémentaire, aucun décor, aucun damier dessiné, aucun fond blanc, aucune ombre portée ni halo. Véritable canal alpha.
++CORRECTION IMPÉRATIVE : réduire tout le dessin pour conserver au moins 5 % de vide à gauche et à droite, y compris éclats et étincelle. Ne dessiner AUCUN halo lumineux ni ombre diffuse ni nuage noir autour du logo : contours secs, étincelle en aplat. Alpha zéro partout hors des formes dessinées et alpha 255 au cœur du bois. Si impossible de produire un vrai fond transparent propre, utiliser uniquement un fond chroma parfaitement uni #00FF00 sans aucune ombre. Dessiner les petites charges sur les deux O après la lettre T.
+
+exec
+/bin/bash -lc 'cp /root/.codex/generated_images/01a0e78b-9955-75d0-9cbc-d37b99a6c960/exec-971edc11-fcbf-433c-8947-c378185b3fd5.png assets/generated/identity/crownforge.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/identity/crownforge.prompt.txt
+diff --git a/assets/generated/identity/crownforge.prompt.txt b/assets/generated/identity/crownforge.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..032b81a956431315d420e70429e9d5676c230f69
+--- /dev/null
++++ b/assets/generated/identity/crownforge.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul PNG paysage exactement 1536×1024 pour la marque du studio Crownforge. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++Image de référence D1 : style seulement, aucun de ses textes ni sa composition. Emblème centré sobre élégant : couronne dorée posée sur une enclume de forge sombre, un marteau incliné associé à l'enclume, quelques étincelles orange géométriques en aplats. Dessous le mot exact unique « CROWNFORGE » en capitales massives crème cernées d'encre. Épeler C R O W N F O R G E, une seule ligne. Hiérarchie nette, lisibilité en petit. Composition intégralement visible, 5 % de marge minimum tout autour, ensemble 88–90 % de largeur. Fond RÉELLEMENT TRANSPARENT alpha zéro, couleurs du sujet opaques, aucune fumée ni ombre portée ni halo, aucun damier ni fond blanc. Si l'alpha est impossible, fond vert chroma #00FF00 parfaitement uni. Aucun autre texte ni chiffre. Reflets durs dessinés, absolument aucun dégradé.
++CORRECTION PRIORITAIRE : le premier essai a un halo et manque de marge. Utiliser maintenant le repli explicitement autorisé : FOND VERT CHROMA UNI #00FF00, absolument plat, sans halo ni ombre ni lumière sur le vert. Réduire la composition entière à 88 % de la largeur ET 88 % de la hauteur, pour laisser 6 % de marge sur chacun des quatre côtés. Aplats stricts, pas de dégradés. Tout le reste identique, CROWNFORGE exact.
+diff --git a/assets/generated/identity/logo.prompt.txt b/assets/generated/identity/logo.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..c5b8c35ed27319d1663cff278c8f9165545a2fa4
+--- /dev/null
++++ b/assets/generated/identity/logo.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul asset final PNG paysage EXACTEMENT 1536×1024 : logo BOOMTOOTH sur fond réellement transparent alpha. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est uniquement une référence stylistique, ne pas reproduire son écran de jeu. Texte exact unique « BOOMTOOTH », neuf lettres B O O M T O O T H sur une seule ligne, très lisible même réduit à 220 px. Grosses lettres taillées dans des planches bois miel clouées, contour encre épais, reflets francs. Choisir la variante qui préserve toutes les lettres : les deux O centraux après T sont en bois, chacun décoré d'une petite charge rouge discrète, avec une minuscule décoration incisive crème et or si nécessaire mais sans masquer les contreformes. Une mèche allumée part de la dernière lettre H, avec étincelle dessinée et quelques petits éclats de bois. Ensemble compact centré, logo occupant 90 % de la largeur. Sujet intégral sans coupe, minimum 5 % de marge transparente latérale, larges marges transparentes verticales adaptées au logo horizontal. Aucun texte supplémentaire, aucun décor, aucun damier dessiné, aucun fond blanc, aucune ombre portée ni halo. Véritable canal alpha.
++CORRECTION IMPÉRATIVE : réduire tout le dessin pour conserver au moins 5 % de vide à gauche et à droite, y compris éclats et étincelle. Ne dessiner AUCUN halo lumineux ni ombre diffuse ni nuage noir autour du logo : contours secs, étincelle en aplat. Alpha zéro partout hors des formes dessinées et alpha 255 au cœur du bois. Si impossible de produire un vrai fond transparent propre, utiliser uniquement un fond chroma parfaitement uni #00FF00 sans aucune ombre. Dessiner les petites charges sur les deux O après la lettre T.
+
+diff --git a/assets/generated/identity/crownforge.prompt.txt b/assets/generated/identity/crownforge.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..032b81a956431315d420e70429e9d5676c230f69
+--- /dev/null
++++ b/assets/generated/identity/crownforge.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul PNG paysage exactement 1536×1024 pour la marque du studio Crownforge. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++Image de référence D1 : style seulement, aucun de ses textes ni sa composition. Emblème centré sobre élégant : couronne dorée posée sur une enclume de forge sombre, un marteau incliné associé à l'enclume, quelques étincelles orange géométriques en aplats. Dessous le mot exact unique « CROWNFORGE » en capitales massives crème cernées d'encre. Épeler C R O W N F O R G E, une seule ligne. Hiérarchie nette, lisibilité en petit. Composition intégralement visible, 5 % de marge minimum tout autour, ensemble 88–90 % de largeur. Fond RÉELLEMENT TRANSPARENT alpha zéro, couleurs du sujet opaques, aucune fumée ni ombre portée ni halo, aucun damier ni fond blanc. Si l'alpha est impossible, fond vert chroma #00FF00 parfaitement uni. Aucun autre texte ni chiffre. Reflets durs dessinés, absolument aucun dégradé.
++CORRECTION PRIORITAIRE : le premier essai a un halo et manque de marge. Utiliser maintenant le repli explicitement autorisé : FOND VERT CHROMA UNI #00FF00, absolument plat, sans halo ni ombre ni lumière sur le vert. Réduire la composition entière à 88 % de la largeur ET 88 % de la hauteur, pour laisser 6 % de marge sur chacun des quatre côtés. Aplats stricts, pas de dégradés. Tout le reste identique, CROWNFORGE exact.
+diff --git a/assets/generated/identity/logo.prompt.txt b/assets/generated/identity/logo.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..c5b8c35ed27319d1663cff278c8f9165545a2fa4
+--- /dev/null
++++ b/assets/generated/identity/logo.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul asset final PNG paysage EXACTEMENT 1536×1024 : logo BOOMTOOTH sur fond réellement transparent alpha. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est uniquement une référence stylistique, ne pas reproduire son écran de jeu. Texte exact unique « BOOMTOOTH », neuf lettres B O O M T O O T H sur une seule ligne, très lisible même réduit à 220 px. Grosses lettres taillées dans des planches bois miel clouées, contour encre épais, reflets francs. Choisir la variante qui préserve toutes les lettres : les deux O centraux après T sont en bois, chacun décoré d'une petite charge rouge discrète, avec une minuscule décoration incisive crème et or si nécessaire mais sans masquer les contreformes. Une mèche allumée part de la dernière lettre H, avec étincelle dessinée et quelques petits éclats de bois. Ensemble compact centré, logo occupant 90 % de la largeur. Sujet intégral sans coupe, minimum 5 % de marge transparente latérale, larges marges transparentes verticales adaptées au logo horizontal. Aucun texte supplémentaire, aucun décor, aucun damier dessiné, aucun fond blanc, aucune ombre portée ni halo. Véritable canal alpha.
++CORRECTION IMPÉRATIVE : réduire tout le dessin pour conserver au moins 5 % de vide à gauche et à droite, y compris éclats et étincelle. Ne dessiner AUCUN halo lumineux ni ombre diffuse ni nuage noir autour du logo : contours secs, étincelle en aplat. Alpha zéro partout hors des formes dessinées et alpha 255 au cœur du bois. Si impossible de produire un vrai fond transparent propre, utiliser uniquement un fond chroma parfaitement uni #00FF00 sans aucune ombre. Dessiner les petites charges sur les deux O après la lettre T.
+
+codex
+L’emblème Crownforge est enregistré sur fond vert chroma, selon le repli autorisé : la première génération transparente avait aussi un halo. Les textes des deux logos sont corrects. Je poursuis avec les cartes opaques.
+
+diff --git a/assets/generated/identity/crownforge.prompt.txt b/assets/generated/identity/crownforge.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..032b81a956431315d420e70429e9d5676c230f69
+--- /dev/null
++++ b/assets/generated/identity/crownforge.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul PNG paysage exactement 1536×1024 pour la marque du studio Crownforge. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++Image de référence D1 : style seulement, aucun de ses textes ni sa composition. Emblème centré sobre élégant : couronne dorée posée sur une enclume de forge sombre, un marteau incliné associé à l'enclume, quelques étincelles orange géométriques en aplats. Dessous le mot exact unique « CROWNFORGE » en capitales massives crème cernées d'encre. Épeler C R O W N F O R G E, une seule ligne. Hiérarchie nette, lisibilité en petit. Composition intégralement visible, 5 % de marge minimum tout autour, ensemble 88–90 % de largeur. Fond RÉELLEMENT TRANSPARENT alpha zéro, couleurs du sujet opaques, aucune fumée ni ombre portée ni halo, aucun damier ni fond blanc. Si l'alpha est impossible, fond vert chroma #00FF00 parfaitement uni. Aucun autre texte ni chiffre. Reflets durs dessinés, absolument aucun dégradé.
++CORRECTION PRIORITAIRE : le premier essai a un halo et manque de marge. Utiliser maintenant le repli explicitement autorisé : FOND VERT CHROMA UNI #00FF00, absolument plat, sans halo ni ombre ni lumière sur le vert. Réduire la composition entière à 88 % de la largeur ET 88 % de la hauteur, pour laisser 6 % de marge sur chacun des quatre côtés. Aplats stricts, pas de dégradés. Tout le reste identique, CROWNFORGE exact.
+diff --git a/assets/generated/identity/logo.prompt.txt b/assets/generated/identity/logo.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..c5b8c35ed27319d1663cff278c8f9165545a2fa4
+--- /dev/null
++++ b/assets/generated/identity/logo.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul asset final PNG paysage EXACTEMENT 1536×1024 : logo BOOMTOOTH sur fond réellement transparent alpha. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est uniquement une référence stylistique, ne pas reproduire son écran de jeu. Texte exact unique « BOOMTOOTH », neuf lettres B O O M T O O T H sur une seule ligne, très lisible même réduit à 220 px. Grosses lettres taillées dans des planches bois miel clouées, contour encre épais, reflets francs. Choisir la variante qui préserve toutes les lettres : les deux O centraux après T sont en bois, chacun décoré d'une petite charge rouge discrète, avec une minuscule décoration incisive crème et or si nécessaire mais sans masquer les contreformes. Une mèche allumée part de la dernière lettre H, avec étincelle dessinée et quelques petits éclats de bois. Ensemble compact centré, logo occupant 90 % de la largeur. Sujet intégral sans coupe, minimum 5 % de marge transparente latérale, larges marges transparentes verticales adaptées au logo horizontal. Aucun texte supplémentaire, aucun décor, aucun damier dessiné, aucun fond blanc, aucune ombre portée ni halo. Véritable canal alpha.
++CORRECTION IMPÉRATIVE : réduire tout le dessin pour conserver au moins 5 % de vide à gauche et à droite, y compris éclats et étincelle. Ne dessiner AUCUN halo lumineux ni ombre diffuse ni nuage noir autour du logo : contours secs, étincelle en aplat. Alpha zéro partout hors des formes dessinées et alpha 255 au cœur du bois. Si impossible de produire un vrai fond transparent propre, utiliser uniquement un fond chroma parfaitement uni #00FF00 sans aucune ombre. Dessiner les petites charges sur les deux O après la lettre T.
+
+exec
+/bin/bash -lc 'cp /root/.codex/generated_images/01a0e78b-9955-75d0-9cbc-d37b99a6c960/exec-b0cc96f0-1d46-435b-9747-35c75711a832.png assets/generated/identity/card-blast.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/identity/card-blast.prompt.txt
+diff --git a/assets/generated/identity/card-blast.prompt.txt b/assets/generated/identity/card-blast.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..bc7f8b7b256690228fa05afc9e40cff5778bfbe6
+--- /dev/null
++++ b/assets/generated/identity/card-blast.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: illustration-story
++Asset : carte d'accueil verticale BOOMTOOTH, PNG exactement 1024×1536, fond entièrement OPAQUE jusqu'aux quatre coins. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est la référence obligatoire de trait, de matériaux et de couleurs seulement. Illustration montrant une grille de slot 3 colonnes par 4 rangées en bois et métal ; dans une case un bâton de dynamite rouge SANS INSCRIPTION explose, flash crème/orange géométrique, éclats de granit anguleux, volutes de poussière ocre dessinées en aplats. Au centre, un symbole GÉANT : buste d'élan souriant avec énormes bois palmés, entièrement sculpté en granit gris-bleu ébréché, surgit de la poussière et couvre exactement un bloc de QUATRE cases, deux colonnes par deux rangées ; les lignes de la grille encore visibles autour permettent de comprendre son agrandissement. Buste et bois entiers sans coupe. Lecture immédiate explosion puis symbole géant. Cadre épais en bois miel veiné aux coins arrondis dessiné dans l'image, entièrement visible avec une petite marge opaque. Lumière de fin d'après-midi venant de la gauche. Aucun texte, aucune lettre, aucun chiffre, aucune interface ni logo, ne pas écrire TNT. Pas de transparence.
+diff --git a/assets/generated/identity/crownforge.prompt.txt b/assets/generated/identity/crownforge.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..032b81a956431315d420e70429e9d5676c230f69
+--- /dev/null
++++ b/assets/generated/identity/crownforge.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul PNG paysage exactement 1536×1024 pour la marque du studio Crownforge. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++Image de référence D1 : style seulement, aucun de ses textes ni sa composition. Emblème centré sobre élégant : couronne dorée posée sur une enclume de forge sombre, un marteau incliné associé à l'enclume, quelques étincelles orange géométriques en aplats. Dessous le mot exact unique « CROWNFORGE » en capitales massives crème cernées d'encre. Épeler C R O W N F O R G E, une seule ligne. Hiérarchie nette, lisibilité en petit. Composition intégralement visible, 5 % de marge minimum tout autour, ensemble 88–90 % de largeur. Fond RÉELLEMENT TRANSPARENT alpha zéro, couleurs du sujet opaques, aucune fumée ni ombre portée ni halo, aucun damier ni fond blanc. Si l'alpha est impossible, fond vert chroma #00FF00 parfaitement uni. Aucun autre texte ni chiffre. Reflets durs dessinés, absolument aucun dégradé.
++CORRECTION PRIORITAIRE : le premier essai a un halo et manque de marge. Utiliser maintenant le repli explicitement autorisé : FOND VERT CHROMA UNI #00FF00, absolument plat, sans halo ni ombre ni lumière sur le vert. Réduire la composition entière à 88 % de la largeur ET 88 % de la hauteur, pour laisser 6 % de marge sur chacun des quatre côtés. Aplats stricts, pas de dégradés. Tout le reste identique, CROWNFORGE exact.
+diff --git a/assets/generated/identity/logo.prompt.txt b/assets/generated/identity/logo.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..c5b8c35ed27319d1663cff278c8f9165545a2fa4
+--- /dev/null
++++ b/assets/generated/identity/logo.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul asset final PNG paysage EXACTEMENT 1536×1024 : logo BOOMTOOTH sur fond réellement transparent alpha. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est uniquement une référence stylistique, ne pas reproduire son écran de jeu. Texte exact unique « BOOMTOOTH », neuf lettres B O O M T O O T H sur une seule ligne, très lisible même réduit à 220 px. Grosses lettres taillées dans des planches bois miel clouées, contour encre épais, reflets francs. Choisir la variante qui préserve toutes les lettres : les deux O centraux après T sont en bois, chacun décoré d'une petite charge rouge discrète, avec une minuscule décoration incisive crème et or si nécessaire mais sans masquer les contreformes. Une mèche allumée part de la dernière lettre H, avec étincelle dessinée et quelques petits éclats de bois. Ensemble compact centré, logo occupant 90 % de la largeur. Sujet intégral sans coupe, minimum 5 % de marge transparente latérale, larges marges transparentes verticales adaptées au logo horizontal. Aucun texte supplémentaire, aucun décor, aucun damier dessiné, aucun fond blanc, aucune ombre portée ni halo. Véritable canal alpha.
++CORRECTION IMPÉRATIVE : réduire tout le dessin pour conserver au moins 5 % de vide à gauche et à droite, y compris éclats et étincelle. Ne dessiner AUCUN halo lumineux ni ombre diffuse ni nuage noir autour du logo : contours secs, étincelle en aplat. Alpha zéro partout hors des formes dessinées et alpha 255 au cœur du bois. Si impossible de produire un vrai fond transparent propre, utiliser uniquement un fond chroma parfaitement uni #00FF00 sans aucune ombre. Dessiner les petites charges sur les deux O après la lettre T.
+
+diff --git a/assets/generated/identity/card-blast.prompt.txt b/assets/generated/identity/card-blast.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..bc7f8b7b256690228fa05afc9e40cff5778bfbe6
+--- /dev/null
++++ b/assets/generated/identity/card-blast.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: illustration-story
++Asset : carte d'accueil verticale BOOMTOOTH, PNG exactement 1024×1536, fond entièrement OPAQUE jusqu'aux quatre coins. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est la référence obligatoire de trait, de matériaux et de couleurs seulement. Illustration montrant une grille de slot 3 colonnes par 4 rangées en bois et métal ; dans une case un bâton de dynamite rouge SANS INSCRIPTION explose, flash crème/orange géométrique, éclats de granit anguleux, volutes de poussière ocre dessinées en aplats. Au centre, un symbole GÉANT : buste d'élan souriant avec énormes bois palmés, entièrement sculpté en granit gris-bleu ébréché, surgit de la poussière et couvre exactement un bloc de QUATRE cases, deux colonnes par deux rangées ; les lignes de la grille encore visibles autour permettent de comprendre son agrandissement. Buste et bois entiers sans coupe. Lecture immédiate explosion puis symbole géant. Cadre épais en bois miel veiné aux coins arrondis dessiné dans l'image, entièrement visible avec une petite marge opaque. Lumière de fin d'après-midi venant de la gauche. Aucun texte, aucune lettre, aucun chiffre, aucune interface ni logo, ne pas écrire TNT. Pas de transparence.
+diff --git a/assets/generated/identity/crownforge.prompt.txt b/assets/generated/identity/crownforge.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..032b81a956431315d420e70429e9d5676c230f69
+--- /dev/null
++++ b/assets/generated/identity/crownforge.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul PNG paysage exactement 1536×1024 pour la marque du studio Crownforge. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++Image de référence D1 : style seulement, aucun de ses textes ni sa composition. Emblème centré sobre élégant : couronne dorée posée sur une enclume de forge sombre, un marteau incliné associé à l'enclume, quelques étincelles orange géométriques en aplats. Dessous le mot exact unique « CROWNFORGE » en capitales massives crème cernées d'encre. Épeler C R O W N F O R G E, une seule ligne. Hiérarchie nette, lisibilité en petit. Composition intégralement visible, 5 % de marge minimum tout autour, ensemble 88–90 % de largeur. Fond RÉELLEMENT TRANSPARENT alpha zéro, couleurs du sujet opaques, aucune fumée ni ombre portée ni halo, aucun damier ni fond blanc. Si l'alpha est impossible, fond vert chroma #00FF00 parfaitement uni. Aucun autre texte ni chiffre. Reflets durs dessinés, absolument aucun dégradé.
++CORRECTION PRIORITAIRE : le premier essai a un halo et manque de marge. Utiliser maintenant le repli explicitement autorisé : FOND VERT CHROMA UNI #00FF00, absolument plat, sans halo ni ombre ni lumière sur le vert. Réduire la composition entière à 88 % de la largeur ET 88 % de la hauteur, pour laisser 6 % de marge sur chacun des quatre côtés. Aplats stricts, pas de dégradés. Tout le reste identique, CROWNFORGE exact.
+diff --git a/assets/generated/identity/logo.prompt.txt b/assets/generated/identity/logo.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..c5b8c35ed27319d1663cff278c8f9165545a2fa4
+--- /dev/null
++++ b/assets/generated/identity/logo.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul asset final PNG paysage EXACTEMENT 1536×1024 : logo BOOMTOOTH sur fond réellement transparent alpha. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est uniquement une référence stylistique, ne pas reproduire son écran de jeu. Texte exact unique « BOOMTOOTH », neuf lettres B O O M T O O T H sur une seule ligne, très lisible même réduit à 220 px. Grosses lettres taillées dans des planches bois miel clouées, contour encre épais, reflets francs. Choisir la variante qui préserve toutes les lettres : les deux O centraux après T sont en bois, chacun décoré d'une petite charge rouge discrète, avec une minuscule décoration incisive crème et or si nécessaire mais sans masquer les contreformes. Une mèche allumée part de la dernière lettre H, avec étincelle dessinée et quelques petits éclats de bois. Ensemble compact centré, logo occupant 90 % de la largeur. Sujet intégral sans coupe, minimum 5 % de marge transparente latérale, larges marges transparentes verticales adaptées au logo horizontal. Aucun texte supplémentaire, aucun décor, aucun damier dessiné, aucun fond blanc, aucune ombre portée ni halo. Véritable canal alpha.
++CORRECTION IMPÉRATIVE : réduire tout le dessin pour conserver au moins 5 % de vide à gauche et à droite, y compris éclats et étincelle. Ne dessiner AUCUN halo lumineux ni ombre diffuse ni nuage noir autour du logo : contours secs, étincelle en aplat. Alpha zéro partout hors des formes dessinées et alpha 255 au cœur du bois. Si impossible de produire un vrai fond transparent propre, utiliser uniquement un fond chroma parfaitement uni #00FF00 sans aucune ombre. Dessiner les petites charges sur les deux O après la lettre T.
+
+codex
+La carte d’explosion est enregistrée : le buste d’élan en granit émerge devant un bloc de quatre cases, sans texte parasite. Les deux cartes restantes reprendront la nuit turquoise et les éclairages orange de D3.
+
+diff --git a/assets/generated/identity/card-blast.prompt.txt b/assets/generated/identity/card-blast.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..bc7f8b7b256690228fa05afc9e40cff5778bfbe6
+--- /dev/null
++++ b/assets/generated/identity/card-blast.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: illustration-story
++Asset : carte d'accueil verticale BOOMTOOTH, PNG exactement 1024×1536, fond entièrement OPAQUE jusqu'aux quatre coins. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est la référence obligatoire de trait, de matériaux et de couleurs seulement. Illustration montrant une grille de slot 3 colonnes par 4 rangées en bois et métal ; dans une case un bâton de dynamite rouge SANS INSCRIPTION explose, flash crème/orange géométrique, éclats de granit anguleux, volutes de poussière ocre dessinées en aplats. Au centre, un symbole GÉANT : buste d'élan souriant avec énormes bois palmés, entièrement sculpté en granit gris-bleu ébréché, surgit de la poussière et couvre exactement un bloc de QUATRE cases, deux colonnes par deux rangées ; les lignes de la grille encore visibles autour permettent de comprendre son agrandissement. Buste et bois entiers sans coupe. Lecture immédiate explosion puis symbole géant. Cadre épais en bois miel veiné aux coins arrondis dessiné dans l'image, entièrement visible avec une petite marge opaque. Lumière de fin d'après-midi venant de la gauche. Aucun texte, aucune lettre, aucun chiffre, aucune interface ni logo, ne pas écrire TNT. Pas de transparence.
+diff --git a/assets/generated/identity/crownforge.prompt.txt b/assets/generated/identity/crownforge.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..032b81a956431315d420e70429e9d5676c230f69
+--- /dev/null
++++ b/assets/generated/identity/crownforge.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul PNG paysage exactement 1536×1024 pour la marque du studio Crownforge. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++Image de référence D1 : style seulement, aucun de ses textes ni sa composition. Emblème centré sobre élégant : couronne dorée posée sur une enclume de forge sombre, un marteau incliné associé à l'enclume, quelques étincelles orange géométriques en aplats. Dessous le mot exact unique « CROWNFORGE » en capitales massives crème cernées d'encre. Épeler C R O W N F O R G E, une seule ligne. Hiérarchie nette, lisibilité en petit. Composition intégralement visible, 5 % de marge minimum tout autour, ensemble 88–90 % de largeur. Fond RÉELLEMENT TRANSPARENT alpha zéro, couleurs du sujet opaques, aucune fumée ni ombre portée ni halo, aucun damier ni fond blanc. Si l'alpha est impossible, fond vert chroma #00FF00 parfaitement uni. Aucun autre texte ni chiffre. Reflets durs dessinés, absolument aucun dégradé.
++CORRECTION PRIORITAIRE : le premier essai a un halo et manque de marge. Utiliser maintenant le repli explicitement autorisé : FOND VERT CHROMA UNI #00FF00, absolument plat, sans halo ni ombre ni lumière sur le vert. Réduire la composition entière à 88 % de la largeur ET 88 % de la hauteur, pour laisser 6 % de marge sur chacun des quatre côtés. Aplats stricts, pas de dégradés. Tout le reste identique, CROWNFORGE exact.
+diff --git a/assets/generated/identity/logo.prompt.txt b/assets/generated/identity/logo.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..c5b8c35ed27319d1663cff278c8f9165545a2fa4
+--- /dev/null
++++ b/assets/generated/identity/logo.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: logo-brand
++Créer un seul asset final PNG paysage EXACTEMENT 1536×1024 : logo BOOMTOOTH sur fond réellement transparent alpha. Référence obligatoire D1.png déjà chargée : reproduire exactement son trait BD cartoon 2D adulte Crownforge, contours encre #1B1410 noirs épais légèrement irréguliers au pinceau 4–7 px à 1024 px, traits intérieurs plus fins. Aplats de cel-shading deux tons nets et un reflet crème par volume, sans dégradé ni aérographe ni flou. Formes simples lisibles, bois équarri veiné, métal riveté, granit ébréché. Palette orange brûlé #E8742A, orange ciel #F39A3C, pins #2F5D46 et #1E3B2E, granit #6F7F92 et #46526A, TNT #D7332B, or #F2B233, bois miel #C98A45 et sombre #6B4526, crème #F4E6C8. Lumière chaude gauche et ombres bleu-violet. Aucune copie d'une autre marque, aucun filigrane, aucune signature, jamais photoréalisme ni 3D lisse, aucun néon générique ni effet de bordure.
++D1 est uniquement une référence stylistique, ne pas reproduire son écran de jeu. Texte exact unique « BOOMTOOTH », neuf lettres B O O M T O O T H sur une seule ligne, très lisible même réduit à 220 px. Grosses lettres taillées dans des planches bois miel clouées, contour encre épais, reflets francs. Choisir la variante qui préserve toutes les lettres : les deux O centraux après T sont en bois, chacun décoré d'une petite charge rouge discrète, avec une minuscule décoration incisive crème et or si nécessaire mais sans masquer les contreformes. Une mèche allumée part de la dernière lettre H, avec étincelle dessinée et quelques petits éclats de bois. Ensemble compact centré, logo occupant 90 % de la largeur. Sujet intégral sans coupe, minimum 5 % de marge transparente latérale, larges marges transparentes verticales adaptées au logo horizontal. Aucun texte supplémentaire, aucun décor, aucun damier dessiné, aucun fond blanc, aucune ombre portée ni halo. Véritable canal alpha.
++CORRECTION IMPÉRATIVE : réduire tout le dessin pour conserver au moins 5 % de vide à gauche et à droite, y compris éclats et étincelle. Ne dessiner AUCUN halo lumineux ni ombre diffuse ni nuage noir autour du logo : contours secs, étincelle en aplat. Alpha zéro partout hors des formes dessinées et alpha 255 au cœur du bois. Si impossible de produire un vrai fond transparent propre, utiliser uniquement un fond chroma parfaitement uni #00FF00 sans aucune ombre. Dessiner les petites charges sur les deux O après la lettre T.
+
+ERROR: You’ve hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at Oct 4th, 2026 12:31 PM.
+ERROR: You’ve hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at Oct 4th, 2026 12:31 PM.
+tokens used
+35,763

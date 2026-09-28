@@ -118,7 +118,7 @@ function components(buf, threshold = 24, minArea = 400, dilate = 6) {
         if (m[j] && label[j] < 0) { label[j] = id; stack.push(j); }
       }
     }
-    boxes.push({ x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1, area });
+    boxes.push({ x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1, area, id, label });
   }
   const parts = boxes.filter((b) => b.area >= minArea);
   // ordre de lecture : bandes horizontales puis gauche -> droite
@@ -188,7 +188,30 @@ async function processAsset(key, spec) {
     normalizeAlpha(buf);
   }
   const outputs = [];
-  if (spec.split) {
+  if (spec.split && spec.split.rects) {
+    // planche en zones définies (éléments qui se touchent) : chaque zone garde ses composantes principales
+    const names = spec.split.names;
+    for (let n = 0; n < names.length; n++) {
+      const [rx, ry, rw, rh] = spec.split.rects[n];
+      const iso = { width: buf.width, height: buf.height, data: Buffer.alloc(buf.data.length) };
+      for (let y = ry; y < Math.min(buf.height, ry + rh); y++) {
+        const o = (y * buf.width + rx) * 4;
+        buf.data.copy(iso.data, o, o, o + Math.min(rw, buf.width - rx) * 4);
+      }
+      const comps = components(iso, 24, 50, 2);
+      const biggest = Math.max(...comps.map((c) => c.area), 1);
+      const keep = comps.filter((c) => c.area >= biggest * (spec.split.keepMin ?? 0.04));
+      const label = keep[0]?.label;
+      const ids = new Set(keep.map((c) => c.id));
+      if (label) for (let i = 0; i < buf.width * buf.height; i++) if (!ids.has(label[i])) iso.data[i * 4 + 3] = 0;
+      const rect = expand(bbox(iso, 8) ?? { x: rx, y: ry, w: rw, h: rh }, spec.margin ?? 6, buf.width, buf.height);
+      const name = names[n];
+      const out = path.join(OUT, spec.family, `${key}.${name}.webp`);
+      const dims = await exportRegion(iso, rect, spec, out);
+      manifest.assets[`${key}.${name}`] = { url: `assets/${spec.family}/${key}.${name}.webp`, w: dims.w, h: dims.h, source: spec.src, sourceHash: sha(src), frame: rect, scale: dims.scale, pivot: spec.split.pivots?.[name] ?? null, family: spec.family };
+      outputs.push(out);
+    }
+  } else if (spec.split) {
     // planche : une pièce par composante connexe, noms dans l'ordre de lecture
     const comps = components(buf, 24, spec.split.minArea ?? 400, spec.split.dilate ?? 6);
     const names = spec.split.names ?? [];
@@ -197,10 +220,13 @@ async function processAsset(key, spec) {
     for (let n = 0; n < names.length; n++) {
       const comp = comps[order[n]];
       if (!comp) continue;
-      const rect = expand(bbox(buf, 8, comp) ?? comp, spec.margin ?? 6, buf.width, buf.height);
+      // n'exporte que les pixels de cette composante (les voisines peuvent entrer dans le cadre rogné)
+      const iso = { width: buf.width, height: buf.height, data: Buffer.from(buf.data) };
+      for (let i = 0; i < buf.width * buf.height; i++) if (comp.label[i] !== comp.id) iso.data[i * 4 + 3] = 0;
+      const rect = expand(bbox(iso, 8, comp) ?? comp, spec.margin ?? 6, buf.width, buf.height);
       const name = names[n];
       const out = path.join(OUT, spec.family, `${key}.${name}.webp`);
-      const dims = await exportRegion(buf, rect, spec, out);
+      const dims = await exportRegion(iso, rect, spec, out);
       const pivot = spec.split.pivots?.[name] ?? null;
       manifest.assets[`${key}.${name}`] = {
         url: `assets/${spec.family}/${key}.${name}.webp`, w: dims.w, h: dims.h, source: spec.src, sourceHash: sha(src),
@@ -235,6 +261,8 @@ for (const [key, spec] of Object.entries(cfg.assets)) {
 }
 for (const [family, files] of families) await contactSheet(family, files.filter((f) => fs.existsSync(f)));
 
+// entrées périmées (fichier supprimé) retirées du manifeste
+for (const [k, v] of Object.entries(manifest.assets)) if (!fs.existsSync(path.join(ROOT, 'public', v.url))) delete manifest.assets[k];
 manifest.generatedAt = new Date().toISOString();
 fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 1));
 fs.writeFileSync(path.join(CHECKS, 'report.json'), JSON.stringify(report, null, 1));

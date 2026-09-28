@@ -1,0 +1,131 @@
+{
+ "H1": {
+  "body": "sym.H1.body",
+  "props": [
+   {
+    "key": "sym.H1.prop",
+    "attach": [
+     905,
+     700
+    ],
+    "pivot": [
+     1285,
+     860
+    ],
+    "z": 1,
+    "rest": 12,
+    "react": 0
+   }
+  ]
+ },
+ "H2": {
+  "body": "sym.H2.body",
+  "parts": [
+   {
+    "key": "sym.H2.antlerL",
+    "attach": [
+     330,
+     170
+    ],
+    "pivot": [
+     1090,
+     420
+    ],
+    "z": -1,
+    "rest": -8,
+    "react": -14
+   },
+   {
+    "key": "sym.H2.antlerR",
+    "attach": [
+     505,
+     205
+    ],
+    "pivot": [
+     1225,
+     430
+    ],
+    "z": -1,
+    "rest": 6,
+    "react": 14
+   }
+  ]
+ },
+ "H3": {
+  "body": "sym.H3.body",
+  "props": [
+   {
+    "key": "sym.H3.prop",
+    "attach": [
+     470,
+     760
+    ],
+    "pivot": [
+     1166,
+     520
+    ],
+    "z": 1,
+    "rest": -4,
+    "react": 0
+   }
+  ]
+ },
+ "H4": {
+  "body": "sym.H4.body",
+  "parts": [
+   {
+    "key": "sym.H4.part",
+    "attach": [
+     300,
+     420
+    ],
+    "pivot": [
+     1330,
+     535
+    ],
+    "z": -1,
+    "rest": 0,
+    "react": -18
+   }
+  ]
+ },
+ "W": {
+  "body": "sym.W.body",
+  "parts": [
+   {
+    "key": "sym.W.part",
+    "attach": [
+     300,
+     175
+    ],
+    "pivot": [
+     1060,
+     190
+    ],
+    "z": -1,
+    "rest": -18,
+    "react": -40
+   }
+  ]
+ },
+ "S": {
+  "body": "sym.S.body",
+  "parts": [
+   {
+    "key": "sym.S.part",
+    "attach": [
+     495,
+     810
+    ],
+    "pivot": [
+     1205,
+     860
+    ],
+    "z": -1,
+    "rest": 0,
+    "react": 0,
+    "reactDy": -320
+   }
+  ]
+ }
+}

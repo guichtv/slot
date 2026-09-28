@@ -1,0 +1,43 @@
+Utilise $imagegen et l'outil natif de génération d'images (built-in image_gen, PAS un script CLI/API) pour produire réellement les images décrites. Ta mission porte uniquement sur ces images et leur rapport ; ne crée ni ne modifie aucun code du jeu.
+
+Studio : Crownforge. Racine du projet : le répertoire courant.
+
+RÈGLES COMMUNES
+- Style maison Crownforge : BD / cartoon 2D pour adultes, contours noirs épais légèrement irréguliers, cel-shading deux tons, reflets francs, couleurs saturées maîtrisées, formes simples et lisibles. Jamais photo-réaliste, jamais 3D lisse, jamais de rendu « image IA » (pas de néon générique, pas de dégradés par défaut, pas de flou artistique, pas d'effets de bordure).
+- Transparence (quand demandée) : fond RÉELLEMENT transparent (canal alpha), pas de damier dessiné, pas de fond blanc, pas de halo ; sujet complet non coupé, marge de 3 à 6 % tout autour. Si l'outil ne produit pas d'alpha : fond vert chroma uni #00FF00 sans ombre portée, et signale-le dans ta réponse.
+- Aucun texte, logo, filigrane ou signature, sauf le texte exact demandé.
+- Aucune copie de personnage, de logo ou de composition identifiable d'un autre studio ou d'une marque.
+- Reprise : si un fichier cible existe déjà ET que son .prompt.txt existe, ne le régénère pas ; passe au suivant.
+
+PROCÉDURE pour CHAQUE image :
+1) génère avec image_gen (un appel par asset) ;
+2) inspecte (sujet, style, transparence, marges, texte exact) et régénère UNE fois si un défaut évident existe ;
+3) copie le fichier final depuis $CODEX_HOME/generated_images/… vers le chemin indiqué (crée les dossiers) ;
+4) écris à côté <nom>.prompt.txt avec le prompt exact utilisé.
+
+RÉPONSE FINALE : chemins produits, méthode réellement utilisée, dimensions, canal alpha (oui/non), défauts restants.
+Si image_gen n'est pas accessible, dis-le précisément ; ne remplace PAS les images par du SVG, du code ou une liste de prompts.
+
+Projet : BOOMTOOTH, slot 2D « démolition au castor » (Crownforge). Buck Boomtooth, castor chef de chantier vaniteux et casse-cou, fait sauter une montagne de granit pour y sculpter un monument à sa gloire (« Mount Buckmore ») au-dessus d'un barrage en rondins, dans une vallée de pins du Grand Nord.
+
+Direction artistique RETENUE (référence obligatoire) : assets/generated/directions/D1.png — charge-la avec view_image avant de générer et reproduis son style exact :
+- encrage noir épais (4 à 7 px à 1024 px), légèrement irrégulier comme au pinceau, traits intérieurs plus fins ;
+- cel-shading deux tons nets (clair + ombre franche) et un reflet blanc cassé par volume ; pas d'aérographe, pas de flou ;
+- matières dessinées : bois équarri veiné, granit gris-bleu ébréché, métal riveté, flanelle à carreaux rouges et noirs, copeaux ;
+- lumière principale chaude de fin d'après-midi venant de la gauche (orange doré), ombres bleu-violet ;
+- couleurs saturées maîtrisées.
+Palette : orange brûlé #E8742A, orange ciel #F39A3C, vert pin #2F5D46, vert pin sombre #1E3B2E, granit #6F7F92, granit ombre #46526A, rouge TNT #D7332B, or #F2B233, bois miel #C98A45, bois sombre #6B4526, crème #F4E6C8, encre #1B1410.
+Référence d'ambiance NUIT (bonus) : assets/generated/directions/D3.png (aurore turquoise #3FD6B8, bleu nuit #14233A, projecteurs orange #FF9A3C) — même vallée, même trait.
+Jamais photo-réaliste, jamais 3D lisse, jamais de néon générique ni de dégradé par défaut.
+
+LOT mascot-rig — Buck Boomtooth découpé pour une animation cut-out (5 images). Dossier : assets/generated/mascot/
+Personnage de D1.png, strictement le même : castor trapu et musclé, fourrure brun roux (#9A5A2E, ombre #6B3A1E), ventre plus clair, grosse queue plate écailleuse brun foncé, deux grandes incisives dont celle de GAUCHE (côté droit de l'image) en OR (#F2B233), l'autre crème ; casque de chantier orange (#E8742A) cabossé avec lampe frontale ronde ; chemise de flanelle à carreaux rouges et noirs aux manches retroussées aux coudes ; bretelles noires ; ceinture de cuir à grosse boucle et étuis à outils ; jean bleu usé ; grosses bottes de travail brunes ; allumette coincée au coin droit de la bouche.
+Style : exactement celui de D1.png (encrage épais irrégulier, cel-shading deux tons, reflets francs, lumière chaude venant de la gauche).
+Toutes les pièces sont dessinées à la MÊME ÉCHELLE que la référence complète (image 1), vue trois-quarts tournée vers la gauche de l'image (il regarde vers la grille, située à sa gauche).
+RÈGLES DE DÉCOUPE (animation cut-out) : chaque pièce est un élément isolé, complet, entouré d'au moins 60 px de vide transparent ; aux articulations, chaque segment se prolonge largement par une extrémité ARRONDIE et pleine (recouvrement généreux, jamais coupé net) ; les manches retroussées cachent les coudes, la fourrure épaisse cache les poignets, le col de la chemise cache la base du cou, le haut des bottes cache les chevilles. Aucune ombre au sol sur les pièces.
+
+1. buck-ref.png — Référence complète, 1024×1536, fond TRANSPARENT : Buck debout en pose neutre de repos, pieds écartés à largeur d'épaules bien à plat, bras légèrement écartés du corps (les deux mains visibles, ouvertes et détendues), queue visible derrière la jambe droite, sourire en coin avec dent en or visible. Personnage entier non coupé, occupant 90 % de la hauteur.
+2. buck-heads.png — Planche de 7 têtes, 1536×1024, fond TRANSPARENT, disposées en 2 rangées (4 + 3), toutes à la même taille et la même inclinaison, chacune avec son casque, la base du cou coupée en arc arrondi au même endroit (large collerette de fourrure qui s'enfoncera sous le col). Expressions : (a) repos, sourire en coin, allumette ; (b) grand sourire satisfait montrant les deux incisives dont celle en or ; (c) cri de joie bouche grande ouverte ; (d) surprise, yeux ronds, bouche en O, allumette qui tombe ; (e) clin d'œil vaniteux, sourcil levé ; (f) concentré, sourcils froncés, dents serrées sur l'allumette ; (g) yeux fermés (clignement), sourire en coin.
+3. buck-body.png — Planche du corps, 1536×1024, fond TRANSPARENT, 6 pièces séparées : (a) torse + bassin (chemise, bretelles, ceinture à outils, haut du jean) sans tête ni bras, avec épaules arrondies et col ouvert ; (b) queue plate écailleuse seule, base arrondie ; (c) cuisse gauche en jean (du bassin au genou, genou arrondi) ; (d) cuisse droite ; (e) jambe gauche du genou à la botte comprise (genou arrondi en haut, botte à plat) ; (f) jambe droite du genou à la botte comprise.
+4. buck-arms.png — Planche bras et mains, 1536×1024, fond TRANSPARENT, 10 pièces séparées en 2 rangées : (a) bras supérieur gauche (manche de flanelle retroussée, épaule arrondie, coude arrondi) ; (b) bras supérieur droit ; (c) avant-bras gauche (fourrure, du coude au poignet, extrémités arrondies) ; (d) avant-bras droit ; puis six mains de castor à quatre gros doigts griffus, poignet arrondi : (e) main ouverte détendue, (f) poing fermé, (g) main qui empoigne une barre horizontale (vide au centre du poing), (h) pouce levé, (i) index pointé, (j) main tenant une allumette enflammée entre deux doigts.
+5. buck-props.png — Planche d'accessoires, 1536×1024, fond TRANSPARENT, 4 pièces séparées : (a) grand détonateur à piston : caisse en bois rouge TNT (#D7332B) cerclée de fer, deux bornes en laiton, fils rouges qui sortent sur le côté, SANS la poignée (orifice en laiton sur le dessus), à l'échelle d'un objet qui arrive à la taille de Buck ; (b) la poignée en T du détonateur (barre de bois verni + longue tige d'acier), verticale ; (c) un bâton de dynamite rouge à mèche courte, à l'échelle de sa main ; (d) une petite allumette en bois à bout rouge.

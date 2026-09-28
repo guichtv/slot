@@ -1,0 +1,10 @@
+[10:23:20] start mascot-rig (essai 1)
+[10:24:00] start ui-frame-hud (essai 1)
+[10:24:40] start identity (essai 1)
+[10:32:06] mascot-rig : QUOTA atteint — arrêt de la génération
+[10:32:06] fin mascot-rig (code 1)
+[10:32:10] ui-frame-hud : QUOTA atteint — arrêt de la génération
+[10:32:10] fin ui-frame-hud (code 1)
+[10:32:38] identity : QUOTA atteint — arrêt de la génération
+[10:32:38] fin identity (code 1)
+file terminée

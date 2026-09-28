@@ -1,0 +1,13 @@
+Use case: stylized-concept
+Asset type: BOOMTOOTH / Crownforge 2D slot symbol, production PNG.
+Reference: the supplied D1.png is the mandatory STYLE reference only. Match its reel symbols' hand-inked adult comic cartoon art exactly; do not reproduce the scene, lettering, characters, frame or UI.
+Canvas: exactly 1024 x 1024. REAL transparent alpha background, no checkerboard, no white backdrop, no halo, no ground shadow, no frame. One complete centered isolated object, maximum dimension about 88% of canvas, minimum 5% empty margin on every side including fuse/handle. Readable at 90px on dark #1c1a1f.
+Style: bold slightly irregular black brush contours 4–7 px at 1024, finer interior lines, simple readable shapes, strictly two flat cel-shading tones per material and one crisp cream-white highlight per volume. Warm golden-orange late afternoon key light from left, blue-violet shadow shapes. Controlled saturated colors. Hand-drawn worn materials, no airbrush, blur, smooth 3D, photographic rendering, generic neon, gradients or border effects.
+No text, letters, numbers, logos, signatures or watermarks.
+Subject: 
+Rendering constraint applying to this subject: ONLY uniform FLAT color fills bounded by sharp ink or cel shadow edges; no gradients or texture speckles. Keep details as simple as the reel icons in D1.
+
+Framing: keep the full silhouette including all attachments between coordinates 65 and 959 in both axes on the requested 1024x1024 canvas.
+Subject specification:
+A compact bundle of EXACTLY THREE red #D7332B cylindrical dynamite sticks: three clearly countable lighter end faces in triangular arrangement, no fourth stick. Bound tightly with TWO wraps of knotted hemp rope. A SINGLE longer black fuse joins the three sticks, no flames or sparks. Three-quarter slightly overhead view. Red dominant. Medium explosive charge: visibly wider and more substantial than a lone slender stick, less bulky than a keg.
+Technical correction: EXACTLY 1024x1024 PNG required. Keep every part including fuse tip at least 6 percent inside canvas edges. Strict flat fills with no gradients. Three sticks only, two rope wraps only, single shared unlit fuse.

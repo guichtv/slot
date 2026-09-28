@@ -1,0 +1,10 @@
+Use case: stylized-concept
+Asset type: BOOMTOOTH / Crownforge 2D slot symbol, production PNG.
+Reference: the supplied D1.png is the mandatory STYLE reference only. Match its reel symbols' hand-inked adult comic cartoon art exactly; do not reproduce the scene, lettering, characters, frame or UI.
+Canvas: exactly 1024 x 1024. REAL transparent alpha background, no checkerboard, no white backdrop, no halo, no ground shadow, no frame. One complete centered isolated object, maximum dimension about 88% of canvas, minimum 5% empty margin on every side including fuse/handle. Readable at 90px on dark #1c1a1f.
+Style: bold slightly irregular black brush contours 4–7 px at 1024, finer interior lines, simple readable shapes, strictly two flat cel-shading tones per material and one crisp cream-white highlight per volume. Warm golden-orange late afternoon key light from left, blue-violet shadow shapes. Controlled saturated colors. Hand-drawn worn materials, no airbrush, blur, smooth 3D, photographic rendering, generic neon, gradients or border effects.
+No text, letters, numbers, logos, signatures or watermarks.
+Subject: 
+Rendering constraint applying to this subject: ONLY uniform FLAT color fills bounded by sharp ink or cel shadow edges; no gradients or texture speckles. Keep details as simple as the reel icons in D1.
+A miner's pickaxe with a gray steel head with TWO pointed ends, wooden handle painted blue #2F6FD0 with black adhesive tape wrapped around its middle. Diagonal composition: handle bottom left, pickaxe head top right. Slight overhead three-quarter view. Occupy the canvas diagonal, clearly blue dominant handle and readable sharp steel silhouette.
+Framing correction: reduce entire object scale so its extreme tips are at least 70 pixels away from ALL four edges on the 1024 square canvas. Center the complete silhouette. Maximum silhouette width and height 880px. All color surfaces must be flat solid fills.

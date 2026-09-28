@@ -1,0 +1,1083 @@
+OpenAI Codex v0.158.0
+--------
+workdir: /home/user/slot
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: none
+reasoning summaries: none
+session id: 01a0e78a-fcff-74c2-aa0d-acfd3049c872
+--------
+user
+Utilise $imagegen et l'outil natif de génération d'images (built-in image_gen, PAS un script CLI/API) pour produire réellement les images décrites. Ta mission porte uniquement sur ces images et leur rapport ; ne crée ni ne modifie aucun code du jeu.
+
+Studio : Crownforge. Racine du projet : le répertoire courant.
+
+RÈGLES COMMUNES
+- Style maison Crownforge : BD / cartoon 2D pour adultes, contours noirs épais légèrement irréguliers, cel-shading deux tons, reflets francs, couleurs saturées maîtrisées, formes simples et lisibles. Jamais photo-réaliste, jamais 3D lisse, jamais de rendu « image IA » (pas de néon générique, pas de dégradés par défaut, pas de flou artistique, pas d'effets de bordure).
+- Transparence (quand demandée) : fond RÉELLEMENT transparent (canal alpha), pas de damier dessiné, pas de fond blanc, pas de halo ; sujet complet non coupé, marge de 3 à 6 % tout autour. Si l'outil ne produit pas d'alpha : fond vert chroma uni #00FF00 sans ombre portée, et signale-le dans ta réponse.
+- Aucun texte, logo, filigrane ou signature, sauf le texte exact demandé.
+- Aucune copie de personnage, de logo ou de composition identifiable d'un autre studio ou d'une marque.
+- Reprise : si un fichier cible existe déjà ET que son .prompt.txt existe, ne le régénère pas ; passe au suivant.
+
+PROCÉDURE pour CHAQUE image :
+1) génère avec image_gen (un appel par asset) ;
+2) inspecte (sujet, style, transparence, marges, texte exact) et régénère UNE fois si un défaut évident existe ;
+3) copie le fichier final depuis $CODEX_HOME/generated_images/… vers le chemin indiqué (crée les dossiers) ;
+4) écris à côté <nom>.prompt.txt avec le prompt exact utilisé.
+
+RÉPONSE FINALE : chemins produits, méthode réellement utilisée, dimensions, canal alpha (oui/non), défauts restants.
+Si image_gen n'est pas accessible, dis-le précisément ; ne remplace PAS les images par du SVG, du code ou une liste de prompts.
+
+Projet : BOOMTOOTH, slot 2D « démolition au castor » (Crownforge). Buck Boomtooth, castor chef de chantier vaniteux et casse-cou, fait sauter une montagne de granit pour y sculpter un monument à sa gloire (« Mount Buckmore ») au-dessus d'un barrage en rondins, dans une vallée de pins du Grand Nord.
+
+Direction artistique RETENUE (référence obligatoire) : assets/generated/directions/D1.png — charge-la avec view_image avant de générer et reproduis son style exact :
+- encrage noir épais (4 à 7 px à 1024 px), légèrement irrégulier comme au pinceau, traits intérieurs plus fins ;
+- cel-shading deux tons nets (clair + ombre franche) et un reflet blanc cassé par volume ; pas d'aérographe, pas de flou ;
+- matières dessinées : bois équarri veiné, granit gris-bleu ébréché, métal riveté, flanelle à carreaux rouges et noirs, copeaux ;
+- lumière principale chaude de fin d'après-midi venant de la gauche (orange doré), ombres bleu-violet ;
+- couleurs saturées maîtrisées.
+Palette : orange brûlé #E8742A, orange ciel #F39A3C, vert pin #2F5D46, vert pin sombre #1E3B2E, granit #6F7F92, granit ombre #46526A, rouge TNT #D7332B, or #F2B233, bois miel #C98A45, bois sombre #6B4526, crème #F4E6C8, encre #1B1410.
+Référence d'ambiance NUIT (bonus) : assets/generated/directions/D3.png (aurore turquoise #3FD6B8, bleu nuit #14233A, projecteurs orange #FF9A3C) — même vallée, même trait.
+Jamais photo-réaliste, jamais 3D lisse, jamais de néon générique ni de dégradé par défaut.
+
+LOT ui-frame-hud — cadre de grille, fond de case, boutons, icônes, objets de mécanique (7 images). Dossier : assets/generated/ui/
+Même style que D1.png (bois équarri boulonné, métal riveté, coins de sécurité jaune et noir usés, encrage épais, cel-shading deux tons). Aucun texte sauf mention contraire. Coins arrondis pour tout ce qui est interface : aucun rectangle à angles vifs.
+
+1. frame.png — Cadre de grille CARRÉ, 1024×1024, fond TRANSPARENT, OUVERTURE CENTRALE TRANSPARENTE carrée (le centre est vide, on voit à travers). Montants en poutres de bois équarri miel (#C98A45) d'épaisseur régulière (environ 70 px), ferrures d'acier boulonnées au milieu de chaque côté, les quatre coins renforcés d'équerres d'acier peintes en bandes de sécurité jaune et noir usées. Les quatre côtés doivent être identiques entre les coins (pour un étirement 9-slice).
+2. cell.png — Fond de case, 512×512, fond TRANSPARENT autour : un carré d'ardoise sombre (#1c1a1f à #26222a) aux coins arrondis (rayon 40 px), léger biseau intérieur plus sombre, quelques éclats de ciseau très discrets. Doit rester sombre et calme (les symboles se posent dessus).
+3. spin.png — Gros bouton SPIN rond, 1024×1024, fond TRANSPARENT : disque rouge TNT (#D7332B) bombé, anneau d'acier épais riveté de 8 boulons, reflet franc en haut à gauche, SANS icône ni texte au centre (l'icône sera ajoutée).
+4. buttons.png — Planche d'éléments d'interface séparés (au moins 60 px entre chaque), 1536×1024, fond TRANSPARENT : (a) petit bouton rond en bois sombre cerclé d'acier boulonné, centre vide (environ 220 px) ; (b) bouton rond plus petit pour + et − (environ 160 px), même matière ; (c) plaque de valeur horizontale en bois sombre bordée de métal, coins arrondis, 4 boulons, centre uni vide (environ 520 × 150 px) ; (d) panneau BUY BONUS : planche de bois clouée en biais sur laquelle sont attachés deux bâtons de dynamite croisés en haut, grande zone centrale unie vide pour du texte (environ 460 × 260 px) ; (e) longue barre de HUD : planche de bois sombre horizontale très allongée avec bords métalliques et boulons aux extrémités (environ 1400 × 150 px).
+5. icons.png — Planche de 10 icônes séparées (au moins 50 px entre chaque), 1536×1024, fond TRANSPARENT, pictogrammes épais crème (#F4E6C8) cernés d'encre, lisibles à 28 px : (1) menu trois barres, (2) haut-parleur avec ondes, (3) haut-parleur barré, (4) éclair (turbo), (5) deux flèches circulaires avec un petit triangle de lecture au centre (lecture auto), (6) « i » d'information dans un cercle, (7) plus, (8) moins, (9) deux flèches courbes formant un cercle (spin), (10) carré plein arrondi (stop).
+6. topbar.png — Enseigne horizontale en planche de bois clouée avec deux chaînes courtes en haut (suspendue), 1536×1024 dessinée au centre, environ 1200 × 240 px, fond TRANSPARENT, centre uni vide pour un texte.
+7. multiplier.png — Objet de mécanique « compteur du détonateur » : un gros détonateur à piston en bois rouge TNT cerclé d'or, poignée en T enfoncée, avec sur sa face avant une grande fenêtre de compteur mécanique en laiton (cadran rectangulaire crème vide, sans chiffres, assez large pour 5 caractères). 1024×1024, fond TRANSPARENT, objet remplissant 85 %.
+
+warning: Codex could not find bubblewrap on PATH. Install bubblewrap with your OS package manager. See the sandbox prerequisites: https://developers.openai.com/codex/concepts/sandboxing#prerequisites. Codex will use the bundled bubblewrap in the meantime.
+codex
+J’utilise la compétence imagegen et l’outil natif pour ce lot. Je vais vérifier les fichiers existants, charger D1, puis générer et inspecter chaque image sans toucher au code du jeu.
+
+exec
+/bin/bash -lc "pwd && rg --files -g 'AGENTS.md' -g 'assets/generated/**' -g '"'!node_modules'"' | head -80" in /home/user/slot
+ succeeded in 0ms:
+/home/user/slot
+assets/generated/directions/rapport-dir-d2-d5.md
+assets/generated/directions/D5.png
+assets/generated/directions/D3.prompt.txt
+assets/generated/directions/D1.png
+assets/generated/directions/D4.prompt.txt
+assets/generated/directions/D2.prompt.txt
+assets/generated/directions/D5.prompt.txt
+assets/generated/directions/D3.png
+assets/generated/directions/D1.prompt.txt
+assets/generated/directions/D4.png
+assets/generated/directions/D2.png
+assets/generated/decor/ground.prompt.txt
+assets/generated/decor/mid.png
+assets/generated/decor/fg-props.png
+assets/generated/decor/rapport-decor-base.md
+assets/generated/decor/ground.png
+assets/generated/decor/far.prompt.txt
+assets/generated/decor/clouds.png
+assets/generated/decor/sky.png
+assets/generated/decor/mid.prompt.txt
+assets/generated/decor/night-sky.png
+assets/generated/decor/far.png
+assets/generated/decor/night-sky.prompt.txt
+assets/generated/decor/sky.prompt.txt
+assets/generated/decor/clouds.prompt.txt
+assets/generated/decor/fg-props.prompt.txt
+assets/generated/symbols/W.prompt.txt
+assets/generated/symbols/T-stick.png
+assets/generated/symbols/L2.png
+assets/generated/symbols/H1.prompt.txt
+assets/generated/symbols/L2.prompt.txt
+assets/generated/symbols/W.png
+assets/generated/symbols/T-stick.prompt.txt
+assets/generated/symbols/S.prompt.txt
+assets/generated/symbols/L1.prompt.txt
+assets/generated/symbols/sym-lows-tnt.report.md
+assets/generated/symbols/rapport-sym-premiums.md
+assets/generated/symbols/L3.prompt.txt
+assets/generated/symbols/T-bundle.png
+assets/generated/symbols/T-bundle.prompt.txt
+assets/generated/symbols/H4.png
+assets/generated/symbols/H3.prompt.txt
+assets/generated/symbols/T-keg.prompt.txt
+assets/generated/symbols/L1.png
+assets/generated/symbols/L4.prompt.txt
+assets/generated/symbols/H1.png
+assets/generated/symbols/H2.prompt.txt
+assets/generated/symbols/H2.png
+assets/generated/symbols/T-keg.png
+assets/generated/symbols/L3.png
+assets/generated/symbols/H4.prompt.txt
+assets/generated/symbols/H3.png
+assets/generated/symbols/S.png
+assets/generated/symbols/L4.png
+
+exec
+/bin/bash -lc 'cat /root/.codex/skills/.system/imagegen/SKILL.md' in /home/user/slot
+ succeeded in 0ms:
+---
+name: "imagegen"
+description: "Generate or edit raster images when the task benefits from AI-created bitmap visuals such as photos, illustrations, textures, sprites, mockups, or transparent-background cutouts. Use when Codex should create a brand-new image, transform an existing image, or derive visual variants from references, and the output should be a bitmap asset rather than repo-native code or vector. Do not use when the task is better handled by editing existing SVG/vector/code-native assets, extending an established icon or logo system, or building the visual directly in HTML/CSS/canvas."
+---
+
+# Image Generation Skill
+
+Generates or edits images for the current project (for example website assets, game assets, UI mockups, product mockups, wireframes, logo design, photorealistic images, or infographics).
+
+## Top-level modes and rules
+
+This skill has exactly two top-level modes:
+
+- **Default built-in tool mode (preferred):** built-in `image_gen` tool for image generation, editing, and transparent-image requests. Does not require `OPENAI_API_KEY`.
+- **Fallback CLI mode:** `scripts/image_gen.py` CLI. Use when the user explicitly asks for or confirms the CLI/API/model path. Requires `OPENAI_API_KEY`.
+
+Within CLI fallback, the CLI exposes three subcommands:
+
+- `generate`
+- `edit`
+- `generate-batch`
+
+Rules:
+- Use the built-in `image_gen` tool by default for normal image generation and editing requests.
+- Do not switch to CLI fallback for ordinary quality, size, or file-path control.
+- For transparent images, ask built-in `image_gen` for a transparent background and preserve the generated alpha.
+- Never silently switch from built-in `image_gen` or CLI `gpt-image-2` to CLI `gpt-image-1.5`; ask the user first unless they explicitly requested `gpt-image-1.5`.
+- The word `batch` by itself does not mean CLI fallback. If the user asks for many assets or says to batch-generate assets without explicitly asking for CLI/API/model controls, stay on the built-in path and issue one built-in call per requested asset or variant.
+- If the built-in tool fails or is unavailable, tell the user the CLI fallback exists and that it requires `OPENAI_API_KEY`. Proceed only if the user explicitly asks for that fallback.
+- If the user explicitly asks for CLI mode, use the bundled `scripts/image_gen.py` workflow. Do not create one-off SDK runners.
+- Never modify `scripts/image_gen.py`. If something is missing, ask the user before doing anything else.
+
+Built-in save-path policy:
+- In built-in tool mode, Codex saves generated images under `$CODEX_HOME/*` by default.
+- Do not describe or rely on OS temp as the default built-in destination.
+- Do not describe or rely on a destination-path argument (if any) on the built-in `image_gen` tool. If a specific location is needed, generate first and then move or copy the selected output from `$CODEX_HOME/generated_images/...`.
+- Save-path precedence in built-in mode:
+  1. If the user names a destination, move or copy the selected output there.
+  2. If the image is meant for the current project, move or copy the final selected image into the workspace before finishing.
+  3. If the image is only for preview or brainstorming, render it inline; the underlying file can remain at the default `$CODEX_HOME/*` path.
+- Never leave a project-referenced asset only at the default `$CODEX_HOME/*` path.
+- Do not overwrite an existing asset unless the user explicitly asked for replacement; otherwise create a sibling versioned filename such as `hero-v2.png` or `item-icon-edited.png`.
+
+Shared prompt guidance for both modes lives in `references/prompting.md` and `references/sample-prompts.md`.
+
+Fallback-only docs/resources for CLI mode:
+- `references/cli.md`
+- `references/image-api.md`
+- `references/codex-network.md`
+- `scripts/image_gen.py`
+
+## When to use
+- Generate a new image (concept art, product shot, cover, website hero)
+- Generate a new image using one or more reference images for style, composition, or mood
+- Edit an existing image (inpainting, lighting or weather transformations, background replacement, object removal, compositing, transparent background)
+- Produce many assets or variants for one task
+
+## When not to use
+- Extending or matching an existing SVG/vector icon set, logo system, or illustration library inside the repo
+- Creating simple shapes, diagrams, wireframes, or icons that are better produced directly in SVG, HTML/CSS, or canvas
+- Making a small project-local asset edit when the source file already exists in an editable native format
+- Any task where the user clearly wants deterministic code-native output instead of a generated bitmap
+
+## Decision tree
+
+Think about two separate questions:
+
+1. **Intent:** is this a new image or an edit of an existing image?
+2. **Execution strategy:** is this one asset or many assets/variants?
+
+Intent:
+- If the user wants to modify an existing image while preserving parts of it, treat the request as **edit**.
+- If the user provides images only as references for style, composition, mood, or subject guidance, treat the request as **generate**.
+- If the user provides no images, treat the request as **generate**.
+
+Built-in edit semantics:
+- Built-in edit mode is for images already visible in the conversation context, such as attached images or images generated earlier in the thread.
+- If the user wants to edit a local image file with the built-in tool, first load it with built-in `view_image` tool so the image is visible in the conversation context, then proceed with the built-in edit flow.
+- Do not promise arbitrary filesystem-path editing through the built-in tool.
+- If a local file still needs direct file-path control, masks, or other explicit CLI-only parameters, use the explicit CLI fallback only when the user asks for it.
+- For edits, preserve invariants aggressively and save non-destructively by default.
+
+Execution strategy:
+- In the built-in default path, produce many assets or variants by issuing one `image_gen` call per requested asset or variant.
+- In the CLI fallback path, use the CLI `generate-batch` subcommand only when the user explicitly chose CLI mode and needs many prompts/assets.
+- For many distinct assets, do not use `n` as a substitute for separate prompts. `n` is for variants of one prompt; distinct assets need distinct built-in calls or distinct CLI `generate-batch` jobs.
+
+Assume the user wants a new image unless they clearly ask to change an existing one.
+
+## Workflow
+1. Decide the top-level mode: built-in by default, including transparent-output requests; fallback CLI only if explicitly requested or confirmed.
+2. Decide the intent: `generate` or `edit`.
+3. Decide whether the output is preview-only or meant to be consumed by the current project.
+4. Decide the execution strategy: single asset vs repeated built-in calls vs CLI `generate-batch`.
+5. Collect inputs up front: prompt(s), exact text (verbatim), constraints/avoid list, and any input images.
+6. For every input image, label its role explicitly:
+   - reference image
+   - edit target
+   - supporting insert/style/compositing input
+7. If the edit target is only on the local filesystem and you are staying on the built-in path, inspect it with `view_image` first so the image is available in conversation context.
+8. If the user asked for a photo, illustration, sprite, product image, banner, or other explicitly raster-style asset, use `image_gen` rather than substituting SVG/HTML/CSS placeholders. If the request is for an icon, logo, or UI graphic that should match existing repo-native SVG/vector/code assets, prefer editing those directly instead.
+9. Augment the prompt based on specificity:
+   - If the user's prompt is already specific and detailed, normalize it into a clear spec without adding creative requirements.
+   - If the user's prompt is generic, add tasteful augmentation only when it materially improves output quality.
+10. Use the built-in `image_gen` tool by default.
+11. For transparent-output requests, ask built-in `image_gen` for a transparent background and preserve the generated alpha channel.
+12. Inspect outputs and validate: subject, style, composition, text accuracy, and invariants/avoid items.
+13. Iterate with a single targeted change, then re-check.
+14. For preview-only work, render the image inline; the underlying file may remain at the default `$CODEX_HOME/generated_images/...` path.
+15. For project-bound work, move or copy the selected artifact into the workspace and update any consuming code or references. Never leave a project-referenced asset only at the default `$CODEX_HOME/generated_images/...` path.
+16. For batches or multi-asset requests, persist every requested deliverable final in the workspace unless the user explicitly asked to keep outputs preview-only. Discarded variants do not need to be kept unless requested.
+17. If the user explicitly chooses or confirms the CLI fallback, then use the fallback-only docs for model, quality, size, `input_fidelity`, masks, output format, output paths, and network setup.
+18. Always report the final saved path(s) for any workspace-bound asset(s), plus the final prompt or prompt set and whether the built-in tool or fallback CLI mode was used.
+
+## Transparent image requests
+
+Ask built-in `image_gen` for a genuinely transparent background and preserve its alpha.
+
+## Prompt augmentation
+
+Reformat user prompts into a structured, production-oriented spec. Make the user's goal clearer and more actionable, but do not blindly add detail.
+
+Treat this as prompt-shaping guidance, not a closed schema. Use only the lines that help, and add a short extra labeled line when it materially improves clarity.
+
+### Specificity policy
+
+Use the user's prompt specificity to decide how much augmentation is appropriate:
+
+- If the prompt is already specific and detailed, preserve that specificity and only normalize/structure it.
+- If the prompt is generic, you may add tasteful augmentation when it will materially improve the result.
+
+Allowed augmentations:
+- composition or framing hints
+- polish level or intended-use hints
+- practical layout guidance
+- reasonable scene concreteness that supports the stated request
+
+Not allowed augmentations:
+- extra characters or objects that are not implied by the request
+- brand names, slogans, palettes, or narrative beats that are not implied
+- arbitrary side-specific placement unless the surrounding layout supports it
+
+## Use-case taxonomy (exact slugs)
+
+Classify each request into one of these buckets and keep the slug consistent across prompts and references.
+
+Generate:
+- photorealistic-natural — candid/editorial lifestyle scenes with real texture and natural lighting.
+- product-mockup — product/packaging shots, catalog imagery, merch concepts.
+- ui-mockup — app/web interface mockups and wireframes; specify the desired fidelity.
+- infographic-diagram — diagrams/infographics with structured layout and text.
+- scientific-educational — classroom explainers, scientific diagrams, and learning visuals with required labels and accuracy constraints.
+- ads-marketing — campaign concepts and ad creatives with audience, brand position, scene, and exact tagline/copy.
+- productivity-visual — slide, chart, workflow, and data-heavy business visuals.
+- logo-brand — logo/mark exploration, vector-friendly.
+- illustration-story — comics, children’s book art, narrative scenes.
+- stylized-concept — style-driven concept art, 3D/stylized renders.
+- historical-scene — period-accurate/world-knowledge scenes.
+
+Edit:
+- text-localization — translate/replace in-image text, preserve layout.
+- identity-preserve — try-on, person-in-scene; lock face/body/pose.
+- precise-object-edit — remove/replace a specific element (including interior swaps).
+- lighting-weather — time-of-day/season/atmosphere changes only.
+- background-extraction — transparent background / clean cutout. Ask built-in `image_gen` for actual transparency.
+- style-transfer — apply reference style while changing subject/scene.
+- compositing — multi-image insert/merge with matched lighting/perspective.
+- sketch-to-render — drawing/line art to photoreal render.
+
+## Shared prompt schema
+
+Use the following labeled spec as shared prompt scaffolding for both top-level modes:
+
+```text
+Use case: <taxonomy slug>
+Asset type: <where the asset will be used>
+Primary request: <user's main prompt>
+Input images: <Image 1: role; Image 2: role> (optional)
+Scene/backdrop: <environment>
+Subject: <main subject>
+Style/medium: <photo/illustration/3D/etc>
+Composition/framing: <wide/close/top-down; placement>
+Lighting/mood: <lighting + mood>
+Color palette: <palette notes>
+Materials/textures: <surface details>
+Text (verbatim): "<exact text>"
+Constraints: <must keep/must avoid>
+Avoid: <negative constraints>
+```
+
+Notes:
+- `Asset type` and `Input images` are prompt scaffolding, not dedicated CLI flags.
+- `Scene/backdrop` refers to the visual setting. It is not the same as the fallback CLI `background` parameter, which controls output transparency behavior.
+- Fallback-only execution notes such as `Quality:`, `Input fidelity:`, masks, output format, and output paths belong in the CLI path only. Do not treat them as built-in `image_gen` tool arguments.
+
+Augmentation rules:
+- Keep it short.
+- Add only the details needed to improve the prompt materially.
+- For edits, explicitly list invariants (`change only X; keep Y unchanged`).
+- If any critical detail is missing and blocks success, ask a question; otherwise proceed.
+
+## Examples
+
+### Generation example (hero image)
+```text
+Use case: product-mockup
+Asset type: landing page hero
+Primary request: a minimal hero image of a ceramic coffee mug
+Style/medium: clean product photography
+Composition/framing: wide composition with usable negative space for page copy if needed
+Lighting/mood: soft studio lighting
+Constraints: no logos, no text, no watermark
+```
+
+### Edit example (invariants)
+```text
+Use case: precise-object-edit
+Asset type: product photo background replacement
+Primary request: replace only the background with a warm sunset gradient
+Constraints: change only the background; keep the product and its edges unchanged; no text; no watermark
+```
+
+## Prompting best practices
+- Structure prompt as scene/backdrop -> subject -> details -> constraints.
+- Include intended use (ad, UI mock, infographic) to set the mode and polish level.
+- Use camera/composition language for photorealism.
+- Only use SVG/vector stand-ins when the user explicitly asked for vector output or a non-image placeholder.
+- Quote exact text and specify typography + placement.
+- For tricky words, spell them letter-by-letter and require verbatim rendering.
+- For multi-image inputs, reference images by index and describe how they should be used.
+- For edits, repeat invariants every iteration to reduce drift.
+- Iterate with single-change follow-ups.
+- If the prompt is generic, add only the extra detail that will materially help.
+- If the prompt is already detailed, normalize it instead of expanding it.
+- For CLI fallback only, see `references/cli.md` and `references/image-api.md` for model, `quality`, `input_fidelity`, masks, output format, and output-path guidance.
+- For transparent images, ask built-in `image_gen` for actual transparency and preserve its alpha.
+
+More principles shared by both modes: `references/prompting.md`.
+Copy/paste specs shared by both modes: `references/sample-prompts.md`.
+
+## Guidance by asset type
+Asset-type templates (website assets, game assets, wireframes, logo) are consolidated in `references/sample-prompts.md`.
+
+## gpt-image-2 guidance for CLI fallback
+
+The fallback CLI defaults to `gpt-image-2`.
+
+- Use `gpt-image-2` for new CLI/API workflows unless the user confirms a different model.
+- CLI `gpt-image-2` does not support `background=transparent`; ask before using `gpt-image-1.5` unless the user explicitly requested that model.
+- `gpt-image-2` always uses high fidelity for image inputs; do not set `input_fidelity` with this model.
+- `gpt-image-2` supports `quality` values `low`, `medium`, `high`, and `auto`.
+- Use `quality low` for fast drafts, thumbnails, and quick iterations. Use `medium`, `high`, or `auto` for final assets, dense text, diagrams, identity-sensitive edits, or high-resolution outputs.
+- Square images are typically fastest to generate. Use `1024x1024` for fast square drafts.
+- If the user asks for 4K-style output, use `3840x2160` for landscape or `2160x3840` for portrait.
+- `gpt-image-2` size may be `auto` or `WIDTHxHEIGHT` if all constraints hold: max edge `<= 3840px`, both edges multiples of `16px`, long-to-short ratio `<= 3:1`, total pixels between `655,360` and `8,294,400`.
+
+Popular `gpt-image-2` sizes:
+- `1024x1024` square
+- `1536x1024` landscape
+- `1024x1536` portrait
+- `2048x2048` 2K square
+- `2048x1152` 2K landscape
+- `3840x2160` 4K landscape
+- `2160x3840` 4K portrait
+- `auto`
+
+## Fallback CLI mode only
+
+### Temp and output conventions
+These conventions apply only to the CLI fallback. They do not describe built-in `image_gen` output behavior.
+- Use `tmp/imagegen/` for intermediate files (for example JSONL batches); delete them when done.
+- Write final artifacts under `output/imagegen/`.
+- Use `--out` or `--out-dir` to control output paths; keep filenames stable and descriptive.
+
+### Dependencies
+Prefer `uv` for dependency management in this repo.
+
+Required Python package:
+```bash
+uv pip install openai
+```
+
+Optional for image inspection and downscaling:
+```bash
+uv pip install pillow
+```
+
+Portability note:
+- If you are using the installed skill outside this repo, install dependencies into that environment with its package manager.
+- In uv-managed environments, `uv pip install ...` remains the preferred path.
+
+### Environment
+- `OPENAI_API_KEY` must be set for live API calls.
+- Do not ask the user for `OPENAI_API_KEY` when using the built-in `image_gen` tool.
+- Never ask the user to paste the full key in chat. Ask them to set it locally and confirm when ready.
+
+If the key is missing, give the user these steps:
+1. Create an API key in the OpenAI platform UI: https://platform.openai.com/api-keys
+2. Set `OPENAI_API_KEY` as an environment variable in their system.
+3. Offer to guide them through setting the environment variable for their OS/shell if needed.
+
+If installation is not possible in this environment, tell the user which dependency is missing and how to install it into their active environment.
+
+### Script-mode notes
+- CLI commands + examples: `references/cli.md`
+- API parameter quick reference: `references/image-api.md`
+- Network approvals / sandbox settings for CLI mode: `references/codex-network.md`
+
+## Reference map
+- `references/prompting.md`: shared prompting principles for both modes.
+- `references/sample-prompts.md`: shared copy/paste prompt recipes for both modes.
+- `references/cli.md`: fallback-only CLI usage via `scripts/image_gen.py`.
+- `references/image-api.md`: fallback-only API/CLI parameter reference.
+- `references/codex-network.md`: fallback-only network/sandbox troubleshooting for CLI mode.
+- `scripts/image_gen.py`: fallback-only CLI implementation. Use only when the user explicitly chooses or confirms CLI mode.
+
+exec
+/bin/bash -lc 'ls -la .agents 2>/dev/null; printenv CODEX_HOME' in /home/user/slot
+ exited 1 in 0ms:
+total 4
+dr-xr-xr-x  2 root root   40 Sep 28 10:24 .
+drwxr-xr-x 13 root root 4096 Sep 28 10:24 ..
+
+exec
+/bin/bash -lc "python - <<'PY'
+from PIL import Image
+im=Image.open('/root/.codex/generated_images/01a0e78a-fcff-74c2-aa0d-acfd3049c872/exec-ad53b263-eca6-4a53-807a-66bcc4a11e5f.png')
+print(im.size, im.mode, im.getpixel((im.width//2,im.height//2)))
+PY" in /home/user/slot
+ succeeded in 0ms:
+(1254, 1254) RGBA (0, 0, 0, 0)
+
+codex
+Le premier cadre possède bien un centre transparent, mais ses dimensions ne sont pas celles demandées et ses poutres sont trop épaisses. Je lance l’unique reprise prévue pour cet asset.
+
+exec
+/bin/bash -lc 'mkdir -p assets/generated/ui && cp /root/.codex/generated_images/01a0e78a-fcff-74c2-aa0d-acfd3049c872/exec-85d4b824-c6ae-4844-a207-081e1fc898f1.png assets/generated/ui/frame.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/ui/frame.prompt.txt
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+
+codex
+Le fond de case est sombre et sans texte, mais sa marge et son biseau sont trop larges. Je les fais réduire lors de la reprise. L’outil semble aussi imposer sa propre résolution ; je consignerai les dimensions réelles dans le rapport.
+
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+
+exec
+/bin/bash -lc 'cp /root/.codex/generated_images/01a0e78a-fcff-74c2-aa0d-acfd3049c872/exec-ec2a8c8c-f89c-4fe5-a46b-e87914e9b094.png assets/generated/ui/cell.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/ui/cell.prompt.txt
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+
+codex
+Le bouton rouge comporte les huit boulons et son centre est vide. Je passe aux planches de boutons et d’icônes, en vérifiant notamment le nombre d’éléments et leur séparation.
+
+exec
+/bin/bash -lc 'cp /root/.codex/generated_images/01a0e78a-fcff-74c2-aa0d-acfd3049c872/exec-995f48ab-98a3-4858-857e-219ba761f6d4.png assets/generated/ui/spin.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/ui/spin.prompt.txt
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+diff --git a/assets/generated/ui/spin.prompt.txt b/assets/generated/ui/spin.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..a7932e80003e379ecd5956088838e567252c49a7
+--- /dev/null
++++ b/assets/generated/ui/spin.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate spin.png, exact 1024×1024 canvas. One large round SPIN button, no text and NO ICON. Centered frontal circular domed TNT red #D7332B disk within thick riveted blue-grey steel ring. EXACTLY EIGHT evenly spaced bolts on ring. Crisp off-white highlight at upper left, flat red face and hard-edged darker red lower-right shadow, no gradient. Empty center. Overall bounds 45 to 979 on each axis, genuine transparent exterior.
++Correction: EXACT 1024x1024 output; outer margin 4%. Remove all smooth shading and texture: strictly TWO SOLID COLOR FILLS per volume plus crisp cream highlight. Keep eight bolts and empty red center.
+
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+diff --git a/assets/generated/ui/spin.prompt.txt b/assets/generated/ui/spin.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..a7932e80003e379ecd5956088838e567252c49a7
+--- /dev/null
++++ b/assets/generated/ui/spin.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate spin.png, exact 1024×1024 canvas. One large round SPIN button, no text and NO ICON. Centered frontal circular domed TNT red #D7332B disk within thick riveted blue-grey steel ring. EXACTLY EIGHT evenly spaced bolts on ring. Crisp off-white highlight at upper left, flat red face and hard-edged darker red lower-right shadow, no gradient. Empty center. Overall bounds 45 to 979 on each axis, genuine transparent exterior.
++Correction: EXACT 1024x1024 output; outer margin 4%. Remove all smooth shading and texture: strictly TWO SOLID COLOR FILLS per volume plus crisp cream highlight. Keep eight bolts and empty red center.
+
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+diff --git a/assets/generated/ui/spin.prompt.txt b/assets/generated/ui/spin.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..a7932e80003e379ecd5956088838e567252c49a7
+--- /dev/null
++++ b/assets/generated/ui/spin.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate spin.png, exact 1024×1024 canvas. One large round SPIN button, no text and NO ICON. Centered frontal circular domed TNT red #D7332B disk within thick riveted blue-grey steel ring. EXACTLY EIGHT evenly spaced bolts on ring. Crisp off-white highlight at upper left, flat red face and hard-edged darker red lower-right shadow, no gradient. Empty center. Overall bounds 45 to 979 on each axis, genuine transparent exterior.
++Correction: EXACT 1024x1024 output; outer margin 4%. Remove all smooth shading and texture: strictly TWO SOLID COLOR FILLS per volume plus crisp cream highlight. Keep eight bolts and empty red center.
+
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+diff --git a/assets/generated/ui/spin.prompt.txt b/assets/generated/ui/spin.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..a7932e80003e379ecd5956088838e567252c49a7
+--- /dev/null
++++ b/assets/generated/ui/spin.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate spin.png, exact 1024×1024 canvas. One large round SPIN button, no text and NO ICON. Centered frontal circular domed TNT red #D7332B disk within thick riveted blue-grey steel ring. EXACTLY EIGHT evenly spaced bolts on ring. Crisp off-white highlight at upper left, flat red face and hard-edged darker red lower-right shadow, no gradient. Empty center. Overall bounds 45 to 979 on each axis, genuine transparent exterior.
++Correction: EXACT 1024x1024 output; outer margin 4%. Remove all smooth shading and texture: strictly TWO SOLID COLOR FILLS per volume plus crisp cream highlight. Keep eight bolts and empty red center.
+
+codex
+La planche de boutons conserve un fond et des halos visibles après sa reprise ; je la signalerai comme non conforme. Je poursuis les trois autres images et contrôlerai les canaux alpha dans les fichiers eux-mêmes.
+
+exec
+/bin/bash -lc 'cp /root/.codex/generated_images/01a0e78a-fcff-74c2-aa0d-acfd3049c872/exec-2a91baa4-891b-4c35-838c-25869f09bf60.png assets/generated/ui/buttons.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/ui/buttons.prompt.txt
+diff --git a/assets/generated/ui/buttons.prompt.txt b/assets/generated/ui/buttons.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e1fa6836d5e268605ba6edbe2865932dba2b60f
+--- /dev/null
++++ b/assets/generated/ui/buttons.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate buttons.png: landscape sprite sheet EXACTLY 1536×1024. Exactly FIVE separated UI components, at least 60 px clear transparent gap between their bounding boxes. No labels, NO BUY BONUS TEXT. Layout in requested pixel coordinates: (a) dark wood round button with bolted steel rim diameter 220 centered (210,240), plain empty face; (b) same smaller round button diameter 160 centered (520,240), empty, no plus/minus marks; (c) horizontal dark wood value plaque 520×150 centered (1110,240), rounded metal rim and four bolts, blank quiet center; (d) a slightly tilted nailed timber bonus panel approximately 460×260 centered (400,590), two crossed red dynamite sticks attached at its top, wide plain empty central text space; (e) a very long horizontal dark timber HUD bar 1400×150 centered (768,890), rounded metal edging and bolts only at ends, plain center. All subjects complete, all silhouettes distinct, no additional pieces. Flat cel shading.
++CORRECT THE PROVIDED GENERATED SHEET: remove ALL background and ALL soft shadows and glows to genuine alpha zero. Keep five objects only. Shrink first two buttons and bonus panel to requested dimensions to secure 60 px clear gaps. Make flat two-tone fills instead of painterly shading. Exact 1536x1024 canvas.
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+diff --git a/assets/generated/ui/spin.prompt.txt b/assets/generated/ui/spin.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..a7932e80003e379ecd5956088838e567252c49a7
+--- /dev/null
++++ b/assets/generated/ui/spin.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate spin.png, exact 1024×1024 canvas. One large round SPIN button, no text and NO ICON. Centered frontal circular domed TNT red #D7332B disk within thick riveted blue-grey steel ring. EXACTLY EIGHT evenly spaced bolts on ring. Crisp off-white highlight at upper left, flat red face and hard-edged darker red lower-right shadow, no gradient. Empty center. Overall bounds 45 to 979 on each axis, genuine transparent exterior.
++Correction: EXACT 1024x1024 output; outer margin 4%. Remove all smooth shading and texture: strictly TWO SOLID COLOR FILLS per volume plus crisp cream highlight. Keep eight bolts and empty red center.
+
+diff --git a/assets/generated/ui/buttons.prompt.txt b/assets/generated/ui/buttons.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e1fa6836d5e268605ba6edbe2865932dba2b60f
+--- /dev/null
++++ b/assets/generated/ui/buttons.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate buttons.png: landscape sprite sheet EXACTLY 1536×1024. Exactly FIVE separated UI components, at least 60 px clear transparent gap between their bounding boxes. No labels, NO BUY BONUS TEXT. Layout in requested pixel coordinates: (a) dark wood round button with bolted steel rim diameter 220 centered (210,240), plain empty face; (b) same smaller round button diameter 160 centered (520,240), empty, no plus/minus marks; (c) horizontal dark wood value plaque 520×150 centered (1110,240), rounded metal rim and four bolts, blank quiet center; (d) a slightly tilted nailed timber bonus panel approximately 460×260 centered (400,590), two crossed red dynamite sticks attached at its top, wide plain empty central text space; (e) a very long horizontal dark timber HUD bar 1400×150 centered (768,890), rounded metal edging and bolts only at ends, plain center. All subjects complete, all silhouettes distinct, no additional pieces. Flat cel shading.
++CORRECT THE PROVIDED GENERATED SHEET: remove ALL background and ALL soft shadows and glows to genuine alpha zero. Keep five objects only. Shrink first two buttons and bonus panel to requested dimensions to secure 60 px clear gaps. Make flat two-tone fills instead of painterly shading. Exact 1536x1024 canvas.
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+diff --git a/assets/generated/ui/spin.prompt.txt b/assets/generated/ui/spin.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..a7932e80003e379ecd5956088838e567252c49a7
+--- /dev/null
++++ b/assets/generated/ui/spin.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate spin.png, exact 1024×1024 canvas. One large round SPIN button, no text and NO ICON. Centered frontal circular domed TNT red #D7332B disk within thick riveted blue-grey steel ring. EXACTLY EIGHT evenly spaced bolts on ring. Crisp off-white highlight at upper left, flat red face and hard-edged darker red lower-right shadow, no gradient. Empty center. Overall bounds 45 to 979 on each axis, genuine transparent exterior.
++Correction: EXACT 1024x1024 output; outer margin 4%. Remove all smooth shading and texture: strictly TWO SOLID COLOR FILLS per volume plus crisp cream highlight. Keep eight bolts and empty red center.
+
+diff --git a/assets/generated/ui/buttons.prompt.txt b/assets/generated/ui/buttons.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e1fa6836d5e268605ba6edbe2865932dba2b60f
+--- /dev/null
++++ b/assets/generated/ui/buttons.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate buttons.png: landscape sprite sheet EXACTLY 1536×1024. Exactly FIVE separated UI components, at least 60 px clear transparent gap between their bounding boxes. No labels, NO BUY BONUS TEXT. Layout in requested pixel coordinates: (a) dark wood round button with bolted steel rim diameter 220 centered (210,240), plain empty face; (b) same smaller round button diameter 160 centered (520,240), empty, no plus/minus marks; (c) horizontal dark wood value plaque 520×150 centered (1110,240), rounded metal rim and four bolts, blank quiet center; (d) a slightly tilted nailed timber bonus panel approximately 460×260 centered (400,590), two crossed red dynamite sticks attached at its top, wide plain empty central text space; (e) a very long horizontal dark timber HUD bar 1400×150 centered (768,890), rounded metal edging and bolts only at ends, plain center. All subjects complete, all silhouettes distinct, no additional pieces. Flat cel shading.
++CORRECT THE PROVIDED GENERATED SHEET: remove ALL background and ALL soft shadows and glows to genuine alpha zero. Keep five objects only. Shrink first two buttons and bonus panel to requested dimensions to secure 60 px clear gaps. Make flat two-tone fills instead of painterly shading. Exact 1536x1024 canvas.
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+diff --git a/assets/generated/ui/spin.prompt.txt b/assets/generated/ui/spin.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..a7932e80003e379ecd5956088838e567252c49a7
+--- /dev/null
++++ b/assets/generated/ui/spin.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate spin.png, exact 1024×1024 canvas. One large round SPIN button, no text and NO ICON. Centered frontal circular domed TNT red #D7332B disk within thick riveted blue-grey steel ring. EXACTLY EIGHT evenly spaced bolts on ring. Crisp off-white highlight at upper left, flat red face and hard-edged darker red lower-right shadow, no gradient. Empty center. Overall bounds 45 to 979 on each axis, genuine transparent exterior.
++Correction: EXACT 1024x1024 output; outer margin 4%. Remove all smooth shading and texture: strictly TWO SOLID COLOR FILLS per volume plus crisp cream highlight. Keep eight bolts and empty red center.
+
+diff --git a/assets/generated/ui/buttons.prompt.txt b/assets/generated/ui/buttons.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e1fa6836d5e268605ba6edbe2865932dba2b60f
+--- /dev/null
++++ b/assets/generated/ui/buttons.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate buttons.png: landscape sprite sheet EXACTLY 1536×1024. Exactly FIVE separated UI components, at least 60 px clear transparent gap between their bounding boxes. No labels, NO BUY BONUS TEXT. Layout in requested pixel coordinates: (a) dark wood round button with bolted steel rim diameter 220 centered (210,240), plain empty face; (b) same smaller round button diameter 160 centered (520,240), empty, no plus/minus marks; (c) horizontal dark wood value plaque 520×150 centered (1110,240), rounded metal rim and four bolts, blank quiet center; (d) a slightly tilted nailed timber bonus panel approximately 460×260 centered (400,590), two crossed red dynamite sticks attached at its top, wide plain empty central text space; (e) a very long horizontal dark timber HUD bar 1400×150 centered (768,890), rounded metal edging and bolts only at ends, plain center. All subjects complete, all silhouettes distinct, no additional pieces. Flat cel shading.
++CORRECT THE PROVIDED GENERATED SHEET: remove ALL background and ALL soft shadows and glows to genuine alpha zero. Keep five objects only. Shrink first two buttons and bonus panel to requested dimensions to secure 60 px clear gaps. Make flat two-tone fills instead of painterly shading. Exact 1536x1024 canvas.
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+diff --git a/assets/generated/ui/spin.prompt.txt b/assets/generated/ui/spin.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..a7932e80003e379ecd5956088838e567252c49a7
+--- /dev/null
++++ b/assets/generated/ui/spin.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate spin.png, exact 1024×1024 canvas. One large round SPIN button, no text and NO ICON. Centered frontal circular domed TNT red #D7332B disk within thick riveted blue-grey steel ring. EXACTLY EIGHT evenly spaced bolts on ring. Crisp off-white highlight at upper left, flat red face and hard-edged darker red lower-right shadow, no gradient. Empty center. Overall bounds 45 to 979 on each axis, genuine transparent exterior.
++Correction: EXACT 1024x1024 output; outer margin 4%. Remove all smooth shading and texture: strictly TWO SOLID COLOR FILLS per volume plus crisp cream highlight. Keep eight bolts and empty red center.
+
+exec
+/bin/bash -lc 'cp /root/.codex/generated_images/01a0e78a-fcff-74c2-aa0d-acfd3049c872/exec-09161bcf-1476-4c3b-9b33-da84592cb0b9.png assets/generated/ui/icons.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/ui/icons.prompt.txt
+diff --git a/assets/generated/ui/buttons.prompt.txt b/assets/generated/ui/buttons.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e1fa6836d5e268605ba6edbe2865932dba2b60f
+--- /dev/null
++++ b/assets/generated/ui/buttons.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate buttons.png: landscape sprite sheet EXACTLY 1536×1024. Exactly FIVE separated UI components, at least 60 px clear transparent gap between their bounding boxes. No labels, NO BUY BONUS TEXT. Layout in requested pixel coordinates: (a) dark wood round button with bolted steel rim diameter 220 centered (210,240), plain empty face; (b) same smaller round button diameter 160 centered (520,240), empty, no plus/minus marks; (c) horizontal dark wood value plaque 520×150 centered (1110,240), rounded metal rim and four bolts, blank quiet center; (d) a slightly tilted nailed timber bonus panel approximately 460×260 centered (400,590), two crossed red dynamite sticks attached at its top, wide plain empty central text space; (e) a very long horizontal dark timber HUD bar 1400×150 centered (768,890), rounded metal edging and bolts only at ends, plain center. All subjects complete, all silhouettes distinct, no additional pieces. Flat cel shading.
++CORRECT THE PROVIDED GENERATED SHEET: remove ALL background and ALL soft shadows and glows to genuine alpha zero. Keep five objects only. Shrink first two buttons and bonus panel to requested dimensions to secure 60 px clear gaps. Make flat two-tone fills instead of painterly shading. Exact 1536x1024 canvas.
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+diff --git a/assets/generated/ui/icons.prompt.txt b/assets/generated/ui/icons.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..303ce2c30b5c987b17a0edb775049bee9653b2f8
+--- /dev/null
++++ b/assets/generated/ui/icons.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate icons.png EXACT 1536×1024 landscape sheet. Ten separated thick cream #F4E6C8 pictograms outlined ink #1B1410, exceptionally simple and legible at 28px. Uniform two-row five-column layout, at least 50 px transparent gaps. Top row left to right: 1 menu three horizontal bars; 2 speaker with sound waves; 3 speaker crossed by diagonal slash; 4 lightning bolt; 5 two circular arrows with a small PLAY TRIANGLE IN CENTER. Bottom row: 6 lowercase exact letter 'i' inside circle; 7 plus; 8 minus; 9 two curved arrows forming a circle with EMPTY CENTER; 10 solid rounded square stop. All ten same visual weight, no numbers or captions. No wooden panels, no backdrop. Genuine alpha-zero background; if alpha cannot be produced, use ONLY solid chroma #00FF00 instead, no shadows or halos.
++RETRY: Previous output failed transparency. Use fallback SOLID PURE CHROMA GREEN #00FF00 everywhere behind and inside holes of icons, absolutely no shadows, glow, shading or variation on green. Ten icons as specified, two rows five columns, flat cream and ink only. Canvas 1536x1024.
+diff --git a/assets/generated/ui/spin.prompt.txt b/assets/generated/ui/spin.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..a7932e80003e379ecd5956088838e567252c49a7
+--- /dev/null
++++ b/assets/generated/ui/spin.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate spin.png, exact 1024×1024 canvas. One large round SPIN button, no text and NO ICON. Centered frontal circular domed TNT red #D7332B disk within thick riveted blue-grey steel ring. EXACTLY EIGHT evenly spaced bolts on ring. Crisp off-white highlight at upper left, flat red face and hard-edged darker red lower-right shadow, no gradient. Empty center. Overall bounds 45 to 979 on each axis, genuine transparent exterior.
++Correction: EXACT 1024x1024 output; outer margin 4%. Remove all smooth shading and texture: strictly TWO SOLID COLOR FILLS per volume plus crisp cream highlight. Keep eight bolts and empty red center.
+
+diff --git a/assets/generated/ui/buttons.prompt.txt b/assets/generated/ui/buttons.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e1fa6836d5e268605ba6edbe2865932dba2b60f
+--- /dev/null
++++ b/assets/generated/ui/buttons.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate buttons.png: landscape sprite sheet EXACTLY 1536×1024. Exactly FIVE separated UI components, at least 60 px clear transparent gap between their bounding boxes. No labels, NO BUY BONUS TEXT. Layout in requested pixel coordinates: (a) dark wood round button with bolted steel rim diameter 220 centered (210,240), plain empty face; (b) same smaller round button diameter 160 centered (520,240), empty, no plus/minus marks; (c) horizontal dark wood value plaque 520×150 centered (1110,240), rounded metal rim and four bolts, blank quiet center; (d) a slightly tilted nailed timber bonus panel approximately 460×260 centered (400,590), two crossed red dynamite sticks attached at its top, wide plain empty central text space; (e) a very long horizontal dark timber HUD bar 1400×150 centered (768,890), rounded metal edging and bolts only at ends, plain center. All subjects complete, all silhouettes distinct, no additional pieces. Flat cel shading.
++CORRECT THE PROVIDED GENERATED SHEET: remove ALL background and ALL soft shadows and glows to genuine alpha zero. Keep five objects only. Shrink first two buttons and bonus panel to requested dimensions to secure 60 px clear gaps. Make flat two-tone fills instead of painterly shading. Exact 1536x1024 canvas.
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+diff --git a/assets/generated/ui/icons.prompt.txt b/assets/generated/ui/icons.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..303ce2c30b5c987b17a0edb775049bee9653b2f8
+--- /dev/null
++++ b/assets/generated/ui/icons.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate icons.png EXACT 1536×1024 landscape sheet. Ten separated thick cream #F4E6C8 pictograms outlined ink #1B1410, exceptionally simple and legible at 28px. Uniform two-row five-column layout, at least 50 px transparent gaps. Top row left to right: 1 menu three horizontal bars; 2 speaker with sound waves; 3 speaker crossed by diagonal slash; 4 lightning bolt; 5 two circular arrows with a small PLAY TRIANGLE IN CENTER. Bottom row: 6 lowercase exact letter 'i' inside circle; 7 plus; 8 minus; 9 two curved arrows forming a circle with EMPTY CENTER; 10 solid rounded square stop. All ten same visual weight, no numbers or captions. No wooden panels, no backdrop. Genuine alpha-zero background; if alpha cannot be produced, use ONLY solid chroma #00FF00 instead, no shadows or halos.
++RETRY: Previous output failed transparency. Use fallback SOLID PURE CHROMA GREEN #00FF00 everywhere behind and inside holes of icons, absolutely no shadows, glow, shading or variation on green. Ten icons as specified, two rows five columns, flat cream and ink only. Canvas 1536x1024.
+diff --git a/assets/generated/ui/spin.prompt.txt b/assets/generated/ui/spin.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..a7932e80003e379ecd5956088838e567252c49a7
+--- /dev/null
++++ b/assets/generated/ui/spin.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate spin.png, exact 1024×1024 canvas. One large round SPIN button, no text and NO ICON. Centered frontal circular domed TNT red #D7332B disk within thick riveted blue-grey steel ring. EXACTLY EIGHT evenly spaced bolts on ring. Crisp off-white highlight at upper left, flat red face and hard-edged darker red lower-right shadow, no gradient. Empty center. Overall bounds 45 to 979 on each axis, genuine transparent exterior.
++Correction: EXACT 1024x1024 output; outer margin 4%. Remove all smooth shading and texture: strictly TWO SOLID COLOR FILLS per volume plus crisp cream highlight. Keep eight bolts and empty red center.
+
+codex
+Les dix pictogrammes sont présents. Leur reprise a simplifié le dessin, mais le fond vert de secours demandé n’a pas été respecté non plus. Il reste l’enseigne suspendue et le compteur du détonateur.
+
+2026-09-28T10:31:58.854461Z ERROR codex_core::tools::router: error=image generation failed: http 429 Too Many Requests: Some("{\"error\":{\"type\":\"usage_limit_reached\",\"message\":\"The usage limit has been reached\",\"plan_type\":\"prolite\",\"resets_at\":1791117066,\"eligible_promo\":null,\"limit_window_minutes\":null,\"resets_in_seconds\":525548}}")
+diff --git a/assets/generated/ui/buttons.prompt.txt b/assets/generated/ui/buttons.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e1fa6836d5e268605ba6edbe2865932dba2b60f
+--- /dev/null
++++ b/assets/generated/ui/buttons.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate buttons.png: landscape sprite sheet EXACTLY 1536×1024. Exactly FIVE separated UI components, at least 60 px clear transparent gap between their bounding boxes. No labels, NO BUY BONUS TEXT. Layout in requested pixel coordinates: (a) dark wood round button with bolted steel rim diameter 220 centered (210,240), plain empty face; (b) same smaller round button diameter 160 centered (520,240), empty, no plus/minus marks; (c) horizontal dark wood value plaque 520×150 centered (1110,240), rounded metal rim and four bolts, blank quiet center; (d) a slightly tilted nailed timber bonus panel approximately 460×260 centered (400,590), two crossed red dynamite sticks attached at its top, wide plain empty central text space; (e) a very long horizontal dark timber HUD bar 1400×150 centered (768,890), rounded metal edging and bolts only at ends, plain center. All subjects complete, all silhouettes distinct, no additional pieces. Flat cel shading.
++CORRECT THE PROVIDED GENERATED SHEET: remove ALL background and ALL soft shadows and glows to genuine alpha zero. Keep five objects only. Shrink first two buttons and bonus panel to requested dimensions to secure 60 px clear gaps. Make flat two-tone fills instead of painterly shading. Exact 1536x1024 canvas.
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+diff --git a/assets/generated/ui/icons.prompt.txt b/assets/generated/ui/icons.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..303ce2c30b5c987b17a0edb775049bee9653b2f8
+--- /dev/null
++++ b/assets/generated/ui/icons.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate icons.png EXACT 1536×1024 landscape sheet. Ten separated thick cream #F4E6C8 pictograms outlined ink #1B1410, exceptionally simple and legible at 28px. Uniform two-row five-column layout, at least 50 px transparent gaps. Top row left to right: 1 menu three horizontal bars; 2 speaker with sound waves; 3 speaker crossed by diagonal slash; 4 lightning bolt; 5 two circular arrows with a small PLAY TRIANGLE IN CENTER. Bottom row: 6 lowercase exact letter 'i' inside circle; 7 plus; 8 minus; 9 two curved arrows forming a circle with EMPTY CENTER; 10 solid rounded square stop. All ten same visual weight, no numbers or captions. No wooden panels, no backdrop. Genuine alpha-zero background; if alpha cannot be produced, use ONLY solid chroma #00FF00 instead, no shadows or halos.
++RETRY: Previous output failed transparency. Use fallback SOLID PURE CHROMA GREEN #00FF00 everywhere behind and inside holes of icons, absolutely no shadows, glow, shading or variation on green. Ten icons as specified, two rows five columns, flat cream and ink only. Canvas 1536x1024.
+diff --git a/assets/generated/ui/spin.prompt.txt b/assets/generated/ui/spin.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..a7932e80003e379ecd5956088838e567252c49a7
+--- /dev/null
++++ b/assets/generated/ui/spin.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate spin.png, exact 1024×1024 canvas. One large round SPIN button, no text and NO ICON. Centered frontal circular domed TNT red #D7332B disk within thick riveted blue-grey steel ring. EXACTLY EIGHT evenly spaced bolts on ring. Crisp off-white highlight at upper left, flat red face and hard-edged darker red lower-right shadow, no gradient. Empty center. Overall bounds 45 to 979 on each axis, genuine transparent exterior.
++Correction: EXACT 1024x1024 output; outer margin 4%. Remove all smooth shading and texture: strictly TWO SOLID COLOR FILLS per volume plus crisp cream highlight. Keep eight bolts and empty red center.
+
+codex
+L’outil natif vient de bloquer la génération avec l’erreur `429 usage_limit_reached`. L’enseigne et le détonateur n’ont donc pas été produits. Je termine le contrôle des cinq fichiers obtenus et leur rapport, sans passer par une API ou un script de génération.
+
+exec
+/bin/bash -lc "python - <<'PY'
+from PIL import Image
+from pathlib import Path
+import json
+for p in sorted(Path('assets/generated/ui').glob('*.png')):
+ im=Image.open(p)
+ a=im.getchannel('A') if 'A' in im.getbands() else None
+ print(json.dumps({'file':p.name,'size':im.size,'mode':im.mode,'alpha_extrema':a.getextrema() if a else None,'alpha_bbox':a.getbbox() if a else None,'transparent_pixels':a.histogram()[0] if a else 0,'center':im.getpixel((im.width//2,im.height//2))}))
+PY" in /home/user/slot
+ succeeded in 185ms:
+{"file": "buttons.png", "size": [1536, 1024], "mode": "RGBA", "alpha_extrema": [0, 254], "alpha_bbox": [31, 9, 1520, 958], "transparent_pixels": 910690, "center": [105, 125, 152, 254]}
+{"file": "cell.png", "size": [1254, 1254], "mode": "RGBA", "alpha_extrema": [0, 255], "alpha_bbox": [45, 95, 1194, 1158], "transparent_pixels": 448261, "center": [40, 35, 42, 254]}
+{"file": "frame.png", "size": [1254, 1254], "mode": "RGBA", "alpha_extrema": [0, 255], "alpha_bbox": [59, 40, 1216, 1254], "transparent_pixels": 1071496, "center": [0, 0, 0, 0]}
+{"file": "icons.png", "size": [1536, 1024], "mode": "RGBA", "alpha_extrema": [0, 254], "alpha_bbox": [46, 49, 1488, 976], "transparent_pixels": 1200170, "center": [26, 17, 16, 0]}
+{"file": "spin.png", "size": [1254, 1254], "mode": "RGBA", "alpha_extrema": [0, 255], "alpha_bbox": [64, 67, 1190, 1188], "transparent_pixels": 591027, "center": [211, 49, 41, 254]}
+
+diff --git a/assets/generated/ui/buttons.prompt.txt b/assets/generated/ui/buttons.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e1fa6836d5e268605ba6edbe2865932dba2b60f
+--- /dev/null
++++ b/assets/generated/ui/buttons.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate buttons.png: landscape sprite sheet EXACTLY 1536×1024. Exactly FIVE separated UI components, at least 60 px clear transparent gap between their bounding boxes. No labels, NO BUY BONUS TEXT. Layout in requested pixel coordinates: (a) dark wood round button with bolted steel rim diameter 220 centered (210,240), plain empty face; (b) same smaller round button diameter 160 centered (520,240), empty, no plus/minus marks; (c) horizontal dark wood value plaque 520×150 centered (1110,240), rounded metal rim and four bolts, blank quiet center; (d) a slightly tilted nailed timber bonus panel approximately 460×260 centered (400,590), two crossed red dynamite sticks attached at its top, wide plain empty central text space; (e) a very long horizontal dark timber HUD bar 1400×150 centered (768,890), rounded metal edging and bolts only at ends, plain center. All subjects complete, all silhouettes distinct, no additional pieces. Flat cel shading.
++CORRECT THE PROVIDED GENERATED SHEET: remove ALL background and ALL soft shadows and glows to genuine alpha zero. Keep five objects only. Shrink first two buttons and bonus panel to requested dimensions to secure 60 px clear gaps. Make flat two-tone fills instead of painterly shading. Exact 1536x1024 canvas.
+diff --git a/assets/generated/ui/cell.prompt.txt b/assets/generated/ui/cell.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..6563fc2de19c7a6f57eb27eda1a00424fcc0787d
+--- /dev/null
++++ b/assets/generated/ui/cell.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate cell.png, exact canvas 512×512 pixels. One dark quiet slate square with rounded corners of radius 40 px, square occupies 90% of canvas centered. Flat very dark grey face #26222a and slightly darker inset bevel #1c1a1f. Only two or three extremely discreet tiny chisel chips at edges. Unadorned dark uniform empty center intended behind symbols. No rivets or timber. True transparent exterior.
++Correction: exact 512x512 output. Exterior transparent margin exactly 4% each side. Narrow subtle inset bevel only 8 px at 512. Truly uniform flat center #26222a, no gradient anywhere. Chisel chips extremely small and low contrast.
+diff --git a/assets/generated/ui/frame.prompt.txt b/assets/generated/ui/frame.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ab9d8c7e4ce4b2e033048e91b0140eb0a3df5e5
+--- /dev/null
++++ b/assets/generated/ui/frame.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate frame.png: exactly 1024×1024. One perfectly SQUARE grid frame seen straight on, outer bounds approximately (45,45) to (979,979). CENTRAL SQUARE OPENING IS COMPLETELY EMPTY TRANSPARENT ALPHA, see-through, with no backing or grid. Honey squared timber beams of constant approximately 70 px thickness. A bolted steel strap at the midpoint of each of the four sides. Four rounded steel angle brackets at corners painted worn yellow-and-black safety stripes. Between corner brackets, all four sides must have the same construction, thickness and matching repeated details under rotation, suitable for 9-slice stretching. Keep frame thin and central opening very large; no contents.
++STRICT CORRECTION: output canvas exactly 1024 by 1024 pixels. Timber beam width only 70 pixels, not 110. Pure crisp flat two-tone comic rendering, no painterly texture or soft highlights. The four sides repeat the identical beam and midpoint bracket rotated 90 degrees. Large square transparent hole.
+diff --git a/assets/generated/ui/icons.prompt.txt b/assets/generated/ui/icons.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..303ce2c30b5c987b17a0edb775049bee9653b2f8
+--- /dev/null
++++ b/assets/generated/ui/icons.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate icons.png EXACT 1536×1024 landscape sheet. Ten separated thick cream #F4E6C8 pictograms outlined ink #1B1410, exceptionally simple and legible at 28px. Uniform two-row five-column layout, at least 50 px transparent gaps. Top row left to right: 1 menu three horizontal bars; 2 speaker with sound waves; 3 speaker crossed by diagonal slash; 4 lightning bolt; 5 two circular arrows with a small PLAY TRIANGLE IN CENTER. Bottom row: 6 lowercase exact letter 'i' inside circle; 7 plus; 8 minus; 9 two curved arrows forming a circle with EMPTY CENTER; 10 solid rounded square stop. All ten same visual weight, no numbers or captions. No wooden panels, no backdrop. Genuine alpha-zero background; if alpha cannot be produced, use ONLY solid chroma #00FF00 instead, no shadows or halos.
++RETRY: Previous output failed transparency. Use fallback SOLID PURE CHROMA GREEN #00FF00 everywhere behind and inside holes of icons, absolutely no shadows, glow, shading or variation on green. Ten icons as specified, two rows five columns, flat cream and ink only. Canvas 1536x1024.
+diff --git a/assets/generated/ui/spin.prompt.txt b/assets/generated/ui/spin.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..a7932e80003e379ecd5956088838e567252c49a7
+--- /dev/null
++++ b/assets/generated/ui/spin.prompt.txt
+@@ -0,0 +1,3 @@
++Use case: stylized-concept. Asset type: BOOMTOOTH Crownforge 2D game UI bitmap. Match exactly the D1.png art direction image already viewed in this conversation, as style reference only. Adult comic cartoon, slightly irregular thick black brush outlines (4–7 px at 1024), thinner internal lines, flat two-tone cel shading and one crisp off-white highlight per volume. Drawn honey timber, riveted blue-grey steel, controlled saturated colors. Warm golden afternoon light from upper left, blue-violet shadow shapes. Palette honey #C98A45, dark wood #6B4526, steel #6F7F92 and #46526A, TNT red #D7332B, gold #F2B233, cream #F4E6C8, ink #1B1410. True transparent alpha background, no checkerboard, no white background, no halo, no cast shadow outside subject. Complete unclipped artwork with 3–6% outer safe margin unless specific centered dimensions requested. All UI corners rounded. No photorealism, no smooth 3D, no airbrush, blur, gradients, neon, decorative border effects. No text, logo, signature or watermark except an explicitly requested information i.
++Generate spin.png, exact 1024×1024 canvas. One large round SPIN button, no text and NO ICON. Centered frontal circular domed TNT red #D7332B disk within thick riveted blue-grey steel ring. EXACTLY EIGHT evenly spaced bolts on ring. Crisp off-white highlight at upper left, flat red face and hard-edged darker red lower-right shadow, no gradient. Empty center. Overall bounds 45 to 979 on each axis, genuine transparent exterior.
++Correction: EXACT 1024x1024 output; outer margin 4%. Remove all smooth shading and texture: strictly TWO SOLID COLOR FILLS per volume plus crisp cream highlight. Keep eight bolts and empty red center.
+
+ERROR: You’ve hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at Oct 4th, 2026 12:31 PM.
+ERROR: You’ve hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at Oct 4th, 2026 12:31 PM.
+tokens used
+47,492

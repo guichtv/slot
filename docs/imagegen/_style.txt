@@ -1,0 +1,12 @@
+Projet : BOOMTOOTH, slot 2D « démolition au castor » (Crownforge). Buck Boomtooth, castor chef de chantier vaniteux et casse-cou, fait sauter une montagne de granit pour y sculpter un monument à sa gloire (« Mount Buckmore ») au-dessus d'un barrage en rondins, dans une vallée de pins du Grand Nord.
+
+Direction artistique RETENUE (référence obligatoire) : assets/generated/directions/D1.png — charge-la avec view_image avant de générer et reproduis son style exact :
+- encrage noir épais (4 à 7 px à 1024 px), légèrement irrégulier comme au pinceau, traits intérieurs plus fins ;
+- cel-shading deux tons nets (clair + ombre franche) et un reflet blanc cassé par volume ; pas d'aérographe, pas de flou ;
+- matières dessinées : bois équarri veiné, granit gris-bleu ébréché, métal riveté, flanelle à carreaux rouges et noirs, copeaux ;
+- lumière principale chaude de fin d'après-midi venant de la gauche (orange doré), ombres bleu-violet ;
+- couleurs saturées maîtrisées.
+Palette : orange brûlé #E8742A, orange ciel #F39A3C, vert pin #2F5D46, vert pin sombre #1E3B2E, granit #6F7F92, granit ombre #46526A, rouge TNT #D7332B, or #F2B233, bois miel #C98A45, bois sombre #6B4526, crème #F4E6C8, encre #1B1410.
+Référence d'ambiance NUIT (bonus) : assets/generated/directions/D3.png (aurore turquoise #3FD6B8, bleu nuit #14233A, projecteurs orange #FF9A3C) — même vallée, même trait.
+Jamais photo-réaliste, jamais 3D lisse, jamais de néon générique ni de dégradé par défaut.
+

@@ -1,0 +1,909 @@
+OpenAI Codex v0.158.0
+--------
+workdir: /home/user/slot
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: none
+reasoning summaries: none
+session id: 01a0e78a-60dc-71d2-841d-db3dcd3dfdc9
+--------
+user
+Utilise $imagegen et l'outil natif de génération d'images (built-in image_gen, PAS un script CLI/API) pour produire réellement les images décrites. Ta mission porte uniquement sur ces images et leur rapport ; ne crée ni ne modifie aucun code du jeu.
+
+Studio : Crownforge. Racine du projet : le répertoire courant.
+
+RÈGLES COMMUNES
+- Style maison Crownforge : BD / cartoon 2D pour adultes, contours noirs épais légèrement irréguliers, cel-shading deux tons, reflets francs, couleurs saturées maîtrisées, formes simples et lisibles. Jamais photo-réaliste, jamais 3D lisse, jamais de rendu « image IA » (pas de néon générique, pas de dégradés par défaut, pas de flou artistique, pas d'effets de bordure).
+- Transparence (quand demandée) : fond RÉELLEMENT transparent (canal alpha), pas de damier dessiné, pas de fond blanc, pas de halo ; sujet complet non coupé, marge de 3 à 6 % tout autour. Si l'outil ne produit pas d'alpha : fond vert chroma uni #00FF00 sans ombre portée, et signale-le dans ta réponse.
+- Aucun texte, logo, filigrane ou signature, sauf le texte exact demandé.
+- Aucune copie de personnage, de logo ou de composition identifiable d'un autre studio ou d'une marque.
+- Reprise : si un fichier cible existe déjà ET que son .prompt.txt existe, ne le régénère pas ; passe au suivant.
+
+PROCÉDURE pour CHAQUE image :
+1) génère avec image_gen (un appel par asset) ;
+2) inspecte (sujet, style, transparence, marges, texte exact) et régénère UNE fois si un défaut évident existe ;
+3) copie le fichier final depuis $CODEX_HOME/generated_images/… vers le chemin indiqué (crée les dossiers) ;
+4) écris à côté <nom>.prompt.txt avec le prompt exact utilisé.
+
+RÉPONSE FINALE : chemins produits, méthode réellement utilisée, dimensions, canal alpha (oui/non), défauts restants.
+Si image_gen n'est pas accessible, dis-le précisément ; ne remplace PAS les images par du SVG, du code ou une liste de prompts.
+
+Projet : BOOMTOOTH, slot 2D « démolition au castor » (Crownforge). Buck Boomtooth, castor chef de chantier vaniteux et casse-cou, fait sauter une montagne de granit pour y sculpter un monument à sa gloire (« Mount Buckmore ») au-dessus d'un barrage en rondins, dans une vallée de pins du Grand Nord.
+
+Direction artistique RETENUE (référence obligatoire) : assets/generated/directions/D1.png — charge-la avec view_image avant de générer et reproduis son style exact :
+- encrage noir épais (4 à 7 px à 1024 px), légèrement irrégulier comme au pinceau, traits intérieurs plus fins ;
+- cel-shading deux tons nets (clair + ombre franche) et un reflet blanc cassé par volume ; pas d'aérographe, pas de flou ;
+- matières dessinées : bois équarri veiné, granit gris-bleu ébréché, métal riveté, flanelle à carreaux rouges et noirs, copeaux ;
+- lumière principale chaude de fin d'après-midi venant de la gauche (orange doré), ombres bleu-violet ;
+- couleurs saturées maîtrisées.
+Palette : orange brûlé #E8742A, orange ciel #F39A3C, vert pin #2F5D46, vert pin sombre #1E3B2E, granit #6F7F92, granit ombre #46526A, rouge TNT #D7332B, or #F2B233, bois miel #C98A45, bois sombre #6B4526, crème #F4E6C8, encre #1B1410.
+Référence d'ambiance NUIT (bonus) : assets/generated/directions/D3.png (aurore turquoise #3FD6B8, bleu nuit #14233A, projecteurs orange #FF9A3C) — même vallée, même trait.
+Jamais photo-réaliste, jamais 3D lisse, jamais de néon générique ni de dégradé par défaut.
+
+LOT mascot-rig — Buck Boomtooth découpé pour une animation cut-out (5 images). Dossier : assets/generated/mascot/
+Personnage de D1.png, strictement le même : castor trapu et musclé, fourrure brun roux (#9A5A2E, ombre #6B3A1E), ventre plus clair, grosse queue plate écailleuse brun foncé, deux grandes incisives dont celle de GAUCHE (côté droit de l'image) en OR (#F2B233), l'autre crème ; casque de chantier orange (#E8742A) cabossé avec lampe frontale ronde ; chemise de flanelle à carreaux rouges et noirs aux manches retroussées aux coudes ; bretelles noires ; ceinture de cuir à grosse boucle et étuis à outils ; jean bleu usé ; grosses bottes de travail brunes ; allumette coincée au coin droit de la bouche.
+Style : exactement celui de D1.png (encrage épais irrégulier, cel-shading deux tons, reflets francs, lumière chaude venant de la gauche).
+Toutes les pièces sont dessinées à la MÊME ÉCHELLE que la référence complète (image 1), vue trois-quarts tournée vers la gauche de l'image (il regarde vers la grille, située à sa gauche).
+RÈGLES DE DÉCOUPE (animation cut-out) : chaque pièce est un élément isolé, complet, entouré d'au moins 60 px de vide transparent ; aux articulations, chaque segment se prolonge largement par une extrémité ARRONDIE et pleine (recouvrement généreux, jamais coupé net) ; les manches retroussées cachent les coudes, la fourrure épaisse cache les poignets, le col de la chemise cache la base du cou, le haut des bottes cache les chevilles. Aucune ombre au sol sur les pièces.
+
+1. buck-ref.png — Référence complète, 1024×1536, fond TRANSPARENT : Buck debout en pose neutre de repos, pieds écartés à largeur d'épaules bien à plat, bras légèrement écartés du corps (les deux mains visibles, ouvertes et détendues), queue visible derrière la jambe droite, sourire en coin avec dent en or visible. Personnage entier non coupé, occupant 90 % de la hauteur.
+2. buck-heads.png — Planche de 7 têtes, 1536×1024, fond TRANSPARENT, disposées en 2 rangées (4 + 3), toutes à la même taille et la même inclinaison, chacune avec son casque, la base du cou coupée en arc arrondi au même endroit (large collerette de fourrure qui s'enfoncera sous le col). Expressions : (a) repos, sourire en coin, allumette ; (b) grand sourire satisfait montrant les deux incisives dont celle en or ; (c) cri de joie bouche grande ouverte ; (d) surprise, yeux ronds, bouche en O, allumette qui tombe ; (e) clin d'œil vaniteux, sourcil levé ; (f) concentré, sourcils froncés, dents serrées sur l'allumette ; (g) yeux fermés (clignement), sourire en coin.
+3. buck-body.png — Planche du corps, 1536×1024, fond TRANSPARENT, 6 pièces séparées : (a) torse + bassin (chemise, bretelles, ceinture à outils, haut du jean) sans tête ni bras, avec épaules arrondies et col ouvert ; (b) queue plate écailleuse seule, base arrondie ; (c) cuisse gauche en jean (du bassin au genou, genou arrondi) ; (d) cuisse droite ; (e) jambe gauche du genou à la botte comprise (genou arrondi en haut, botte à plat) ; (f) jambe droite du genou à la botte comprise.
+4. buck-arms.png — Planche bras et mains, 1536×1024, fond TRANSPARENT, 10 pièces séparées en 2 rangées : (a) bras supérieur gauche (manche de flanelle retroussée, épaule arrondie, coude arrondi) ; (b) bras supérieur droit ; (c) avant-bras gauche (fourrure, du coude au poignet, extrémités arrondies) ; (d) avant-bras droit ; puis six mains de castor à quatre gros doigts griffus, poignet arrondi : (e) main ouverte détendue, (f) poing fermé, (g) main qui empoigne une barre horizontale (vide au centre du poing), (h) pouce levé, (i) index pointé, (j) main tenant une allumette enflammée entre deux doigts.
+5. buck-props.png — Planche d'accessoires, 1536×1024, fond TRANSPARENT, 4 pièces séparées : (a) grand détonateur à piston : caisse en bois rouge TNT (#D7332B) cerclée de fer, deux bornes en laiton, fils rouges qui sortent sur le côté, SANS la poignée (orifice en laiton sur le dessus), à l'échelle d'un objet qui arrive à la taille de Buck ; (b) la poignée en T du détonateur (barre de bois verni + longue tige d'acier), verticale ; (c) un bâton de dynamite rouge à mèche courte, à l'échelle de sa main ; (d) une petite allumette en bois à bout rouge.
+
+warning: Codex could not find bubblewrap on PATH. Install bubblewrap with your OS package manager. See the sandbox prerequisites: https://developers.openai.com/codex/concepts/sandboxing#prerequisites. Codex will use the bundled bubblewrap in the meantime.
+codex
+J’utilise la compétence **imagegen** et l’outil natif `image_gen`. Je vais vérifier la référence D1 et les fichiers déjà présents, puis générer et contrôler chaque asset sans toucher au code du jeu.
+
+exec
+/bin/bash -lc "pwd && rg --files -g 'AGENTS.md' -g 'D1.png' -g 'D3.png' -g 'buck-*' -g 'SKILL.md' assets .agents 2>/dev/null" in /home/user/slot
+ succeeded in 0ms:
+/home/user/slot
+assets/generated/directions/D1.png
+assets/generated/directions/D3.png
+
+exec
+/bin/bash -lc 'cat /root/.codex/skills/.system/imagegen/SKILL.md' in /home/user/slot
+ succeeded in 0ms:
+---
+name: "imagegen"
+description: "Generate or edit raster images when the task benefits from AI-created bitmap visuals such as photos, illustrations, textures, sprites, mockups, or transparent-background cutouts. Use when Codex should create a brand-new image, transform an existing image, or derive visual variants from references, and the output should be a bitmap asset rather than repo-native code or vector. Do not use when the task is better handled by editing existing SVG/vector/code-native assets, extending an established icon or logo system, or building the visual directly in HTML/CSS/canvas."
+---
+
+# Image Generation Skill
+
+Generates or edits images for the current project (for example website assets, game assets, UI mockups, product mockups, wireframes, logo design, photorealistic images, or infographics).
+
+## Top-level modes and rules
+
+This skill has exactly two top-level modes:
+
+- **Default built-in tool mode (preferred):** built-in `image_gen` tool for image generation, editing, and transparent-image requests. Does not require `OPENAI_API_KEY`.
+- **Fallback CLI mode:** `scripts/image_gen.py` CLI. Use when the user explicitly asks for or confirms the CLI/API/model path. Requires `OPENAI_API_KEY`.
+
+Within CLI fallback, the CLI exposes three subcommands:
+
+- `generate`
+- `edit`
+- `generate-batch`
+
+Rules:
+- Use the built-in `image_gen` tool by default for normal image generation and editing requests.
+- Do not switch to CLI fallback for ordinary quality, size, or file-path control.
+- For transparent images, ask built-in `image_gen` for a transparent background and preserve the generated alpha.
+- Never silently switch from built-in `image_gen` or CLI `gpt-image-2` to CLI `gpt-image-1.5`; ask the user first unless they explicitly requested `gpt-image-1.5`.
+- The word `batch` by itself does not mean CLI fallback. If the user asks for many assets or says to batch-generate assets without explicitly asking for CLI/API/model controls, stay on the built-in path and issue one built-in call per requested asset or variant.
+- If the built-in tool fails or is unavailable, tell the user the CLI fallback exists and that it requires `OPENAI_API_KEY`. Proceed only if the user explicitly asks for that fallback.
+- If the user explicitly asks for CLI mode, use the bundled `scripts/image_gen.py` workflow. Do not create one-off SDK runners.
+- Never modify `scripts/image_gen.py`. If something is missing, ask the user before doing anything else.
+
+Built-in save-path policy:
+- In built-in tool mode, Codex saves generated images under `$CODEX_HOME/*` by default.
+- Do not describe or rely on OS temp as the default built-in destination.
+- Do not describe or rely on a destination-path argument (if any) on the built-in `image_gen` tool. If a specific location is needed, generate first and then move or copy the selected output from `$CODEX_HOME/generated_images/...`.
+- Save-path precedence in built-in mode:
+  1. If the user names a destination, move or copy the selected output there.
+  2. If the image is meant for the current project, move or copy the final selected image into the workspace before finishing.
+  3. If the image is only for preview or brainstorming, render it inline; the underlying file can remain at the default `$CODEX_HOME/*` path.
+- Never leave a project-referenced asset only at the default `$CODEX_HOME/*` path.
+- Do not overwrite an existing asset unless the user explicitly asked for replacement; otherwise create a sibling versioned filename such as `hero-v2.png` or `item-icon-edited.png`.
+
+Shared prompt guidance for both modes lives in `references/prompting.md` and `references/sample-prompts.md`.
+
+Fallback-only docs/resources for CLI mode:
+- `references/cli.md`
+- `references/image-api.md`
+- `references/codex-network.md`
+- `scripts/image_gen.py`
+
+## When to use
+- Generate a new image (concept art, product shot, cover, website hero)
+- Generate a new image using one or more reference images for style, composition, or mood
+- Edit an existing image (inpainting, lighting or weather transformations, background replacement, object removal, compositing, transparent background)
+- Produce many assets or variants for one task
+
+## When not to use
+- Extending or matching an existing SVG/vector icon set, logo system, or illustration library inside the repo
+- Creating simple shapes, diagrams, wireframes, or icons that are better produced directly in SVG, HTML/CSS, or canvas
+- Making a small project-local asset edit when the source file already exists in an editable native format
+- Any task where the user clearly wants deterministic code-native output instead of a generated bitmap
+
+## Decision tree
+
+Think about two separate questions:
+
+1. **Intent:** is this a new image or an edit of an existing image?
+2. **Execution strategy:** is this one asset or many assets/variants?
+
+Intent:
+- If the user wants to modify an existing image while preserving parts of it, treat the request as **edit**.
+- If the user provides images only as references for style, composition, mood, or subject guidance, treat the request as **generate**.
+- If the user provides no images, treat the request as **generate**.
+
+Built-in edit semantics:
+- Built-in edit mode is for images already visible in the conversation context, such as attached images or images generated earlier in the thread.
+- If the user wants to edit a local image file with the built-in tool, first load it with built-in `view_image` tool so the image is visible in the conversation context, then proceed with the built-in edit flow.
+- Do not promise arbitrary filesystem-path editing through the built-in tool.
+- If a local file still needs direct file-path control, masks, or other explicit CLI-only parameters, use the explicit CLI fallback only when the user asks for it.
+- For edits, preserve invariants aggressively and save non-destructively by default.
+
+Execution strategy:
+- In the built-in default path, produce many assets or variants by issuing one `image_gen` call per requested asset or variant.
+- In the CLI fallback path, use the CLI `generate-batch` subcommand only when the user explicitly chose CLI mode and needs many prompts/assets.
+- For many distinct assets, do not use `n` as a substitute for separate prompts. `n` is for variants of one prompt; distinct assets need distinct built-in calls or distinct CLI `generate-batch` jobs.
+
+Assume the user wants a new image unless they clearly ask to change an existing one.
+
+## Workflow
+1. Decide the top-level mode: built-in by default, including transparent-output requests; fallback CLI only if explicitly requested or confirmed.
+2. Decide the intent: `generate` or `edit`.
+3. Decide whether the output is preview-only or meant to be consumed by the current project.
+4. Decide the execution strategy: single asset vs repeated built-in calls vs CLI `generate-batch`.
+5. Collect inputs up front: prompt(s), exact text (verbatim), constraints/avoid list, and any input images.
+6. For every input image, label its role explicitly:
+   - reference image
+   - edit target
+   - supporting insert/style/compositing input
+7. If the edit target is only on the local filesystem and you are staying on the built-in path, inspect it with `view_image` first so the image is available in conversation context.
+8. If the user asked for a photo, illustration, sprite, product image, banner, or other explicitly raster-style asset, use `image_gen` rather than substituting SVG/HTML/CSS placeholders. If the request is for an icon, logo, or UI graphic that should match existing repo-native SVG/vector/code assets, prefer editing those directly instead.
+9. Augment the prompt based on specificity:
+   - If the user's prompt is already specific and detailed, normalize it into a clear spec without adding creative requirements.
+   - If the user's prompt is generic, add tasteful augmentation only when it materially improves output quality.
+10. Use the built-in `image_gen` tool by default.
+11. For transparent-output requests, ask built-in `image_gen` for a transparent background and preserve the generated alpha channel.
+12. Inspect outputs and validate: subject, style, composition, text accuracy, and invariants/avoid items.
+13. Iterate with a single targeted change, then re-check.
+14. For preview-only work, render the image inline; the underlying file may remain at the default `$CODEX_HOME/generated_images/...` path.
+15. For project-bound work, move or copy the selected artifact into the workspace and update any consuming code or references. Never leave a project-referenced asset only at the default `$CODEX_HOME/generated_images/...` path.
+16. For batches or multi-asset requests, persist every requested deliverable final in the workspace unless the user explicitly asked to keep outputs preview-only. Discarded variants do not need to be kept unless requested.
+17. If the user explicitly chooses or confirms the CLI fallback, then use the fallback-only docs for model, quality, size, `input_fidelity`, masks, output format, output paths, and network setup.
+18. Always report the final saved path(s) for any workspace-bound asset(s), plus the final prompt or prompt set and whether the built-in tool or fallback CLI mode was used.
+
+## Transparent image requests
+
+Ask built-in `image_gen` for a genuinely transparent background and preserve its alpha.
+
+## Prompt augmentation
+
+Reformat user prompts into a structured, production-oriented spec. Make the user's goal clearer and more actionable, but do not blindly add detail.
+
+Treat this as prompt-shaping guidance, not a closed schema. Use only the lines that help, and add a short extra labeled line when it materially improves clarity.
+
+### Specificity policy
+
+Use the user's prompt specificity to decide how much augmentation is appropriate:
+
+- If the prompt is already specific and detailed, preserve that specificity and only normalize/structure it.
+- If the prompt is generic, you may add tasteful augmentation when it will materially improve the result.
+
+Allowed augmentations:
+- composition or framing hints
+- polish level or intended-use hints
+- practical layout guidance
+- reasonable scene concreteness that supports the stated request
+
+Not allowed augmentations:
+- extra characters or objects that are not implied by the request
+- brand names, slogans, palettes, or narrative beats that are not implied
+- arbitrary side-specific placement unless the surrounding layout supports it
+
+## Use-case taxonomy (exact slugs)
+
+Classify each request into one of these buckets and keep the slug consistent across prompts and references.
+
+Generate:
+- photorealistic-natural — candid/editorial lifestyle scenes with real texture and natural lighting.
+- product-mockup — product/packaging shots, catalog imagery, merch concepts.
+- ui-mockup — app/web interface mockups and wireframes; specify the desired fidelity.
+- infographic-diagram — diagrams/infographics with structured layout and text.
+- scientific-educational — classroom explainers, scientific diagrams, and learning visuals with required labels and accuracy constraints.
+- ads-marketing — campaign concepts and ad creatives with audience, brand position, scene, and exact tagline/copy.
+- productivity-visual — slide, chart, workflow, and data-heavy business visuals.
+- logo-brand — logo/mark exploration, vector-friendly.
+- illustration-story — comics, children’s book art, narrative scenes.
+- stylized-concept — style-driven concept art, 3D/stylized renders.
+- historical-scene — period-accurate/world-knowledge scenes.
+
+Edit:
+- text-localization — translate/replace in-image text, preserve layout.
+- identity-preserve — try-on, person-in-scene; lock face/body/pose.
+- precise-object-edit — remove/replace a specific element (including interior swaps).
+- lighting-weather — time-of-day/season/atmosphere changes only.
+- background-extraction — transparent background / clean cutout. Ask built-in `image_gen` for actual transparency.
+- style-transfer — apply reference style while changing subject/scene.
+- compositing — multi-image insert/merge with matched lighting/perspective.
+- sketch-to-render — drawing/line art to photoreal render.
+
+## Shared prompt schema
+
+Use the following labeled spec as shared prompt scaffolding for both top-level modes:
+
+```text
+Use case: <taxonomy slug>
+Asset type: <where the asset will be used>
+Primary request: <user's main prompt>
+Input images: <Image 1: role; Image 2: role> (optional)
+Scene/backdrop: <environment>
+Subject: <main subject>
+Style/medium: <photo/illustration/3D/etc>
+Composition/framing: <wide/close/top-down; placement>
+Lighting/mood: <lighting + mood>
+Color palette: <palette notes>
+Materials/textures: <surface details>
+Text (verbatim): "<exact text>"
+Constraints: <must keep/must avoid>
+Avoid: <negative constraints>
+```
+
+Notes:
+- `Asset type` and `Input images` are prompt scaffolding, not dedicated CLI flags.
+- `Scene/backdrop` refers to the visual setting. It is not the same as the fallback CLI `background` parameter, which controls output transparency behavior.
+- Fallback-only execution notes such as `Quality:`, `Input fidelity:`, masks, output format, and output paths belong in the CLI path only. Do not treat them as built-in `image_gen` tool arguments.
+
+Augmentation rules:
+- Keep it short.
+- Add only the details needed to improve the prompt materially.
+- For edits, explicitly list invariants (`change only X; keep Y unchanged`).
+- If any critical detail is missing and blocks success, ask a question; otherwise proceed.
+
+## Examples
+
+### Generation example (hero image)
+```text
+Use case: product-mockup
+Asset type: landing page hero
+Primary request: a minimal hero image of a ceramic coffee mug
+Style/medium: clean product photography
+Composition/framing: wide composition with usable negative space for page copy if needed
+Lighting/mood: soft studio lighting
+Constraints: no logos, no text, no watermark
+```
+
+### Edit example (invariants)
+```text
+Use case: precise-object-edit
+Asset type: product photo background replacement
+Primary request: replace only the background with a warm sunset gradient
+Constraints: change only the background; keep the product and its edges unchanged; no text; no watermark
+```
+
+## Prompting best practices
+- Structure prompt as scene/backdrop -> subject -> details -> constraints.
+- Include intended use (ad, UI mock, infographic) to set the mode and polish level.
+- Use camera/composition language for photorealism.
+- Only use SVG/vector stand-ins when the user explicitly asked for vector output or a non-image placeholder.
+- Quote exact text and specify typography + placement.
+- For tricky words, spell them letter-by-letter and require verbatim rendering.
+- For multi-image inputs, reference images by index and describe how they should be used.
+- For edits, repeat invariants every iteration to reduce drift.
+- Iterate with single-change follow-ups.
+- If the prompt is generic, add only the extra detail that will materially help.
+- If the prompt is already detailed, normalize it instead of expanding it.
+- For CLI fallback only, see `references/cli.md` and `references/image-api.md` for model, `quality`, `input_fidelity`, masks, output format, and output-path guidance.
+- For transparent images, ask built-in `image_gen` for actual transparency and preserve its alpha.
+
+More principles shared by both modes: `references/prompting.md`.
+Copy/paste specs shared by both modes: `references/sample-prompts.md`.
+
+## Guidance by asset type
+Asset-type templates (website assets, game assets, wireframes, logo) are consolidated in `references/sample-prompts.md`.
+
+## gpt-image-2 guidance for CLI fallback
+
+The fallback CLI defaults to `gpt-image-2`.
+
+- Use `gpt-image-2` for new CLI/API workflows unless the user confirms a different model.
+- CLI `gpt-image-2` does not support `background=transparent`; ask before using `gpt-image-1.5` unless the user explicitly requested that model.
+- `gpt-image-2` always uses high fidelity for image inputs; do not set `input_fidelity` with this model.
+- `gpt-image-2` supports `quality` values `low`, `medium`, `high`, and `auto`.
+- Use `quality low` for fast drafts, thumbnails, and quick iterations. Use `medium`, `high`, or `auto` for final assets, dense text, diagrams, identity-sensitive edits, or high-resolution outputs.
+- Square images are typically fastest to generate. Use `1024x1024` for fast square drafts.
+- If the user asks for 4K-style output, use `3840x2160` for landscape or `2160x3840` for portrait.
+- `gpt-image-2` size may be `auto` or `WIDTHxHEIGHT` if all constraints hold: max edge `<= 3840px`, both edges multiples of `16px`, long-to-short ratio `<= 3:1`, total pixels between `655,360` and `8,294,400`.
+
+Popular `gpt-image-2` sizes:
+- `1024x1024` square
+- `1536x1024` landscape
+- `1024x1536` portrait
+- `2048x2048` 2K square
+- `2048x1152` 2K landscape
+- `3840x2160` 4K landscape
+- `2160x3840` 4K portrait
+- `auto`
+
+## Fallback CLI mode only
+
+### Temp and output conventions
+These conventions apply only to the CLI fallback. They do not describe built-in `image_gen` output behavior.
+- Use `tmp/imagegen/` for intermediate files (for example JSONL batches); delete them when done.
+- Write final artifacts under `output/imagegen/`.
+- Use `--out` or `--out-dir` to control output paths; keep filenames stable and descriptive.
+
+### Dependencies
+Prefer `uv` for dependency management in this repo.
+
+Required Python package:
+```bash
+uv pip install openai
+```
+
+Optional for image inspection and downscaling:
+```bash
+uv pip install pillow
+```
+
+Portability note:
+- If you are using the installed skill outside this repo, install dependencies into that environment with its package manager.
+- In uv-managed environments, `uv pip install ...` remains the preferred path.
+
+### Environment
+- `OPENAI_API_KEY` must be set for live API calls.
+- Do not ask the user for `OPENAI_API_KEY` when using the built-in `image_gen` tool.
+- Never ask the user to paste the full key in chat. Ask them to set it locally and confirm when ready.
+
+If the key is missing, give the user these steps:
+1. Create an API key in the OpenAI platform UI: https://platform.openai.com/api-keys
+2. Set `OPENAI_API_KEY` as an environment variable in their system.
+3. Offer to guide them through setting the environment variable for their OS/shell if needed.
+
+If installation is not possible in this environment, tell the user which dependency is missing and how to install it into their active environment.
+
+### Script-mode notes
+- CLI commands + examples: `references/cli.md`
+- API parameter quick reference: `references/image-api.md`
+- Network approvals / sandbox settings for CLI mode: `references/codex-network.md`
+
+## Reference map
+- `references/prompting.md`: shared prompting principles for both modes.
+- `references/sample-prompts.md`: shared copy/paste prompt recipes for both modes.
+- `references/cli.md`: fallback-only CLI usage via `scripts/image_gen.py`.
+- `references/image-api.md`: fallback-only API/CLI parameter reference.
+- `references/codex-network.md`: fallback-only network/sandbox troubleshooting for CLI mode.
+- `scripts/image_gen.py`: fallback-only CLI implementation. Use only when the user explicitly chooses or confirms CLI mode.
+
+exec
+/bin/bash -lc 'ls -la && printenv CODEX_HOME' in /home/user/slot
+ exited 1 in 0ms:
+total 160
+drwxr-xr-x 13 root root  4096 Sep 28 10:23 .
+drwxr-xr-x  3 root root  4096 Sep 28 09:15 ..
+dr-xr-xr-x  2 root root    40 Sep 28 10:23 .agents
+drwxr-xr-x  2 root root  4096 Sep 28 09:18 .claude
+dr-xr-xr-x  2 root root    40 Sep 28 10:23 .codex
+drwxr-xr-x  8 root root  4096 Sep 28 10:04 .git
+-rw-r--r--  1 root root   102 Sep 28 09:24 .gitignore
+drwxr-xr-x  3 root root  4096 Sep 28 09:46 assets
+-rw-r--r--  1 root root  3547 Sep 28 10:08 directions.html
+drwxr-xr-x  3 root root  4096 Sep 28 10:08 docs
+-rw-r--r--  1 root root   909 Sep 28 10:22 index.html
+drwxr-xr-x 89 root root  4096 Sep 28 10:22 node_modules
+-rw-r--r--  1 root root 87111 Sep 28 10:22 package-lock.json
+-rw-r--r--  1 root root   860 Sep 28 10:22 package.json
+drwxr-xr-x  5 root root  4096 Sep 28 10:22 public
+drwxr-xr-x 12 root root  4096 Sep 28 09:49 src
+drwxr-xr-x  2 root root  4096 Sep 28 10:23 tests
+drwxr-xr-x  5 root root  4096 Sep 28 09:50 tools
+-rw-r--r--  1 root root   589 Sep 28 09:24 tsconfig.json
+-rw-r--r--  1 root root  1085 Sep 28 09:37 vite.config.ts
+-rw-r--r--  1 root root   232 Sep 28 09:42 vitest.config.ts
+
+exec
+/bin/bash -lc "python - <<'PY'
+from PIL import Image
+p='/root/.codex/generated_images/01a0e78a-60dc-71d2-841d-db3dcd3dfdc9/exec-fad1b57d-59a2-457e-83d2-9c2058854004.png'
+im=Image.open(p);print(im.size, im.mode, im.getextrema()[-1] if im.mode=='RGBA' else 'no alpha')
+PY" in /home/user/slot
+ succeeded in 84ms:
+(1024, 1536) RGBA (0, 254)
+
+exec
+/bin/bash -lc "python - <<'PY'
+from PIL import Image
+im=Image.open('/root/.codex/generated_images/01a0e78a-60dc-71d2-841d-db3dcd3dfdc9/exec-fad1b57d-59a2-457e-83d2-9c2058854004.png');a=im.getchannel('A');print('bbox',a.getbbox(),'corners', [im.getpixel(p) for p in [(0,0),(500,0),(0,700),(100,100),(500,700)]]);print('alpha most common',a.getcolors() and sorted(a.getcolors(),reverse=True)[:8])
+PY" in /home/user/slot
+ succeeded in 96ms:
+bbox (32, 10, 992, 1536) corners [(1, 1, 1, 0), (86, 53, 17, 0), (64, 47, 27, 0), (1, 1, 1, 0), (227, 35, 34, 253)]
+alpha most common [(749593, 253), (688182, 0), (77119, 252), (9021, 1), (8941, 251), (5147, 254), (4248, 250), (4239, 2)]
+
+codex
+La première image possède un canal alpha, mais le casque est trop près du bord supérieur. Je lance la correction prévue pour obtenir une marge suffisante avant de produire les planches.
+
+exec
+/bin/bash -lc "rg --files --hidden -g AGENTS.md -g '"'!node_modules'"' -g '"'!.git'"' /home/user 2>/dev/null" in /home/user/slot
+ exited 1 in 0ms:
+exec
+/bin/bash -lc 'mkdir -p assets/generated/mascot && cp /root/.codex/generated_images/01a0e78a-60dc-71d2-841d-db3dcd3dfdc9/exec-b76b6410-66dc-48c5-94a8-562a00507fc4.png assets/generated/mascot/buck-ref.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/mascot/buck-ref.prompt.txt
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+codex
+Les sept expressions sont présentes, mais les têtes sont trop serrées. Je corrige leur espacement. La taille des planches impose aussi une limite : quatre têtes à l’échelle de la référence complète ne tiennent pas dans 1536 px avec les marges demandées ; je signalerai l’écart d’échelle dans le rapport.
+
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+exec
+/bin/bash -lc 'cp /root/.codex/generated_images/01a0e78a-60dc-71d2-841d-db3dcd3dfdc9/exec-a959600a-3d3e-4ce6-98fb-964b1d8e02fe.png assets/generated/mascot/buck-heads.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/mascot/buck-heads.prompt.txt
+diff --git a/assets/generated/mascot/buck-heads.prompt.txt b/assets/generated/mascot/buck-heads.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..22ac8dbb777a3168337bddca11e0d3887afb4621
+--- /dev/null
++++ b/assets/generated/mascot/buck-heads.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input image 1 D1 is mandatory style/identity reference; image 2 buck-ref is the full-body rig reference. Generate buck-heads.png only, 1536×1024 landscape. Exactly SEVEN isolated heads in TWO rows, FOUR across top and THREE across bottom. Same helmet, head size, inclination, three-quarter image-left view in all seven. Maintain reference proportions, aim for same rig scale, no bodies. Each includes a broad solid rounded fur neck overlap ending at same position below chin. At least 60px transparent border and empty space between pieces. Expressions reading order: 1 rest smug smile with match; 2 wide satisfied grin showing both incisors gold image right; 3 cheering with mouth wide open; 4 surprised round eyes O-shaped mouth, falling match close beneath mouth; 5 vain wink with raised eyebrow; 6 focused furrowed brows teeth clenched on match; 7 closed eyes blink with smug smile. NO labels or text. Transparent background.
++CORRECTION PRIORITY spacing: each head fits a 290px wide by 350px high bounding box, top row centers x=220,585,950,1315 y=275; bottom centers x=400,770,1140 y=760. 60px minimum clear border and 70px minimum horizontal clear gaps. All heads exactly same size, preserve seven expressions. Broad ROUNDED solid neck fur overlap, not a pointed chin tip. Expression 2 both eyes OPEN, grin; expression 5 only wink. Transparent alpha only.
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+diff --git a/assets/generated/mascot/buck-heads.prompt.txt b/assets/generated/mascot/buck-heads.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..22ac8dbb777a3168337bddca11e0d3887afb4621
+--- /dev/null
++++ b/assets/generated/mascot/buck-heads.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input image 1 D1 is mandatory style/identity reference; image 2 buck-ref is the full-body rig reference. Generate buck-heads.png only, 1536×1024 landscape. Exactly SEVEN isolated heads in TWO rows, FOUR across top and THREE across bottom. Same helmet, head size, inclination, three-quarter image-left view in all seven. Maintain reference proportions, aim for same rig scale, no bodies. Each includes a broad solid rounded fur neck overlap ending at same position below chin. At least 60px transparent border and empty space between pieces. Expressions reading order: 1 rest smug smile with match; 2 wide satisfied grin showing both incisors gold image right; 3 cheering with mouth wide open; 4 surprised round eyes O-shaped mouth, falling match close beneath mouth; 5 vain wink with raised eyebrow; 6 focused furrowed brows teeth clenched on match; 7 closed eyes blink with smug smile. NO labels or text. Transparent background.
++CORRECTION PRIORITY spacing: each head fits a 290px wide by 350px high bounding box, top row centers x=220,585,950,1315 y=275; bottom centers x=400,770,1140 y=760. 60px minimum clear border and 70px minimum horizontal clear gaps. All heads exactly same size, preserve seven expressions. Broad ROUNDED solid neck fur overlap, not a pointed chin tip. Expression 2 both eyes OPEN, grin; expression 5 only wink. Transparent alpha only.
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+diff --git a/assets/generated/mascot/buck-heads.prompt.txt b/assets/generated/mascot/buck-heads.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..22ac8dbb777a3168337bddca11e0d3887afb4621
+--- /dev/null
++++ b/assets/generated/mascot/buck-heads.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input image 1 D1 is mandatory style/identity reference; image 2 buck-ref is the full-body rig reference. Generate buck-heads.png only, 1536×1024 landscape. Exactly SEVEN isolated heads in TWO rows, FOUR across top and THREE across bottom. Same helmet, head size, inclination, three-quarter image-left view in all seven. Maintain reference proportions, aim for same rig scale, no bodies. Each includes a broad solid rounded fur neck overlap ending at same position below chin. At least 60px transparent border and empty space between pieces. Expressions reading order: 1 rest smug smile with match; 2 wide satisfied grin showing both incisors gold image right; 3 cheering with mouth wide open; 4 surprised round eyes O-shaped mouth, falling match close beneath mouth; 5 vain wink with raised eyebrow; 6 focused furrowed brows teeth clenched on match; 7 closed eyes blink with smug smile. NO labels or text. Transparent background.
++CORRECTION PRIORITY spacing: each head fits a 290px wide by 350px high bounding box, top row centers x=220,585,950,1315 y=275; bottom centers x=400,770,1140 y=760. 60px minimum clear border and 70px minimum horizontal clear gaps. All heads exactly same size, preserve seven expressions. Broad ROUNDED solid neck fur overlap, not a pointed chin tip. Expression 2 both eyes OPEN, grin; expression 5 only wink. Transparent alpha only.
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+codex
+La planche du corps contient bien six pièces et des genoux arrondis. Le torse conserve toutefois des manches trop longues, et certaines marges sont insuffisantes : je demande une correction ciblée avant de passer aux bras.
+
+diff --git a/assets/generated/mascot/buck-heads.prompt.txt b/assets/generated/mascot/buck-heads.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..22ac8dbb777a3168337bddca11e0d3887afb4621
+--- /dev/null
++++ b/assets/generated/mascot/buck-heads.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input image 1 D1 is mandatory style/identity reference; image 2 buck-ref is the full-body rig reference. Generate buck-heads.png only, 1536×1024 landscape. Exactly SEVEN isolated heads in TWO rows, FOUR across top and THREE across bottom. Same helmet, head size, inclination, three-quarter image-left view in all seven. Maintain reference proportions, aim for same rig scale, no bodies. Each includes a broad solid rounded fur neck overlap ending at same position below chin. At least 60px transparent border and empty space between pieces. Expressions reading order: 1 rest smug smile with match; 2 wide satisfied grin showing both incisors gold image right; 3 cheering with mouth wide open; 4 surprised round eyes O-shaped mouth, falling match close beneath mouth; 5 vain wink with raised eyebrow; 6 focused furrowed brows teeth clenched on match; 7 closed eyes blink with smug smile. NO labels or text. Transparent background.
++CORRECTION PRIORITY spacing: each head fits a 290px wide by 350px high bounding box, top row centers x=220,585,950,1315 y=275; bottom centers x=400,770,1140 y=760. 60px minimum clear border and 70px minimum horizontal clear gaps. All heads exactly same size, preserve seven expressions. Broad ROUNDED solid neck fur overlap, not a pointed chin tip. Expression 2 both eyes OPEN, grin; expression 5 only wink. Transparent alpha only.
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+exec
+/bin/bash -lc 'cp /root/.codex/generated_images/01a0e78a-60dc-71d2-841d-db3dcd3dfdc9/exec-a07cdaf6-aff8-4551-87f9-994086cca703.png assets/generated/mascot/buck-body.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/mascot/buck-body.prompt.txt
+diff --git a/assets/generated/mascot/buck-body.prompt.txt b/assets/generated/mascot/buck-body.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..7eb2dd37250d850570dee000bf3a3a08dd685db4
+--- /dev/null
++++ b/assets/generated/mascot/buck-body.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input 1 D1 style; input 2 buck-ref full character scale and costume. Generate buck-body.png, 1536×1024 landscape, exactly SIX separate cut-out pieces, ample transparent space between, no heads or arms or hands. Layout: left large torso/pelvis, upper middle tail, upper right two thighs, lower right two lower legs. (1) Torso AND pelvis, matching plaid shirt black suspenders belt tools upper blue jeans from reference, NO HEAD, NO ARMS, open collar, rounded solid shoulder joint stubs, rounded pelvis bottom. (2) single broad flat dark-brown scaly tail with rounded solid base. (3) left blue-jean thigh hip to rounded knee. (4) right blue-jean thigh hip to rounded knee. (5) left lower leg knee to flat work boot inclusive, large rounded knee overlap on top. (6) right lower leg knee to flat work boot inclusive, large rounded knee overlap on top. Preserve three-quarter image-left orientation and same pixel scale as corresponding full-body parts of buck-ref as closely as possible. All joints generously extended and rounded for overlapping assembly. Never hollow cross-sections, never severed straight lines. At least 60px border and spacing. Empty truly transparent background, no cast shadows, no text.
++CORRECTION PRIORITY: torso has NO SLEEVES, only short solid rounded shoulder stubs integrated in torso silhouette; upper arms/sleeves belong on another sheet. Shrink all six pieces slightly to enforce minimum 65px outer transparent margin and 65px gap between every piece. Thighs have plain denim rounded hip overlaps, NO extra waistbands, belts or buttons. Preserve six pieces, proportions, identity and shading.
+diff --git a/assets/generated/mascot/buck-heads.prompt.txt b/assets/generated/mascot/buck-heads.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..22ac8dbb777a3168337bddca11e0d3887afb4621
+--- /dev/null
++++ b/assets/generated/mascot/buck-heads.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input image 1 D1 is mandatory style/identity reference; image 2 buck-ref is the full-body rig reference. Generate buck-heads.png only, 1536×1024 landscape. Exactly SEVEN isolated heads in TWO rows, FOUR across top and THREE across bottom. Same helmet, head size, inclination, three-quarter image-left view in all seven. Maintain reference proportions, aim for same rig scale, no bodies. Each includes a broad solid rounded fur neck overlap ending at same position below chin. At least 60px transparent border and empty space between pieces. Expressions reading order: 1 rest smug smile with match; 2 wide satisfied grin showing both incisors gold image right; 3 cheering with mouth wide open; 4 surprised round eyes O-shaped mouth, falling match close beneath mouth; 5 vain wink with raised eyebrow; 6 focused furrowed brows teeth clenched on match; 7 closed eyes blink with smug smile. NO labels or text. Transparent background.
++CORRECTION PRIORITY spacing: each head fits a 290px wide by 350px high bounding box, top row centers x=220,585,950,1315 y=275; bottom centers x=400,770,1140 y=760. 60px minimum clear border and 70px minimum horizontal clear gaps. All heads exactly same size, preserve seven expressions. Broad ROUNDED solid neck fur overlap, not a pointed chin tip. Expression 2 both eyes OPEN, grin; expression 5 only wink. Transparent alpha only.
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+diff --git a/assets/generated/mascot/buck-body.prompt.txt b/assets/generated/mascot/buck-body.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..7eb2dd37250d850570dee000bf3a3a08dd685db4
+--- /dev/null
++++ b/assets/generated/mascot/buck-body.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input 1 D1 style; input 2 buck-ref full character scale and costume. Generate buck-body.png, 1536×1024 landscape, exactly SIX separate cut-out pieces, ample transparent space between, no heads or arms or hands. Layout: left large torso/pelvis, upper middle tail, upper right two thighs, lower right two lower legs. (1) Torso AND pelvis, matching plaid shirt black suspenders belt tools upper blue jeans from reference, NO HEAD, NO ARMS, open collar, rounded solid shoulder joint stubs, rounded pelvis bottom. (2) single broad flat dark-brown scaly tail with rounded solid base. (3) left blue-jean thigh hip to rounded knee. (4) right blue-jean thigh hip to rounded knee. (5) left lower leg knee to flat work boot inclusive, large rounded knee overlap on top. (6) right lower leg knee to flat work boot inclusive, large rounded knee overlap on top. Preserve three-quarter image-left orientation and same pixel scale as corresponding full-body parts of buck-ref as closely as possible. All joints generously extended and rounded for overlapping assembly. Never hollow cross-sections, never severed straight lines. At least 60px border and spacing. Empty truly transparent background, no cast shadows, no text.
++CORRECTION PRIORITY: torso has NO SLEEVES, only short solid rounded shoulder stubs integrated in torso silhouette; upper arms/sleeves belong on another sheet. Shrink all six pieces slightly to enforce minimum 65px outer transparent margin and 65px gap between every piece. Thighs have plain denim rounded hip overlaps, NO extra waistbands, belts or buttons. Preserve six pieces, proportions, identity and shading.
+diff --git a/assets/generated/mascot/buck-heads.prompt.txt b/assets/generated/mascot/buck-heads.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..22ac8dbb777a3168337bddca11e0d3887afb4621
+--- /dev/null
++++ b/assets/generated/mascot/buck-heads.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input image 1 D1 is mandatory style/identity reference; image 2 buck-ref is the full-body rig reference. Generate buck-heads.png only, 1536×1024 landscape. Exactly SEVEN isolated heads in TWO rows, FOUR across top and THREE across bottom. Same helmet, head size, inclination, three-quarter image-left view in all seven. Maintain reference proportions, aim for same rig scale, no bodies. Each includes a broad solid rounded fur neck overlap ending at same position below chin. At least 60px transparent border and empty space between pieces. Expressions reading order: 1 rest smug smile with match; 2 wide satisfied grin showing both incisors gold image right; 3 cheering with mouth wide open; 4 surprised round eyes O-shaped mouth, falling match close beneath mouth; 5 vain wink with raised eyebrow; 6 focused furrowed brows teeth clenched on match; 7 closed eyes blink with smug smile. NO labels or text. Transparent background.
++CORRECTION PRIORITY spacing: each head fits a 290px wide by 350px high bounding box, top row centers x=220,585,950,1315 y=275; bottom centers x=400,770,1140 y=760. 60px minimum clear border and 70px minimum horizontal clear gaps. All heads exactly same size, preserve seven expressions. Broad ROUNDED solid neck fur overlap, not a pointed chin tip. Expression 2 both eyes OPEN, grin; expression 5 only wink. Transparent alpha only.
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+diff --git a/assets/generated/mascot/buck-body.prompt.txt b/assets/generated/mascot/buck-body.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..7eb2dd37250d850570dee000bf3a3a08dd685db4
+--- /dev/null
++++ b/assets/generated/mascot/buck-body.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input 1 D1 style; input 2 buck-ref full character scale and costume. Generate buck-body.png, 1536×1024 landscape, exactly SIX separate cut-out pieces, ample transparent space between, no heads or arms or hands. Layout: left large torso/pelvis, upper middle tail, upper right two thighs, lower right two lower legs. (1) Torso AND pelvis, matching plaid shirt black suspenders belt tools upper blue jeans from reference, NO HEAD, NO ARMS, open collar, rounded solid shoulder joint stubs, rounded pelvis bottom. (2) single broad flat dark-brown scaly tail with rounded solid base. (3) left blue-jean thigh hip to rounded knee. (4) right blue-jean thigh hip to rounded knee. (5) left lower leg knee to flat work boot inclusive, large rounded knee overlap on top. (6) right lower leg knee to flat work boot inclusive, large rounded knee overlap on top. Preserve three-quarter image-left orientation and same pixel scale as corresponding full-body parts of buck-ref as closely as possible. All joints generously extended and rounded for overlapping assembly. Never hollow cross-sections, never severed straight lines. At least 60px border and spacing. Empty truly transparent background, no cast shadows, no text.
++CORRECTION PRIORITY: torso has NO SLEEVES, only short solid rounded shoulder stubs integrated in torso silhouette; upper arms/sleeves belong on another sheet. Shrink all six pieces slightly to enforce minimum 65px outer transparent margin and 65px gap between every piece. Thighs have plain denim rounded hip overlaps, NO extra waistbands, belts or buttons. Preserve six pieces, proportions, identity and shading.
+diff --git a/assets/generated/mascot/buck-heads.prompt.txt b/assets/generated/mascot/buck-heads.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..22ac8dbb777a3168337bddca11e0d3887afb4621
+--- /dev/null
++++ b/assets/generated/mascot/buck-heads.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input image 1 D1 is mandatory style/identity reference; image 2 buck-ref is the full-body rig reference. Generate buck-heads.png only, 1536×1024 landscape. Exactly SEVEN isolated heads in TWO rows, FOUR across top and THREE across bottom. Same helmet, head size, inclination, three-quarter image-left view in all seven. Maintain reference proportions, aim for same rig scale, no bodies. Each includes a broad solid rounded fur neck overlap ending at same position below chin. At least 60px transparent border and empty space between pieces. Expressions reading order: 1 rest smug smile with match; 2 wide satisfied grin showing both incisors gold image right; 3 cheering with mouth wide open; 4 surprised round eyes O-shaped mouth, falling match close beneath mouth; 5 vain wink with raised eyebrow; 6 focused furrowed brows teeth clenched on match; 7 closed eyes blink with smug smile. NO labels or text. Transparent background.
++CORRECTION PRIORITY spacing: each head fits a 290px wide by 350px high bounding box, top row centers x=220,585,950,1315 y=275; bottom centers x=400,770,1140 y=760. 60px minimum clear border and 70px minimum horizontal clear gaps. All heads exactly same size, preserve seven expressions. Broad ROUNDED solid neck fur overlap, not a pointed chin tip. Expression 2 both eyes OPEN, grin; expression 5 only wink. Transparent alpha only.
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+codex
+Les dix pièces de bras et de mains sont présentes. Je vérifie notamment le trou de préhension et les marges ; la dernière planche contiendra le détonateur, sa poignée séparée, la dynamite et l’allumette.
+
+diff --git a/assets/generated/mascot/buck-body.prompt.txt b/assets/generated/mascot/buck-body.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..7eb2dd37250d850570dee000bf3a3a08dd685db4
+--- /dev/null
++++ b/assets/generated/mascot/buck-body.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input 1 D1 style; input 2 buck-ref full character scale and costume. Generate buck-body.png, 1536×1024 landscape, exactly SIX separate cut-out pieces, ample transparent space between, no heads or arms or hands. Layout: left large torso/pelvis, upper middle tail, upper right two thighs, lower right two lower legs. (1) Torso AND pelvis, matching plaid shirt black suspenders belt tools upper blue jeans from reference, NO HEAD, NO ARMS, open collar, rounded solid shoulder joint stubs, rounded pelvis bottom. (2) single broad flat dark-brown scaly tail with rounded solid base. (3) left blue-jean thigh hip to rounded knee. (4) right blue-jean thigh hip to rounded knee. (5) left lower leg knee to flat work boot inclusive, large rounded knee overlap on top. (6) right lower leg knee to flat work boot inclusive, large rounded knee overlap on top. Preserve three-quarter image-left orientation and same pixel scale as corresponding full-body parts of buck-ref as closely as possible. All joints generously extended and rounded for overlapping assembly. Never hollow cross-sections, never severed straight lines. At least 60px border and spacing. Empty truly transparent background, no cast shadows, no text.
++CORRECTION PRIORITY: torso has NO SLEEVES, only short solid rounded shoulder stubs integrated in torso silhouette; upper arms/sleeves belong on another sheet. Shrink all six pieces slightly to enforce minimum 65px outer transparent margin and 65px gap between every piece. Thighs have plain denim rounded hip overlaps, NO extra waistbands, belts or buttons. Preserve six pieces, proportions, identity and shading.
+diff --git a/assets/generated/mascot/buck-heads.prompt.txt b/assets/generated/mascot/buck-heads.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..22ac8dbb777a3168337bddca11e0d3887afb4621
+--- /dev/null
++++ b/assets/generated/mascot/buck-heads.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input image 1 D1 is mandatory style/identity reference; image 2 buck-ref is the full-body rig reference. Generate buck-heads.png only, 1536×1024 landscape. Exactly SEVEN isolated heads in TWO rows, FOUR across top and THREE across bottom. Same helmet, head size, inclination, three-quarter image-left view in all seven. Maintain reference proportions, aim for same rig scale, no bodies. Each includes a broad solid rounded fur neck overlap ending at same position below chin. At least 60px transparent border and empty space between pieces. Expressions reading order: 1 rest smug smile with match; 2 wide satisfied grin showing both incisors gold image right; 3 cheering with mouth wide open; 4 surprised round eyes O-shaped mouth, falling match close beneath mouth; 5 vain wink with raised eyebrow; 6 focused furrowed brows teeth clenched on match; 7 closed eyes blink with smug smile. NO labels or text. Transparent background.
++CORRECTION PRIORITY spacing: each head fits a 290px wide by 350px high bounding box, top row centers x=220,585,950,1315 y=275; bottom centers x=400,770,1140 y=760. 60px minimum clear border and 70px minimum horizontal clear gaps. All heads exactly same size, preserve seven expressions. Broad ROUNDED solid neck fur overlap, not a pointed chin tip. Expression 2 both eyes OPEN, grin; expression 5 only wink. Transparent alpha only.
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+exec
+/bin/bash -lc 'cp /root/.codex/generated_images/01a0e78a-60dc-71d2-841d-db3dcd3dfdc9/exec-91bff7f7-ef64-459a-8ce0-d1e98ed0f1ce.png assets/generated/mascot/buck-arms.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/mascot/buck-arms.prompt.txt
+diff --git a/assets/generated/mascot/buck-arms.prompt.txt b/assets/generated/mascot/buck-arms.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..30cb5b81a0ece65a92f6cac58d65b473b348424a
+--- /dev/null
++++ b/assets/generated/mascot/buck-arms.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input 1 D1 style; input 2 buck-ref costume and scale. Generate buck-arms.png, exact 1536×1024 landscape transparent sheet. Exactly TEN isolated pieces, TWO rows of FIVE, no labels. Each fits within a 210×350px cell, centers x=160,465,770,1075,1380 y=265 and 760. Minimum 60px transparent outside and between pieces. Match full character scale and shape as closely as feasible. Reading order: TOP 1 left upper arm red-black plaid rolled sleeve, solid rounded shoulder and elbow overlaps; 2 right upper arm rolled sleeve rounded overlaps; 3 left furry forearm elbow-to-wrist ONLY no hand, both ends solid rounded; 4 right furry forearm no hand rounded ends; 5 relaxed open four-digit clawed beaver hand with rounded furry wrist. BOTTOM 6 closed fist; 7 hand gripping imaginary horizontal bar, EMPTY transparent hole at center of fist, NO bar; 8 thumbs-up; 9 pointing index finger; 10 hand holding a lit wooden match between two fingers, tiny crisp orange-yellow flame no glow. Six hands total, each four thick clawed digits including thumb, all wrist overlaps generous round solid fur. No head, torso, legs or other props. Flat two-tone graphic shading no gradient backgrounds or shadow.
++CORRECTION PRIORITY: the gripping hand (bottom row second piece) must form an obvious OPEN RING with a genuinely TRANSPARENT oval aperture at least 40×30 pixels for insertion of a horizontal handle, no brown fill inside hole. Keep every piece at least 65px from borders and every neighboring piece. Remove any glow around lit match. Exactly ten pieces otherwise same design.
+diff --git a/assets/generated/mascot/buck-body.prompt.txt b/assets/generated/mascot/buck-body.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..7eb2dd37250d850570dee000bf3a3a08dd685db4
+--- /dev/null
++++ b/assets/generated/mascot/buck-body.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input 1 D1 style; input 2 buck-ref full character scale and costume. Generate buck-body.png, 1536×1024 landscape, exactly SIX separate cut-out pieces, ample transparent space between, no heads or arms or hands. Layout: left large torso/pelvis, upper middle tail, upper right two thighs, lower right two lower legs. (1) Torso AND pelvis, matching plaid shirt black suspenders belt tools upper blue jeans from reference, NO HEAD, NO ARMS, open collar, rounded solid shoulder joint stubs, rounded pelvis bottom. (2) single broad flat dark-brown scaly tail with rounded solid base. (3) left blue-jean thigh hip to rounded knee. (4) right blue-jean thigh hip to rounded knee. (5) left lower leg knee to flat work boot inclusive, large rounded knee overlap on top. (6) right lower leg knee to flat work boot inclusive, large rounded knee overlap on top. Preserve three-quarter image-left orientation and same pixel scale as corresponding full-body parts of buck-ref as closely as possible. All joints generously extended and rounded for overlapping assembly. Never hollow cross-sections, never severed straight lines. At least 60px border and spacing. Empty truly transparent background, no cast shadows, no text.
++CORRECTION PRIORITY: torso has NO SLEEVES, only short solid rounded shoulder stubs integrated in torso silhouette; upper arms/sleeves belong on another sheet. Shrink all six pieces slightly to enforce minimum 65px outer transparent margin and 65px gap between every piece. Thighs have plain denim rounded hip overlaps, NO extra waistbands, belts or buttons. Preserve six pieces, proportions, identity and shading.
+diff --git a/assets/generated/mascot/buck-heads.prompt.txt b/assets/generated/mascot/buck-heads.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..22ac8dbb777a3168337bddca11e0d3887afb4621
+--- /dev/null
++++ b/assets/generated/mascot/buck-heads.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input image 1 D1 is mandatory style/identity reference; image 2 buck-ref is the full-body rig reference. Generate buck-heads.png only, 1536×1024 landscape. Exactly SEVEN isolated heads in TWO rows, FOUR across top and THREE across bottom. Same helmet, head size, inclination, three-quarter image-left view in all seven. Maintain reference proportions, aim for same rig scale, no bodies. Each includes a broad solid rounded fur neck overlap ending at same position below chin. At least 60px transparent border and empty space between pieces. Expressions reading order: 1 rest smug smile with match; 2 wide satisfied grin showing both incisors gold image right; 3 cheering with mouth wide open; 4 surprised round eyes O-shaped mouth, falling match close beneath mouth; 5 vain wink with raised eyebrow; 6 focused furrowed brows teeth clenched on match; 7 closed eyes blink with smug smile. NO labels or text. Transparent background.
++CORRECTION PRIORITY spacing: each head fits a 290px wide by 350px high bounding box, top row centers x=220,585,950,1315 y=275; bottom centers x=400,770,1140 y=760. 60px minimum clear border and 70px minimum horizontal clear gaps. All heads exactly same size, preserve seven expressions. Broad ROUNDED solid neck fur overlap, not a pointed chin tip. Expression 2 both eyes OPEN, grin; expression 5 only wink. Transparent alpha only.
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+diff --git a/assets/generated/mascot/buck-arms.prompt.txt b/assets/generated/mascot/buck-arms.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..30cb5b81a0ece65a92f6cac58d65b473b348424a
+--- /dev/null
++++ b/assets/generated/mascot/buck-arms.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input 1 D1 style; input 2 buck-ref costume and scale. Generate buck-arms.png, exact 1536×1024 landscape transparent sheet. Exactly TEN isolated pieces, TWO rows of FIVE, no labels. Each fits within a 210×350px cell, centers x=160,465,770,1075,1380 y=265 and 760. Minimum 60px transparent outside and between pieces. Match full character scale and shape as closely as feasible. Reading order: TOP 1 left upper arm red-black plaid rolled sleeve, solid rounded shoulder and elbow overlaps; 2 right upper arm rolled sleeve rounded overlaps; 3 left furry forearm elbow-to-wrist ONLY no hand, both ends solid rounded; 4 right furry forearm no hand rounded ends; 5 relaxed open four-digit clawed beaver hand with rounded furry wrist. BOTTOM 6 closed fist; 7 hand gripping imaginary horizontal bar, EMPTY transparent hole at center of fist, NO bar; 8 thumbs-up; 9 pointing index finger; 10 hand holding a lit wooden match between two fingers, tiny crisp orange-yellow flame no glow. Six hands total, each four thick clawed digits including thumb, all wrist overlaps generous round solid fur. No head, torso, legs or other props. Flat two-tone graphic shading no gradient backgrounds or shadow.
++CORRECTION PRIORITY: the gripping hand (bottom row second piece) must form an obvious OPEN RING with a genuinely TRANSPARENT oval aperture at least 40×30 pixels for insertion of a horizontal handle, no brown fill inside hole. Keep every piece at least 65px from borders and every neighboring piece. Remove any glow around lit match. Exactly ten pieces otherwise same design.
+diff --git a/assets/generated/mascot/buck-body.prompt.txt b/assets/generated/mascot/buck-body.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..7eb2dd37250d850570dee000bf3a3a08dd685db4
+--- /dev/null
++++ b/assets/generated/mascot/buck-body.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input 1 D1 style; input 2 buck-ref full character scale and costume. Generate buck-body.png, 1536×1024 landscape, exactly SIX separate cut-out pieces, ample transparent space between, no heads or arms or hands. Layout: left large torso/pelvis, upper middle tail, upper right two thighs, lower right two lower legs. (1) Torso AND pelvis, matching plaid shirt black suspenders belt tools upper blue jeans from reference, NO HEAD, NO ARMS, open collar, rounded solid shoulder joint stubs, rounded pelvis bottom. (2) single broad flat dark-brown scaly tail with rounded solid base. (3) left blue-jean thigh hip to rounded knee. (4) right blue-jean thigh hip to rounded knee. (5) left lower leg knee to flat work boot inclusive, large rounded knee overlap on top. (6) right lower leg knee to flat work boot inclusive, large rounded knee overlap on top. Preserve three-quarter image-left orientation and same pixel scale as corresponding full-body parts of buck-ref as closely as possible. All joints generously extended and rounded for overlapping assembly. Never hollow cross-sections, never severed straight lines. At least 60px border and spacing. Empty truly transparent background, no cast shadows, no text.
++CORRECTION PRIORITY: torso has NO SLEEVES, only short solid rounded shoulder stubs integrated in torso silhouette; upper arms/sleeves belong on another sheet. Shrink all six pieces slightly to enforce minimum 65px outer transparent margin and 65px gap between every piece. Thighs have plain denim rounded hip overlaps, NO extra waistbands, belts or buttons. Preserve six pieces, proportions, identity and shading.
+diff --git a/assets/generated/mascot/buck-heads.prompt.txt b/assets/generated/mascot/buck-heads.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..22ac8dbb777a3168337bddca11e0d3887afb4621
+--- /dev/null
++++ b/assets/generated/mascot/buck-heads.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input image 1 D1 is mandatory style/identity reference; image 2 buck-ref is the full-body rig reference. Generate buck-heads.png only, 1536×1024 landscape. Exactly SEVEN isolated heads in TWO rows, FOUR across top and THREE across bottom. Same helmet, head size, inclination, three-quarter image-left view in all seven. Maintain reference proportions, aim for same rig scale, no bodies. Each includes a broad solid rounded fur neck overlap ending at same position below chin. At least 60px transparent border and empty space between pieces. Expressions reading order: 1 rest smug smile with match; 2 wide satisfied grin showing both incisors gold image right; 3 cheering with mouth wide open; 4 surprised round eyes O-shaped mouth, falling match close beneath mouth; 5 vain wink with raised eyebrow; 6 focused furrowed brows teeth clenched on match; 7 closed eyes blink with smug smile. NO labels or text. Transparent background.
++CORRECTION PRIORITY spacing: each head fits a 290px wide by 350px high bounding box, top row centers x=220,585,950,1315 y=275; bottom centers x=400,770,1140 y=760. 60px minimum clear border and 70px minimum horizontal clear gaps. All heads exactly same size, preserve seven expressions. Broad ROUNDED solid neck fur overlap, not a pointed chin tip. Expression 2 both eyes OPEN, grin; expression 5 only wink. Transparent alpha only.
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+2026-09-28T10:31:54.837965Z ERROR codex_core::tools::router: error=image generation failed: http 429 Too Many Requests: Some("{\"error\":{\"type\":\"usage_limit_reached\",\"message\":\"The usage limit has been reached\",\"plan_type\":\"prolite\",\"resets_at\":1791117066,\"eligible_promo\":null,\"limit_window_minutes\":null,\"resets_in_seconds\":525552}}")
+diff --git a/assets/generated/mascot/buck-arms.prompt.txt b/assets/generated/mascot/buck-arms.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..30cb5b81a0ece65a92f6cac58d65b473b348424a
+--- /dev/null
++++ b/assets/generated/mascot/buck-arms.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input 1 D1 style; input 2 buck-ref costume and scale. Generate buck-arms.png, exact 1536×1024 landscape transparent sheet. Exactly TEN isolated pieces, TWO rows of FIVE, no labels. Each fits within a 210×350px cell, centers x=160,465,770,1075,1380 y=265 and 760. Minimum 60px transparent outside and between pieces. Match full character scale and shape as closely as feasible. Reading order: TOP 1 left upper arm red-black plaid rolled sleeve, solid rounded shoulder and elbow overlaps; 2 right upper arm rolled sleeve rounded overlaps; 3 left furry forearm elbow-to-wrist ONLY no hand, both ends solid rounded; 4 right furry forearm no hand rounded ends; 5 relaxed open four-digit clawed beaver hand with rounded furry wrist. BOTTOM 6 closed fist; 7 hand gripping imaginary horizontal bar, EMPTY transparent hole at center of fist, NO bar; 8 thumbs-up; 9 pointing index finger; 10 hand holding a lit wooden match between two fingers, tiny crisp orange-yellow flame no glow. Six hands total, each four thick clawed digits including thumb, all wrist overlaps generous round solid fur. No head, torso, legs or other props. Flat two-tone graphic shading no gradient backgrounds or shadow.
++CORRECTION PRIORITY: the gripping hand (bottom row second piece) must form an obvious OPEN RING with a genuinely TRANSPARENT oval aperture at least 40×30 pixels for insertion of a horizontal handle, no brown fill inside hole. Keep every piece at least 65px from borders and every neighboring piece. Remove any glow around lit match. Exactly ten pieces otherwise same design.
+diff --git a/assets/generated/mascot/buck-body.prompt.txt b/assets/generated/mascot/buck-body.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..7eb2dd37250d850570dee000bf3a3a08dd685db4
+--- /dev/null
++++ b/assets/generated/mascot/buck-body.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input 1 D1 style; input 2 buck-ref full character scale and costume. Generate buck-body.png, 1536×1024 landscape, exactly SIX separate cut-out pieces, ample transparent space between, no heads or arms or hands. Layout: left large torso/pelvis, upper middle tail, upper right two thighs, lower right two lower legs. (1) Torso AND pelvis, matching plaid shirt black suspenders belt tools upper blue jeans from reference, NO HEAD, NO ARMS, open collar, rounded solid shoulder joint stubs, rounded pelvis bottom. (2) single broad flat dark-brown scaly tail with rounded solid base. (3) left blue-jean thigh hip to rounded knee. (4) right blue-jean thigh hip to rounded knee. (5) left lower leg knee to flat work boot inclusive, large rounded knee overlap on top. (6) right lower leg knee to flat work boot inclusive, large rounded knee overlap on top. Preserve three-quarter image-left orientation and same pixel scale as corresponding full-body parts of buck-ref as closely as possible. All joints generously extended and rounded for overlapping assembly. Never hollow cross-sections, never severed straight lines. At least 60px border and spacing. Empty truly transparent background, no cast shadows, no text.
++CORRECTION PRIORITY: torso has NO SLEEVES, only short solid rounded shoulder stubs integrated in torso silhouette; upper arms/sleeves belong on another sheet. Shrink all six pieces slightly to enforce minimum 65px outer transparent margin and 65px gap between every piece. Thighs have plain denim rounded hip overlaps, NO extra waistbands, belts or buttons. Preserve six pieces, proportions, identity and shading.
+diff --git a/assets/generated/mascot/buck-heads.prompt.txt b/assets/generated/mascot/buck-heads.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..22ac8dbb777a3168337bddca11e0d3887afb4621
+--- /dev/null
++++ b/assets/generated/mascot/buck-heads.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input image 1 D1 is mandatory style/identity reference; image 2 buck-ref is the full-body rig reference. Generate buck-heads.png only, 1536×1024 landscape. Exactly SEVEN isolated heads in TWO rows, FOUR across top and THREE across bottom. Same helmet, head size, inclination, three-quarter image-left view in all seven. Maintain reference proportions, aim for same rig scale, no bodies. Each includes a broad solid rounded fur neck overlap ending at same position below chin. At least 60px transparent border and empty space between pieces. Expressions reading order: 1 rest smug smile with match; 2 wide satisfied grin showing both incisors gold image right; 3 cheering with mouth wide open; 4 surprised round eyes O-shaped mouth, falling match close beneath mouth; 5 vain wink with raised eyebrow; 6 focused furrowed brows teeth clenched on match; 7 closed eyes blink with smug smile. NO labels or text. Transparent background.
++CORRECTION PRIORITY spacing: each head fits a 290px wide by 350px high bounding box, top row centers x=220,585,950,1315 y=275; bottom centers x=400,770,1140 y=760. 60px minimum clear border and 70px minimum horizontal clear gaps. All heads exactly same size, preserve seven expressions. Broad ROUNDED solid neck fur overlap, not a pointed chin tip. Expression 2 both eyes OPEN, grin; expression 5 only wink. Transparent alpha only.
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+codex
+L’outil natif a refusé la génération des accessoires : erreur HTTP 429, `usage_limit_reached`. Quatre images sont enregistrées ; `buck-props.png` n’a pas été produit. Je termine le contrôle des fichiers et le rapport des défauts restants.
+
+exec
+/bin/bash -lc "python - <<'PY'
+from PIL import Image
+from pathlib import Path
+import json
+for p in sorted(Path('assets/generated/mascot').glob('*.png')):
+ im=Image.open(p);a=im.getchannel('A');mask=a.point(lambda v:255 if v>=128 else 0);box=mask.getbbox();h=a.histogram();print(json.dumps({'file':p.name,'size':im.size,'mode':im.mode,'alpha_extrema':a.getextrema(),'transparent_percent':round(100*h[0]/(im.width*im.height),2),'visible_bbox_alpha128':box,'margins_alpha128':[box[0],box[1],im.width-box[2],im.height-box[3]]}))
+ if p.stem=='buck-arms':print('grip hole alpha:',a.getpixel((445,750)))
+PY" in /home/user/slot
+ succeeded in 202ms:
+{"file": "buck-arms.png", "size": [1536, 1024], "mode": "RGBA", "alpha_extrema": [0, 254], "transparent_percent": 68.54, "visible_bbox_alpha128": [39, 123, 1488, 868], "margins_alpha128": [39, 123, 48, 156]}
+grip hole alpha: 0
+{"file": "buck-body.png", "size": [1536, 1024], "mode": "RGBA", "alpha_extrema": [0, 254], "transparent_percent": 63.39, "visible_bbox_alpha128": [81, 95, 1499, 942], "margins_alpha128": [81, 95, 37, 82]}
+{"file": "buck-heads.png", "size": [1536, 1024], "mode": "RGBA", "alpha_extrema": [0, 254], "transparent_percent": 46.71, "visible_bbox_alpha128": [2, 77, 1523, 979], "margins_alpha128": [2, 77, 13, 45]}
+{"file": "buck-ref.png", "size": [1024, 1536], "mode": "RGBA", "alpha_extrema": [0, 254], "transparent_percent": 49.74, "visible_bbox_alpha128": [52, 87, 971, 1450], "margins_alpha128": [52, 87, 53, 86]}
+
+diff --git a/assets/generated/mascot/buck-arms.prompt.txt b/assets/generated/mascot/buck-arms.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..30cb5b81a0ece65a92f6cac58d65b473b348424a
+--- /dev/null
++++ b/assets/generated/mascot/buck-arms.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input 1 D1 style; input 2 buck-ref costume and scale. Generate buck-arms.png, exact 1536×1024 landscape transparent sheet. Exactly TEN isolated pieces, TWO rows of FIVE, no labels. Each fits within a 210×350px cell, centers x=160,465,770,1075,1380 y=265 and 760. Minimum 60px transparent outside and between pieces. Match full character scale and shape as closely as feasible. Reading order: TOP 1 left upper arm red-black plaid rolled sleeve, solid rounded shoulder and elbow overlaps; 2 right upper arm rolled sleeve rounded overlaps; 3 left furry forearm elbow-to-wrist ONLY no hand, both ends solid rounded; 4 right furry forearm no hand rounded ends; 5 relaxed open four-digit clawed beaver hand with rounded furry wrist. BOTTOM 6 closed fist; 7 hand gripping imaginary horizontal bar, EMPTY transparent hole at center of fist, NO bar; 8 thumbs-up; 9 pointing index finger; 10 hand holding a lit wooden match between two fingers, tiny crisp orange-yellow flame no glow. Six hands total, each four thick clawed digits including thumb, all wrist overlaps generous round solid fur. No head, torso, legs or other props. Flat two-tone graphic shading no gradient backgrounds or shadow.
++CORRECTION PRIORITY: the gripping hand (bottom row second piece) must form an obvious OPEN RING with a genuinely TRANSPARENT oval aperture at least 40×30 pixels for insertion of a horizontal handle, no brown fill inside hole. Keep every piece at least 65px from borders and every neighboring piece. Remove any glow around lit match. Exactly ten pieces otherwise same design.
+diff --git a/assets/generated/mascot/buck-body.prompt.txt b/assets/generated/mascot/buck-body.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..7eb2dd37250d850570dee000bf3a3a08dd685db4
+--- /dev/null
++++ b/assets/generated/mascot/buck-body.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input 1 D1 style; input 2 buck-ref full character scale and costume. Generate buck-body.png, 1536×1024 landscape, exactly SIX separate cut-out pieces, ample transparent space between, no heads or arms or hands. Layout: left large torso/pelvis, upper middle tail, upper right two thighs, lower right two lower legs. (1) Torso AND pelvis, matching plaid shirt black suspenders belt tools upper blue jeans from reference, NO HEAD, NO ARMS, open collar, rounded solid shoulder joint stubs, rounded pelvis bottom. (2) single broad flat dark-brown scaly tail with rounded solid base. (3) left blue-jean thigh hip to rounded knee. (4) right blue-jean thigh hip to rounded knee. (5) left lower leg knee to flat work boot inclusive, large rounded knee overlap on top. (6) right lower leg knee to flat work boot inclusive, large rounded knee overlap on top. Preserve three-quarter image-left orientation and same pixel scale as corresponding full-body parts of buck-ref as closely as possible. All joints generously extended and rounded for overlapping assembly. Never hollow cross-sections, never severed straight lines. At least 60px border and spacing. Empty truly transparent background, no cast shadows, no text.
++CORRECTION PRIORITY: torso has NO SLEEVES, only short solid rounded shoulder stubs integrated in torso silhouette; upper arms/sleeves belong on another sheet. Shrink all six pieces slightly to enforce minimum 65px outer transparent margin and 65px gap between every piece. Thighs have plain denim rounded hip overlaps, NO extra waistbands, belts or buttons. Preserve six pieces, proportions, identity and shading.
+diff --git a/assets/generated/mascot/buck-heads.prompt.txt b/assets/generated/mascot/buck-heads.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..22ac8dbb777a3168337bddca11e0d3887afb4621
+--- /dev/null
++++ b/assets/generated/mascot/buck-heads.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Input image 1 D1 is mandatory style/identity reference; image 2 buck-ref is the full-body rig reference. Generate buck-heads.png only, 1536×1024 landscape. Exactly SEVEN isolated heads in TWO rows, FOUR across top and THREE across bottom. Same helmet, head size, inclination, three-quarter image-left view in all seven. Maintain reference proportions, aim for same rig scale, no bodies. Each includes a broad solid rounded fur neck overlap ending at same position below chin. At least 60px transparent border and empty space between pieces. Expressions reading order: 1 rest smug smile with match; 2 wide satisfied grin showing both incisors gold image right; 3 cheering with mouth wide open; 4 surprised round eyes O-shaped mouth, falling match close beneath mouth; 5 vain wink with raised eyebrow; 6 focused furrowed brows teeth clenched on match; 7 closed eyes blink with smug smile. NO labels or text. Transparent background.
++CORRECTION PRIORITY spacing: each head fits a 290px wide by 350px high bounding box, top row centers x=220,585,950,1315 y=275; bottom centers x=400,770,1140 y=760. 60px minimum clear border and 70px minimum horizontal clear gaps. All heads exactly same size, preserve seven expressions. Broad ROUNDED solid neck fur overlap, not a pointed chin tip. Expression 2 both eyes OPEN, grin; expression 5 only wink. Transparent alpha only.
+diff --git a/assets/generated/mascot/buck-ref.prompt.txt b/assets/generated/mascot/buck-ref.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e6461b217b2539199189cd04d9423a5f5a21057
+--- /dev/null
++++ b/assets/generated/mascot/buck-ref.prompt.txt
+@@ -0,0 +1,4 @@
++Use case: stylized-concept. Crownforge BOOMTOOTH production cut-out animation asset. Mandatory visual reference D1.png: reproduce EXACTLY the illustrated beaver Buck on the right, same identity and drawing style, not the scene or lettering. Adult 2D comic cartoon, thick slightly irregular brush-ink outlines 4–7 px at 1024px, thinner interior strokes, crisp two-tone cel shading, one cream highlight per volume, no airbrush, gradients, blur, 3D, photorealism, generic neon or decorative border. Warm late-afternoon light from image left, blue-violet shadow. Palette burnt orange #E8742A, fur #9A5A2E shadow #6B3A1E, gold #F2B233, cream #F4E6C8, ink #1B1410, red #D7332B, honey wood #C98A45, dark wood #6B4526, blue-grey metal #6F7F92.
++Buck is stocky muscular russet beaver, lighter belly/muzzle, large dark brown flat scaly tail, two big incisors: HIS LEFT incisor on IMAGE RIGHT is GOLD, other cream. Dented orange construction helmet with round headlamp, red/black plaid flannel rolled to elbows, black suspenders, leather belt with large buckle and tool holsters, worn blue jeans, large brown work boots, match in HIS right mouth corner. Three-quarter view facing IMAGE LEFT. No words, letters, labels, logos, signature, watermark. Real transparent alpha background, never a checkerboard drawing or white matte, no halo, no ground shadow. Every isolated part complete, unclipped, at least 60px clear transparent padding around it. Cut-out joints must have generous solid rounded overlap ends, never straight amputated cuts. Fur hides wrists, rolled sleeves hide elbows, collar hides neck, boot tops hide ankles.
++Generate buck-ref.png only, exact 1024×1536 portrait canvas. One full-body neutral standing reference, height 1380px (~90%), centered with minimum 60px margin on every side. Feet shoulder-width apart flat, arms slightly away from body, both empty hands visible open relaxed with four thick clawed digits each. Tail visible behind image-right leg. Smug asymmetric smile with gold tooth visible, match in mouth. Entire helmet and boots in frame. No props in hands.
++CORRECTION PRIORITY: shrink the entire character to fit fully within x=70..954 and y=77..1459. Helmet must start at y=77 or lower, all tail and boots end above y=1459. Leave a clean empty transparent border, no shadow or glow. Full character 90% height maximum.
+
+ERROR: You’ve hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at Oct 4th, 2026 12:31 PM.
+ERROR: You’ve hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at Oct 4th, 2026 12:31 PM.
+tokens used
+44,150

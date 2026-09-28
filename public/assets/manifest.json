@@ -1,0 +1,1292 @@
+{
+ "version": 1,
+ "assets": {
+  "sym.L1": {
+   "url": "assets/symbols/sym.L1.webp",
+   "w": 640,
+   "h": 495,
+   "source": "assets/generated/symbols/L1.png",
+   "sourceHash": "d843fc890e440383",
+   "frame": {
+    "x": 91,
+    "y": 195,
+    "w": 1092,
+    "h": 845
+   },
+   "scale": 0.5860805860805861,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "symbols",
+   "visibleFill": 0.985
+  },
+  "sym.L2": {
+   "url": "assets/symbols/sym.L2.webp",
+   "w": 590,
+   "h": 640,
+   "source": "assets/generated/symbols/L2.png",
+   "sourceHash": "8973c18f6902b95e",
+   "frame": {
+    "x": 208,
+    "y": 134,
+    "w": 917,
+    "h": 995
+   },
+   "scale": 0.6432160804020101,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "symbols",
+   "visibleFill": 0.984
+  },
+  "sym.L3": {
+   "url": "assets/symbols/sym.L3.webp",
+   "w": 362,
+   "h": 640,
+   "source": "assets/generated/symbols/L3.png",
+   "sourceHash": "bd6c134116981013",
+   "frame": {
+    "x": 316,
+    "y": 89,
+    "w": 619,
+    "h": 1093
+   },
+   "scale": 0.585544373284538,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "symbols",
+   "visibleFill": 0.985
+  },
+  "sym.L4": {
+   "url": "assets/symbols/sym.L4.webp",
+   "w": 426,
+   "h": 640,
+   "source": "assets/generated/symbols/L4.png",
+   "sourceHash": "1c1741d54805797d",
+   "frame": {
+    "x": 260,
+    "y": 68,
+    "w": 742,
+    "h": 1115
+   },
+   "scale": 0.5739910313901345,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "symbols",
+   "visibleFill": 0.986
+  },
+  "sym.T.stick": {
+   "url": "assets/symbols/sym.T.stick.webp",
+   "w": 335,
+   "h": 640,
+   "source": "assets/generated/symbols/T-stick.png",
+   "sourceHash": "dcf8039d73a4a82c",
+   "frame": {
+    "x": 346,
+    "y": 56,
+    "w": 599,
+    "h": 1146
+   },
+   "scale": 0.5584642233856894,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "symbols",
+   "visibleFill": 0.986
+  },
+  "sym.H1.body": {
+   "url": "assets/symbols/sym.H1.body.webp",
+   "w": 941,
+   "h": 945,
+   "source": "assets/generated/symbols/H1.png",
+   "sourceHash": "b9efc108f211bad6",
+   "frame": {
+    "x": 73,
+    "y": 50,
+    "w": 941,
+    "h": 945
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "symbols"
+  },
+  "sym.H1.prop": {
+   "url": "assets/symbols/sym.H1.prop.webp",
+   "w": 159,
+   "h": 584,
+   "source": "assets/generated/symbols/H1.png",
+   "sourceHash": "b9efc108f211bad6",
+   "frame": {
+    "x": 1206,
+    "y": 289,
+    "w": 159,
+    "h": 584
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "symbols"
+  },
+  "sym.H2.body": {
+   "url": "assets/symbols/sym.H2.body.webp",
+   "w": 862,
+   "h": 908,
+   "source": "assets/generated/symbols/H2.png",
+   "sourceHash": "94355057c2bf7438",
+   "frame": {
+    "x": 22,
+    "y": 66,
+    "w": 862,
+    "h": 908
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "symbols"
+  },
+  "sym.H3.body": {
+   "url": "assets/symbols/sym.H3.body.webp",
+   "w": 815,
+   "h": 906,
+   "source": "assets/generated/symbols/H3.png",
+   "sourceHash": "c8518e2fbd603386",
+   "frame": {
+    "x": 6,
+    "y": 66,
+    "w": 815,
+    "h": 906
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "symbols"
+  },
+  "sym.H3.prop": {
+   "url": "assets/symbols/sym.H3.prop.webp",
+   "w": 739,
+   "h": 659,
+   "source": "assets/generated/symbols/H3.png",
+   "sourceHash": "c8518e2fbd603386",
+   "frame": {
+    "x": 797,
+    "y": 190,
+    "w": 739,
+    "h": 659
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "symbols"
+  },
+  "sym.H4.body": {
+   "url": "assets/symbols/sym.H4.body.webp",
+   "w": 968,
+   "h": 962,
+   "source": "assets/generated/symbols/H4.png",
+   "sourceHash": "cebcefdde3691796",
+   "frame": {
+    "x": 66,
+    "y": 39,
+    "w": 968,
+    "h": 962
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "symbols"
+  },
+  "sym.H4.part": {
+   "url": "assets/symbols/sym.H4.part.webp",
+   "w": 343,
+   "h": 398,
+   "source": "assets/generated/symbols/H4.png",
+   "sourceHash": "cebcefdde3691796",
+   "frame": {
+    "x": 1075,
+    "y": 156,
+    "w": 343,
+    "h": 398
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "symbols"
+  },
+  "sym.W.body": {
+   "url": "assets/symbols/sym.W.body.webp",
+   "w": 764,
+   "h": 851,
+   "source": "assets/generated/symbols/W.png",
+   "sourceHash": "6104fc740e8b6083",
+   "frame": {
+    "x": 41,
+    "y": 117,
+    "w": 764,
+    "h": 851
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "symbols"
+  },
+  "sym.W.part": {
+   "url": "assets/symbols/sym.W.part.webp",
+   "w": 668,
+   "h": 373,
+   "source": "assets/generated/symbols/W.png",
+   "sourceHash": "6104fc740e8b6083",
+   "frame": {
+    "x": 844,
+    "y": 160,
+    "w": 668,
+    "h": 373
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "symbols"
+  },
+  "decor.sky": {
+   "url": "assets/decor/decor.sky.webp",
+   "w": 1536,
+   "h": 1024,
+   "source": "assets/generated/decor/sky.png",
+   "sourceHash": "60c5092547712850",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 1536,
+    "h": 1024
+   },
+   "scale": 1,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "decor",
+   "visibleFill": 1
+  },
+  "decor.nightSky": {
+   "url": "assets/decor/decor.nightSky.webp",
+   "w": 1536,
+   "h": 1024,
+   "source": "assets/generated/decor/night-sky.png",
+   "sourceHash": "65b23da32183d9b2",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 1536,
+    "h": 1024
+   },
+   "scale": 1,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "decor",
+   "visibleFill": 1
+  },
+  "decor.clouds.0": {
+   "url": "assets/decor/decor.clouds.0.webp",
+   "w": 714,
+   "h": 328,
+   "source": "assets/generated/decor/clouds.png",
+   "sourceHash": "1c6e02664bac3430",
+   "frame": {
+    "x": 43,
+    "y": 188,
+    "w": 714,
+    "h": 328
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "decor"
+  },
+  "decor.clouds.1": {
+   "url": "assets/decor/decor.clouds.1.webp",
+   "w": 706,
+   "h": 316,
+   "source": "assets/generated/decor/clouds.png",
+   "sourceHash": "1c6e02664bac3430",
+   "frame": {
+    "x": 789,
+    "y": 204,
+    "w": 706,
+    "h": 316
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "decor"
+  },
+  "decor.clouds.2": {
+   "url": "assets/decor/decor.clouds.2.webp",
+   "w": 479,
+   "h": 216,
+   "source": "assets/generated/decor/clouds.png",
+   "sourceHash": "1c6e02664bac3430",
+   "frame": {
+    "x": 29,
+    "y": 650,
+    "w": 479,
+    "h": 216
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "decor"
+  },
+  "decor.clouds.3": {
+   "url": "assets/decor/decor.clouds.3.webp",
+   "w": 485,
+   "h": 192,
+   "source": "assets/generated/decor/clouds.png",
+   "sourceHash": "1c6e02664bac3430",
+   "frame": {
+    "x": 525,
+    "y": 679,
+    "w": 485,
+    "h": 192
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "decor"
+  },
+  "decor.clouds.4": {
+   "url": "assets/decor/decor.clouds.4.webp",
+   "w": 479,
+   "h": 196,
+   "source": "assets/generated/decor/clouds.png",
+   "sourceHash": "1c6e02664bac3430",
+   "frame": {
+    "x": 1028,
+    "y": 682,
+    "w": 479,
+    "h": 196
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "decor"
+  },
+  "decor.far": {
+   "url": "assets/decor/decor.far.webp",
+   "w": 1470,
+   "h": 895,
+   "source": "assets/generated/decor/far.png",
+   "sourceHash": "62a10ad0abdbf1fc",
+   "frame": {
+    "x": 35,
+    "y": 60,
+    "w": 1470,
+    "h": 895
+   },
+   "scale": 1,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "decor",
+   "visibleFill": 0.997
+  },
+  "decor.mid": {
+   "url": "assets/decor/decor.mid.webp",
+   "w": 1459,
+   "h": 544,
+   "source": "assets/generated/decor/mid.png",
+   "sourceHash": "0a8f80c516a29499",
+   "frame": {
+    "x": 39,
+    "y": 352,
+    "w": 1459,
+    "h": 544
+   },
+   "scale": 1,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "decor",
+   "visibleFill": 0.997
+  },
+  "decor.ground": {
+   "url": "assets/decor/decor.ground.webp",
+   "w": 1493,
+   "h": 237,
+   "source": "assets/generated/decor/ground.png",
+   "sourceHash": "cd7dbc44929ed695",
+   "frame": {
+    "x": 22,
+    "y": 678,
+    "w": 1493,
+    "h": 237
+   },
+   "scale": 1,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "decor",
+   "visibleFill": 0.997
+  },
+  "sym.H2.antlerL": {
+   "url": "assets/symbols/sym.H2.antlerL.webp",
+   "w": 336,
+   "h": 352,
+   "source": "assets/generated/symbols/H2.png",
+   "sourceHash": "94355057c2bf7438",
+   "frame": {
+    "x": 804,
+    "y": 118,
+    "w": 336,
+    "h": 352
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "symbols"
+  },
+  "sym.H2.antlerR": {
+   "url": "assets/symbols/sym.H2.antlerR.webp",
+   "w": 319,
+   "h": 363,
+   "source": "assets/generated/symbols/H2.png",
+   "sourceHash": "94355057c2bf7438",
+   "frame": {
+    "x": 1191,
+    "y": 117,
+    "w": 319,
+    "h": 363
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "symbols"
+  },
+  "sym.T.bundle": {
+   "url": "assets/symbols/sym.T.bundle.webp",
+   "w": 640,
+   "h": 556,
+   "source": "assets/generated/symbols/T-bundle.png",
+   "sourceHash": "0fdee7956ac6dda9",
+   "frame": {
+    "x": 129,
+    "y": 166,
+    "w": 1044,
+    "h": 907
+   },
+   "scale": 0.6130268199233716,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "symbols",
+   "visibleFill": 0.985
+  },
+  "sym.T.keg": {
+   "url": "assets/symbols/sym.T.keg.webp",
+   "w": 502,
+   "h": 640,
+   "source": "assets/generated/symbols/T-keg.png",
+   "sourceHash": "844093df02533d5c",
+   "frame": {
+    "x": 178,
+    "y": 63,
+    "w": 899,
+    "h": 1145
+   },
+   "scale": 0.5589519650655022,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "symbols",
+   "visibleFill": 0.986
+  },
+  "sym.S.body": {
+   "url": "assets/symbols/sym.S.body.webp",
+   "w": 882,
+   "h": 810,
+   "source": "assets/generated/symbols/S.png",
+   "sourceHash": "160a9dd92c78051a",
+   "frame": {
+    "x": 38,
+    "y": 155,
+    "w": 882,
+    "h": 810
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "symbols"
+  },
+  "sym.S.part": {
+   "url": "assets/symbols/sym.S.part.webp",
+   "w": 572,
+   "h": 749,
+   "source": "assets/generated/symbols/S.png",
+   "sourceHash": "160a9dd92c78051a",
+   "frame": {
+    "x": 942,
+    "y": 136,
+    "w": 572,
+    "h": 749
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "symbols"
+  },
+  "ui.frame": {
+   "url": "assets/ui/ui.frame.webp",
+   "w": 1127,
+   "h": 1103,
+   "source": "assets/generated/ui/frame.png",
+   "sourceHash": "c6ee84d33f262045",
+   "frame": {
+    "x": 64,
+    "y": 65,
+    "w": 1127,
+    "h": 1103
+   },
+   "scale": 1,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "ui",
+   "visibleFill": 1
+  },
+  "ui.cell": {
+   "url": "assets/ui/ui.cell.webp",
+   "w": 256,
+   "h": 254,
+   "source": "assets/generated/ui/cell.png",
+   "sourceHash": "ca9d0c40fa2fa0a1",
+   "frame": {
+    "x": 94,
+    "y": 98,
+    "w": 1067,
+    "h": 1058
+   },
+   "scale": 0.23992502343017807,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "ui",
+   "visibleFill": 1
+  },
+  "ui.spin": {
+   "url": "assets/ui/ui.spin.webp",
+   "w": 360,
+   "h": 358,
+   "source": "assets/generated/ui/spin.png",
+   "sourceHash": "aedad2ad7b59ec4c",
+   "frame": {
+    "x": 63,
+    "y": 65,
+    "w": 1128,
+    "h": 1123
+   },
+   "scale": 0.3191489361702128,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "ui",
+   "visibleFill": 0.993
+  },
+  "ui.btn.round": {
+   "url": "assets/ui/ui.btn.round.webp",
+   "w": 274,
+   "h": 273,
+   "source": "assets/generated/ui/buttons.png",
+   "sourceHash": "1bbf94d3ab393f6c",
+   "frame": {
+    "x": 64,
+    "y": 78,
+    "w": 274,
+    "h": 273
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.btn.step": {
+   "url": "assets/ui/ui.btn.step.webp",
+   "w": 221,
+   "h": 220,
+   "source": "assets/generated/ui/buttons.png",
+   "sourceHash": "1bbf94d3ab393f6c",
+   "frame": {
+    "x": 453,
+    "y": 104,
+    "w": 221,
+    "h": 220
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.btn.plaque": {
+   "url": "assets/ui/ui.btn.plaque.webp",
+   "w": 652,
+   "h": 214,
+   "source": "assets/generated/ui/buttons.png",
+   "sourceHash": "1bbf94d3ab393f6c",
+   "frame": {
+    "x": 815,
+    "y": 112,
+    "w": 652,
+    "h": 214
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.btn.buy": {
+   "url": "assets/ui/ui.btn.buy.webp",
+   "w": 604,
+   "h": 407,
+   "source": "assets/generated/ui/buttons.png",
+   "sourceHash": "1bbf94d3ab393f6c",
+   "frame": {
+    "x": 238,
+    "y": 346,
+    "w": 604,
+    "h": 407
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.btn.bar": {
+   "url": "assets/ui/ui.btn.bar.webp",
+   "w": 1400,
+   "h": 185,
+   "source": "assets/generated/ui/buttons.png",
+   "sourceHash": "1bbf94d3ab393f6c",
+   "frame": {
+    "x": 31,
+    "y": 761,
+    "w": 1476,
+    "h": 195
+   },
+   "scale": 0.948509485094851,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.ico.menu": {
+   "url": "assets/ui/ui.ico.menu.webp",
+   "w": 230,
+   "h": 218,
+   "source": "assets/generated/ui/icons.png",
+   "sourceHash": "cb4e3d79498153b3",
+   "frame": {
+    "x": 65,
+    "y": 213,
+    "w": 230,
+    "h": 218
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.ico.soundOn": {
+   "url": "assets/ui/ui.ico.soundOn.webp",
+   "w": 263,
+   "h": 238,
+   "source": "assets/generated/ui/icons.png",
+   "sourceHash": "cb4e3d79498153b3",
+   "frame": {
+    "x": 343,
+    "y": 203,
+    "w": 263,
+    "h": 238
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.ico.soundOff": {
+   "url": "assets/ui/ui.ico.soundOff.webp",
+   "w": 268,
+   "h": 267,
+   "source": "assets/generated/ui/icons.png",
+   "sourceHash": "cb4e3d79498153b3",
+   "frame": {
+    "x": 628,
+    "y": 181,
+    "w": 268,
+    "h": 267
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.ico.turbo": {
+   "url": "assets/ui/ui.ico.turbo.webp",
+   "w": 208,
+   "h": 319,
+   "source": "assets/generated/ui/icons.png",
+   "sourceHash": "cb4e3d79498153b3",
+   "frame": {
+    "x": 954,
+    "y": 161,
+    "w": 208,
+    "h": 319
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.ico.auto": {
+   "url": "assets/ui/ui.ico.auto.webp",
+   "w": 264,
+   "h": 275,
+   "source": "assets/generated/ui/icons.png",
+   "sourceHash": "cb4e3d79498153b3",
+   "frame": {
+    "x": 1227,
+    "y": 181,
+    "w": 264,
+    "h": 275
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.ico.info": {
+   "url": "assets/ui/ui.ico.info.webp",
+   "w": 271,
+   "h": 273,
+   "source": "assets/generated/ui/icons.png",
+   "sourceHash": "cb4e3d79498153b3",
+   "frame": {
+    "x": 42,
+    "y": 570,
+    "w": 271,
+    "h": 273
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.ico.plus": {
+   "url": "assets/ui/ui.ico.plus.webp",
+   "w": 236,
+   "h": 238,
+   "source": "assets/generated/ui/icons.png",
+   "sourceHash": "cb4e3d79498153b3",
+   "frame": {
+    "x": 353,
+    "y": 588,
+    "w": 236,
+    "h": 238
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.ico.minus": {
+   "url": "assets/ui/ui.ico.minus.webp",
+   "w": 229,
+   "h": 99,
+   "source": "assets/generated/ui/icons.png",
+   "sourceHash": "cb4e3d79498153b3",
+   "frame": {
+    "x": 652,
+    "y": 659,
+    "w": 229,
+    "h": 99
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.ico.spin": {
+   "url": "assets/ui/ui.ico.spin.webp",
+   "w": 265,
+   "h": 264,
+   "source": "assets/generated/ui/icons.png",
+   "sourceHash": "cb4e3d79498153b3",
+   "frame": {
+    "x": 928,
+    "y": 572,
+    "w": 265,
+    "h": 264
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "ui.ico.stop": {
+   "url": "assets/ui/ui.ico.stop.webp",
+   "w": 217,
+   "h": 217,
+   "source": "assets/generated/ui/icons.png",
+   "sourceHash": "cb4e3d79498153b3",
+   "frame": {
+    "x": 1252,
+    "y": 598,
+    "w": 217,
+    "h": 217
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "ui"
+  },
+  "decor.fg.0": {
+   "url": "assets/decor/decor.fg.0.webp",
+   "w": 494,
+   "h": 735,
+   "source": "assets/generated/decor/fg-props.png",
+   "sourceHash": "8579598fe82c10fd",
+   "frame": {
+    "x": 15,
+    "y": 117,
+    "w": 494,
+    "h": 735
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "decor"
+  },
+  "decor.fg.1": {
+   "url": "assets/decor/decor.fg.1.webp",
+   "w": 562,
+   "h": 629,
+   "source": "assets/generated/decor/fg-props.png",
+   "sourceHash": "8579598fe82c10fd",
+   "frame": {
+    "x": 518,
+    "y": 216,
+    "w": 562,
+    "h": 629
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "decor"
+  },
+  "decor.fg.2": {
+   "url": "assets/decor/decor.fg.2.webp",
+   "w": 428,
+   "h": 610,
+   "source": "assets/generated/decor/fg-props.png",
+   "sourceHash": "8579598fe82c10fd",
+   "frame": {
+    "x": 1094,
+    "y": 244,
+    "w": 428,
+    "h": 610
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "decor"
+  },
+  "buck.ref": {
+   "url": "assets/mascot/buck.ref.webp",
+   "w": 813,
+   "h": 1200,
+   "source": "assets/generated/mascot/buck-ref.png",
+   "sourceHash": "55764f43416bf5fc",
+   "frame": {
+    "x": 45,
+    "y": 80,
+    "w": 933,
+    "h": 1377
+   },
+   "scale": 0.8714596949891068,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "mascot",
+   "visibleFill": 0.991
+  },
+  "buck.heads.rest": {
+   "url": "assets/mascot/buck.heads.rest.webp",
+   "w": 390,
+   "h": 436,
+   "source": "assets/generated/mascot/buck-heads.png",
+   "sourceHash": "c7f3f1e38443350e",
+   "frame": {
+    "x": 0,
+    "y": 74,
+    "w": 390,
+    "h": 436
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.heads.grin": {
+   "url": "assets/mascot/buck.heads.grin.webp",
+   "w": 391,
+   "h": 441,
+   "source": "assets/generated/mascot/buck-heads.png",
+   "sourceHash": "c7f3f1e38443350e",
+   "frame": {
+    "x": 382,
+    "y": 70,
+    "w": 391,
+    "h": 441
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.heads.shout": {
+   "url": "assets/mascot/buck.heads.shout.webp",
+   "w": 386,
+   "h": 444,
+   "source": "assets/generated/mascot/buck-heads.png",
+   "sourceHash": "c7f3f1e38443350e",
+   "frame": {
+    "x": 762,
+    "y": 70,
+    "w": 386,
+    "h": 444
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.heads.surprise": {
+   "url": "assets/mascot/buck.heads.surprise.webp",
+   "w": 380,
+   "h": 438,
+   "source": "assets/generated/mascot/buck-heads.png",
+   "sourceHash": "c7f3f1e38443350e",
+   "frame": {
+    "x": 1149,
+    "y": 73,
+    "w": 380,
+    "h": 438
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.heads.wink": {
+   "url": "assets/mascot/buck.heads.wink.webp",
+   "w": 389,
+   "h": 436,
+   "source": "assets/generated/mascot/buck-heads.png",
+   "sourceHash": "c7f3f1e38443350e",
+   "frame": {
+    "x": 144,
+    "y": 547,
+    "w": 389,
+    "h": 436
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.body.torso": {
+   "url": "assets/mascot/buck.body.torso.webp",
+   "w": 544,
+   "h": 602,
+   "source": "assets/generated/mascot/buck-body.png",
+   "sourceHash": "ff2d2b8ed5b8068f",
+   "frame": {
+    "x": 74,
+    "y": 258,
+    "w": 544,
+    "h": 602
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.body.tail": {
+   "url": "assets/mascot/buck.body.tail.webp",
+   "w": 313,
+   "h": 362,
+   "source": "assets/generated/mascot/buck-body.png",
+   "sourceHash": "ff2d2b8ed5b8068f",
+   "frame": {
+    "x": 635,
+    "y": 89,
+    "w": 313,
+    "h": 362
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.body.thighL": {
+   "url": "assets/mascot/buck.body.thighL.webp",
+   "w": 250,
+   "h": 335,
+   "source": "assets/generated/mascot/buck-body.png",
+   "sourceHash": "ff2d2b8ed5b8068f",
+   "frame": {
+    "x": 937,
+    "y": 168,
+    "w": 250,
+    "h": 335
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.body.thighR": {
+   "url": "assets/mascot/buck.body.thighR.webp",
+   "w": 239,
+   "h": 337,
+   "source": "assets/generated/mascot/buck-body.png",
+   "sourceHash": "ff2d2b8ed5b8068f",
+   "frame": {
+    "x": 1252,
+    "y": 164,
+    "w": 239,
+    "h": 337
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.body.shinL": {
+   "url": "assets/mascot/buck.body.shinL.webp",
+   "w": 302,
+   "h": 391,
+   "source": "assets/generated/mascot/buck-body.png",
+   "sourceHash": "ff2d2b8ed5b8068f",
+   "frame": {
+    "x": 775,
+    "y": 547,
+    "w": 302,
+    "h": 391
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.body.shinR": {
+   "url": "assets/mascot/buck.body.shinR.webp",
+   "w": 278,
+   "h": 405,
+   "source": "assets/generated/mascot/buck-body.png",
+   "sourceHash": "ff2d2b8ed5b8068f",
+   "frame": {
+    "x": 1228,
+    "y": 544,
+    "w": 278,
+    "h": 405
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.arms.upperL": {
+   "url": "assets/mascot/buck.arms.upperL.webp",
+   "w": 278,
+   "h": 303,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 31,
+    "y": 120,
+    "w": 278,
+    "h": 303
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.arms.upperR": {
+   "url": "assets/mascot/buck.arms.upperR.webp",
+   "w": 281,
+   "h": 310,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 351,
+    "y": 121,
+    "w": 281,
+    "h": 310
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.arms.foreL": {
+   "url": "assets/mascot/buck.arms.foreL.webp",
+   "w": 213,
+   "h": 341,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 677,
+    "y": 118,
+    "w": 213,
+    "h": 341
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.arms.foreR": {
+   "url": "assets/mascot/buck.arms.foreR.webp",
+   "w": 208,
+   "h": 341,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 975,
+    "y": 116,
+    "w": 208,
+    "h": 341
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.arms.handOpen": {
+   "url": "assets/mascot/buck.arms.handOpen.webp",
+   "w": 265,
+   "h": 336,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 1229,
+    "y": 122,
+    "w": 265,
+    "h": 336
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.arms.handFist": {
+   "url": "assets/mascot/buck.arms.handFist.webp",
+   "w": 241,
+   "h": 265,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 47,
+    "y": 573,
+    "w": 241,
+    "h": 265
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.arms.handGrip": {
+   "url": "assets/mascot/buck.arms.handGrip.webp",
+   "w": 256,
+   "h": 292,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 344,
+    "y": 570,
+    "w": 256,
+    "h": 292
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.arms.handThumb": {
+   "url": "assets/mascot/buck.arms.handThumb.webp",
+   "w": 229,
+   "h": 291,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 657,
+    "y": 557,
+    "w": 229,
+    "h": 291
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.arms.handPoint": {
+   "url": "assets/mascot/buck.arms.handPoint.webp",
+   "w": 309,
+   "h": 249,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 913,
+    "y": 604,
+    "w": 309,
+    "h": 249
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.arms.handMatch": {
+   "url": "assets/mascot/buck.arms.handMatch.webp",
+   "w": 237,
+   "h": 343,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 1243,
+    "y": 532,
+    "w": 237,
+    "h": 343
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "id.logo": {
+   "url": "assets/identity/id.logo.webp",
+   "w": 1100,
+   "h": 449,
+   "source": "assets/generated/identity/logo.png",
+   "sourceHash": "2256da72ba81c46d",
+   "frame": {
+    "x": 16,
+    "y": 192,
+    "w": 1507,
+    "h": 615
+   },
+   "scale": 0.7299270072992701,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "identity",
+   "visibleFill": 0.992
+  },
+  "id.crownforge": {
+   "url": "assets/identity/id.crownforge.webp",
+   "w": 900,
+   "h": 648,
+   "source": "assets/generated/identity/crownforge.png",
+   "sourceHash": "76645815a32a1924",
+   "frame": {
+    "x": 121,
+    "y": 45,
+    "w": 1294,
+    "h": 932
+   },
+   "scale": 0.6955177743431221,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "identity",
+   "visibleFill": 0.991
+  },
+  "id.card.blast": {
+   "url": "assets/identity/id.card.blast.webp",
+   "w": 480,
+   "h": 720,
+   "source": "assets/generated/identity/card-blast.png",
+   "sourceHash": "970fcdde33517fa3",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 1024,
+    "h": 1536
+   },
+   "scale": 0.46875,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "identity",
+   "visibleFill": 1
+  },
+  "buck.heads.focus": {
+   "url": "assets/mascot/buck.heads.focus.webp",
+   "w": 401,
+   "h": 439,
+   "source": "assets/generated/mascot/buck-heads.png",
+   "sourceHash": "c7f3f1e38443350e",
+   "frame": {
+    "x": 562,
+    "y": 547,
+    "w": 401,
+    "h": 439
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.heads.blink": {
+   "url": "assets/mascot/buck.heads.blink.webp",
+   "w": 399,
+   "h": 435,
+   "source": "assets/generated/mascot/buck-heads.png",
+   "sourceHash": "c7f3f1e38443350e",
+   "frame": {
+    "x": 980,
+    "y": 548,
+    "w": 399,
+    "h": 435
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  }
+ },
+ "generatedAt": "2026-09-28T10:34:33.876Z"
+}

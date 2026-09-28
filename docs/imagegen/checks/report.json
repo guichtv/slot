@@ -1,0 +1,147 @@
+[
+ {
+  "key": "ui.frame",
+  "status": "ok",
+  "src": "assets/generated/ui/frame.png",
+  "outputs": 1,
+  "alphaBefore": [
+   1101025,
+   1257,
+   653,
+   1252,
+   1363,
+   3167,
+   654,
+   463145
+  ],
+  "alphaAfter": [
+   1101025,
+   1257,
+   653,
+   1252,
+   1363,
+   3167,
+   654,
+   463145
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "ui.cell",
+  "status": "ok",
+  "src": "assets/generated/ui/cell.png",
+  "outputs": 1,
+  "alphaBefore": [
+   454453,
+   157,
+   742,
+   1491,
+   1083,
+   567,
+   180,
+   1113843
+  ],
+  "alphaAfter": [
+   454453,
+   157,
+   742,
+   1491,
+   1083,
+   567,
+   180,
+   1113843
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "ui.spin",
+  "status": "ok",
+  "src": "assets/generated/ui/spin.png",
+  "outputs": 1,
+  "alphaBefore": [
+   597233,
+   729,
+   583,
+   596,
+   594,
+   670,
+   794,
+   971317
+  ],
+  "alphaAfter": [
+   597233,
+   729,
+   583,
+   596,
+   594,
+   670,
+   794,
+   971317
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "ui.btn",
+  "status": "ok",
+  "src": "assets/generated/ui/buttons.png",
+  "outputs": 5,
+  "alphaBefore": [
+   939358,
+   1376,
+   932,
+   1951,
+   1178,
+   2316,
+   1237,
+   624516
+  ],
+  "alphaAfter": [
+   939358,
+   1376,
+   932,
+   1951,
+   1178,
+   2316,
+   1237,
+   624516
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "ui.ico",
+  "status": "ok",
+  "src": "assets/generated/ui/icons.png",
+  "outputs": 10,
+  "alphaBefore": [
+   1226538,
+   2305,
+   2198,
+   1418,
+   1606,
+   1594,
+   2358,
+   334847
+  ],
+  "alphaAfter": [
+   1226538,
+   2305,
+   2198,
+   1418,
+   1606,
+   1594,
+   2358,
+   334847
+  ],
+  "opaqueCorners": 0
+ },
+ {
+  "key": "ui.topbar",
+  "status": "missing",
+  "src": "assets/generated/ui/topbar.png"
+ },
+ {
+  "key": "ui.multiplier",
+  "status": "missing",
+  "src": "assets/generated/ui/multiplier.png"
+ }
+]

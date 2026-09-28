@@ -1,0 +1,549 @@
+{
+ "assets": {
+  "sym.L1": {
+   "src": "assets/generated/symbols/L1.png",
+   "family": "symbols",
+   "maxSize": 640,
+   "margin": 8,
+   "quality": 90
+  },
+  "sym.L2": {
+   "src": "assets/generated/symbols/L2.png",
+   "family": "symbols",
+   "maxSize": 640,
+   "margin": 8,
+   "quality": 90
+  },
+  "sym.L3": {
+   "src": "assets/generated/symbols/L3.png",
+   "family": "symbols",
+   "maxSize": 640,
+   "margin": 8,
+   "quality": 90
+  },
+  "sym.L4": {
+   "src": "assets/generated/symbols/L4.png",
+   "family": "symbols",
+   "maxSize": 640,
+   "margin": 8,
+   "quality": 90
+  },
+  "sym.T.stick": {
+   "src": "assets/generated/symbols/T-stick.png",
+   "family": "symbols",
+   "maxSize": 640,
+   "margin": 8,
+   "quality": 90
+  },
+  "sym.T.bundle": {
+   "src": "assets/generated/symbols/T-bundle.png",
+   "family": "symbols",
+   "maxSize": 640,
+   "margin": 8,
+   "quality": 90
+  },
+  "sym.T.keg": {
+   "src": "assets/generated/symbols/T-keg.png",
+   "family": "symbols",
+   "maxSize": 640,
+   "margin": 8,
+   "quality": 90
+  },
+  "sym.H1": {
+   "src": "assets/generated/symbols/H1.png",
+   "family": "symbols",
+   "maxSize": 1100,
+   "margin": 8,
+   "quality": 90,
+   "split": {
+    "names": [
+     "body",
+     "prop"
+    ],
+    "minArea": 3000,
+    "dilate": 8
+   }
+  },
+  "sym.H2": {
+   "src": "assets/generated/symbols/H2.png",
+   "family": "symbols",
+   "maxSize": 1100,
+   "margin": 8,
+   "quality": 90,
+   "split": {
+    "names": [
+     "body",
+     "antlerL",
+     "antlerR"
+    ],
+    "minArea": 3000,
+    "dilate": 8
+   }
+  },
+  "sym.H3": {
+   "src": "assets/generated/symbols/H3.png",
+   "family": "symbols",
+   "maxSize": 1100,
+   "margin": 8,
+   "quality": 90,
+   "split": {
+    "names": [
+     "body",
+     "prop"
+    ],
+    "minArea": 3000,
+    "dilate": 8
+   }
+  },
+  "sym.H4": {
+   "src": "assets/generated/symbols/H4.png",
+   "family": "symbols",
+   "maxSize": 1100,
+   "margin": 8,
+   "quality": 90,
+   "split": {
+    "names": [
+     "body",
+     "part"
+    ],
+    "minArea": 3000,
+    "dilate": 8
+   }
+  },
+  "sym.W": {
+   "src": "assets/generated/symbols/W.png",
+   "family": "symbols",
+   "maxSize": 1100,
+   "margin": 8,
+   "quality": 90,
+   "split": {
+    "names": [
+     "body",
+     "part"
+    ],
+    "minArea": 3000,
+    "dilate": 8
+   }
+  },
+  "sym.S": {
+   "src": "assets/generated/symbols/S.png",
+   "family": "symbols",
+   "maxSize": 1100,
+   "margin": 8,
+   "quality": 90,
+   "split": {
+    "names": [
+     "body",
+     "part"
+    ],
+    "minArea": 3000,
+    "dilate": 8
+   }
+  },
+  "decor.sky": {
+   "src": "assets/generated/decor/sky.png",
+   "family": "decor",
+   "quality": 86,
+   "opaque": true
+  },
+  "decor.nightSky": {
+   "src": "assets/generated/decor/night-sky.png",
+   "family": "decor",
+   "quality": 86,
+   "opaque": true
+  },
+  "decor.clouds": {
+   "src": "assets/generated/decor/clouds.png",
+   "family": "decor",
+   "quality": 86,
+   "maxSize": 1536,
+   "split": {
+    "names": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4"
+    ],
+    "minArea": 4000,
+    "dilate": 6
+   }
+  },
+  "decor.far": {
+   "src": "assets/generated/decor/far.png",
+   "family": "decor",
+   "quality": 86,
+   "noTrim": false,
+   "margin": 2
+  },
+  "decor.mid": {
+   "src": "assets/generated/decor/mid.png",
+   "family": "decor",
+   "quality": 86,
+   "margin": 2
+  },
+  "decor.ground": {
+   "src": "assets/generated/decor/ground.png",
+   "family": "decor",
+   "quality": 86,
+   "margin": 2
+  },
+  "decor.fg": {
+   "src": "assets/generated/decor/fg-props.png",
+   "family": "decor",
+   "quality": 86,
+   "maxSize": 1536,
+   "split": {
+    "names": [
+     "0",
+     "1",
+     "2"
+    ],
+    "minArea": 8000,
+    "dilate": 8
+   }
+  },
+  "decor.monument.0": {
+   "src": "assets/generated/decor/monument-0.png",
+   "family": "decor",
+   "quality": 86,
+   "margin": 4
+  },
+  "decor.monument.1": {
+   "src": "assets/generated/decor/monument-1.png",
+   "family": "decor",
+   "quality": 86,
+   "margin": 4
+  },
+  "decor.monument.2": {
+   "src": "assets/generated/decor/monument-2.png",
+   "family": "decor",
+   "quality": 86,
+   "margin": 4
+  },
+  "decor.monument.3": {
+   "src": "assets/generated/decor/monument-3.png",
+   "family": "decor",
+   "quality": 86,
+   "margin": 4
+  },
+  "decor.floodlight": {
+   "src": "assets/generated/decor/floodlight.png",
+   "family": "decor",
+   "quality": 86,
+   "margin": 4
+  },
+  "decor.birds": {
+   "src": "assets/generated/decor/birds.png",
+   "family": "decor",
+   "quality": 86,
+   "maxSize": 1536,
+   "split": {
+    "names": [
+     "0",
+     "1",
+     "2"
+    ],
+    "minArea": 500,
+    "dilate": 4
+   }
+  },
+  "ui.frame": {
+   "src": "assets/generated/ui/frame.png",
+   "family": "ui",
+   "quality": 92,
+   "margin": 0
+  },
+  "ui.cell": {
+   "src": "assets/generated/ui/cell.png",
+   "family": "ui",
+   "quality": 92,
+   "maxSize": 256,
+   "margin": 0
+  },
+  "ui.spin": {
+   "src": "assets/generated/ui/spin.png",
+   "family": "ui",
+   "quality": 92,
+   "maxSize": 360,
+   "margin": 4
+  },
+  "ui.btn": {
+   "src": "assets/generated/ui/buttons.png",
+   "family": "ui",
+   "quality": 92,
+   "maxSize": 1400,
+   "split": {
+    "names": [
+     "round",
+     "step",
+     "plaque",
+     "buy",
+     "bar"
+    ],
+    "minArea": 3000,
+    "dilate": 6
+   }
+  },
+  "ui.ico": {
+   "src": "assets/generated/ui/icons.png",
+   "family": "ui",
+   "quality": 92,
+   "maxSize": 1536,
+   "split": {
+    "names": [
+     "menu",
+     "soundOn",
+     "soundOff",
+     "turbo",
+     "auto",
+     "info",
+     "plus",
+     "minus",
+     "spin",
+     "stop"
+    ],
+    "rects": [
+     [
+      40,
+      150,
+      280,
+      330
+     ],
+     [
+      330,
+      150,
+      290,
+      330
+     ],
+     [
+      630,
+      150,
+      290,
+      330
+     ],
+     [
+      930,
+      150,
+      260,
+      330
+     ],
+     [
+      1200,
+      150,
+      320,
+      330
+     ],
+     [
+      40,
+      560,
+      290,
+      300
+     ],
+     [
+      340,
+      560,
+      260,
+      300
+     ],
+     [
+      630,
+      560,
+      280,
+      300
+     ],
+     [
+      920,
+      560,
+      290,
+      300
+     ],
+     [
+      1230,
+      560,
+      280,
+      300
+     ]
+    ],
+    "keepMin": 0.02
+   }
+  },
+  "ui.topbar": {
+   "src": "assets/generated/ui/topbar.png",
+   "family": "ui",
+   "quality": 92,
+   "maxSize": 900,
+   "margin": 4
+  },
+  "ui.multiplier": {
+   "src": "assets/generated/ui/multiplier.png",
+   "family": "ui",
+   "quality": 92,
+   "maxSize": 420,
+   "margin": 4
+  },
+  "buck.ref": {
+   "src": "assets/generated/mascot/buck-ref.png",
+   "family": "mascot",
+   "quality": 92,
+   "margin": 6,
+   "maxSize": 1200
+  },
+  "buck.heads": {
+   "src": "assets/generated/mascot/buck-heads.png",
+   "family": "mascot",
+   "quality": 92,
+   "margin": 6,
+   "split": {
+    "names": [
+     "rest",
+     "grin",
+     "shout",
+     "surprise",
+     "wink",
+     "focus",
+     "blink"
+    ],
+    "rects": [
+     [
+      0,
+      40,
+      384,
+      500
+     ],
+     [
+      384,
+      40,
+      384,
+      500
+     ],
+     [
+      768,
+      40,
+      384,
+      500
+     ],
+     [
+      1152,
+      40,
+      384,
+      500
+     ],
+     [
+      150,
+      520,
+      418,
+      500
+     ],
+     [
+      568,
+      520,
+      418,
+      500
+     ],
+     [
+      986,
+      520,
+      418,
+      500
+     ]
+    ],
+    "keepMin": 0.04
+   }
+  },
+  "buck.body": {
+   "src": "assets/generated/mascot/buck-body.png",
+   "family": "mascot",
+   "quality": 92,
+   "margin": 6,
+   "split": {
+    "names": [
+     "torso",
+     "tail",
+     "thighL",
+     "thighR",
+     "shinL",
+     "shinR"
+    ],
+    "minArea": 4000,
+    "dilate": 6
+   }
+  },
+  "buck.arms": {
+   "src": "assets/generated/mascot/buck-arms.png",
+   "family": "mascot",
+   "quality": 92,
+   "margin": 6,
+   "split": {
+    "names": [
+     "upperL",
+     "upperR",
+     "foreL",
+     "foreR",
+     "handOpen",
+     "handFist",
+     "handGrip",
+     "handThumb",
+     "handPoint",
+     "handMatch"
+    ],
+    "minArea": 2000,
+    "dilate": 6
+   }
+  },
+  "buck.props": {
+   "src": "assets/generated/mascot/buck-props.png",
+   "family": "mascot",
+   "quality": 92,
+   "margin": 6,
+   "split": {
+    "names": [
+     "box",
+     "handle",
+     "stick",
+     "match"
+    ],
+    "minArea": 800,
+    "dilate": 6
+   }
+  },
+  "id.logo": {
+   "src": "assets/generated/identity/logo.png",
+   "family": "identity",
+   "quality": 90,
+   "margin": 6,
+   "maxSize": 1100
+  },
+  "id.crownforge": {
+   "src": "assets/generated/identity/crownforge.png",
+   "family": "identity",
+   "quality": 90,
+   "margin": 6,
+   "maxSize": 900
+  },
+  "id.card.blast": {
+   "src": "assets/generated/identity/card-blast.png",
+   "family": "identity",
+   "quality": 90,
+   "margin": 6,
+   "opaque": true,
+   "maxSize": 720
+  },
+  "id.card.detonator": {
+   "src": "assets/generated/identity/card-detonator.png",
+   "family": "identity",
+   "quality": 90,
+   "margin": 6,
+   "opaque": true,
+   "maxSize": 720
+  },
+  "id.card.bonus": {
+   "src": "assets/generated/identity/card-bonus.png",
+   "family": "identity",
+   "quality": 90,
+   "margin": 6,
+   "opaque": true,
+   "maxSize": 720
+  }
+ }
+}

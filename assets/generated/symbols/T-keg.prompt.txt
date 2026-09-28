@@ -1,0 +1,13 @@
+Use case: stylized-concept
+Asset type: BOOMTOOTH / Crownforge 2D slot symbol, production PNG.
+Reference: the supplied D1.png is the mandatory STYLE reference only. Match its reel symbols' hand-inked adult comic cartoon art exactly; do not reproduce the scene, lettering, characters, frame or UI.
+Canvas: exactly 1024 x 1024. REAL transparent alpha background, no checkerboard, no white backdrop, no halo, no ground shadow, no frame. One complete centered isolated object, maximum dimension about 88% of canvas, minimum 5% empty margin on every side including fuse/handle. Readable at 90px on dark #1c1a1f.
+Style: bold slightly irregular black brush contours 4–7 px at 1024, finer interior lines, simple readable shapes, strictly two flat cel-shading tones per material and one crisp cream-white highlight per volume. Warm golden-orange late afternoon key light from left, blue-violet shadow shapes. Controlled saturated colors. Hand-drawn worn materials, no airbrush, blur, smooth 3D, photographic rendering, generic neon, gradients or border effects.
+No text, letters, numbers, logos, signatures or watermarks.
+Subject: 
+Rendering constraint applying to this subject: ONLY uniform FLAT color fills bounded by sharp ink or cel shadow edges; no gradients or texture speckles. Keep details as simple as the reel icons in D1.
+
+Framing: keep the full silhouette including all attachments between coordinates 65 and 959 in both axes on the requested 1024x1024 canvas.
+Subject specification:
+A squat bulky black-powder keg made from dark brown wooden staves #6B4526 with drawn grain, THREE riveted iron hoops, a wooden top bung with ONE thick curled fuse emerging from it. A large red and yellow EXPLOSION STAR pictogram painted as a rough stencil on the front side, no text and no skull. No flames or sparks. Three-quarter slightly overhead view showing top and front. Dark wood dominant. Largest explosive charge of the family: broad squat heavy silhouette substantially bulkier than three bundled dynamite sticks.
+Correction: fuse must form a clearly visible curled LOOP / coil above the wooden bung, not just a short arch. Keep entire barrel and fuse within centered 88% canvas, at least 6% margin below base and above fuse. EXACT output 1024x1024 pixels. Uniform flat colors, no soft gradients.

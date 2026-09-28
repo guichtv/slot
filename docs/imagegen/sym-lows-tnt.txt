@@ -1,0 +1,13 @@
+LOT sym-lows-tnt — symboles bas et charges de TNT (7 images). Dossier : assets/generated/symbols/
+Famille cohérente avec les symboles de D1.png, silhouettes très différenciées, lisibles en 90 px sur une case sombre (#1c1a1f). Chaque symbole : vue trois-quarts légèrement plongeante, contour noir épais, cel-shading deux tons, reflet franc, une seule couleur dominante par symbole. Aucun fond, aucune case, aucun cadre, aucune ombre portée au sol, aucun texte.
+Format commun : 1024×1024, fond TRANSPARENT (canal alpha), sujet centré remplissant environ 88 % de l'image (marge 5 % minimum tout autour), non coupé.
+
+1. L1.png — Casque de chantier jaune vif (#F6C331) cabossé, visière courte, petite lampe frontale ronde éteinte sur le devant, deux éraflures, reflet franc sur le dôme. Posé de trois-quarts.
+2. L2.png — Pioche de mineur : fer gris acier à deux pointes, manche en bois peint bleu (#2F6FD0) avec ruban adhésif noir au milieu, posée en diagonale (fer en haut à droite), occupe la diagonale de l'image.
+3. L3.png — Lanterne tempête verte (#2E9B4E) à anse, verre bombé avec flamme orange vive à l'intérieur, cage métallique, légère lueur dessinée (pas de halo flou).
+4. L4.png — Gourde militaire en métal violette (#7B4FC9) cabossée, bouchon vissé gris avec chaînette, sangle de cuir brun enroulée autour.
+5. T-stick.png — UN seul bâton de dynamite rouge (#D7332B) en papier cartonné, extrémités plus claires, légèrement incliné (15°), mèche noire courte et tordue qui sort du haut, bout de mèche légèrement brûlé (sans flamme ni étincelle : elles seront animées).
+6. T-bundle.png — Fagot de TROIS bâtons de dynamite rouges serrés par deux tours de corde de chanvre nouée, une seule mèche plus longue réunissant les trois, sans flamme.
+7. T-keg.png — Baril de poudre noire trapu en bois sombre cerclé de trois bandes de fer rivetées, bouchon de bois sur le dessus d'où sort une mèche épaisse enroulée, une grosse étoile d'explosion rouge et jaune peinte au pochoir sur le flanc (pas de texte, pas de tête de mort).
+
+Les trois charges (5, 6, 7) doivent se lire immédiatement comme trois tailles croissantes : bâton seul < fagot < baril.

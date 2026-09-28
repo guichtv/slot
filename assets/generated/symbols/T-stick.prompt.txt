@@ -1,0 +1,13 @@
+Use case: stylized-concept
+Asset type: BOOMTOOTH / Crownforge 2D slot symbol, production PNG.
+Reference: the supplied D1.png is the mandatory STYLE reference only. Match its reel symbols' hand-inked adult comic cartoon art exactly; do not reproduce the scene, lettering, characters, frame or UI.
+Canvas: exactly 1024 x 1024. REAL transparent alpha background, no checkerboard, no white backdrop, no halo, no ground shadow, no frame. One complete centered isolated object, maximum dimension about 88% of canvas, minimum 5% empty margin on every side including fuse/handle. Readable at 90px on dark #1c1a1f.
+Style: bold slightly irregular black brush contours 4–7 px at 1024, finer interior lines, simple readable shapes, strictly two flat cel-shading tones per material and one crisp cream-white highlight per volume. Warm golden-orange late afternoon key light from left, blue-violet shadow shapes. Controlled saturated colors. Hand-drawn worn materials, no airbrush, blur, smooth 3D, photographic rendering, generic neon, gradients or border effects.
+No text, letters, numbers, logos, signatures or watermarks.
+Subject: 
+Rendering constraint applying to this subject: ONLY uniform FLAT color fills bounded by sharp ink or cel shadow edges; no gradients or texture speckles. Keep details as simple as the reel icons in D1.
+
+Framing: keep the full silhouette including all attachments between coordinates 65 and 959 in both axes on the requested 1024x1024 canvas.
+Subject specification:
+EXACTLY ONE red #D7332B cardboard-paper dynamite stick, cylindrical with lighter colored end faces, long slender silhouette tilted 15 degrees from vertical. Short crooked black fuse emerges from the top, slightly charred tip, NO flame, NO spark. Three-quarter slightly overhead view. Red dominant. This is the smallest charge of the family: emphasize a single narrow stick.
+Technical correction: deliver a PNG of EXACTLY 1024 by 1024 pixels, not 1254 or 1280. Strict flat red fills without any gradient. Enlarge centered full silhouette to 88 percent of canvas height while keeping 6 percent transparent top and bottom margins.

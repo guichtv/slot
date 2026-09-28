@@ -1,9 +1,10 @@
-node_modules/
-dist/
-dist-*/
-.cache/
-captures/tmp/
-*.log
 !docs/imagegen/logs/*.log
+*.log
 .DS_Store
+.cache/
 Thumbs.db
+captures/
+captures/tmp/
+dist-*/
+dist/
+node_modules/

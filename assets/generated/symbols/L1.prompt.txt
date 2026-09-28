@@ -1,0 +1,8 @@
+Use case: stylized-concept
+Asset type: BOOMTOOTH / Crownforge 2D slot symbol, production PNG.
+Reference: the supplied D1.png is the mandatory STYLE reference only. Match its reel symbols' hand-inked adult comic cartoon art exactly; do not reproduce the scene, lettering, characters, frame or UI.
+Canvas: exactly 1024 x 1024. REAL transparent alpha background, no checkerboard, no white backdrop, no halo, no ground shadow, no frame. One complete centered isolated object, maximum dimension about 88% of canvas, minimum 5% empty margin on every side including fuse/handle. Readable at 90px on dark #1c1a1f.
+Style: bold slightly irregular black brush contours 4–7 px at 1024, finer interior lines, simple readable shapes, strictly two flat cel-shading tones per material and one crisp cream-white highlight per volume. Warm golden-orange late afternoon key light from left, blue-violet shadow shapes. Controlled saturated colors. Hand-drawn worn materials, no airbrush, blur, smooth 3D, photographic rendering, generic neon, gradients or border effects.
+No text, letters, numbers, logos, signatures or watermarks.
+Subject: A bright yellow #F6C331 dented construction hard hat with short brim, small round SWITCHED-OFF headlamp fixed on its FRONT, two scratches, a crisp highlight on the dome. Three-quarter view slightly from above. Yellow overwhelmingly dominant.
+Critical correction: Use ONLY flat uniform color fills with sharp boundaries. NO gradients, NO texture speckles, NO soft modeling. Exactly two scratches only. Small headlamp, restrained simple details matching the reference reel icons. Entire alpha silhouette contained within central 88% square. Output exactly 1024x1024 pixels.

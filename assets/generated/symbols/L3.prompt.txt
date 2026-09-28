@@ -1,0 +1,10 @@
+Use case: stylized-concept
+Asset type: BOOMTOOTH / Crownforge 2D slot symbol, production PNG.
+Reference: the supplied D1.png is the mandatory STYLE reference only. Match its reel symbols' hand-inked adult comic cartoon art exactly; do not reproduce the scene, lettering, characters, frame or UI.
+Canvas: exactly 1024 x 1024. REAL transparent alpha background, no checkerboard, no white backdrop, no halo, no ground shadow, no frame. One complete centered isolated object, maximum dimension about 88% of canvas, minimum 5% empty margin on every side including fuse/handle. Readable at 90px on dark #1c1a1f.
+Style: bold slightly irregular black brush contours 4–7 px at 1024, finer interior lines, simple readable shapes, strictly two flat cel-shading tones per material and one crisp cream-white highlight per volume. Warm golden-orange late afternoon key light from left, blue-violet shadow shapes. Controlled saturated colors. Hand-drawn worn materials, no airbrush, blur, smooth 3D, photographic rendering, generic neon, gradients or border effects.
+No text, letters, numbers, logos, signatures or watermarks.
+Subject: 
+Rendering constraint applying to this subject: ONLY uniform FLAT color fills bounded by sharp ink or cel shadow edges; no gradients or texture speckles. Keep details as simple as the reel icons in D1.
+A green #2E9B4E hurricane lantern with carrying handle, bulging glass enclosing a vivid orange flame, protective metal cage. Slight drawn glow confined inside glass using flat hard-edged shapes, absolutely no blurry halo or external light spill. Three-quarter view slightly from above. Green dominant.
+Critical framing correction: entire lantern INCLUDING its handle must fit between y=72 and y=952 on a 1024x1024 canvas. Leave visibly generous transparent padding above handle and below base. Scale down. Use only flat fills, no gradients.

@@ -1,0 +1,45 @@
+Utilise $imagegen et l'outil natif de génération d'images (built-in image_gen, PAS un script CLI/API) pour produire réellement les images décrites. Ta mission porte uniquement sur ces images et leur rapport ; ne crée ni ne modifie aucun code du jeu.
+
+Studio : Crownforge. Racine du projet : le répertoire courant.
+
+RÈGLES COMMUNES
+- Style maison Crownforge : BD / cartoon 2D pour adultes, contours noirs épais légèrement irréguliers, cel-shading deux tons, reflets francs, couleurs saturées maîtrisées, formes simples et lisibles. Jamais photo-réaliste, jamais 3D lisse, jamais de rendu « image IA » (pas de néon générique, pas de dégradés par défaut, pas de flou artistique, pas d'effets de bordure).
+- Transparence (quand demandée) : fond RÉELLEMENT transparent (canal alpha), pas de damier dessiné, pas de fond blanc, pas de halo ; sujet complet non coupé, marge de 3 à 6 % tout autour. Si l'outil ne produit pas d'alpha : fond vert chroma uni #00FF00 sans ombre portée, et signale-le dans ta réponse.
+- Aucun texte, logo, filigrane ou signature, sauf le texte exact demandé.
+- Aucune copie de personnage, de logo ou de composition identifiable d'un autre studio ou d'une marque.
+- Reprise : si un fichier cible existe déjà ET que son .prompt.txt existe, ne le régénère pas ; passe au suivant.
+
+PROCÉDURE pour CHAQUE image :
+1) génère avec image_gen (un appel par asset) ;
+2) inspecte (sujet, style, transparence, marges, texte exact) et régénère UNE fois si un défaut évident existe ;
+3) copie le fichier final depuis $CODEX_HOME/generated_images/… vers le chemin indiqué (crée les dossiers) ;
+4) écris à côté <nom>.prompt.txt avec le prompt exact utilisé.
+
+RÉPONSE FINALE : chemins produits, méthode réellement utilisée, dimensions, canal alpha (oui/non), défauts restants.
+Si image_gen n'est pas accessible, dis-le précisément ; ne remplace PAS les images par du SVG, du code ou une liste de prompts.
+
+Projet : BOOMTOOTH, slot 2D « démolition au castor » (Crownforge). Buck Boomtooth, castor chef de chantier vaniteux et casse-cou, fait sauter une montagne de granit pour y sculpter un monument à sa gloire (« Mount Buckmore ») au-dessus d'un barrage en rondins, dans une vallée de pins du Grand Nord.
+
+Direction artistique RETENUE (référence obligatoire) : assets/generated/directions/D1.png — charge-la avec view_image avant de générer et reproduis son style exact :
+- encrage noir épais (4 à 7 px à 1024 px), légèrement irrégulier comme au pinceau, traits intérieurs plus fins ;
+- cel-shading deux tons nets (clair + ombre franche) et un reflet blanc cassé par volume ; pas d'aérographe, pas de flou ;
+- matières dessinées : bois équarri veiné, granit gris-bleu ébréché, métal riveté, flanelle à carreaux rouges et noirs, copeaux ;
+- lumière principale chaude de fin d'après-midi venant de la gauche (orange doré), ombres bleu-violet ;
+- couleurs saturées maîtrisées.
+Palette : orange brûlé #E8742A, orange ciel #F39A3C, vert pin #2F5D46, vert pin sombre #1E3B2E, granit #6F7F92, granit ombre #46526A, rouge TNT #D7332B, or #F2B233, bois miel #C98A45, bois sombre #6B4526, crème #F4E6C8, encre #1B1410.
+Référence d'ambiance NUIT (bonus) : assets/generated/directions/D3.png (aurore turquoise #3FD6B8, bleu nuit #14233A, projecteurs orange #FF9A3C) — même vallée, même trait.
+Jamais photo-réaliste, jamais 3D lisse, jamais de néon générique ni de dégradé par défaut.
+
+LOT sym-lows-tnt — symboles bas et charges de TNT (7 images). Dossier : assets/generated/symbols/
+Famille cohérente avec les symboles de D1.png, silhouettes très différenciées, lisibles en 90 px sur une case sombre (#1c1a1f). Chaque symbole : vue trois-quarts légèrement plongeante, contour noir épais, cel-shading deux tons, reflet franc, une seule couleur dominante par symbole. Aucun fond, aucune case, aucun cadre, aucune ombre portée au sol, aucun texte.
+Format commun : 1024×1024, fond TRANSPARENT (canal alpha), sujet centré remplissant environ 88 % de l'image (marge 5 % minimum tout autour), non coupé.
+
+1. L1.png — Casque de chantier jaune vif (#F6C331) cabossé, visière courte, petite lampe frontale ronde éteinte sur le devant, deux éraflures, reflet franc sur le dôme. Posé de trois-quarts.
+2. L2.png — Pioche de mineur : fer gris acier à deux pointes, manche en bois peint bleu (#2F6FD0) avec ruban adhésif noir au milieu, posée en diagonale (fer en haut à droite), occupe la diagonale de l'image.
+3. L3.png — Lanterne tempête verte (#2E9B4E) à anse, verre bombé avec flamme orange vive à l'intérieur, cage métallique, légère lueur dessinée (pas de halo flou).
+4. L4.png — Gourde militaire en métal violette (#7B4FC9) cabossée, bouchon vissé gris avec chaînette, sangle de cuir brun enroulée autour.
+5. T-stick.png — UN seul bâton de dynamite rouge (#D7332B) en papier cartonné, extrémités plus claires, légèrement incliné (15°), mèche noire courte et tordue qui sort du haut, bout de mèche légèrement brûlé (sans flamme ni étincelle : elles seront animées).
+6. T-bundle.png — Fagot de TROIS bâtons de dynamite rouges serrés par deux tours de corde de chanvre nouée, une seule mèche plus longue réunissant les trois, sans flamme.
+7. T-keg.png — Baril de poudre noire trapu en bois sombre cerclé de trois bandes de fer rivetées, bouchon de bois sur le dessus d'où sort une mèche épaisse enroulée, une grosse étoile d'explosion rouge et jaune peinte au pochoir sur le flanc (pas de texte, pas de tête de mort).
+
+Les trois charges (5, 6, 7) doivent se lire immédiatement comme trois tailles croissantes : bâton seul < fagot < baril.

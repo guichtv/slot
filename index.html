@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1b1410">
+<title>BOOMTOOTH</title>
+<link rel="icon" href="favicon.png">
+</head>
+<body>
+<div id="app">
+  <div id="stage"></div>
+  <div id="ui"></div>
+  <div id="loader" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Loading">
+    <div class="loader-brand"><img class="loader-logo" alt="Crownforge" src="assets/identity/id.crownforge.webp"></div>
+    <div class="loader-bar"><div class="loader-fill"></div><div class="loader-spark"></div></div>
+    <div class="loader-error" hidden><p class="loader-msg"></p><button type="button" class="loader-retry"></button></div>
+  </div>
+</div>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>
