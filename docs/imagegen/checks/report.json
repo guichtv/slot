@@ -864,11 +864,6 @@
   "opaqueCorners": 0
  },
  {
-  "key": "ui.multiplier",
-  "status": "missing",
-  "src": "assets/generated/ui/multiplier.png"
- },
- {
   "key": "buck.ref",
   "status": "ok",
   "src": "assets/generated/mascot/buck-ref.png",
@@ -978,8 +973,30 @@
  },
  {
   "key": "buck.props",
-  "status": "missing",
-  "src": "assets/generated/mascot/buck-props.png"
+  "status": "ok",
+  "src": "assets/generated/mascot/buck-props.png",
+  "outputs": 4,
+  "alphaBefore": [
+   1082240,
+   1389,
+   1032,
+   916,
+   951,
+   1121,
+   1757,
+   483458
+  ],
+  "alphaAfter": [
+   1082240,
+   1389,
+   1032,
+   916,
+   951,
+   1121,
+   1757,
+   483458
+  ],
+  "opaqueCorners": 0
  },
  {
   "key": "id.logo",

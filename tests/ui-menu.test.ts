@@ -43,18 +43,23 @@ describe('rules: pay table', () => {
     expect(waysCount(5, 5)).toBe(3125);
   });
 
-  it('builds retrigger tables (config value wins, last row is "or more")', () => {
-    expect(retriggerTable(cfg, 'standard')).toEqual([
-      { scatters: 2, label: '2', spins: 2 },
-      { scatters: 3, label: '3+', spins: 5 },
-    ]);
-    expect(retriggerTable(cfg, 'super')).toEqual([
-      { scatters: 2, label: '2', spins: 2 },
-      { scatters: 3, label: '3', spins: 5 },
-      { scatters: 4, label: '4+', spins: 8 },
-    ]);
-    const tweaked = { ...cfg, freeSpins: { ...cfg.freeSpins, standard: { ...cfg.freeSpins.standard, retrigger: { scatters: 3, spins: 6 } } } };
-    expect(retriggerTable(tweaked, 'standard').at(-1)).toEqual({ scatters: 3, label: '3+', spins: 6 });
+  it('builds retrigger tables from the math config only (last row is "or more")', () => {
+    // table complète de la config livrée (2 → +2, 3 → +5 ; super : 4+ → +8)
+    expect(retriggerTable(cfg, 'standard').map((x) => `${x.label}:${x.spins}`)).toEqual(['2:2', '3+:5']);
+    expect(retriggerTable(cfg, 'super').map((x) => `${x.label}:${x.spins}`)).toEqual(['2:2', '3:5', '4+:8']);
+    // une seule entrée `retrigger` : une seule ligne « N ou plus »
+    const single = (k: 'standard' | 'super') => ({ ...cfg.freeSpins[k], retriggers: undefined });
+    const cfg1 = { ...cfg, freeSpins: { standard: single('standard'), super: single('super') } };
+    const r = cfg.freeSpins.standard.retrigger;
+    expect(retriggerTable(cfg1, 'standard')).toEqual([{ scatters: r.scatters, label: `${r.scatters}+`, spins: r.spins }]);
+    const tweaked = { ...cfg1, freeSpins: { ...cfg1.freeSpins, standard: { ...cfg1.freeSpins.standard, retrigger: { scatters: 3, spins: 6 } } } };
+    expect(retriggerTable(tweaked, 'standard')).toEqual([{ scatters: 3, label: '3+', spins: 6 }]);
+    // a full table, when the math config carries one, is shown row by row
+    const full = { ...cfg, freeSpins: { ...cfg.freeSpins, super: { ...cfg.freeSpins.super, retriggers: { '2': 2, '3': 5, '4': 8 } } } };
+    expect(retriggerTable(full, 'super').map((x) => `${x.label}:${x.spins}`)).toEqual(['2:2', '3:5', '4+:8']);
+    // nothing configured: no row (never a value invented by the front-end)
+    const none = { ...cfg1, freeSpins: { ...cfg1.freeSpins, standard: { ...cfg1.freeSpins.standard, retrigger: { scatters: 0, spins: 0 } } } };
+    expect(retriggerTable(none, 'standard')).toEqual([]);
   });
 
   it('lists RTP per mode in a stable order and formats percentages', () => {

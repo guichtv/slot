@@ -76,7 +76,6 @@
   background-color: transparent;
   background-size: 100% 100%;
   box-shadow: none;
-  filter: drop-shadow(0 12px 0 rgba(0, 0, 0, 0.35));
   gap: 4px;
 }
 .ovl-dialog.has-art .ovl-title { font-size: clamp(26px, 4.6vh, 50px); }
@@ -132,7 +131,6 @@
   width: min(94vw, calc(var(--gw) * 1.25));
   aspect-ratio: 1200 / 394;
   background: center / 100% 100% no-repeat;
-  filter: drop-shadow(0 10px 0 rgba(0, 0, 0, 0.35));
   padding-bottom: 2%;
   box-sizing: border-box;
 }

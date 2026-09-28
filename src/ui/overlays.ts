@@ -74,6 +74,17 @@ export class Overlays {
     this.fsValue.textContent = String(remaining);
   }
 
+  /** bandeau de la planche du haut sans compteur (relecture Stake) ; null le masque */
+  setBanner(text: string | null): void {
+    if (text === null) {
+      this.fsBox.hidden = true;
+      return;
+    }
+    this.fsBox.hidden = false;
+    this.fsLabel.textContent = text;
+    this.fsValue.textContent = '';
+  }
+
   /** « +N FS » en grand au centre, puis il rejoint le compteur */
   async plusFs(n: number, beat: Beat): Promise<void> {
     const p = this.plus;

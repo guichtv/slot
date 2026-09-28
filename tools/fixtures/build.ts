@@ -6,6 +6,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { validateBook } from './validate';
+import { CONTRACT_VERSION } from '../../src/contract/schema';
 import { ALL } from './scenarios';
 
 const cfg = JSON.parse(fs.readFileSync('public/game-math-config.json', 'utf8')) as { maxWinX: number };
@@ -40,7 +41,7 @@ for (const make of ALL) {
   out.push(f);
 }
 fs.mkdirSync('public/fixtures', { recursive: true });
-fs.writeFileSync(path.join('public/fixtures', 'fixtures.json'), JSON.stringify({ contract: '1.0.0', generated: new Date().toISOString(), fixtures: out }, null, 1));
+fs.writeFileSync(path.join('public/fixtures', 'fixtures.json'), JSON.stringify({ contract: CONTRACT_VERSION, generated: new Date().toISOString(), fixtures: out }, null, 1));
 fs.writeFileSync('docs/fixtures-ascii.txt', printed.join('\n'));
 console.log(`${out.length} fixtures, ${bad} invalides`);
 if (bad) process.exit(1);

@@ -59,7 +59,7 @@
   "sym.T.bundle": "Dynamite bundle",
   "sym.T.keg": "Blast keg",
   "rules.special.title": "WILD & SCATTER",
-  "rules.wild.text": "Substitutes for every paying symbol and has its own values.",
+  "rules.wild.text": "Substitutes for all symbols except SCATTER and charges, and has its own values.",
   "rules.scatter.text": "At most one per reel. Never destroyed by a blast. Triggers the bonuses.",
   "rules.blast.title": "BLAST & CARVE",
   "rules.blast.text1": "Charges blast before wins are counted, each clearing a square zone:",
@@ -147,5 +147,6 @@
   "welcome.super.title": "FLOODLIGHT SHIFT",
   "welcome.super.body": "4 Scatters: 12 free spins, and every charge in a spin is wired into one single blast.",
   "welcome.max": "Max win {x}× the bet",
-  "welcome.skip": "Don't show again"
+  "welcome.skip": "Don't show again",
+  "replay.badge": "REPLAY"
 }

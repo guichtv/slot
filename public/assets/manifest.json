@@ -1973,7 +1973,143 @@
    "nineSlice": null,
    "family": "identity",
    "visibleFill": 1
+  },
+  "buck.props.box": {
+   "url": "assets/mascot/buck.props.box.webp",
+   "w": 674,
+   "h": 768,
+   "source": "assets/generated/mascot/buck-props.png",
+   "sourceHash": "8c656e6f3e00a783",
+   "frame": {
+    "x": 5,
+    "y": 182,
+    "w": 674,
+    "h": 768
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.props.handle": {
+   "url": "assets/mascot/buck.props.handle.webp",
+   "w": 406,
+   "h": 742,
+   "source": "assets/generated/mascot/buck-props.png",
+   "sourceHash": "8c656e6f3e00a783",
+   "frame": {
+    "x": 672,
+    "y": 149,
+    "w": 406,
+    "h": 742
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.props.stick": {
+   "url": "assets/mascot/buck.props.stick.webp",
+   "w": 226,
+   "h": 436,
+   "source": "assets/generated/mascot/buck-props.png",
+   "sourceHash": "8c656e6f3e00a783",
+   "frame": {
+    "x": 1075,
+    "y": 393,
+    "w": 226,
+    "h": 436
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.props.match": {
+   "url": "assets/mascot/buck.props.match.webp",
+   "w": 106,
+   "h": 233,
+   "source": "assets/generated/mascot/buck-props.png",
+   "sourceHash": "8c656e6f3e00a783",
+   "frame": {
+    "x": 1361,
+    "y": 566,
+    "w": 106,
+    "h": 233
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "sym.H1.full": {
+   "url": "assets/symbols/sym.H1.full.webp",
+   "w": 320,
+   "h": 302,
+   "source": "composite:sym.H1.body",
+   "frame": null,
+   "scale": 1,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "symbols",
+   "ui": true
+  },
+  "sym.H2.full": {
+   "url": "assets/symbols/sym.H2.full.webp",
+   "w": 254,
+   "h": 320,
+   "source": "composite:sym.H2.body",
+   "frame": null,
+   "scale": 1,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "symbols",
+   "ui": true
+  },
+  "sym.H3.full": {
+   "url": "assets/symbols/sym.H3.full.webp",
+   "w": 270,
+   "h": 320,
+   "source": "composite:sym.H3.body",
+   "frame": null,
+   "scale": 1,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "symbols",
+   "ui": true
+  },
+  "sym.H4.full": {
+   "url": "assets/symbols/sym.H4.full.webp",
+   "w": 320,
+   "h": 311,
+   "source": "composite:sym.H4.body",
+   "frame": null,
+   "scale": 1,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "symbols",
+   "ui": true
+  },
+  "sym.W.full": {
+   "url": "assets/symbols/sym.W.full.webp",
+   "w": 270,
+   "h": 320,
+   "source": "composite:sym.W.body",
+   "frame": null,
+   "scale": 1,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "symbols",
+   "ui": true
+  },
+  "sym.S.full": {
+   "url": "assets/symbols/sym.S.full.webp",
+   "w": 320,
+   "h": 319,
+   "source": "composite:sym.S.body",
+   "frame": null,
+   "scale": 1,
+   "pivot": null,
+   "nineSlice": null,
+   "family": "symbols",
+   "ui": true
   }
  },
- "generatedAt": "2026-09-28T11:42:48.548Z"
+ "generatedAt": "2026-09-28T11:49:32.452Z"
 }

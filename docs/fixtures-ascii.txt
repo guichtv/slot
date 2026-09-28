@@ -342,7 +342,7 @@
  H2  H4  S   L3  H4 
  L4  H1  H3  L1  L2 
 
-==== F14 (BASE) anticipation réussie -> bonus standard : explosions, multiplicateur x6, relance +5 (15 FS)
+==== F14 (BASE) anticipation réussie -> bonus standard : explosions, Cornerstone ×26, relance +5 (15 FS)
 -- F14 reveal
  L2  H3  S   L4  H2 
  H4  L1  L3  H3  L4 
@@ -596,7 +596,7 @@
  H2  S   L3  L1  L1 
  L4  L4  L2  L1  L1 
 
-==== F15 (BASE) déclenchement du super bonus (4 Scatters), 12 FS : fagots et caisse, multiplicateur x5, anticipation ratée au 10e tour
+==== F15 (BASE) déclenchement du super bonus (4 Scatters), 12 FS : fagots et caisse, Cornerstone ×44, anticipation ratée au 10e tour
 -- F15 reveal
  L2  H4  L1  S   H3 
  S   L1  H2  L3  L4 
@@ -796,7 +796,7 @@
  L4  L3  H4  H4  H4 
  L4  H2  H3  L2  L1 
 
-==== F16 (BONUS) achat bonus : 3 Scatters, 10 FS complets, multiplicateur x5
+==== F16 (BONUS) achat bonus : 3 Scatters, 10 FS complets, Cornerstone ×22
 -- F16 reveal
  H2  L3  S   L4  H1 
  L4  H1  L1  H3  L2 
@@ -996,7 +996,7 @@
  L2  L2  H2  L3  L2 
  L4  L1  H4  S   L3 
 
-==== F17 (SUPER) achat super bonus : 4 Scatters, 12 FS, fagots et caisse, multiplicateur x5
+==== F17 (SUPER) achat super bonus : 4 Scatters, 12 FS, fagots et caisse, Cornerstone ×44
 -- F17 reveal
  H1  L1  L4  S   L3 
  L3  S   H2  H1  H4 
@@ -1480,7 +1480,7 @@
  H2  L4  L1  L3  L3 
  L2  H1  L4  S   H2 
 
-==== F25 (BONUS) achat bonus : baril 4x4 H1 sous multiplicateur x3, palier x1000
+==== F25 (BONUS) achat bonus : baril 4x4 H1 sous Cornerstone ×21, palier x1000
 -- F25 reveal
  L1  S   H3  L2  H4 
  H4  H2  L2  L4  H1 
@@ -1632,7 +1632,7 @@
  H3  L1  L4  H2  S  
  H1  L2  L3  H2  L4 
 
-==== F26 (SUPER) MAX WIN : baril H1 4x4 + 4 H1 au rouleau 5 (1024 ways) sous x5 -> plafond x25000
+==== F26 (SUPER) MAX WIN : baril H1 4x4 + 4 H1 au rouleau 5 (1024 ways) sous Cornerstone ×44 -> plafond x25000
 -- F26 reveal
  L4  H1  S   H2  L1 
  H2  L3  L2  S   H3 
@@ -1827,3 +1827,273 @@
  L2  L4  H2  L1  L3 
  H4  L1  L4  H3  H2 
  L3  H3  S   L4  H4 
+
+==== F31 (BASE) chaîne de 2 : le bâton prend le fagot dans sa zone -> UN géant H4 3x4 (rectangle englobant), 64 ways (x16)
+-- F31 reveal
+ T   H2  L4  L1  H3 
+ L2  T   H1  L3  L4 
+ H1  L4  L2  H2  L1 
+ L3  H3  L1  L4  S  
+ L1  L3  L2  H1  H2 
+-- F31 blast stick @0,0
+ T   H2  L4  L1  H3 
+ L2  T   H1  L3  L4 
+ H1  L4  L2  H2  L1 
+ L3  H3  L1  L4  S  
+ L1  L3  L2  H1  H2 
+-- F31 blast bundle @1,1 (lien 1)
+ T   H2  L4  L1  H3 
+ L2  T   H1  L3  L4 
+ H1  L4  L2  H2  L1 
+ L3  H3  L1  L4  S  
+ L1  L3  L2  H1  H2 
+-- F31 carve -> H4 3x4
+ H4  H4  H4  L1  H3 
+ H4  H4  H4  L3  L4 
+ H4  H4  H4  H2  L1 
+ H4  H4  H4  L4  S  
+ L1  L3  L2  H1  H2 
+-- F31 wins H4x3=1600
+[H4][H4][H4] L1  H3 
+[H4][H4][H4] L3  L4 
+[H4][H4][H4] H2  L1 
+[H4][H4][H4] L4  S  
+ L1  L3  L2  H1  H2 
+-- F31 tumble
+ H2  L2  H3  L1  H3 
+ L4  H3  L1  L3  L4 
+ H1  L4  H1  H2  L1 
+ L3  H2  L2  L4  S  
+ L1  L3  L2  H1  H2 
+
+==== F32 (BASE) chaîne de 3 : bâton -> fagot -> baril, géant L4 5x5 sur toute la grille, 3125 ways (x937,50)
+-- F32 reveal
+ H3  T   L2  H1  L3 
+ T   L1  H4  L2  H2 
+ L2  H2  L3  T   L1 
+ H1  L4  H2  L1  H4 
+ L3  H4  L1  H3  L2 
+-- F32 blast stick @0,1
+ H3  T   L2  H1  L3 
+ T   L1  H4  L2  H2 
+ L2  H2  L3  T   L1 
+ H1  L4  H2  L1  H4 
+ L3  H4  L1  H3  L2 
+-- F32 blast bundle @1,0 (lien 1)
+ H3  T   L2  H1  L3 
+ T   L1  H4  L2  H2 
+ L2  H2  L3  T   L1 
+ H1  L4  H2  L1  H4 
+ L3  H4  L1  H3  L2 
+-- F32 blast keg @3,2 (lien 2)
+ H3  T   L2  H1  L3 
+ T   L1  H4  L2  H2 
+ L2  H2  L3  T   L1 
+ H1  L4  H2  L1  H4 
+ L3  H4  L1  H3  L2 
+-- F32 carve -> L4 5x5
+ L4  L4  L4  L4  L4 
+ L4  L4  L4  L4  L4 
+ L4  L4  L4  L4  L4 
+ L4  L4  L4  L4  L4 
+ L4  L4  L4  L4  L4 
+-- F32 wins L4x5=93750
+[L4][L4][L4][L4][L4]
+[L4][L4][L4][L4][L4]
+[L4][L4][L4][L4][L4]
+[L4][L4][L4][L4][L4]
+[L4][L4][L4][L4][L4]
+-- F32 tumble
+ H1  L3  L2  H1  L1 
+ L2  H4  H2  L4  H3 
+ H3  L4  L3  H2  L2 
+ L1  H1  H3  L3  H4 
+ H2  L3  L1  H4  L4 
+
+==== F33 (SUPER) achat super bonus : charges reliées (wired) en une seule explosion, Cornerstone +1 par case (×10 -> ×25 -> ×45), relance 2 Scatters +2 (14 FS)
+-- F33 reveal
+ L3  S   H1  L2  H4 
+ H2  L4  L1  S   L3 
+ S   H3  L2  H1  L1 
+ L1  H1  H4  L4  S  
+ H4  L2  L3  H3  L2 
+-- F33 reveal
+ H2  L1  L3  H4  L2 
+ L4  H3  H1  L2  H1 
+ H1  L2  L4  L3  S  
+ L3  H4  H2  H1  L4 
+ L2  L1  H3  L4  H3 
+-- F33 reveal
+ L1  L3  H4  L2  H1 
+ L4  H3  L2  H1  L3 
+ H1  T   L3  L4  L2 
+ L2  L1  H1  L3  H4 
+ H3  L4  L1  H4  S  
+-- F33 blast bundle @1,2
+ L1  L3  H4  L2  H1 
+ L4  H3  L2  H1  L3 
+ H1  T   L3  L4  L2 
+ L2  L1  H1  L3  H4 
+ H3  L4  L1  H4  S  
+-- F33 carve -> H2 3x3
+ L1  L3  H4  L2  H1 
+ H2  H2  H2  H1  L3 
+ H2  H2  H2  L4  L2 
+ H2  H2  H2  L3  H4 
+ H3  L4  L1  H4  S  
+-- F33 wins H2x3=10800
+ L1  L3  H4  L2  H1 
+[H2][H2][H2] H1  L3 
+[H2][H2][H2] L4  L2 
+[H2][H2][H2] L3  H4 
+ H3  L4  L1  H4  S  
+-- F33 tumble
+ H4  H2  L3  L2  H1 
+ L2  H1  H3  H1  L3 
+ H1  L2  L4  L4  L2 
+ L1  L3  H4  L3  H4 
+ H3  L4  L1  H4  S  
+-- F33 reveal
+ L4  H1  H2  L3  H2 
+ H3  L2  H4  L1  L4 
+ L1  H2  L3  H3  L1 
+ H4  L4  H1  L2  H1 
+ L2  L3  L1  H1  S  
+-- F33 reveal
+ H1  L2  H3  L1  H4 
+ T   H4  L2  H2  T  
+ L3  H1  L1  H3  L2 
+ H2  L3  H4  L1  H3 
+ L1  H2  S   H4  L2 
+-- F33 blast bundle @0,1
+ H1  L2  H3  L1  H4 
+ T   H4  L2  H2  T  
+ L3  H1  L1  H3  L2 
+ H2  L3  H4  L1  H3 
+ L1  H2  S   H4  L2 
+-- F33 blast bundle @4,1 (lien 1)
+ H1  L2  H3  L1  H4 
+ T   H4  L2  H2  T  
+ L3  H1  L1  H3  L2 
+ H2  L3  H4  L1  H3 
+ L1  H2  S   H4  L2 
+-- F33 carve -> L4 5x3
+ L4  L4  L4  L4  L4 
+ L4  L4  L4  L4  L4 
+ L4  L4  L4  L4  L4 
+ H2  L3  H4  L1  H3 
+ L1  H2  S   H4  L2 
+-- F33 wins L4x5=182250
+[L4][L4][L4][L4][L4]
+[L4][L4][L4][L4][L4]
+[L4][L4][L4][L4][L4]
+ H2  L3  H4  L1  H3 
+ L1  H2  S   H4  L2 
+-- F33 tumble
+ H3  L4  L3  H2  L1 
+ L2  H1  H3  L4  H4 
+ H1  L1  L2  H1  L3 
+ H2  L3  H4  L1  H3 
+ L1  H2  S   H4  L2 
+-- F33 reveal
+ H3  L4  L4  S   L3 
+ L2  H1  H3  L4  H4 
+ H4  L3  L2  L1  H1 
+ L1  H2  H4  H3  L2 
+ L3  L1  H1  L2  H2 
+-- F33 reveal
+ L2  H4  H1  L3  H3 
+ H3  L1  L2  H2  L4 
+ L4  L2  H4  L1  H1 
+ H1  H3  L3  L4  S  
+ L3  L4  H2  H1  L1 
+-- F33 wins L2x3=250
+[L2] H4  H1  L3  H3 
+ H3  L1 [L2] H2  L4 
+ L4 [L2] H4  L1  H1 
+ H1  H3  L3  L4  S  
+ L3  L4  H2  H1  L1 
+-- F33 tumble
+ H2  L2  L1  L3  H3 
+ H3  H4  H1  H2  L4 
+ L4  L1  H4  L1  H1 
+ H1  H3  L3  L4  S  
+ L3  L4  H2  H1  L1 
+-- F33 reveal
+ L1  S   L3  H2  L4 
+ H4  L2  H1  L4  H3 
+ S   H3  L4  L1  L2 
+ L3  H1  H2  H3  H1 
+ H2  L4  L2  H4  L3 
+-- F33 reveal
+ H1  L3  L2  H4  L1 
+ L2  H2  H4  L3  H2 
+ H3  L4  H1  H2  L3 
+ L4  L1  H3  L2  H4 
+ H2  H4  L1  S   L2 
+-- F33 reveal
+ L2  H3  L1  L4  T  
+ H2  L4  H4  L1  L3 
+ L3  L2  H2  H3  H4 
+ S   T   L3  L2  L1 
+ L4  H4  L2  H3  H2 
+-- F33 blast bundle @4,0
+ L2  H3  L1  L4  T  
+ H2  L4  H4  L1  L3 
+ L3  L2  H2  H3  H4 
+ S   T   L3  L2  L1 
+ L4  H4  L2  H3  H2 
+-- F33 blast keg @1,3 (lien 1)
+ L2  H3  L1  L4  T  
+ H2  L4  H4  L1  L3 
+ L3  L2  H2  H3  H4 
+ S   T   L3  L2  L1 
+ L4  H4  L2  H3  H2 
+-- F33 carve -> H1 4x5
+ L2  H1  H1  H1  H1 
+ H2  H1  H1  H1  H1 
+ L3  H1  H1  H1  H1 
+ S   H1  H1  H1  H1 
+ L4  H1  H1  H1  H1 
+-- F33 reveal
+ L3  H2  L4  H1  L2 
+ H1  L1  H4  L3  H4 
+ L4  H4  L2  H2  L1 
+ H3  L2  H2  L4  S  
+ L1  H3  L3  L2  H1 
+-- F33 reveal
+ H4  L1  H4  L2  L3 
+ L3  H4  L2  H1  H2 
+ L1  H2  L4  L3  L1 
+ H4  L3  H1  L4  H3 
+ H2  L4  H3  S   L2 
+-- F33 wins H4x3=2250
+[H4] L1 [H4] L2  L3 
+ L3 [H4] L2  H1  H2 
+ L1  H2  L4  L3  L1 
+[H4] L3  H1  L4  H3 
+ H2  L4  H3  S   L2 
+-- F33 tumble
+ H1  H3  L4  L2  L3 
+ L2  L1  L2  H1  H2 
+ L3  H2  L4  L3  L1 
+ L1  L3  H1  L4  H3 
+ H2  L4  H3  S   L2 
+-- F33 reveal
+ H2  L4  H3  L1  H1 
+ L1  H1  L3  H4  L4 
+ L3  L2  H2  L2  H3 
+ H4  L1  L4  H3  L2 
+ L2  H3  H1  L3  S  
+-- F33 reveal
+ L4  H1  L1  H3  L3 
+ H3  L3  H2  L2  H1 
+ L2  H4  L4  H1  L4 
+ H1  L2  H4  L4  H2 
+ L3  H3  H2  H2  S  
+-- F33 reveal
+ H4  L2  H1  L3  H2 
+ L3  H3  L4  H2  L1 
+ H1  L1  H3  L4  H4 
+ L2  H2  L1  H1  L3 
+ S   L4  H2  L2  H1 

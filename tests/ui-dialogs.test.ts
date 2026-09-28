@@ -51,4 +51,13 @@ describe('RGS error mapping', () => {
     expect(errorActions(mapRgsError({ code: 'ERR_IS' }))).toEqual(['reload']);
     expect(errorActions(mapRgsError({ code: 'ERR_BR' }))).toEqual(['dismiss']);
   });
+
+  it('never offers RETRY when the bet outcome is uncertain (the round is checked instead)', () => {
+    expect(errorActions(mapRgsError(new RgsError('ERR_GEN', 503, true)))).toEqual(['dismiss']);
+    expect(errorActions(mapRgsError(new RgsError('ERR_TF', 500, true)))).toEqual(['dismiss']);
+    expect(errorActions(mapRgsError(new RgsError('BAD_RESPONSE', 200, true)))).toEqual(['dismiss']);
+    // lost connection: RETRY re-runs the check once the network is back
+    expect(errorActions(mapRgsError(new RgsError('NETWORK', 0, true)))).toEqual(['retry', 'dismiss']);
+    expect(errorActions(mapRgsError(new RgsError('ERR_IS', 401, true)))).toEqual(['reload']);
+  });
 });

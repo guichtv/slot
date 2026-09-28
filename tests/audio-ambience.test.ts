@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { birdSong, cricketPulses, fillNoise, gap, woodpeckerHits } from '../src/audio/ambience';
+import { birdSong, cricketPulses, fillNoiseSteps, gap, gooseCalls, woodpeckerHits } from '../src/audio/ambience';
 import { mulberry32 } from '../src/audio/music';
+
+/** calcule tout le bruit (toutes les tranches) */
+function fillNoise(out: Float32Array, color: 'white' | 'pink' | 'brown', rng: () => number, chunk?: number): number {
+  let slices = 0;
+  for (const _ of fillNoiseSteps(out, color, rng, chunk)) slices++;
+  return slices;
+}
 
 describe('ambience generators', () => {
   it('bird songs stay in a natural whistle range, in order, bounded volume', () => {
@@ -23,6 +30,30 @@ describe('ambience generators', () => {
         }
         expect(song[song.length - 1]!.t).toBeLessThan(2);
       }
+    }
+  });
+
+  it('geese calls: several voices, honk-length calls in order, a few seconds long', () => {
+    const rng = mulberry32(12);
+    for (let k = 0; k < 40; k++) {
+      const calls = gooseCalls(rng);
+      expect(calls.length).toBeGreaterThanOrEqual(7);
+      expect(calls.length).toBeLessThanOrEqual(12);
+      let prev = -1;
+      for (const c of calls) {
+        expect(c.t).toBeGreaterThan(prev);
+        prev = c.t;
+        expect(c.f).toBeGreaterThan(280);
+        expect(c.f).toBeLessThan(460);
+        expect(c.dur).toBeGreaterThanOrEqual(0.13);
+        expect(c.dur).toBeLessThanOrEqual(0.21);
+        expect(c.vol).toBeGreaterThan(0);
+        expect(c.vol).toBeLessThanOrEqual(1);
+      }
+      expect(calls[calls.length - 1]!.t).toBeLessThan(7);
+      // plusieurs individus : au moins deux hauteurs nettement distinctes
+      const fs = calls.map((c) => c.f);
+      expect(Math.max(...fs) / Math.min(...fs)).toBeGreaterThan(1.02);
     }
   });
 
@@ -75,6 +106,17 @@ describe('ambience generators', () => {
     expect(lag1(p)).toBeGreaterThan(lag1(w));
     // bouclage : fin raccordée au début
     expect(Math.abs(b[b.length - 1]! - b[959]!)).toBeLessThan(0.05);
+  });
+
+  it('noise computed in small slices is identical to one pass', () => {
+    for (const color of ['pink', 'brown'] as const) {
+      const whole = new Float32Array(100_000);
+      const sliced = new Float32Array(100_000);
+      expect(fillNoise(whole, color, mulberry32(5), 1e9)).toBe(2);
+      // 4 tranches de calcul + 2 de normalisation : jamais plus de 32 768 échantillons d'un coup
+      expect(fillNoise(sliced, color, mulberry32(5), 32768)).toBe(6);
+      expect(Array.from(sliced)).toEqual(Array.from(whole));
+    }
   });
 
   it('gap stays within bounds', () => {

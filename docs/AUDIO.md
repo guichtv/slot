@@ -41,7 +41,9 @@ lieu de rejouer toutes les notes d'un coup.
 
 **Changements d'humeur** : fondu enchaîné d'égale puissance de **2 s**, calé sur le prochain temps de la piste
 en cours. Chaque humeur garde son compositeur : revenir au jeu de base reprend la forme là où elle en était,
-sur une nouvelle section A.
+sur une nouvelle section A. Un aller-retour rapide (ou une relance pendant un arrêt en fondu) ramène la piste
+encore en fondu au lieu d'en créer une seconde : deux pistes ne tirent jamais leurs mesures du même
+compositeur. Un fondu demandé pendant un autre fondu repart de la valeur courante (pas de saut de niveau).
 
 **Couche de tension** (anticipation, `music.setTension(on)`, aussi exposée par `tension()` de `sfx.ts`) :
 le groove est filtré (passe-bas qui descend à 850 Hz), un bourdon de dents de scie (tonique, quinte, octave)
@@ -49,15 +51,17 @@ monte de deux demi-tons en 4,5 s derrière un filtre qui s'ouvre, et une pulsati
 battement sourd sur les temps) suit exactement le tempo de l'humeur en cours. Sortie sur le bus effets
 (retour de jeu important même si la musique est baissée).
 
-**API**
+**API** (aucun appel ne lève d'exception : un incident audio est signalé une fois en console et le jeu continue)
 
 ```ts
-music.start(mood?)          // attend l'activation audio si nécessaire
+music.start(mood?)          // attend l'activation audio si nécessaire ; déjà lancée : équivaut à setMood(mood)
 music.setMood('base' | 'bonus' | 'super')
-music.setTension(on)
-music.pause(p)              // pause musicale (menus) ; l'onglet masqué est géré par la suspension du moteur
+music.setTension(on)        // fonctionne aussi sans musique lancée ; jamais deux couches superposées
+music.pause(p)              // pause musicale du jeu ; l'onglet masqué est géré par la suspension du moteur
 music.stop(fadeMs = 1200)
 ```
+
+Ne pas mettre la musique en pause à l'ouverture du menu : le joueur y règle les volumes et doit l'entendre.
 
 ## 3. Ambiances (`ambience.ts`, bus ambience)
 
@@ -67,11 +71,15 @@ music.stop(fadeMs = 1200)
 | `bonus` | rivière lointaine, vent grave, insectes de nuit, grillons (3, porteuses sinus en impulsions, silences aléatoires) | hululement de chouette, plainte du huard (plongeon) sur le lac (25-60 s) |
 | `super` | idem nuit + **groupe électrogène** lointain (ronflement 58 Hz, battement du moteur, légère dérive de régime) et grésillement des projecteurs | hululement |
 
-Événements rares ponctuels (décor) : `ambience.event('distantBlast' | 'birds' | 'woodpecker' | 'sparks' | 'loon' | 'owl')`.
-`distantBlast` : boum grave filtré, écho sur la montagne à 0,55 s, grondement, petits débris. `birds` : envol
-(battements d'ailes qui traversent la stéréo) et cris. Fondu de 2 s entre les lits.
+Événements rares ponctuels (décor) : `ambience.event('distantBlast' | 'birds' | 'woodpecker' | 'sparks' | 'loon' | 'owl', dir?)`.
+`distantBlast` : boum grave filtré, écho sur la montagne à 0,55 s, grondement, petits débris. `birds` accompagne
+le **vol d'oies en V** du décor : 7 à 12 cris nasillards « ha-onk » de 3 à 5 individus (dent de scie, formant
+vers 1,1 kHz, montée puis chute de hauteur), sur ~3 s, qui entrent du côté d'où vient le vol et traversent la
+stéréo dans son sens (`dir` : 1 = vers la droite, -1 = vers la gauche). Crête -27 dBFS, soit ~4,5 dB au-dessus
+du lit de rivière dans leur bande : audibles sans couvrir le jeu. Fondu de 2 s entre les lits.
 
-API : `ambience.start(mood?)`, `setMood`, `event`, `pause`, `stop(fadeMs)`.
+API : `ambience.start(mood?)` (déjà lancées : équivaut à `setMood`), `setMood`, `event`, `pause`, `stop(fadeMs)` ;
+aucun appel ne lève d'exception.
 
 ## 4. Effets (`sfx.ts`)
 
@@ -130,8 +138,9 @@ explosions baissent la musique via `audio.duckMusic`.
 - nappes, sifflet (sinus, glissé d'attaque, vibrato, souffle filtré), harmonica (onde périodique à anches,
   trémolo), tension, tous les effets et toutes les ambiances : **oscillateurs et bruits filtrés Web Audio** en temps
   réel ;
-- bruits blanc / rose (Paul Kellet) / brun générés par un générateur pseudo-aléatoire à graine ; réverbération :
-  réponse impulsionnelle synthétique du moteur (bruit à décroissance exponentielle).
+- bruits blanc / rose (Paul Kellet) / brun générés par un générateur pseudo-aléatoire à graine, par tranches de
+  32 768 échantillons pendant le temps libre du navigateur ; réverbération : réponse impulsionnelle synthétique
+  du moteur (bruit à décroissance exponentielle).
 
 ## 6. Mixage
 
@@ -146,11 +155,30 @@ explosions baissent la musique via `audio.duckMusic`.
   -6,8), bonus -27,6 (crête -11,2), super -24,5 (crête -8,8) ; ambiances -33 à -35 dBFS RMS ; mix complet d'une
   manche (musique + ambiance + effets, explosion, palier, déclenchement, gain maximal) : crête -3,1 dBFS,
   **0 échantillon écrêté**. Étalonnage des effets : table `TRIM` de `sfx.ts`.
-- **Coût** (rendu hors ligne Chromium, un cœur de ce conteneur) : musique base ≈ 4,5 % du temps réel, bonus et
-  super ≈ 5,6 %, ambiance ≈ 4 %. Mémoire des tampons pré-rendus : de l'ordre de 12 à 16 Mo au pire (générés à la
-  demande, cordes graves et cuivres à demi-fréquence d'échantillonnage).
+- **Coût du rendu audio** (rendu hors ligne Chromium, un cœur libre de ce conteneur) : musique base ≈ 4,5 % du
+  temps réel, bonus et super ≈ 5,6 %, ambiance ≈ 4 %. Sur machine chargée, ces chiffres montent d'autant ; la
+  revue a comparé l'ancien et le nouveau code sous la même charge : aucune différence. Mémoire des tampons
+  pré-rendus : de l'ordre de 12 à 16 Mo au pire (cordes graves et cuivres à demi-fréquence d'échantillonnage).
+- **Fil principal** : aucun calcul lourd dans le geste d'activation ni au moment d'un gros gain. Les
+  réverbérations des modules (préparation de la convolution), les ~15 s de bruit des ambiances et les tampons
+  des voix (percussions, cuivres du super bonus et des fanfares, banjo aigu) sont calculés un par un pendant le
+  temps libre du navigateur (`whenIdle`, `prewarm` dans `music.ts`) ; le lit d'ambiance démarre dès que ses
+  bruits sont prêts (moins d'une seconde). Mesures Chromium : `music.start` 10-23 ms → 1-2 ms, `ambience.start`
+  60-100 ms → < 0,5 ms, premier gain maximal 110-170 ms → 2-3 ms. Restent ~30-90 ms dans `audio.unlock()`
+  du moteur (réponse impulsionnelle calculée avec une puissance par échantillon, convolution préparée dans le
+  geste) : à reporter sur le moteur de la même façon. Les rendus de cuivres et de percussions ont été
+  optimisés (récurrences au lieu de puissances et d'exponentielles par échantillon ; couches arrêtées à -100 dB) :
+  ~2 ms par note de cuivres au lieu de ~18, résultat identique (écart < 2·10⁻⁶).
+- **Planificateurs** : aucune allocation par passage (tableaux réutilisés, pistes et lits terminés retirés sur
+  place).
 - **Activation / pause** : aucun son avant la première interaction ; un effet demandé avant n'est jamais rejoué.
-  Onglet masqué ou pause du jeu : le moteur suspend le contexte, la musique reprend là où elle était.
+  Onglet masqué ou pause du jeu : le moteur suspend le contexte, la musique reprend là où elle était. En
+  sourdine, `sfx()` et `ambience.event()` ne créent aucun nœud ; l'intégration suspend en plus le contexte
+  200 ms après la mise en sourdine (plus aucun calcul audio) et le relance au retour du son.
+- **Réglages du menu** : le menu a trois curseurs (général, musique, effets) dont les valeurs par défaut
+  (0,8 / 0,7 / 0,9) doivent tomber sur les volumes étalonnés du moteur (0,8 / 0,55 / 0,85) : l'intégration
+  multiplie donc musique par 0,55/0,7 et effets par 0,85/0,9 ; l'ambiance suit le curseur des effets
+  (0,6/0,9). Sans ce facteur, la musique serait ~4 dB plus forte que le mixage mesuré.
 
 ## 7. Vérifications effectuées
 
@@ -159,11 +187,17 @@ explosions baissent la musique via `audio.duckMusic`.
   aucune répétition de 8 mesures sur 480, toutes les notes dans la tonalité (ré# seulement sur B7), instruments
   par humeur, tempos, marches de basse, Karplus-Strong (accord mesuré par autocorrélation, décroissance, bornes),
   percussions et cuivres pré-rendus.
-- `tests/audio-ambience.test.ts` : chants d'oiseaux, tambourinage, impulsions de grillons, couleurs de bruit
-  (normalisation, spectre, bouclage sans clic).
+- `tests/audio-ambience.test.ts` : chants d'oiseaux, cris d'oies, tambourinage, impulsions de grillons, couleurs
+  de bruit (normalisation, spectre, bouclage sans clic, calcul par tranches identique au calcul d'un seul tenant).
+- `tests/audio-music.test.ts` vérifie aussi que la liste de pré-calcul contient toutes les notes de cuivres que le
+  super bonus peut jouer.
 - `tests/audio-render.test.ts` : faux AudioContext qui applique les règles qui lèvent des exceptions dans les
   navigateurs (rampe exponentielle vers 0, start/stop invalides, valeurs non finies) : chaque effet, la musique
-  (fenêtre d'avance respectée, fondus, tension, pause, arrêt, humeur changée pendant la pause) et les ambiances.
+  (fenêtre d'avance respectée, fondus, tension, pause, arrêt, humeur changée pendant la pause) et les ambiances ;
+  robustesse : `start(mood)` sur un moteur lancé, aller-retour d'humeur sans piste doublée, relance pendant
+  l'arrêt, tension sans musique (jamais empilée, planificateur libéré), aucune exception transmise au jeu même
+  si la création d'un nœud échoue, silence en sourdine, oies qui suivent le sens du vol, lit d'ambiance hors du
+  geste d'activation, toutes les voix des fanfares pré-calculées (aucun tampon calculé au premier gain maximal).
 - **Rendu réel hors ligne** (Chromium sans interface, `OfflineAudioContext`, moteur réel) : sonies et crêtes
   ci-dessus, absence de NaN et d'écrêtage, spectrogrammes inspectés (rolls de banjo, sifflet avec vibrato,
   battements de pied sur 1 et 3, fondus entre humeurs, couche de tension) ; hauteurs des Scatters mesurées :
@@ -181,4 +215,8 @@ explosions baissent la musique via `audio.duckMusic`.
   médium, mais non contrôlée sur appareil) ;
 - Safari / iOS (activation, `webkitAudioContext`, reprise après interruption), Firefox, et le coût CPU réel sur
   mobile d'entrée de gamme (mesuré seulement ici, sur un cœur de serveur) ;
-- la synchronisation fine des effets avec les animations (dépend des appels du présentateur).
+- la synchronisation fine des effets avec les animations (dépend des appels du présentateur) ;
+- le caractère des cris d'oies (timbre nasillard synthétique) face au dessin du vol.
+- Les effets à crépitements et bruits aléatoires (`crack`, `tumble`, `blast`, `multUp`, `buyOpen`) varient de
+  1 à 4 dB d'un passage à l'autre (mesuré sur trois rendus) : la table `TRIM` a été réglée sur un seul tirage
+  (`crack` mesuré entre -15,5 et -18 dB pour -15 visé ; les fanfares, elles, restent à 0,1 dB près).

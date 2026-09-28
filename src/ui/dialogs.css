@@ -22,6 +22,7 @@
   --cf-veil: rgba(14, 9, 6, 0.38);
   font-family: var(--font-ui);
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
   color: var(--cf-cream);
   -webkit-tap-highlight-color: transparent;
 }
@@ -154,9 +155,10 @@
   background: var(--cf-ico-plus) center / contain no-repeat;
   transform: rotate(45deg);
 }
-.cf-close:hover { filter: brightness(1.14); }
-.cf-close.is-pressed, .cf-close:active { transform: translateY(2px) scale(0.93); filter: brightness(0.9); }
+.cf-close:hover:not(:disabled) { filter: brightness(1.14); }
+.cf-close.is-pressed:not(:disabled), .cf-close:active:not(:disabled) { transform: translateY(2px) scale(0.93); filter: brightness(0.9); }
 .cf-close:focus-visible { outline: 3px solid var(--cf-focus-ring); outline-offset: 3px; }
+.cf-close:disabled { cursor: default; filter: grayscale(0.75) brightness(0.72); }
 
 /* ---------- segments (choix exclusifs) ---------- */
 .cf-seg {
@@ -376,4 +378,41 @@
   :root:not([data-motion='full']) .cf-balance-alert { animation: none; }
   :root:not([data-motion='full']) .cf-switch-knob,
   :root:not([data-motion='full']) .cf-switch-track { transition: none; }
+}
+
+
+/* ---------- surfaces illustrées (ImageGen) : aucun panneau dessiné en CSS ----------
+   Cadre de bois cerclé d'acier (scr.card) en 9-slice pour le menu, l'achat et les dialogues ;
+   planche à embouts (ui.btn.plaque) pour l'encart Ante. */
+.cf-ui .cf-panel,
+.cf-ui .dlg-panel,
+.cf-ui .bm-confirm {
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  border: 30px solid transparent;
+  border-image: var(--cf-card) 112 fill / 30px stretch;
+  color: var(--cf-cream);
+}
+.cf-ui .dlg-panel,
+.cf-ui .bm-confirm {
+  padding: 4px 6px 6px;
+}
+.cf-ui .dlg-panel :is(h2, h3, p, span, div),
+.cf-ui .bm-confirm :is(h2, p, span) {
+  color: inherit;
+}
+.cf-ui .dlg-panel .cf-btn,
+.cf-ui .bm-confirm .cf-btn {
+  color: var(--cf-cream);
+}
+.cf-ui.ante .ante-btn {
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  border: 0 solid transparent;
+  border-width: 0 34px;
+  border-image: var(--cf-plaque) 0 70 fill / 0 34px stretch;
+  padding-left: 4px;
+  padding-right: 4px;
 }

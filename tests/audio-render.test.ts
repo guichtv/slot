@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { audio } from '../src/audio/engine';
-import { music, LOOKAHEAD_S } from '../src/audio/music';
+import { flushIdle, music, Music, LOOKAHEAD_S } from '../src/audio/music';
 import { ambience } from '../src/audio/ambience';
 import { SFX_NAMES, scatterSemis, quantizePitch, sfx, tension } from '../src/audio/sfx';
 
@@ -12,6 +12,8 @@ import { SFX_NAMES, scatterSemis, quantizePitch, sfx, tension } from '../src/aud
  */
 class FakeParam {
   maxAbs = 0;
+  /** valeurs programmées (panoramiques seulement : sens des déplacements stéréo) */
+  history: number[] = [];
   constructor(
     public value = 0,
     private kind = 'param',
@@ -24,10 +26,12 @@ class FakeParam {
   }
   setValueAtTime(v: number, t: number) {
     this.note(v, t);
+    if (this.kind === 'pan') this.history.push(v);
     return this;
   }
   linearRampToValueAtTime(v: number, t: number) {
     this.note(v, t);
+    if (this.kind === 'pan') this.history.push(v);
     return this;
   }
   exponentialRampToValueAtTime(v: number, t: number) {
@@ -51,6 +55,8 @@ const stats = {
   gains: [] as Array<{ node: FakeNode; gain: FakeParam }>,
   starts: [] as Array<{ t: number; now: number; kind: string }>,
   maxParam: {} as Record<string, number>,
+  buffers: [] as Array<{ sr: number; len: number }>,
+  panners: [] as Array<{ pan: FakeParam }>,
 };
 
 class FakeNode {
@@ -149,7 +155,9 @@ class FakeCtx {
     return Object.assign(new FakeNode(this), { type: 'lowpass', frequency: new FakeParam(350, 'filterFreq'), Q: new FakeParam(1, 'Q'), gain: new FakeParam(0, 'filterGain') });
   }
   createStereoPanner() {
-    return Object.assign(new FakeNode(this), { pan: new FakeParam(0, 'pan') });
+    const p = Object.assign(new FakeNode(this), { pan: new FakeParam(0, 'pan') });
+    stats.panners.push(p);
+    return p;
   }
   createConvolver() {
     return Object.assign(new FakeNode(this), { buffer: null as unknown });
@@ -159,6 +167,7 @@ class FakeCtx {
   }
   createBuffer(ch: number, len: number, sr: number) {
     if (!(len > 0) || !Number.isInteger(len)) throw new RangeError(`buffer length ${len}`);
+    stats.buffers.push({ sr, len });
     return new FakeBuffer(ch, len, sr);
   }
   createPeriodicWave() {
@@ -174,12 +183,12 @@ class FakeCtx {
 
 const ctx = new FakeCtx();
 
-beforeAll(() => {
-  vi.useFakeTimers();
+/** branche le faux contexte dans un moteur audio, comme le ferait unlock() */
+function install(engine: object): void {
   const g = () => ctx.createGain();
   const reverb = ctx.createConvolver();
   reverb.buffer = ctx.createBuffer(2, 1000, 48000);
-  Object.assign(audio as unknown as Record<string, unknown>, {
+  Object.assign(engine as Record<string, unknown>, {
     ctx,
     master: g(),
     buses: { music: g(), ambience: g(), sfx: g() },
@@ -189,6 +198,11 @@ beforeAll(() => {
     reverb,
     unlocked: true,
   });
+}
+
+beforeAll(() => {
+  vi.useFakeTimers();
+  install(audio);
 });
 
 afterAll(() => {
@@ -288,6 +302,9 @@ describe('ambience', () => {
   it('runs beds for every mood, crossfades and plays rare events', () => {
     const beds = () => (ambience as unknown as { beds: Array<{ mood: string }> }).beds;
     ambience.start('base');
+    expect(beds()).toHaveLength(0); // rien de lourd dans le geste d'activation : bruits calculés en tâche de fond
+    flushIdle();
+    expect(beds().map((b) => b.mood)).toEqual(['base']);
     for (let k = 0; k < 900; k++) {
       ctx.currentTime += 0.1;
       if (k === 300) ambience.setMood('bonus');
@@ -307,5 +324,128 @@ describe('ambience', () => {
       ambience.pump();
     }
     expect(beds().length).toBe(0);
+  });
+});
+
+describe('robustness', () => {
+  const run = (n: number, m: { pump(): void } = music) => {
+    for (let k = 0; k < n; k++) {
+      ctx.currentTime += 0.025;
+      m.pump();
+    }
+  };
+  const tracks = () => (music as unknown as { tracks: Array<{ mood: string; endAt: number | null }> }).tracks;
+
+  it('start(mood) on a running engine changes mood; a quick return revives the fading track', () => {
+    music.start('base');
+    run(80);
+    music.start('bonus'); // déjà lancée : fondu vers bonus (l'humeur n'est plus ignorée)
+    expect(music.currentMood).toBe('bonus');
+    expect(tracks().map((t) => t.mood)).toEqual(['base', 'bonus']);
+    run(8);
+    music.setMood('base'); // retour pendant le fondu : la piste base est ramenée, pas doublée
+    expect(tracks().filter((t) => t.mood === 'base')).toHaveLength(1);
+    expect(tracks().find((t) => t.mood === 'base')?.endAt).toBeNull();
+    run(160);
+    expect(tracks().map((t) => t.mood)).toEqual(['base']);
+    music.stop(300);
+    music.start(); // relance pendant l'arrêt : même piste
+    expect(tracks()).toHaveLength(1);
+    expect(tracks()[0]?.endAt).toBeNull();
+    run(40);
+    music.stop(300);
+    run(60);
+    expect(tracks()).toHaveLength(0);
+  });
+
+  it('tension works without the music running, never stacks, and releases the scheduler', () => {
+    const m = new Music();
+    const priv = m as unknown as { timer: unknown; tension: unknown; retired: unknown[] };
+    m.setTension(true);
+    expect(priv.tension).not.toBeNull();
+    const before = stats.starts.length;
+    run(40, m);
+    expect(stats.starts.length).toBeGreaterThan(before); // pulsation de mèche
+    m.setTension(true); // déjà active : aucune seconde couche
+    m.setTension(false);
+    m.setTension(true); // relance immédiate : l'ancienne couche est retirée proprement
+    m.setTension(false);
+    expect(priv.retired).toHaveLength(2);
+    run(40, m);
+    expect(priv.retired).toHaveLength(0);
+    expect(priv.tension).toBeNull();
+    expect(priv.timer).toBeNull();
+  });
+
+  it('never throws into the game, and stays silent while muted', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const orig = ctx.createOscillator;
+    ctx.createOscillator = () => {
+      throw new Error('node failure');
+    };
+    try {
+      expect(() => sfx('win')).not.toThrow();
+      expect(() => sfx('maxWin')).not.toThrow();
+      expect(() => tension(true)).not.toThrow();
+      expect(() => tension(false)).not.toThrow();
+      expect(() => ambience.event('owl')).not.toThrow();
+    } finally {
+      ctx.createOscillator = orig;
+      warn.mockRestore();
+    }
+    audio.setMuted(true);
+    const before = stats.starts.length;
+    sfx('blast');
+    ambience.event('birds');
+    expect(stats.starts.length).toBe(before);
+    audio.setMuted(false);
+  });
+
+  it('ambience start(mood) on a running engine changes mood; geese follow the flock direction', () => {
+    const beds = () => (ambience as unknown as { beds: Array<{ mood: string }> }).beds;
+    ambience.start('base');
+    run(10, ambience);
+    ambience.start('bonus');
+    expect(ambience.currentMood).toBe('bonus');
+    for (let k = 0; k < 30; k++) {
+      ctx.currentTime += 0.1;
+      ambience.pump();
+    }
+    expect(beds().map((b) => b.mood)).toEqual(['bonus']);
+    for (const dir of [1, -1] as const) {
+      const first = stats.panners.length;
+      ambience.event('birds', dir);
+      const h = stats.panners[first]?.pan.history ?? [];
+      expect(h.length).toBeGreaterThanOrEqual(2);
+      // entre du côté d'où vient le vol, puis se déplace dans son sens
+      expect(Math.sign(h[0]!)).toBe(-dir);
+      expect(Math.sign(h[h.length - 1]! - h[0]!)).toBe(dir);
+    }
+    ambience.stop(200);
+    for (let k = 0; k < 10; k++) {
+      ctx.currentTime += 0.1;
+      ambience.pump();
+    }
+    expect(beds()).toHaveLength(0);
+  });
+
+  it('pre-computes every fanfare voice in idle time once audio is unlocked', async () => {
+    // modules neufs : caches vides, comme au lancement du jeu
+    vi.resetModules();
+    const eng = await import('../src/audio/engine');
+    const fx = await import('../src/audio/sfx');
+    install(eng.audio);
+    // cuivres : 2 s à demi-fréquence d'échantillonnage (seuls tampons de cette forme)
+    const brass = () => stats.buffers.filter((b) => b.sr === ctx.sampleRate / 2 && b.len === ctx.sampleRate).length;
+    const base = brass();
+    const listeners = (eng.audio as unknown as { listeners: Array<() => void> }).listeners;
+    expect(listeners.length).toBeGreaterThan(0); // sfx.ts attend l'activation
+    for (const fn of listeners.splice(0)) fn(); // ce que fait unlock()
+    expect(brass()).toBe(base); // rien de calculé dans le geste d'activation
+    vi.advanceTimersByTime(10_000); // temps libre du navigateur
+    const warmed = brass();
+    expect(warmed - base).toBe(fx.FANFARE_VOICES.filter(([i]) => i === 'brass').length);
+    for (const n of ['anticipationLand', 'trigger', 'retrigger', 'tier', 'maxWin', 'bonusOutro']) fx.sfx(n);
+    expect(brass()).toBe(warmed); // aucune note de fanfare calculée au moment du gain
   });
 });

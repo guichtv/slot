@@ -3,13 +3,14 @@ import './ui/hud.css';
 import './ui/overlays.css';
 import './ui/welcome.css';
 import { gsap } from 'gsap';
+import 'pixi.js/prepare';
 import { clock } from './core/clock';
 import { Beat } from './core/beat';
 import { setMoneyFormat } from './core/money';
 import { parseLaunchParams } from './stake/params';
 import { intlLocale, resolveLang, setLang, t, getLang } from './i18n';
 import { loadMathConfig, modeCost, math } from './config/math';
-import { keys, loadManifest, loadTextures } from './render/assets';
+import { hasTex, keys, loadManifest, loadTextures, sceneKeys, tex } from './render/assets';
 import { createApp } from './render/app';
 import { Scene } from './render/scene';
 import { Cornerstone } from './render/cornerstone';
@@ -18,6 +19,13 @@ import { Hud } from './ui/hud';
 import { Overlays, assetUrl } from './ui/overlays';
 import { CelebrationFx } from './render/celebration';
 import { showWelcome, welcomeSkipped } from './ui/welcome';
+import { GameMenu, type HistoryItem } from './ui/menu';
+import { BuyMenu } from './ui/buy';
+import { AntePanel, anteFromConfig } from './ui/ante';
+import { Dialogs, warmArt } from './ui/dialogs';
+import { music } from './audio/music';
+import { ambience } from './audio/ambience';
+import type { PlayedRound } from './provider/types';
 import { GamePresenter, type Stage } from './controller/presenter';
 import { GameController } from './controller/game';
 import { DemoProvider, type Fixture } from './provider/DemoProvider';
@@ -80,10 +88,14 @@ async function boot(): Promise<void> {
   progress = 0.08;
   await Promise.all([document.fonts.load('40px "Lilita One"'), document.fonts.load('700 20px "Baloo 2"')]).catch(() => undefined);
   progress = 0.12;
-  await loadTextures(keys(), step(0.72));
+  await loadTextures(sceneKeys(), step(0.72));
   progress = 0.84;
   const quality = (localStorage.getItem('bt.quality') as 'high' | 'low' | null) ?? 'high';
   const host = await createApp($('#stage'), quality);
+  // envoi de toutes les textures au GPU pendant le chargement : aucun à-coup au premier bonus ou à la première explosion
+  host.app.renderer.prepare.add(sceneKeys().filter(hasTex).map((k) => tex(k)));
+  await host.app.renderer.prepare.upload();
+  setProgress(0.92);
   const scene = new Scene(host);
   const cornerstone = new Cornerstone();
   const buck = new Buck();
@@ -100,8 +112,12 @@ async function boot(): Promise<void> {
   const m = params.mode;
   if (m.kind === 'stake') provider = new StakeProvider(m.rgsUrl, m.sessionID);
   else if (m.kind === 'replay') provider = new ReplayProvider({ kind: 'stake', rgsUrl: m.rgsUrl, game: m.game, version: m.version, mode: m.mode, event: m.event, ...(m.amount ? { amount: m.amount } : {}), ...(m.currency ? { currency: m.currency } : {}) });
-  else provider = new DemoProvider(await loadFixtures(), { modeCost, seed: params.dev.seed ? Number(params.dev.seed) : undefined });
+  else {
+    provider = new DemoProvider(await loadFixtures(), { modeCost, seed: params.dev.seed ? Number(params.dev.seed) : undefined });
+  }
   const session = await provider.authenticate(getLang());
+  // en local, la latence simulée suit l'horloge de présentation (horloge démarrée plus bas, avant tout tour)
+  if (provider instanceof DemoProvider) provider.wait = (ms) => clock.wait(ms);
   setProgress(1);
   setMoneyFormat({ currency: session.currency, locale: intlLocale() });
 
@@ -109,33 +125,192 @@ async function boot(): Promise<void> {
   const ui = $('#ui');
   const overlays = new Overlays();
   let game!: GameController;
+  let menu!: GameMenu;
+  let buyMenu!: BuyMenu;
+  const replayMode = provider.kind === 'replay';
+  let replayRound: PlayedRound | null = null;
+
+  // son : une seule source d'ambiance pour la musique et les nappes ; son coupé = contexte audio suspendu
+  const setSoundMood = (a: 'base' | 'bonus' | 'super'): void => {
+    music.setMood(a);
+    ambience.setMood(a);
+  };
+  let muteTimer = 0;
+  const setSound = (on: boolean): void => {
+    audio.setMuted(!on);
+    hud.setSound(on);
+    window.clearTimeout(muteTimer);
+    if (!on) muteTimer = window.setTimeout(() => audio.setPaused(true), 200);
+    else {
+      audio.setPaused(false);
+      void audio.ctx?.resume().then(() => sfx('toggle'));
+    }
+  };
+
   const hud = new Hud({
-    spin: () => void game.spin(),
-    quickStop: () => game.quickStop(),
-    betDelta: (d) => game.changeBet(d),
-    buy: () => undefined,
-    menu: () => undefined,
-    sound: () => {
-      audio.setMuted(!audio.isMuted);
-      hud.setSound(!audio.isMuted);
+    spin: () => {
+      if (replayMode) {
+        if (replayRound) void game.replayRound(replayRound);
+        return;
+      }
+      void game.spin();
     },
-    turbo: () => game.cycleTurbo(),
+    quickStop: () => game.quickStop(),
+    betDelta: (d) => {
+      game.changeBet(d);
+      syncAnte();
+    },
+    buy: () => {
+      if (game.fsm.state === 'ready' && game.flags.buy) {
+        sfx('buyOpen');
+        buyMenu.open();
+      }
+    },
+    menu: (tab) => {
+      if (game.fsm.accepts('menu') || game.fsm.state === 'ready') menu.open(tab);
+    },
+    sound: () => setSound(audio.isMuted),
+    turbo: () => {
+      sfx('toggle');
+      menu.cycleTurbo();
+    },
     autoplay: (n) => (n === null ? game.stopAuto() : game.startAuto(n)),
     ante: () => undefined,
   });
-  ui.append(overlays.root, hud.root);
+
+  const dialogs = new Dialogs({ balanceEl: () => hud.element('balanceBox') });
+  const history: HistoryItem[] = [];
+  menu = new GameMenu({
+    getBet: () => game.bet,
+    getHistory: () => history,
+    canReplay: () => game.fsm.state === 'ready',
+    buyAllowed: () => game.flags.buy,
+    onReplay: (id) => {
+      const r = game.history.find((x) => x.id === id);
+      if (!r || game.fsm.state !== 'ready') return;
+      menu.close();
+      void game.replayRound(r);
+    },
+    // valeurs par défaut du menu (0,8 / 0,7 / 0,9) ramenées aux niveaux calibrés du moteur
+    onVolume: (ch, v) => {
+      if (ch === 'master') audio.setVolume('master', v);
+      else if (ch === 'music') audio.setVolume('music', v * (0.55 / 0.7));
+      else {
+        audio.setVolume('sfx', v * (0.85 / 0.9));
+        audio.setVolume('ambience', v * (0.6 / 0.9));
+      }
+    },
+    onTurbo: (lv) => {
+      game.turbo = lv;
+      game.player.setSpeed(game.speed);
+      hud.setTurbo(lv);
+    },
+    onReducedMotion: (on) => {
+      stage.reducedMotion = on;
+      buck.reducedMotion = on;
+      scene.logo.reducedMotion = on;
+      scene.camera.reducedMotion = on;
+      celebration.reducedMotion = on;
+      document.documentElement.dataset.motion = on ? 'reduced' : 'full';
+    },
+    onQuality: (q) => {
+      const dpr = Math.min(window.devicePixelRatio || 1, q === 'high' ? 2 : 1.25);
+      host.app.renderer.resolution = dpr;
+      scene.resize();
+    },
+    onOpen: () => sfx('ui'),
+    onClose: () => sfx('ui'),
+  });
+
+  let pendingBuy: ((ok: boolean) => void) | null = null;
+  const settleBuy = (ok: boolean): void => {
+    pendingBuy?.(ok);
+    pendingBuy = null;
+  };
+  buyMenu = new BuyMenu({
+    getBet: () => game.bet,
+    getBalance: () => game.balance,
+    isAnteOn: () => game.ante,
+    reducedMotion: () => menu.settings.reducedMotion,
+    onStep: (st) => {
+      if (game.fsm.state !== st && game.fsm.can(st)) game.fsm.go(st);
+    },
+    onClose: (reason) => {
+      if (reason === 'cancel' && (game.fsm.state === 'catalog' || game.fsm.state === 'confirm')) game.fsm.go('ready');
+    },
+    onConfirm: async (mode, quote) => {
+      // devis périmé (mise changée, Ante actif) : aucun débit
+      if (quote.bet !== game.bet || game.ante) return false;
+      const ok = await new Promise<boolean>((resolve) => {
+        pendingBuy = resolve;
+        void game.buy(mode).then(settleBuy, () => settleBuy(false));
+      });
+      sfx(ok ? 'buyConfirm' : 'error');
+      return ok;
+    },
+  });
+
+  const ante = new AntePanel({
+    onToggle: (on) => {
+      sfx('toggle');
+      if (game.fsm.state === 'ready' && game.fsm.accepts('ante')) {
+        game.ante = on;
+        buck.setAnte(on);
+        game.refreshHud();
+      }
+      syncAnte();
+    },
+  });
+  const syncAnte = (): void => {
+    const v = anteFromConfig(math(), game.bet, game.ante);
+    if (!v || replayMode) {
+      ante.setHidden(true);
+      return;
+    }
+    ante.setState({ on: game.ante, factor: v.factor, nextCost: v.nextCost, disabled: game.fsm.state !== 'ready' });
+  };
+
+  ui.append(ante.root, overlays.root, hud.root, menu.root, buyMenu.root, dialogs.root);
+  // images d'interface décodées d'avance : menus et achat s'ouvrent déjà illustrés
+  warmArt(keys().filter((k) => /^(sym|ui|scr|id\.card|decor\.(skyRich|nightSky|far|mid))/.test(k)));
+  if (replayMode) hud.root.classList.add('is-replay');
   const celebration = new CelebrationFx(scene, buck);
   celebration.reducedMotion = buck.reducedMotion;
   scene.overlay.addChild(celebration.view);
   overlays.celebration = celebration;
+  // une fanfare par palier, celle du MAX WIN sur le dernier
+  let celebMax = false;
+  let celebTop = 0;
+  const fxTier = celebration.onTier.bind(celebration);
+  celebration.onTier = (i, beat) => {
+    sfx(celebMax && i === celebTop ? 'maxWin' : 'tier');
+    fxTier(i, beat);
+  };
+  // géants qui se fendent en cases : son seulement s'il y a des géants
+  const crackAll = scene.grid.crackAll.bind(scene.grid);
+  scene.grid.crackAll = (instant = false) => {
+    if (!instant && scene.grid.giants.length) sfx('crack');
+    crackAll(instant);
+  };
+  scene.decor.onFlock = (dir) => ambience.event('birds', dir);
+  scene.decor.onRareEvent = (k) => ambience.event(k === 1 ? 'distantBlast' : 'sparks');
+
   scene.onLayout((l) => {
     hud.layout(l);
     overlays.setLayout(l);
+    ante.layout(l.ante);
+    menu.setLayout(l);
+    buyMenu.setLayout(l);
+    dialogs.setLayout(l);
   });
 
   const mascot = {
     perform: (name: string, beat: Beat, arg?: unknown) => buck.perform(name, beat, arg as { target?: { x: number; y: number }; tier?: number }),
-    react: (name: string) => buck.react(name),
+    react: (name: string) => {
+      if (name === 'anticipationWin') sfx('anticipationLand');
+      else if (name === 'anticipationLose') sfx('anticipationMiss');
+      buck.react(name);
+    },
     matchPoint: () => buck.matchPoint(),
   };
   const stage: Stage = {
@@ -143,7 +318,15 @@ async function boot(): Promise<void> {
     blast: scene.blast as unknown as Stage['blast'],
     mascot,
     camera: scene.camera,
-    decor: scene.decor as unknown as Stage['decor'],
+    // le décor fixe aussi l'ambiance sonore (y compris à la reprise d'un bonus)
+    decor: {
+      setDim: (v: number) => scene.decor.setDim(v),
+      setAmbience: (a: 'base' | 'bonus' | 'super', d?: number) => {
+        setSoundMood(a);
+        return scene.decor.setAmbience(a, d);
+      },
+      setMonument: (st: number, anim?: boolean) => scene.decor.setMonument(st, anim),
+    },
     ui: {
       setSpinWin: (amount, label) => hud.setWin(amount, label === 'total' ? t('hud.total') : undefined),
       setFs: (n) => overlays.setFs(n),
@@ -162,26 +345,32 @@ async function boot(): Promise<void> {
           cornerstone.setValue(v);
           if (beat) await beat.play(cornerstone.show(true));
           else cornerstone.show(true).progress(1);
-        } else if (beat) await cornerstone.engrave(v, beat);
+        } else if (beat) {
+          sfx('engrave');
+          await cornerstone.engrave(v, beat);
+        }
         else cornerstone.setValue(v);
       },
       bonusIntro: async (kind, spins, beat) => {
+        sfx('bonusIntro');
         const artKey = kind === 'super' ? 'scr.floodlight' : 'scr.sundown';
         await overlays.dialog('intro', { title: t(`bonus.${kind}.name`), spins: t('bonus.spins', { n: spins }), rule: t(`bonus.${kind}.rule`), variant: kind, art: assetUrl(artKey), artKey }, beat);
       },
       bonusOutro: async (total, beat) => {
+        sfx('bonusOutro');
         const { formatMoney } = await import('./core/money');
         await overlays.dialog('outro', { title: t('bonus.end'), big: formatMoney(total), art: assetUrl('scr.total'), artKey: 'scr.total' }, beat);
       },
       celebrate: (amount, bet, beat, max) => {
-        sfx('tier');
-        return overlays.celebrate(amount, bet, beat, max);
+        celebMax = max;
+        celebTop = math().celebrationTiersX.reduce((top, mx, i) => (amount / bet >= mx ? i : top), 0);
+        return overlays.celebrate(amount, bet, beat, max); // la fanfare part de onTier(0)
       },
       scatterCount: () => undefined,
       collectChunks: (from, count, beat) => cornerstone.collect(from, count, beat),
     },
-    sound: { play: (n, o) => sfx(n, o), tension, ambience: () => undefined },
-    reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
+    sound: { play: (n, o) => sfx(n, o), tension, ambience: setSoundMood },
+    reducedMotion: menu.settings.reducedMotion,
     turbo: 1,
   };
   const presenter = new GamePresenter(stage);
@@ -189,12 +378,37 @@ async function boot(): Promise<void> {
     onError: async (e) => {
       console.error(e);
       sfx('error');
-      return 'dismiss';
+      const a = await dialogs.error(e);
+      if (a === 'reload') location.reload();
+      return a === 'retry' ? 'retry' : 'dismiss';
     },
-    message: (k) => overlays.announce(k),
+    // serveur d'accord pour l'achat : la page d'achat se ferme
+    onRoundStart: () => settleBuy(true),
+    onRoundEnd: (round) => {
+      history.unshift({ id: round.id, mode: round.mode, bet: round.bet, payout: round.book.payoutMultiplier, time: Date.now() });
+      if (history.length > 20) history.length = 20;
+    },
+    message: (k) => (k === 'insufficient' ? void dialogs.insufficient() : overlays.announce(k)),
   });
   game.applySession(session);
   presenter.bet = game.bet;
+  menu.setTurboAllowed({ turbo: game.flags.turbo, ultra: game.flags.turbo && !session.jurisdiction.disabledSuperTurbo });
+  menu.applyAll();
+  buck.reducedMotion = menu.settings.reducedMotion;
+  scene.logo.reducedMotion = buck.reducedMotion;
+  celebration.reducedMotion = buck.reducedMotion;
+  scene.camera.reducedMotion = buck.reducedMotion;
+  syncAnte();
+  game.fsm.onChange((st, prev) => {
+    syncAnte();
+    if (st === 'waiting') dialogs.waiting(true); // requête incertaine : jeu verrouillé
+    else if (st === 'requesting') dialogs.waiting(true, { delayMs: 1500, block: false }); // serveur lent seulement
+    else dialogs.waiting(false);
+    if (menu.isOpen && menu.tab === 'history' && (st === 'ready' || prev === 'ready')) menu.refresh();
+  });
+  // musique et nappes : démarrent au premier geste (déverrouillage audio), ambiance restaurée conservée
+  music.start();
+  ambience.start();
 
   // grille initiale : première révélation d'une perte de la playlist (aucun symbole spécial)
   if (provider instanceof DemoProvider) {
@@ -206,6 +420,7 @@ async function boot(): Promise<void> {
   // clavier : Espace lance / arrête (sauf dialogue ouvert)
   window.addEventListener('keydown', (e) => {
     if (e.code !== 'Space' || e.repeat || !game.flags.spacebar) return;
+    if (dialogs.blocking || menu.isOpen || buyMenu.isOpen || replayMode) return;
     if ((e.target as HTMLElement)?.closest?.('button, input, [role="dialog"]')) return;
     e.preventDefault();
     if (game.fsm.state === 'ready') void game.spin();
@@ -230,7 +445,7 @@ async function boot(): Promise<void> {
   // accueil (cartes) puis entrée thématique : Buck balaie la scène, la caméra recule, le logo sursaute
   game.fsm.go('welcome');
   const forceWelcome = new URLSearchParams(location.search).has('welcome');
-  const skipWelcome = !forceWelcome && (params.dev.skipIntro || params.dev.qa || welcomeSkipped());
+  const skipWelcome = !forceWelcome && (params.dev.skipIntro || params.dev.qa || replayMode || !!session.resume || welcomeSkipped());
   const enter = () => {
     const beat = new Beat();
     void buck.perform('introSwipe', beat);
@@ -244,7 +459,22 @@ async function boot(): Promise<void> {
   if (!skipWelcome) await showWelcome(ui, { maxWinX: math().maxWinX, onDismissStart: enter });
   else enter();
   game.fsm.go('entering');
+
+  // manche interrompue : reprise exacte à l'événement enregistré, sans nouveau débit
+  if (session.resume) {
+    game.fsm.go('resume');
+    await dialogs.resume();
+    await game.resumeRound(session.resume);
+    return;
+  }
   game.fsm.go('ready');
+
+  // replay Stake : la manche relue se joue d'elle-même ; le SPIN la relance (aucun pari, aucun solde)
+  if (replayMode) {
+    replayRound = (await provider.play(game.bet, 'BASE')).round;
+    overlays.setBanner(t('replay.badge'));
+    await game.replayRound(replayRound);
+  }
 }
 
 boot().catch((e) => {

@@ -59,7 +59,7 @@
   "sym.T.bundle": "Fagot de dynamite",
   "sym.T.keg": "Tonnelet explosif",
   "rules.special.title": "WILD ET SCATTER",
-  "rules.wild.text": "Remplace tous les symboles payants et possède ses propres valeurs.",
+  "rules.wild.text": "Remplace tous les symboles sauf le SCATTER et les charges, et possède ses propres valeurs.",
   "rules.scatter.text": "Au plus un par rouleau. Jamais détruit par une explosion. Déclenche les bonus.",
   "rules.blast.title": "BLAST & CARVE",
   "rules.blast.text1": "Les charges explosent avant le calcul des gains ; chacune dégage une zone carrée :",
@@ -147,5 +147,6 @@
   "welcome.super.title": "FLOODLIGHT SHIFT",
   "welcome.super.body": "4 Scatters : 12 free spins, et toutes les charges d'un même tour sont reliées en une seule explosion.",
   "welcome.max": "Gain maximal {x}× la mise",
-  "welcome.skip": "Ne plus afficher"
+  "welcome.skip": "Ne plus afficher",
+  "replay.badge": "RELECTURE"
 }

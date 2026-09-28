@@ -49,6 +49,8 @@ export class AntePanel {
   private costVal = h('span', { class: 'ante-cost-val', 'data-fit': '' });
   private swState = h('span', { class: 'ante-sw-state' });
   private state: AnteState = { on: false, nextCost: 0, factor: 1, disabled: false };
+  /** textes affichés au dernier rendu (l'ajustement des tailles ne se refait que s'ils changent) */
+  private shown = '';
 
   constructor(private cb: { onToggle(on: boolean): void }) {
     const info = h('span', { class: 'ante-info', id: 'ante-info' }, this.label, this.factor, h('span', { class: 'ante-cost' }, this.costLabel, this.costVal));
@@ -70,15 +72,22 @@ export class AntePanel {
     this.root = h('div', { class: 'cf-ui ante', 'data-on': 'false' }, this.btn);
     applyArt(this.root);
     this.render();
-    onLangChange(() => this.render());
+    onLangChange(() => {
+      this.shown = '';
+      this.render();
+    });
   }
 
   get isOn(): boolean {
     return this.state.on;
   }
 
+  /** appelé à chaque changement d'état du jeu : sans modification, aucun accès au DOM */
   setState(s: Partial<AnteState>): void {
-    this.state = { ...this.state, ...s };
+    const next = { ...this.state, ...s };
+    const cur = this.state;
+    if (next.on === cur.on && next.nextCost === cur.nextCost && next.factor === cur.factor && next.disabled === cur.disabled) return;
+    this.state = next;
     this.render();
   }
 
@@ -89,7 +98,6 @@ export class AntePanel {
     st.top = `${Math.round(rect.y)}px`;
     st.width = `${Math.round(rect.w)}px`;
     st.height = `${Math.round(rect.h)}px`;
-    this.root.classList.toggle('is-compact', rect.h < 80);
     fitAll(this.root, '[data-fit]', 9);
   }
 
@@ -100,15 +108,22 @@ export class AntePanel {
   private render(): void {
     const s = this.state;
     const name = t('ante.label');
-    this.label.textContent = name;
-    this.factor.textContent = t('ante.factor', { x: formatFactor(s.factor, intlLocale()) });
-    this.costLabel.textContent = t('ante.next');
-    this.costVal.textContent = formatMoney(s.nextCost);
-    this.swState.textContent = s.on ? t('common.on') : t('common.off');
-    this.btn.setAttribute('aria-label', name);
-    this.btn.setAttribute('aria-checked', s.on ? 'true' : 'false');
+    const factor = t('ante.factor', { x: formatFactor(s.factor, intlLocale()) });
+    const next = t('ante.next');
+    const cost = formatMoney(s.nextCost);
+    const sw = s.on ? t('common.on') : t('common.off');
     this.btn.disabled = s.disabled;
+    this.btn.setAttribute('aria-checked', s.on ? 'true' : 'false');
     this.root.dataset.on = s.on ? 'true' : 'false';
+    const key = `${name}|${factor}|${next}|${cost}|${sw}`;
+    if (key === this.shown) return;
+    this.shown = key;
+    this.label.textContent = name;
+    this.factor.textContent = factor;
+    this.costLabel.textContent = next;
+    this.costVal.textContent = cost;
+    this.swState.textContent = sw;
+    this.btn.setAttribute('aria-label', name);
     fitAll(this.root, '[data-fit]', 9);
   }
 }

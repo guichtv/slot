@@ -23,6 +23,8 @@ export interface PlayOptions {
   speed?: number;
   /** passe automatiquement chaque événement (mode rapide / tests) */
   instant?: boolean;
+  /** après chaque événement présenté (sauvegarde de progression /bet/event) */
+  onEvent?: (index: number) => void;
 }
 
 export class RoundPlayer {
@@ -67,6 +69,7 @@ export class RoundPlayer {
         model.apply(e);
         await this.presenter.present(e, prev, model, beat);
         this.presenter.afterEvent?.(e, model);
+        opts.onEvent?.(e.index);
         token.throwIfCancelled();
         // après un skip ponctuel (un événement), on revient à la vitesse normale
         if (!opts.instant && beat.skipping && !this.skipAll) beat.skipping = false;

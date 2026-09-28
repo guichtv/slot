@@ -1,7 +1,7 @@
-import { Container, Graphics } from 'pixi.js';
+import { Container, Graphics, Sprite } from 'pixi.js';
 import { gsap } from 'gsap';
 import { Rig, type Pose, type RigDef } from '../rig/Rig';
-import { tex } from '../assets';
+import { hasTex, tex } from '../assets';
 import { rand } from '../fx/particles';
 import type { Beat } from '../../core/beat';
 import type { SceneLayout } from '../layout';
@@ -54,17 +54,65 @@ export class Buck {
   /** lampe frontale rouge quand l'Ante est actif */
   private lamp = new Graphics();
   anteOn = false;
+  /** détonateur à piston (accessoires ImageGen) : caisse + poignée en T, devant ses jambes */
+  private detonator = new Container();
+  private detBox: Sprite | null = null;
+  private detHandle: Sprite | null = null;
+  /** repères du détonateur (px du rig) : trou de la caisse, course de la poignée */
+  private det = { x: -40, boxH: 330, holeY: -310, upY: 190, downY: 30 };
 
   constructor() {
     this.rig = new Rig(RIG, tex);
-    this.view.addChild(this.shadow, this.rig.root);
+    this.view.addChild(this.shadow, this.rig.root, this.detonator);
     this.rig.part('head').addChild(this.lamp);
+    this.buildDetonator();
     // pieds : bas des bottes au repos -> origine de la mascotte
     const b = this.rig.root.getLocalBounds();
     this.feetY = b.y + b.height;
     this.rig.body.y = -this.feetY + 16;
     this.drawShadow(1);
     this.startIdle();
+  }
+
+  private buildDetonator(): void {
+    if (!hasTex('buck.props.box') || !hasTex('buck.props.handle')) return;
+    const box = new Sprite(tex('buck.props.box'));
+    const handle = new Sprite(tex('buck.props.handle'));
+    const k = this.det.boxH / box.texture.height;
+    box.scale.set(k);
+    handle.scale.set(k);
+    box.anchor.set(0.5, 1);
+    handle.anchor.set(0.5, 1);
+    // trou de laiton : 53 % de la largeur, 7 % de la hauteur de la caisse
+    box.position.set(this.det.x, 0);
+    const holeX = this.det.x + box.texture.width * k * 0.03;
+    this.det.holeY = -this.det.boxH * 0.93;
+    handle.x = holeX;
+    // la tige plonge dans la caisse : poignée dessinée derrière la caisse
+    this.detonator.addChild(handle, box);
+    this.detonator.visible = false;
+    this.detBox = box;
+    this.detHandle = handle;
+    this.setHandle(1);
+  }
+
+  /** position de la poignée : 1 = tirée, 0 = enfoncée */
+  private setHandle(up: number): void {
+    const h = this.detHandle;
+    if (!h) return;
+    const hh = h.texture.height * h.scale.y;
+    const visible = this.det.downY + (this.det.upY - this.det.downY) * up; // longueur de tige visible au-dessus du trou
+    h.y = this.det.holeY - visible + hh * 0.97;
+  }
+
+  /** extrémités de la barre en T (coordonnées globales) */
+  private handleGrips(): { l: { x: number; y: number }; r: { x: number; y: number } } | null {
+    const h = this.detHandle;
+    if (!h) return null;
+    const w = h.texture.width * h.scale.x;
+    const hh = h.texture.height * h.scale.y;
+    const top = h.y - hh + hh * 0.05;
+    return { l: this.view.toGlobal({ x: h.x - w * 0.34, y: top }), r: this.view.toGlobal({ x: h.x + w * 0.34, y: top }) };
   }
 
   /** hauteur de référence du rig (px de texture) */
@@ -308,6 +356,45 @@ export class Buck {
         await beat.play(gsap.timeline().to({}, { duration: name === 'triggerCheer' ? 0.8 : 0.5 }));
         return;
       }
+      case 'plunger': {
+        // le détonateur tombe devant lui, il empoigne la barre en T, prend son élan et enfonce le piston
+        const box = this.detBox;
+        if (!box || !this.detHandle) {
+          await this.perform('triggerCheer', beat);
+          return;
+        }
+        this.detonator.visible = true;
+        this.detonator.alpha = 1;
+        this.detonator.y = 0;
+        this.setHandle(1);
+        const grips = (): Pose => {
+          const g = this.handleGrips()!;
+          return { ...this.ik('armF', this.toTorso(g.l)), ...this.ik('armB', this.toTorso(g.r)) };
+        };
+        // cibles des mains calculées avec la caisse posée, avant la chute
+        const gUp = grips();
+        tl.fromTo(this.detonator, { y: -900 }, { y: 0, duration: 0.28, ease: 'bounce.out' }, 0);
+        this.front(tl, 0.2, ['F', 'B']);
+        const state = { up: 1 };
+        const follow = () => {
+          this.setHandle(state.up);
+          R.set(grips());
+        };
+        R.to({ ...gUp, handF: { alt: 'fist' }, handB: { alt: 'fist' }, head: { alt: 'focus', r: -4 }, torso: { r: -2 } }, 0.2, 'power2.out', tl, 0.26);
+        // élan : la poignée remonte un peu, il se hisse
+        tl.to(state, { up: 1.12, duration: 0.22, ease: 'sine.out', onUpdate: follow }, 0.5);
+        tl.call(() => R.setAlt('head', 'shout'), [], 0.7);
+        // coup sec : piston enfoncé, genoux fléchis
+        tl.to(state, { up: 0, duration: 0.11, ease: 'power4.in', onUpdate: follow }, 0.74);
+        R.to({ torso: { r: 3 }, thighF: { r: 4 }, thighB: { r: 4 } }, 0.11, 'power4.in', tl, 0.74);
+        tl.addLabel('boom', 0.85);
+        // relâche : la caisse s'enfonce dans le sol et disparaît, retour au repos
+        tl.to(this.detonator, { alpha: 0, y: 60, duration: 0.3, ease: 'power2.in', onComplete: () => void (this.detonator.visible = false) }, 1.5);
+        this.back(tl, 1.35, 0.4);
+        this.run(tl, 3);
+        await beat.play(gsap.timeline().to({}, { duration: 0.85 }));
+        return;
+      }
       case 'celebrate': {
         this.celebrate(arg?.tier ?? 0);
         await beat.wait(300);
@@ -315,9 +402,9 @@ export class Buck {
       }
       case 'introSwipe': {
         // geste de la mascotte qui balaie l'introduction : coup de queue et bras qui balaie
-        const sweepA = this.ik('armF', [-520, -120]);
+        const sweepA = this.reach('armF', [-520, -120], 0.7);
         this.front(tl, 0, ['F']);
-        const sweepB = this.ik('armF', [-380, 160]);
+        const sweepB = this.reach('armF', [-380, 160], 0.7);
         R.to({ ...sweepA, handF: { alt: 'open' }, head: { alt: 'focus', r: -5 }, torso: { r: -3 } }, 0.16, 'power2.out', tl, 0);
         R.to({ ...sweepB, head: { alt: 'grin' } }, 0.18, 'power3.in', tl, 0.18);
         R.to({ tail: { r: -22 } }, 0.1, 'power3.in', tl, 0.18);

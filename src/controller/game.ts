@@ -170,13 +170,25 @@ export class GameController {
         return false;
       }
     }
+    return this.finishRound(round);
+  }
+
+  /** présentation puis clôture d'une manche obtenue du serveur (nouvelle ou reprise) */
+  private async finishRound(round: PlayedRound): Promise<boolean> {
     this.lastRound = round;
     this.history.unshift(round);
     if (this.history.length > 20) this.history.pop();
     this.hud.setBalance(this.balance);
     this.hooks.onRoundStart?.(round);
-    if (this.fsm.state === 'requesting') this.fsm.go('spinning');
-    await this.player.play(round.id, round.book, { startAt: round.startAt, speed: this.speed });
+    if (this.fsm.state === 'requesting' || this.fsm.state === 'resume') this.fsm.go('spinning');
+    await this.player.play(round.id, round.book, {
+      startAt: round.startAt,
+      speed: this.speed,
+      // progression enregistrée côté serveur : une manche interrompue reprend à l'événement exact
+      onEvent: (i) => {
+        if (round.active) this.provider.saveProgress?.(round, i);
+      },
+    });
     // clôture
     for (;;) {
       try {
@@ -189,7 +201,7 @@ export class GameController {
     }
     this.hud.setBalance(this.balance);
     this.hooks.onRoundEnd?.(round, this.balance);
-    this.fsm.go('returning');
+    if (this.fsm.state !== 'returning') this.fsm.go('returning');
     this.fsm.go('ready');
     this.busy = false;
     if (this.autoLeft > 0) {
@@ -203,6 +215,34 @@ export class GameController {
     this.hud.setPhase('idle');
     this.refreshHud();
     return true;
+  }
+
+  /** manche interrompue (session.resume) : rejouée depuis l'événement enregistré, sans nouveau débit */
+  async resumeRound(round: PlayedRound): Promise<void> {
+    if (this.busy) return;
+    this.busy = true;
+    if (this.fsm.state !== 'resume' && this.fsm.can('resume')) this.fsm.go('resume');
+    this.hud.setPhase('spinning');
+    this.presenter.bet = round.bet;
+    await this.finishRound(round);
+  }
+
+  /** relecture d'une manche de l'historique (aucun appel serveur, aucun débit) */
+  async replayRound(round: PlayedRound): Promise<void> {
+    if (this.busy || this.fsm.state !== 'ready') return;
+    this.busy = true;
+    this.fsm.go('replay');
+    this.hud.setPhase('locked');
+    this.presenter.bet = round.bet;
+    try {
+      await this.player.play(`replay:${round.id}:${Date.now()}`, round.book, { startAt: 0, speed: this.speed });
+    } finally {
+      this.presenter.bet = this.bet;
+      this.fsm.go('ready');
+      this.busy = false;
+      this.hud.setPhase('idle');
+      this.refreshHud();
+    }
   }
 
   private stopReelsIfNeeded(): void {

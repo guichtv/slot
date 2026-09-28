@@ -24,7 +24,7 @@
   padding: max(10px, var(--sat)) 12px max(10px, var(--sab));
   box-sizing: border-box;
 }
-.wel-logo { width: clamp(200px, 30vw, 420px); height: auto; filter: drop-shadow(0 8px 0 rgba(0, 0, 0, 0.35)); }
+.wel-logo { width: clamp(200px, 30vw, 420px); height: auto; }
 .wel-cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -38,7 +38,6 @@
   max-height: 46vh;
   aspect-ratio: 480 / 720;
   object-fit: contain;
-  filter: drop-shadow(0 10px 0 rgba(0, 0, 0, 0.35));
 }
 .wel-text { text-align: center; max-width: 300px; }
 .wel-title {

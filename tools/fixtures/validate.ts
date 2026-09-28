@@ -5,10 +5,14 @@
  * - ways déclaré = produit des cases par rouleau ; toutes les cases du symbole sur ces rouleaux sont incluses ;
  * - AUCUNE connexion visible non déclarée (BARNSTORM : 9 grilles montraient des groupes non payés) ;
  * - chutes : cases retirées = cases gagnantes, gravité et nouveaux symboles cohérents avec la grille déclarée ;
- * - explosions : TNT présente, zone de la bonne taille, dans la grille ;
+ * - explosions : TNT présente, zone de la bonne taille, dans la grille, sans Scatter ;
+ * - chaînes : lien k = rang dans la chaîne ; lien > 0 = charge prise dans la zone d'une charge précédente (from)
+ *   ou reliée par le fil (wired, super bonus seulement) ; toute charge prise explose avant le carve ;
+ *   carve = rectangle englobant des zones de la chaîne, sans Scatter ni charge dessous ;
  * - totaux : updateTumbleWin cumulés, setWin, setTotalWin, finalWin = payoutMultiplier ;
  * - free spins : déclencheur = Scatters visibles (3 standard, 4+ super), compteurs exacts ;
- * - multiplicateur global en bonus : +1 par explosion ; win = baseWin × mult.
+ * - Cornerstone (multiplicateur global du bonus) : +1 par CASE SCULPTÉE (added = cells du dernier carve,
+ *   plafond 9 999) ; win = baseWin × mult.
  */
 import { COLS, ROWS, parseBook, type Book, type GameEvent, type SymbolName } from '../../src/contract/schema';
 

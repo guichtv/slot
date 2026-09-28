@@ -158,10 +158,11 @@ export class Decor {
       const leftFree = l.grid.x - l.cell * 0.7;
       for (const m of this.monument) {
         m.anchor.set(0.5, 1);
-        const mh = portrait ? Math.min(l.stage.h * 0.16, vw * 0.3) : Math.min(leftFree * 0.62, vh * 0.3);
+        const mh = portrait ? Math.min(l.stage.h * 0.16, vw * 0.3) : Math.min(leftFree * 0.56, vh * 0.27);
         m.scale.set(mh / (m.texture.height || 1));
+        // bureau : sous le logo et l'Ante, au-dessus de la chute d'eau (le tas de bois passe devant)
         if (portrait) m.position.set(vw * 0.5, l.grid.y - l.cell * 1.05);
-        else m.position.set(leftFree * 0.5, l.grid.y + l.grid.h * 0.62);
+        else m.position.set(leftFree * 0.56, Math.max(l.ante.y + l.ante.h + mh + 8, l.grid.y + l.grid.h * 0.86));
       }
       if (this.farBack) {
         const kb = k * (portrait ? 0.8 : 0.72);
@@ -355,7 +356,8 @@ export class Decor {
     const l = this.l;
     if (!l || !this.birdFrames.length || this.flock.length) return;
     const n = 3 + Math.floor(rand() * 3);
-    const dir = rand() < 0.5 ? 1 : -1;
+    const dir: 1 | -1 = rand() < 0.5 ? 1 : -1;
+    this.onFlock?.(dir);
     const size = Math.min(l.vw, l.vh) * 0.045;
     const y0 = l.vh * (0.08 + rand() * 0.14);
     for (let i = 0; i < n; i++) {
@@ -389,8 +391,10 @@ export class Decor {
     this.flock = keep;
   }
 
-  /** branché par la scène (oiseaux, explosion lointaine, étincelles) */
+  /** événements lointains sans image (1 : explosion au loin, 2 : étincelles de chantier) — son d'ambiance */
   onRareEvent: ((kind: number) => void) | null = null;
+  /** départ d'un vol d'oies (sens du vol : 1 vers la droite, -1 vers la gauche) */
+  onFlock: ((dir: 1 | -1) => void) | null = null;
 
   /** parallaxe légère pendant un zoom de caméra */
   parallax(zoom: number, fx: number, fy: number): void {

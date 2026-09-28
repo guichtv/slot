@@ -16,6 +16,7 @@ import {
   STEPS,
   StepClock,
   stepOffset,
+  superBrassNotes,
   type BarPlan,
   type Mood,
 } from '../src/audio/music';
@@ -185,6 +186,14 @@ describe('composer', () => {
     expect(bonus.has('stomp')).toBe(false);
     const sup = insts('super');
     for (const i of ['taiko', 'brass', 'bassDrive', 'banjo']) expect(sup.has(i as never), i).toBe(true);
+  });
+
+  it('pre-computes exactly the brass notes the super bonus can play', () => {
+    const listed = new Set(superBrassNotes());
+    const played = new Set<number>();
+    for (const seed of [0xb00f + 202, 17, 99]) for (const b of bars('super', seed, 400)) for (const e of b.events) if (e.inst === 'brass') played.add(e.midi);
+    for (const m of played) expect(listed.has(m), String(m)).toBe(true);
+    expect(listed.size).toBeLessThanOrEqual(played.size + 2);
   });
 
   it('uses the specified tempi', () => {

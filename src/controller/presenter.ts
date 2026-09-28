@@ -42,7 +42,7 @@ export interface Stage {
     /** point de départ des étincelles (bout de l'allumette), coordonnées de scène */
     matchPoint(): { x: number; y: number };
   };
-  camera: { zoomTo(f: number, x: number, y: number, d?: number): gsap.core.Timeline; reset(d?: number): gsap.core.Timeline };
+  camera: { zoomTo(f: number, x: number, y: number, d?: number): gsap.core.Timeline; reset(d?: number): gsap.core.Timeline; shake(strength?: number, duration?: number): gsap.core.Timeline };
   decor: { setDim(v: number): unknown; setAmbience(a: 'base' | 'bonus' | 'super', d?: number): gsap.core.Timeline; setMonument(stage: number, animate?: boolean): gsap.core.Timeline };
   ui: {
     setSpinWin(amount: number | null, label?: string): void;
@@ -279,10 +279,17 @@ export class GamePresenter implements Presenter {
     this.s.sound.play('trigger');
     for (const [c, r] of e.positions) beat.fire(this.s.grid.viewAt(c, r)!.react());
     await this.s.mascot.perform('triggerCheer', beat);
-    await beat.wait(500);
+    // transition thématique : Buck enfonce le piston, les Scatters sautent, la nuit tombe dans le souffle
+    await this.s.mascot.perform('plunger', beat);
+    this.s.sound.play('blastBig');
+    const reduced = this.s.reducedMotion;
+    for (const [c, r] of e.positions) void this.s.blast.explode({ col: c, row: r, w: 1, h: 1 }, [c, r], beat, { reduced, strength: 0.7 });
+    if (!reduced) beat.fire(this.s.camera.shake(16, 0.55));
+    const amb = e.bonus === 'super' ? 'super' : 'bonus';
+    this.s.sound.ambience(amb);
+    beat.fire(this.s.decor.setAmbience(amb, 0.9));
+    await beat.wait(900);
     await this.s.ui.bonusIntro(e.bonus, e.totalFs, beat);
-    this.s.sound.ambience(e.bonus === 'super' ? 'super' : 'bonus');
-    await beat.play(this.s.decor.setAmbience(e.bonus === 'super' ? 'super' : 'bonus', 1.4));
     this.s.ui.setFs(e.totalFs, e.totalFs);
     await this.s.ui.setMultiplier(1, beat, 'start');
   }

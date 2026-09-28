@@ -1,5 +1,5 @@
 import { audio } from './engine';
-import { mulberry32, type Mood } from './music';
+import { audioWarn, idleReverb, mulberry32, whenIdle, type Mood } from './music';
 
 /**
  * Ambiances continues du camp (bus « ambience »), 100 % synthétisées :
@@ -9,7 +9,8 @@ import { mulberry32, type Mood } from './music';
  *           rivière plus lointaine, rares hululements et cris de plongeon (huard) sur le lac.
  * - super : nuit sous projecteurs : grillons, vent grave, groupe électrogène lointain (ronflement,
  *           battement du moteur, grésillement des projecteurs).
- * Événements rares ponctuels : ambience.event('distantBlast' | 'birds' | 'woodpecker' | ...).
+ * Événements rares ponctuels : ambience.event('distantBlast' | 'birds' | 'woodpecker' | ...) ; 'birds' accompagne
+ * le vol d'oies en V du décor (cris nasillards qui traversent la stéréo dans le sens du vol).
  * Changement d'humeur : fondu enchaîné de 2 s. Ordonnancement sur l'horloge audio (lookahead).
  */
 
@@ -68,6 +69,34 @@ export function birdSong(rng: () => number, species: number): Chirp[] {
   return out;
 }
 
+export interface Honk {
+  /** instant relatif (s) */
+  t: number;
+  /** hauteur de base (Hz) */
+  f: number;
+  dur: number;
+  vol: number;
+}
+
+/**
+ * cris d'un vol d'oies (bernaches) : « ha-onk » nasillards de 3 à 5 individus (hauteurs propres),
+ * souvent par paires rapprochées, sur 1 à 7 s (3 s en moyenne)
+ */
+export function gooseCalls(rng: () => number): Honk[] {
+  const voices = 3 + Math.floor(rng() * 3);
+  const pitch: number[] = [];
+  for (let v = 0; v < voices; v++) pitch.push(300 + rng() * 140);
+  const n = 7 + Math.floor(rng() * 6);
+  const out: Honk[] = [];
+  let t = 0;
+  for (let i = 0; i < n; i++) {
+    const v = Math.floor(rng() * voices) % voices;
+    out.push({ t, f: (pitch[v] as number) * (0.97 + rng() * 0.06), dur: 0.13 + rng() * 0.08, vol: 0.6 + rng() * 0.4 });
+    t += rng() < 0.35 ? 0.2 + rng() * 0.06 : 0.3 + rng() * 0.3;
+  }
+  return out;
+}
+
 export interface Hit {
   t: number;
   vol: number;
@@ -95,8 +124,11 @@ export function cricketPulses(start: number, count: number, period = 0.026, widt
   return out;
 }
 
-/** bruit blanc, rose (Paul Kellet) ou brun (intégré avec fuite), normalisé dans [-1, 1] */
-export function fillNoise(out: Float32Array, color: 'white' | 'pink' | 'brown', rng: () => number): void {
+/**
+ * Bruit blanc, rose (Paul Kellet) ou brun (intégré avec fuite), normalisé dans [-1, 1], calculé par
+ * tranches de `chunk` échantillons : chaque next() rend la main (calcul étalé sur le temps libre).
+ */
+export function* fillNoiseSteps(out: Float32Array, color: 'white' | 'pink' | 'brown', rng: () => number, chunk = 32768): Generator<void, void, void> {
   let b0 = 0;
   let b1 = 0;
   let b2 = 0;
@@ -106,33 +138,44 @@ export function fillNoise(out: Float32Array, color: 'white' | 'pink' | 'brown', 
   let b6 = 0;
   let br = 0;
   let peak = 1e-9;
-  for (let i = 0; i < out.length; i++) {
-    const w = rng() * 2 - 1;
-    let v = w;
-    if (color === 'pink') {
-      b0 = 0.99886 * b0 + w * 0.0555179;
-      b1 = 0.99332 * b1 + w * 0.0750759;
-      b2 = 0.969 * b2 + w * 0.153852;
-      b3 = 0.8665 * b3 + w * 0.3104856;
-      b4 = 0.55 * b4 + w * 0.5329522;
-      b5 = -0.7616 * b5 - w * 0.016898;
-      v = b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362;
-      b6 = w * 0.115926;
-    } else if (color === 'brown') {
-      br = (br + 0.02 * w) / 1.02;
-      v = br;
+  const n = out.length;
+  for (let s = 0; s < n; s += chunk) {
+    const e = Math.min(n, s + chunk);
+    for (let i = s; i < e; i++) {
+      const w = rng() * 2 - 1;
+      let v = w;
+      if (color === 'pink') {
+        b0 = 0.99886 * b0 + w * 0.0555179;
+        b1 = 0.99332 * b1 + w * 0.0750759;
+        b2 = 0.969 * b2 + w * 0.153852;
+        b3 = 0.8665 * b3 + w * 0.3104856;
+        b4 = 0.55 * b4 + w * 0.5329522;
+        b5 = -0.7616 * b5 - w * 0.016898;
+        v = b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362;
+        b6 = w * 0.115926;
+      } else if (color === 'brown') {
+        br = (br + 0.02 * w) / 1.02;
+        v = br;
+      }
+      out[i] = v;
+      if (v > peak) peak = v;
+      else if (-v > peak) peak = -v;
     }
-    out[i] = v;
-    peak = Math.max(peak, Math.abs(v));
+    yield;
   }
   // bouclage sans clic : fondu croisé des 20 ms de fin vers le début
-  const x = Math.min(Math.floor(out.length / 4), 960);
+  const x = Math.min(Math.floor(n / 4), 960);
   for (let i = 0; i < x; i++) {
     const a = i / x;
-    const j = out.length - x + i;
+    const j = n - x + i;
     out[j] = (out[j] as number) * (1 - a) + (out[i] as number) * a;
   }
-  for (let i = 0; i < out.length; i++) out[i] = (out[i] as number) / peak;
+  const k = 1 / peak;
+  for (let s = 0; s < n; s += chunk * 2) {
+    const e = Math.min(n, s + chunk * 2);
+    for (let i = s; i < e; i++) out[i] = (out[i] as number) * k;
+    yield;
+  }
 }
 
 /** prochain délai aléatoire dans [min, max] */
@@ -157,10 +200,12 @@ const OUT_LEVEL = 1.8;
 const BED_LEVEL: Record<Mood, number> = { base: 1, bonus: 1.45, super: 1.1 };
 const TICK_MS = 100;
 const XFADE = 2;
+/** crête d'un cri d'oie (lointain) avant le bus, étalonnée par rendu hors ligne */
+const HONK_LEVEL = 0.14;
 
 export class Ambience {
   private out: GainNode | null = null;
-  private verb: ConvolverNode | null = null;
+  /** entrée de la réverbération (la convolution est branchée pendant le temps libre) */
   private verbIn: GainNode | null = null;
   private beds: Bed[] = [];
   private mood: Mood = 'base';
@@ -169,10 +214,49 @@ export class Ambience {
   private paused = false;
   private waiting = false;
   private rng = mulberry32(0xa11b);
+  /** bruits de fond (rivière, vent, grondements), prêts après le calcul en tâche de fond */
   private buf: { pink: AudioBuffer; brown: AudioBuffer } | null = null;
 
   get currentMood(): Mood {
     return this.mood;
+  }
+
+  /* API publique : aucun appel ne lève d'exception (incident signalé une fois, le jeu continue). */
+
+  /** démarre les ambiances (attend l'activation audio si nécessaire) ; déjà lancées : change d'humeur */
+  start(mood?: Mood): void {
+    try {
+      this.startNow(mood);
+    } catch (e) {
+      audioWarn(e);
+    }
+  }
+
+  /** fondu enchaîné de 2 s vers le lit de l'humeur m */
+  setMood(m: Mood): void {
+    try {
+      this.setMoodNow(m);
+    } catch (e) {
+      audioWarn(e);
+    }
+  }
+
+  /** arrêt en fondu */
+  stop(fadeMs = 1500): void {
+    try {
+      this.stopNow(fadeMs);
+    } catch (e) {
+      audioWarn(e);
+    }
+  }
+
+  /** pause : lits coupés en fondu, événements suspendus */
+  pause(p: boolean): void {
+    try {
+      this.pauseNow(p);
+    } catch (e) {
+      audioWarn(e);
+    }
   }
 
   private ensureGraph(): boolean {
@@ -182,25 +266,43 @@ export class Ambience {
     this.out = c.createGain();
     this.out.gain.value = OUT_LEVEL;
     this.out.connect(audio.buses.ambience);
-    this.verb = c.createConvolver();
-    this.verb.buffer = audio.reverb.buffer;
     this.verbIn = c.createGain();
-    this.verbIn.gain.value = 1;
     const wet = c.createGain();
     wet.gain.value = 0.6;
-    this.verbIn.connect(this.verb).connect(wet).connect(this.out);
-    const mk = (seconds: number, color: 'pink' | 'brown', seed: number) => {
-      const b = c.createBuffer(1, Math.floor(c.sampleRate * seconds), c.sampleRate);
-      fillNoise(b.getChannelData(0), color, mulberry32(seed));
-      return b;
+    wet.connect(this.out);
+    idleReverb(this.verbIn, wet);
+    // ~15 s de bruit rose et brun : calculés par tranches pendant le temps libre (pas dans le premier geste),
+    // le lit démarre dès qu'ils sont prêts
+    const pink = c.createBuffer(1, Math.floor(c.sampleRate * 7.9), c.sampleRate);
+    const brown = c.createBuffer(1, Math.floor(c.sampleRate * 6.7), c.sampleRate);
+    const steps = [fillNoiseSteps(pink.getChannelData(0), 'pink', mulberry32(71)), fillNoiseSteps(brown.getChannelData(0), 'brown', mulberry32(73))];
+    const step = (): void => {
+      const g = steps[0];
+      if (!g) {
+        this.buf = { pink, brown };
+        this.onNoiseReady();
+        return;
+      }
+      if (g.next().done) steps.shift();
+      whenIdle(step, true);
     };
-    this.buf = { pink: mk(7.9, 'pink', 71), brown: mk(6.7, 'brown', 73) };
+    whenIdle(step, true);
     return true;
   }
 
-  start(mood?: Mood): void {
+  /** bruits prêts : le lit de l'humeur courante entre en fondu si les ambiances tournent */
+  private onNoiseReady(): void {
+    if (!this.running || !audio.ctx || this.beds.some((b) => b.endAt === null)) return;
+    this.addBed(this.mood, audio.ctx.currentTime + 0.05, 2.5);
+    this.ensureTimer();
+  }
+
+  private startNow(mood?: Mood): void {
+    if (this.running) {
+      if (mood) this.setMood(mood);
+      return;
+    }
     if (mood) this.mood = mood;
-    if (this.running) return;
     if (!this.ensureGraph()) {
       if (!this.waiting) {
         this.waiting = true;
@@ -219,20 +321,20 @@ export class Ambience {
     o.cancelScheduledValues(t);
     o.setValueAtTime(o.value, t);
     o.linearRampToValueAtTime(OUT_LEVEL, t + 0.1);
-    this.addBed(this.mood, t, 2.5);
+    if (this.buf) this.addBed(this.mood, t, 2.5); // sinon : dès que les bruits sont prêts
     this.ensureTimer();
   }
 
-  setMood(m: Mood): void {
+  private setMoodNow(m: Mood): void {
     if (m === this.mood) return;
     this.mood = m;
-    if (!this.running || !audio.ctx) return;
+    if (!this.running || !audio.ctx || !this.buf) return; // bruits pas encore prêts : le lit partira dans cette humeur
     const t = audio.ctx.currentTime + 0.03;
     for (const b of this.beds) if (b.endAt === null) this.fadeBed(b, t, XFADE);
     this.addBed(m, t, XFADE);
   }
 
-  stop(fadeMs = 1500): void {
+  private stopNow(fadeMs = 1500): void {
     if (!audio.ctx || !this.running) return;
     const t = audio.ctx.currentTime;
     for (const b of this.beds) if (b.endAt === null) this.fadeBed(b, t, Math.max(0.05, fadeMs / 1000));
@@ -241,7 +343,7 @@ export class Ambience {
     this.ensureTimer();
   }
 
-  pause(p: boolean): void {
+  private pauseNow(p: boolean): void {
     if (!audio.ctx || !this.out || p === this.paused) return;
     this.paused = p;
     const t = audio.ctx.currentTime;
@@ -251,30 +353,41 @@ export class Ambience {
     g.linearRampToValueAtTime(p ? 0 : OUT_LEVEL, t + (p ? 0.3 : 0.8));
   }
 
-  /** événement rare ponctuel (décor) */
-  event(kind: AmbienceEvent): void {
-    if (!audio.ready || !this.ensureGraph() || this.paused) return;
+  /**
+   * Événement rare ponctuel (décor). dir : sens de déplacement de ce qui est à l'image
+   * (1 = de gauche à droite, -1 = de droite à gauche), pour que le son suive le vol d'oies.
+   * Ne lève jamais d'exception.
+   */
+  event(kind: AmbienceEvent, dir?: 1 | -1): void {
+    if (!audio.ready || audio.isMuted || this.paused) return;
+    try {
+      if (this.ensureGraph()) this.play(kind, dir);
+    } catch (e) {
+      audioWarn(e);
+    }
+  }
+
+  private play(kind: AmbienceEvent, dir?: 1 | -1): void {
     const c = audio.ctx as AudioContext;
     const t = c.currentTime + 0.03;
     const dest = this.out as GainNode;
     const rng = this.rng;
     switch (kind) {
       case 'distantBlast':
-        this.distantBlast(t, dest);
+        if (this.buf) this.distantBlast(t, dest, this.buf.brown);
         break;
       case 'birds': {
-        // envol : battements d'ailes qui s'éloignent, puis cris
-        const from = rng() < 0.5 ? -0.6 : 0.6;
+        // vol d'oies en V : cris nasillards qui entrent d'un côté et traversent la stéréo avec le vol
+        const from = dir ? -0.7 * dir : rng() < 0.5 ? -0.7 : 0.7;
+        const calls = gooseCalls(rng);
+        const span = (calls[calls.length - 1] as Honk).t + 1.5;
         const pan = this.panner(from, dest);
         pan.pan.setValueAtTime(from, t);
-        pan.pan.linearRampToValueAtTime(-from * 0.8, t + 1.6);
-        const n = 10 + Math.floor(rng() * 7);
-        let tt = t;
-        for (let i = 0; i < n; i++) {
-          this.noiseHit(tt, 'bandpass', 650 + rng() * 350, 1.6, 0.05 * (1 - (i / n) * 0.7), 0.028, pan);
-          tt += 0.062 + i * 0.004;
-        }
-        for (let k = 0; k < 4 + Math.floor(rng() * 3); k++) this.song(t + 0.2 + rng() * 1.2, Math.floor(rng() * 4), 0.028, this.panner(rng() * 1.4 - 0.7, dest));
+        pan.pan.linearRampToValueAtTime(-from * 0.5, t + span);
+        const lp = this.filter('lowpass', 3200);
+        lp.connect(pan);
+        if (this.verbIn) lp.connect(this.gainNode(0.6)).connect(this.verbIn);
+        calls.forEach((h, i) => this.honk(t + h.t, h.f, h.dur, h.vol * (1 - (i / calls.length) * 0.4), lp));
         break;
       }
       case 'woodpecker':
@@ -568,11 +681,11 @@ export class Ambience {
     s.stop(t + dur * 2 + 0.05);
   }
 
-  private distantBlast(t: number, dest: AudioNode): void {
+  private distantBlast(t: number, dest: AudioNode, brown: AudioBuffer): void {
     const c = audio.ctx as AudioContext;
     const boom = (at: number, peak: number, f: number, decay: number) => {
       const s = c.createBufferSource();
-      s.buffer = (this.buf as { brown: AudioBuffer }).brown;
+      s.buffer = brown;
       const lp = this.filter('lowpass', f, 0.9);
       const g = c.createGain();
       g.gain.setValueAtTime(0, at);
@@ -588,6 +701,26 @@ export class Ambience {
     boom(t + 0.55, 0.1, 120, 1.2); // écho sur la montagne
     boom(t + 0.25, 0.08, 80, 2.6); // grondement
     for (let i = 0; i < 6; i++) this.noiseHit(t + 0.9 + this.rng() * 0.8, 'bandpass', 900 + this.rng() * 900, 3, 0.01, 0.02, dest);
+  }
+
+  /** cri d'oie : dent de scie nasillarde (formant vers 1,1 kHz), « ha-onk » : montée puis chute de hauteur */
+  private honk(t: number, f: number, dur: number, vol: number, dest: AudioNode): void {
+    const c = audio.ctx as AudioContext;
+    const o = c.createOscillator();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(f * 0.86, t);
+    o.frequency.linearRampToValueAtTime(f * 1.08, t + dur * 0.3);
+    o.frequency.linearRampToValueAtTime(f * 0.94, t + dur);
+    const bp = this.filter('bandpass', 1150, 1.6);
+    const g = c.createGain();
+    const peak = HONK_LEVEL * vol;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(peak, t + 0.02);
+    g.gain.setValueAtTime(peak, t + dur * 0.7);
+    g.gain.linearRampToValueAtTime(0, t + dur);
+    o.connect(bp).connect(g).connect(dest);
+    o.start(t);
+    o.stop(t + dur + 0.02);
   }
 
   /** huard (plongeon) : longue plainte glissée, signature des lacs du Nord */
@@ -638,25 +771,36 @@ export class Ambience {
 
   /* ---------------- planificateur ---------------- */
 
+  /** planificateur : appelé toutes les 100 ms (et à la demande) ; aucune allocation par passage */
   pump(ahead = LOOKAHEAD): void {
     const c = audio.ctx;
     if (!c || !this.out) return;
     const now = c.currentTime;
     const horizon = now + ahead;
-    if (!this.paused) for (const b of this.beds) if (b.endAt === null) b.tick(now, horizon);
-    this.beds = this.beds.filter((b) => {
-      if (b.endAt !== null && now > b.endAt + 0.3) {
+    let w = 0;
+    for (let r = 0; r < this.beds.length; r++) {
+      const b = this.beds[r] as Bed;
+      if (b.endAt === null) {
+        if (!this.paused) b.tick(now, horizon);
+      } else if (now > b.endAt + 0.3) {
         b.gain.disconnect();
-        return false;
+        continue;
       }
-      return true;
-    });
-    if (!this.running && this.beds.length === 0) this.stopTimer();
+      this.beds[w++] = b;
+    }
+    this.beds.length = w;
+    if (!this.running && w === 0) this.stopTimer();
   }
 
   private ensureTimer(): void {
     if (this.timer !== null) return;
-    this.timer = setInterval(() => this.pump(), TICK_MS);
+    this.timer = setInterval(() => {
+      try {
+        this.pump();
+      } catch (e) {
+        audioWarn(e);
+      }
+    }, TICK_MS);
   }
 
   private stopTimer(): void {

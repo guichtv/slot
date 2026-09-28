@@ -3,8 +3,9 @@ import { gsap } from 'gsap';
 import { formatMoney, getMoneyFormat } from '../core/money';
 import { math, type MathConfig } from '../config/math';
 import { t, onLangChange } from '../i18n';
-import { h, pressable, trapFocus } from './dom';
-import { applyArt, artImg, cfButton, cfClose, fitAll, placeArea, playArea, reducedMotion, warmArt } from './dialogs';
+import { h, pressable } from './dom';
+import { entry } from '../render/assets';
+import { applyArt, artImg, cfButton, cfClose, fitAll, isTopTrap, placeArea, playArea, reducedMotion, trapDialog, warmArt } from './dialogs';
 import type { SceneLayout } from '../render/layout';
 
 /**
@@ -185,8 +186,8 @@ function cardLine(cfg: MathConfig, mode: BuyMode): string {
 export function buyVisual(mode: BuyMode): HTMLElement {
   const v = h('span', { class: `bm-visual bm-v-${mode.toLowerCase()}`, 'aria-hidden': 'true' });
   const add = (key: string, cls: string) => v.append(artImg(key, `bm-art ${cls}`));
-  if (mode === 'BONUS') for (let i = 0; i < 3; i++) add('sym.S.body', `bm-s bm-s${i}`);
-  else if (mode === 'SUPER') for (let i = 0; i < 4; i++) add('sym.S.body', `bm-s bm-s${i}`);
+  if (mode === 'BONUS') for (let i = 0; i < 3; i++) add(entry('sym.S.full') ? 'sym.S.full' : 'sym.S.body', `bm-s bm-s${i}`);
+  else if (mode === 'SUPER') for (let i = 0; i < 4; i++) add(entry('sym.S.full') ? 'sym.S.full' : 'sym.S.body', `bm-s bm-s${i}`);
   else if (mode === 'BLAST') {
     add('sym.T.bundle', 'bm-bundle');
     add('sym.T.stick', 'bm-stick');
@@ -223,17 +224,27 @@ export class BuyMenu {
       e.stopPropagation();
       if (this.flow.step !== 'pending') this.close();
     });
-    this.root.addEventListener('keydown', (e) => {
-      if (e.key !== 'Escape' || this.flow.step === 'closed') return;
-      e.preventDefault();
-      e.stopPropagation();
-      this.close();
-    });
     onLangChange(() => {
-      if (this.flow.step === 'catalog') this.renderCatalog();
       this.closeBtn.setAttribute('aria-label', t('common.close'));
+      if (this.flow.step === 'catalog') this.renderCatalog();
+      else if (this.flow.step === 'confirm') {
+        this.renderCatalog();
+        this.showConfirm();
+      }
     });
   }
+
+  /**
+   * Échap : retour au jeu sans achat (écouté sur le document : fonctionne même si le focus est sorti).
+   * Sans effet pendant l'achat en cours ; un dialogue ouvert par-dessus le consomme avant.
+   */
+  private onEscape = (e: KeyboardEvent): void => {
+    if (e.key !== 'Escape' || this.flow.step === 'closed') return;
+    const top = this.confirmBox ?? this.board;
+    if (!isTopTrap(top)) return;
+    e.preventDefault();
+    this.close();
+  };
 
   get isOpen(): boolean {
     return this.flow.step !== 'closed';
@@ -265,7 +276,8 @@ export class BuyMenu {
     this.renderCatalog();
     this.opts.onOpen?.();
     this.opts.onStep?.('catalog');
-    this.untrap = trapFocus(this.board);
+    this.untrap = trapDialog(this.board);
+    document.addEventListener('keydown', this.onEscape);
     // l'enseigne descend du haut et se balance comme un panneau suspendu (~350 ms) ; animations réduites : fondu
     const tl = gsap.timeline();
     gsap.set(this.board, { transformOrigin: '50% 0%' });
@@ -286,6 +298,7 @@ export class BuyMenu {
   private shut(reason: 'cancel' | 'purchased'): void {
     if (!this.flow.close() && reason === 'cancel') return;
     this.removeConfirm();
+    document.removeEventListener('keydown', this.onEscape);
     this.untrap?.();
     this.untrap = null;
     this.anim?.kill();
@@ -408,7 +421,7 @@ export class BuyMenu {
     this.cardsBox.inert = true;
     this.confirmBox = box;
     fitAll(box);
-    this.untrapConfirm = trapFocus(box);
+    this.untrapConfirm = trapDialog(box);
     this.opts.onStep?.('confirm');
   }
 
@@ -419,6 +432,9 @@ export class BuyMenu {
     cancel.disabled = true;
     ok.setAttribute('aria-busy', 'true');
     this.closeBtn.disabled = true;
+    // le bouton désactivé perd le focus : il reste dans la confirmation (lecteurs d'écran : achat en cours)
+    this.confirmBox?.setAttribute('aria-busy', 'true');
+    this.confirmBox?.focus();
     const res = await this.flow.confirm((q) => this.opts.onConfirm(q.mode, q));
     this.closeBtn.disabled = false;
     if (res === 'done') {

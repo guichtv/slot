@@ -5,8 +5,8 @@ import { intlLocale, onLangChange, t } from '../i18n';
 import { entry } from '../render/assets';
 import type { SceneLayout } from '../render/layout';
 import type { TurboLevel } from './hud';
-import { h, pressable, trapFocus } from './dom';
-import { applyArt, artImg, cfButton, cfClose, cfSwitch, fitAll, fitText, placeArea, playArea } from './dialogs';
+import { h, pressable } from './dom';
+import { applyArt, artImg, cfButton, cfClose, cfSwitch, fitAll, fitBatch, isTopTrap, placeArea, playArea, trapDialog } from './dialogs';
 import { buyModeName, buyModes, buyPrice, buyVisual, type BuyMode } from './buy';
 
 /**
@@ -53,6 +53,10 @@ export interface GameMenuOptions {
   onReducedMotion(on: boolean): void;
   onQuality(q: Quality): void;
   getConfig?(): MathConfig;
+  /** « Revoir » actif seulement au repos (défaut : toujours) */
+  canReplay?(): boolean;
+  /** juridiction : achat de bonus autorisé (défaut : oui) ; sinon prix d'achat et features achetables masqués */
+  buyAllowed?(): boolean;
   onOpen?(): void;
   onClose?(): void;
   /** stockage des réglages (défaut : localStorage, protégé par try/catch) */
@@ -152,17 +156,12 @@ export function waysCount(cols = 5, rows = 5): number {
 }
 
 /**
- * Relances par nombre de Scatters (concept : 2 -> +2, 3 -> +5, 4+ -> +8 en super).
- * La config actuelle n'en porte qu'une (retrigger) : elle prime ; une table complète future (retriggers) aussi.
- * Le dernier palier vaut « N ou plus ».
+ * Relances par nombre de Scatters, uniquement d'après la config maths (jamais de valeur du concept codée en dur :
+ * les règles affichées doivent correspondre aux maths réelles). Entrée `retrigger` et, si la config en porte une,
+ * table complète `retriggers` ({ "2": 2, "3": 5, ... }). Le dernier palier vaut « N ou plus ».
  */
-const RETRIGGER_DEFAULTS: Record<'standard' | 'super', Record<number, number>> = {
-  standard: { 2: 2, 3: 5 },
-  super: { 2: 2, 3: 5, 4: 8 },
-};
-
 export function retriggerTable(cfg: MathConfig, kind: 'standard' | 'super'): Array<{ scatters: number; label: string; spins: number }> {
-  const table: Record<number, number> = { ...RETRIGGER_DEFAULTS[kind] };
+  const table: Record<number, number> = {};
   const fs = cfg.freeSpins[kind] as MathConfig['freeSpins']['standard'] & { retriggers?: Record<string, number> };
   if (fs?.retriggers) for (const [k, v] of Object.entries(fs.retriggers)) if (Number(k) > 0 && v > 0) table[Number(k)] = v;
   if (fs?.retrigger && fs.retrigger.scatters > 0 && fs.retrigger.spins > 0) table[fs.retrigger.scatters] = fs.retrigger.spins;
@@ -225,6 +224,8 @@ export function formatTime(time: number | string | Date, locale = 'en-US', now: 
 
 /** clé d'art d'un symbole (corps illustré si le symbole est en pièces) */
 export function symbolArtKey(id: string): string {
+  // symbole complet (corps + pièces, pipeline symbol_thumbs.py), sinon corps seul, sinon image unique
+  if (entry(`sym.${id}.full`)) return `sym.${id}.full`;
   return entry(`sym.${id}.body`) ? `sym.${id}.body` : `sym.${id}`;
 }
 
@@ -306,12 +307,6 @@ export class GameMenu {
       e.stopPropagation();
       this.close();
     });
-    this.root.addEventListener('keydown', (e) => {
-      if (e.key !== 'Escape' || !this.open_) return;
-      e.preventDefault();
-      e.stopPropagation();
-      this.close();
-    });
     this.refreshTexts();
     onLangChange(() => {
       this.refreshTexts();
@@ -332,12 +327,15 @@ export class GameMenu {
     return this.s;
   }
 
-  /** applique tous les réglages mémorisés via les callbacks (à appeler une fois au démarrage) */
+  /** applique tous les réglages mémorisés via les callbacks (à appeler une fois au démarrage, après setTurboAllowed) */
   applyAll(): void {
     this.opts.onVolume('master', this.s.master);
     this.opts.onVolume('music', this.s.music);
     this.opts.onVolume('effects', this.s.effects);
-    this.opts.onTurbo(this.clampTurbo(this.s.turbo));
+    // niveau interdit par la juridiction : le réglage affiché suit le niveau réellement appliqué
+    const turbo = this.clampTurbo(this.s.turbo);
+    if (turbo !== this.s.turbo) this.s = { ...this.s, turbo };
+    this.opts.onTurbo(turbo);
     this.opts.onReducedMotion(this.s.reducedMotion);
     this.opts.onQuality(this.s.quality);
   }
@@ -351,12 +349,31 @@ export class GameMenu {
     }
   }
 
-  /** synchronise le niveau turbo changé ailleurs (bouton du HUD) */
+  /** synchronise le niveau turbo changé ailleurs */
   setTurbo(level: TurboLevel): void {
-    if (this.s.turbo === level) return;
-    this.s = { ...this.s, turbo: level };
+    const lv = this.clampTurbo(level);
+    if (this.s.turbo === lv) return;
+    this.s = { ...this.s, turbo: lv };
     this.persist();
     if (this.open_ && this.current === 'settings') this.renderBody();
+  }
+
+  /**
+   * Bouton turbo du HUD : passe au niveau autorisé suivant (0 -> 1 -> 2 -> 0, super turbo sauté s'il est interdit),
+   * mémorise et applique via onTurbo. Renvoie le niveau appliqué.
+   */
+  cycleTurbo(): TurboLevel {
+    const order: TurboLevel[] = [0, 1, 2];
+    let lv = this.s.turbo;
+    for (let i = 0; i < 3; i++) {
+      lv = order[(order.indexOf(lv) + 1) % 3] as TurboLevel;
+      if (this.clampTurbo(lv) === lv) break;
+    }
+    this.s = { ...this.s, turbo: lv };
+    this.persist();
+    this.opts.onTurbo(lv);
+    if (this.open_ && this.current === 'settings') this.renderBody();
+    return lv;
   }
 
   /** juridiction : turbo et/ou super turbo interdits */
@@ -376,7 +393,8 @@ export class GameMenu {
     this.refreshTexts();
     this.renderBody();
     this.fitTabs();
-    this.untrap = trapFocus(this.panel);
+    this.untrap = trapDialog(this.panel);
+    document.addEventListener('keydown', this.onEscape);
     queueMicrotask(() => this.tabs.get(this.current)?.focus());
     this.opts.onOpen?.();
   }
@@ -386,9 +404,25 @@ export class GameMenu {
     this.open_ = false;
     this.root.hidden = true;
     this.body.replaceChildren();
+    document.removeEventListener('keydown', this.onEscape);
     this.untrap?.();
     this.untrap = null;
     this.opts.onClose?.();
+  }
+
+  /** Échap ferme le menu, même si le focus en est sorti ; un dialogue ouvert par-dessus le consomme avant */
+  private onEscape = (e: KeyboardEvent): void => {
+    if (e.key !== 'Escape' || !this.open_ || !isTopTrap(this.panel)) return;
+    e.preventDefault();
+    this.close();
+  };
+
+  /** redessine l'onglet ouvert (fin de manche : historique à jour, « Revoir » réactivé), défilement conservé */
+  refresh(): void {
+    if (!this.open_) return;
+    const top = this.body.scrollTop;
+    this.renderBody();
+    this.body.scrollTop = top;
   }
 
   select(tab: MenuTab): void {
@@ -425,11 +459,11 @@ export class GameMenu {
   private fitTabs(): void {
     const run = () => {
       const texts = [...this.tablist.querySelectorAll<HTMLElement>('.gm-tab-text')];
-      texts.forEach((el) => fitText(el, 11));
-      const sizes = texts.map((el) => parseFloat(getComputedStyle(el).fontSize)).filter((v) => v > 0);
+      fitBatch(texts, 11);
+      const sizes = texts.map((el) => parseFloat(el.style.fontSize || getComputedStyle(el).fontSize)).filter((v) => v > 0);
       if (!sizes.length) return;
       const min = Math.min(...sizes);
-      texts.forEach((el) => (el.style.fontSize = `${min}px`));
+      for (const el of texts) el.style.fontSize = `${min}px`;
     };
     if (typeof requestAnimationFrame === 'function') requestAnimationFrame(run);
     else run();
@@ -508,7 +542,8 @@ export class GameMenu {
       const fs = cfg.freeSpins[kind];
       const trig = kind === 'super' ? `${fs.scatters}+` : String(fs.scatters);
       const retr = h('ul', { class: 'gm-retrig', 'aria-label': t('rules.retrigger') });
-      for (const r of retriggerTable(cfg, kind)) {
+      const rows = retriggerTable(cfg, kind);
+      for (const r of rows) {
         retr.append(
           h(
             'li',
@@ -536,7 +571,7 @@ export class GameMenu {
           ),
         ),
         p(`bonus.${kind}.rule`),
-        h('div', { class: 'gm-retrig-box' }, h('span', { class: 'gm-retrig-label' }, t('rules.retrigger')), retr),
+        rows.length ? h('div', { class: 'gm-retrig-box' }, h('span', { class: 'gm-retrig-label', 'aria-hidden': 'true' }, t('rules.retrigger')), retr) : null,
       );
     };
     wrap.append(
@@ -548,10 +583,11 @@ export class GameMenu {
       ),
     );
 
-    // features d'un spin
+    // features d'un spin (achetables uniquement : masquées si la juridiction interdit l'achat)
+    const buyOk = this.opts.buyAllowed?.() ?? true;
     const featureBlock = (mode: 'BLAST' | 'MEGA', ruleKey: string) =>
       h('div', { class: 'gm-bonus' }, h('div', { class: 'gm-bonus-head' }, buyVisual(mode), h('div', { class: 'gm-bonus-id' }, h('h4', { class: 'gm-h4' }, buyModeName(mode)), p(ruleKey))));
-    const hasFeat = cfg.modes.BLAST || cfg.modes.MEGA;
+    const hasFeat = buyOk && (cfg.modes.BLAST || cfg.modes.MEGA);
     if (hasFeat) {
       wrap.append(
         sec(
@@ -564,7 +600,7 @@ export class GameMenu {
 
     // prix des modes (coût × mise)
     const prices = h('div', { class: 'gm-table', role: 'table', 'aria-label': t('rules.modes.title') });
-    for (const mode of buyModes(cfg)) {
+    for (const mode of buyOk ? buyModes(cfg) : []) {
       const cost = cfg.modes[mode]?.cost ?? 1;
       prices.append(
         h(
@@ -576,7 +612,7 @@ export class GameMenu {
         ),
       );
     }
-    wrap.append(sec('rules.modes.title', prices));
+    if (prices.childElementCount) wrap.append(sec('rules.modes.title', prices));
 
     // ANTE
     const ante = cfg.modes.ANTE;
@@ -585,7 +621,7 @@ export class GameMenu {
         sec(
           'ante.label',
           p('rules.ante.text', { cost: num(ante.cost), factor: num(ante.bonusChanceFactor ?? 1), amount: formatMoney(buyPrice(bet, ante.cost)) }),
-          p('rules.modes.note'),
+          prices.childElementCount ? p('rules.modes.note') : null,
         ),
       );
     }
@@ -595,7 +631,9 @@ export class GameMenu {
 
     // RTP par mode
     const rtp = h('div', { class: 'gm-table', role: 'table', 'aria-label': t('rules.rtp.title') });
+    const buyable = new Set<string>(buyModes(cfg));
     for (const r of modeRtps(cfg)) {
+      if (!buyOk && buyable.has(r.mode)) continue;
       rtp.append(
         h(
           'div',
@@ -615,6 +653,12 @@ export class GameMenu {
 
   private renderSettings(): HTMLElement {
     const wrap = h('div', { class: 'gm-settings' });
+    let pct: Intl.NumberFormat;
+    try {
+      pct = new Intl.NumberFormat(intlLocale(), { style: 'percent', maximumFractionDigits: 0 });
+    } catch {
+      pct = new Intl.NumberFormat('en-US', { style: 'percent', maximumFractionDigits: 0 });
+    }
     const s = this.s;
     const row = (labelEl: HTMLElement, control: HTMLElement, cls = '') => h('div', { class: `gm-set ${cls}`.trim() }, labelEl, control);
 
@@ -625,7 +669,7 @@ export class GameMenu {
       const paint = () => {
         const v = Number(input.value);
         input.style.setProperty('--pct', `${v}%`);
-        input.setAttribute('aria-valuetext', `${v}%`);
+        input.setAttribute('aria-valuetext', pct.format(v / 100));
         ico?.classList.toggle('is-off', v === 0);
       };
       input.value = String(Math.round(s[ch] * 100));
@@ -659,7 +703,8 @@ export class GameMenu {
       pressable(b);
       seg.append(b);
     }
-    wrap.append(row(h('span', { class: 'gm-set-label', id: turboLabelId }, t('settings.turbo')), seg));
+    // turbo interdit par la juridiction : pas de rangée (comme le bouton du HUD, masqué)
+    if (this.turboAllowed.turbo) wrap.append(row(h('span', { class: 'gm-set-label', id: turboLabelId }, t('settings.turbo')), seg));
 
     // animations réduites
     const sw = cfSwitch(t('settings.motion'), (on) => {
@@ -703,10 +748,15 @@ export class GameMenu {
     const cfg = this.cfg();
     const loc = intlLocale();
     const now = new Date();
+    // pendant une manche, « Revoir » est désactivé (jamais un clic sans effet)
+    const canReplay = this.opts.canReplay?.() ?? true;
     const list = h('ol', { class: 'gm-hist' });
     for (const it of items) {
       const win = historyWin(it);
-      const replay = cfButton(t('history.replay'), 'gm-replay', () => this.opts.onReplay(it.id));
+      const replay = cfButton(t('history.replay'), 'gm-replay', () => {
+        if (this.opts.canReplay?.() ?? true) this.opts.onReplay(it.id);
+      });
+      replay.disabled = !canReplay;
       replay.setAttribute('aria-label', t('history.replayRound', { id: it.id }));
       list.append(
         h(

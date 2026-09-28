@@ -56,9 +56,9 @@ export function installQa(d: QaDeps): void {
     skip: () => game.skipPresentation(),
     quick: () => game.quickStop(),
     layout: () => scene.layout,
-    flock: () => scene.decor.launchFlock(),
-    ambience: (a: 'base' | 'bonus' | 'super') => scene.decor.setAmbience(a, 0).progress(1),
-    monument: (n: number) => scene.decor.setMonument(n, false),
+    flock: () => void scene.decor.launchFlock(),
+    ambience: (a: 'base' | 'bonus' | 'super') => void scene.decor.setAmbience(a, 0).progress(1),
+    monument: (n: number) => void scene.decor.setMonument(n, false),
     deps: d,
   };
   window.__qaBoot = () => undefined;

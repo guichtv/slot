@@ -137,13 +137,13 @@
 .bm-art { position: absolute; height: auto; filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.45)); }
 
 /* SUNDOWN SHIFT : 3 détonateurs qui se chevauchent, fond crépuscule */
-.bm-v-bonus { background: #7a3e1d; }
+.bm-v-bonus { background: #7a3e1d var(--cf-bg-bonus) center 60% / cover no-repeat; }
 .bm-v-bonus .bm-s { width: 50%; top: 22%; }
 .bm-v-bonus .bm-s0 { left: 3%; rotate: -12deg; }
 .bm-v-bonus .bm-s1 { left: 25%; top: 12%; rotate: 0deg; z-index: 2; }
 .bm-v-bonus .bm-s2 { left: 47%; rotate: 12deg; }
 /* FLOODLIGHT SHIFT : 4 détonateurs, teinte de nuit */
-.bm-v-super { background: var(--cf-night); }
+.bm-v-super { background: var(--cf-night) var(--cf-bg-super) center 30% / cover no-repeat; }
 .bm-v-super .bm-s { width: 42%; top: 24%; }
 .bm-v-super .bm-s0 { left: 1%; rotate: -14deg; }
 .bm-v-super .bm-s1 { left: 20%; top: 12%; rotate: -5deg; z-index: 2; }
@@ -158,11 +158,11 @@
   pointer-events: none;
 }
 /* TNT SPIN : un fagot et un bâton */
-.bm-v-blast { background: #1e3b2e; }
+.bm-v-blast { background: #1e3b2e var(--cf-bg-blast) center 25% / cover no-repeat; }
 .bm-v-blast .bm-bundle { width: 64%; left: 6%; top: 18%; }
 .bm-v-blast .bm-stick { width: 24%; right: 8%; top: 10%; rotate: 16deg; z-index: 2; }
 /* MEGA BLAST SPIN : le tonnelet */
-.bm-v-mega { background: var(--cf-steel-dark); }
+.bm-v-mega { background: var(--cf-steel-dark) var(--cf-bg-mega) 30% 40% / cover no-repeat; }
 .bm-v-mega .bm-keg { height: 88%; width: auto; left: 50%; top: 7%; translate: -50% 0; }
 
 .bm-name {

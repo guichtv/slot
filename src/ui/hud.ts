@@ -30,6 +30,7 @@ export class Hud {
   private els: Record<string, HTMLElement> = {};
   private phase: SpinPhase = 'idle';
   private autoOpen = false;
+  private betOpen = false;
   private flags = { turbo: true, autoplay: true, buy: true, ante: true };
 
   constructor(private cb: HudCallbacks) {
@@ -67,6 +68,18 @@ export class Hud {
     }
     e.autoPop = autoMenu;
 
+    // sélecteur de mise des dispositions compactes (téléphone) : la valeur ouvre − / valeur / +
+    const betPopVal = h('span', { class: 'hud-bet-pop-val' });
+    e.betPopVal = betPopVal;
+    const betPop = h(
+      'div',
+      { class: 'hud-bet-pop', role: 'group', hidden: true },
+      btn('betPopDown', 'hud-step hud-minus', t('hud.betDown'), () => cb.betDelta(-1), h('span', { class: 'glyph' })),
+      betPopVal,
+      btn('betPopUp', 'hud-step hud-plus', t('hud.betUp'), () => cb.betDelta(1), h('span', { class: 'glyph' })),
+    );
+    e.betPop = betPop;
+
     const spinCount = h('span', { class: 'hud-spin-count', 'aria-hidden': 'true' });
     e.spinCount = spinCount;
     const spin = btn('spin', 'hud-spin', t('hud.spin'), () => this.onSpin(), h('span', { class: 'hud-spin-face' }, spinCount));
@@ -92,6 +105,7 @@ export class Hud {
         btn('betDown', 'hud-step hud-minus', t('hud.betDown'), () => cb.betDelta(-1), h('span', { class: 'glyph' })),
         val('bet', 'hud-bet-val'),
         btn('betUp', 'hud-step hud-plus', t('hud.betUp'), () => cb.betDelta(1), h('span', { class: 'glyph' })),
+        betPop,
       ),
       h(
         'div',
@@ -101,10 +115,24 @@ export class Hud {
         h('div', { class: 'hud-auto-wrap' }, btn('auto', 'hud-ico ico-auto', t('hud.autoplay'), () => this.toggleAuto()), autoMenu),
       ),
     );
+    // dispositions compactes : la case « mise » elle-même ouvre le sélecteur (clavier compris)
+    const betBox = e.betBox as HTMLElement;
+    betBox.addEventListener('click', (ev) => {
+      if (!this.compact) return;
+      ev.stopPropagation();
+      this.toggleBet();
+    });
+    betBox.addEventListener('keydown', (ev) => {
+      if (!this.compact || (ev.key !== 'Enter' && ev.key !== ' ')) return;
+      ev.preventDefault();
+      this.toggleBet();
+    });
+    pressable(betBox);
     this.refreshTexts();
     onLangChange(() => this.refreshTexts());
     document.addEventListener('pointerdown', (ev) => {
       if (this.autoOpen && !(ev.target as HTMLElement).closest('.hud-auto-wrap')) this.closeAuto();
+      if (this.betOpen && !(ev.target as HTMLElement).closest('.hud-bet')) this.closeBet();
     });
   }
 
@@ -117,6 +145,47 @@ export class Hud {
     if (buyText) buyText.textContent = t('hud.buy');
     for (const [k, key] of [['spin', 'hud.spin'], ['buy', 'hud.buy'], ['menu', 'hud.menu'], ['sound', 'hud.sound'], ['info', 'hud.info'], ['betDown', 'hud.betDown'], ['betUp', 'hud.betUp'], ['turbo', 'hud.turbo'], ['auto', 'hud.autoplay']] as const) {
       e[k]?.setAttribute('aria-label', t(key));
+    }
+  }
+
+  private get compact(): boolean {
+    const c = this.root.getAttribute('data-layout');
+    return c === 'portrait' || c === 'mini' || c === 'landscapeShort';
+  }
+
+  private toggleBet(): void {
+    if (this.phase !== 'idle') return;
+    this.betOpen ? this.closeBet() : this.openBet();
+  }
+
+  private openBet(): void {
+    this.betOpen = true;
+    (this.els.betPop as HTMLElement).hidden = false;
+    this.els.betBox?.setAttribute('aria-expanded', 'true');
+  }
+
+  closeBet(): void {
+    this.betOpen = false;
+    (this.els.betPop as HTMLElement).hidden = true;
+    this.els.betBox?.setAttribute('aria-expanded', 'false');
+  }
+
+  /** réduit la police d'une valeur jusqu'à ce qu'elle tienne (jamais tronquée) */
+  private fit(el: HTMLElement): void {
+    el.style.fontSize = '';
+    if (!el.clientWidth) return;
+    const base = parseFloat(getComputedStyle(el).fontSize) || 16;
+    let size = base;
+    while (el.scrollWidth > el.clientWidth + 1 && size > base * 0.6) {
+      size -= 1;
+      el.style.fontSize = `${size}px`;
+    }
+  }
+
+  private refit(): void {
+    for (const k of ['balance', 'win', 'bet']) {
+      const el = this.els[k];
+      if (el) this.fit(el);
     }
   }
 
@@ -157,6 +226,7 @@ export class Hud {
 
   setBalance(amount: number): void {
     (this.els.balance as HTMLElement).textContent = formatMoney(amount);
+    this.fit(this.els.balance as HTMLElement);
   }
 
   setWin(amount: number | null, label?: string): void {
@@ -164,6 +234,7 @@ export class Hud {
     (this.els.winLabel as HTMLElement).textContent = label ?? t('hud.win');
     (this.els.win as HTMLElement).textContent = amount === null ? '' : formatMoney(amount);
     box.classList.toggle('is-empty', amount === null || amount === 0);
+    this.fit(this.els.win as HTMLElement);
   }
 
   pulseWin(): void {
@@ -175,6 +246,8 @@ export class Hud {
 
   setBet(amount: number, canDown: boolean, canUp: boolean): void {
     (this.els.bet as HTMLElement).textContent = formatMoney(amount);
+    (this.els.betPopVal as HTMLElement).textContent = formatMoney(amount);
+    this.fit(this.els.bet as HTMLElement);
     this.betBounds = { canDown, canUp };
     this.applyLocks();
   }
@@ -188,7 +261,10 @@ export class Hud {
     spin.setAttribute('data-phase', p);
     (this.els.spinCount as HTMLElement).textContent = p === 'autoplay' && autoLeft !== undefined ? String(autoLeft) : '';
     spin.setAttribute('aria-label', p === 'spinning' ? t('hud.stop') : p === 'autoplay' ? t('hud.stopAuto') : t('hud.spin'));
-    if (p !== 'idle') this.closeAuto();
+    if (p !== 'idle') {
+      this.closeAuto();
+      this.closeBet();
+    }
     this.applyLocks();
   }
 
@@ -200,6 +276,13 @@ export class Hud {
     };
     set('betDown', !idle || !this.betBounds.canDown);
     set('betUp', !idle || !this.betBounds.canUp);
+    set('betPopDown', !idle || !this.betBounds.canDown);
+    set('betPopUp', !idle || !this.betBounds.canUp);
+    const box = this.els.betBox;
+    if (box) {
+      const interactive = this.compact && idle;
+      box.setAttribute('aria-disabled', interactive ? 'false' : 'true');
+    }
     set('buy', !idle);
     set('auto', !(idle || this.phase === 'autoplay'));
     set('spin', this.phase === 'locked' || this.phase === 'bonus' || this.phase === 'stopping');
@@ -221,11 +304,29 @@ export class Hud {
   /** place le HUD selon la mise en page commune */
   layout(l: SceneLayout): void {
     this.root.setAttribute('data-layout', l.cls);
+    // case « mise » : bouton en disposition compacte, simple affichage sinon
+    const betBox = this.els.betBox as HTMLElement;
+    if (this.compact) {
+      betBox.setAttribute('role', 'button');
+      betBox.setAttribute('tabindex', '0');
+      betBox.setAttribute('aria-label', t('hud.bet'));
+      betBox.setAttribute('aria-haspopup', 'true');
+    } else {
+      for (const a of ['role', 'tabindex', 'aria-label', 'aria-haspopup', 'aria-expanded', 'aria-disabled']) betBox.removeAttribute(a);
+    }
     const s = this.root.style;
     s.left = `${l.hud.x}px`;
     s.top = `${l.hud.y}px`;
     s.width = `${l.hud.w}px`;
     s.height = `${l.hud.h}px`;
+    s.setProperty('--hud-h', `${l.hud.h}px`);
+    s.setProperty('--hud-w', `${l.hud.w}px`);
+    // paysage court : petits boutons dans la colonne gauche, sous le logo et l'Ante
+    s.setProperty('--small-left', `${Math.max(8, l.logo.x)}px`);
+    s.setProperty('--small-top', `${l.ante.y + l.ante.h + 8}px`);
+    s.setProperty('--small-w', `${Math.max(96, l.stage.x - 16)}px`);
+    this.closeBet();
+    requestAnimationFrame(() => this.refit());
   }
 
   element(key: string): HTMLElement | undefined {

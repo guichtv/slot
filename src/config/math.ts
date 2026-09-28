@@ -14,6 +14,14 @@ const Mode = z.object({
   feature: z.string().optional(),
 });
 
+/** retriggers : table complète { "Scatters": spins } (le dernier palier vaut « N ou plus ») */
+const FreeSpins = z.object({
+  scatters: z.number().int(),
+  spins: z.number().int(),
+  retrigger: z.object({ scatters: z.number().int(), spins: z.number().int() }),
+  retriggers: z.record(z.number().int().positive()).optional(),
+});
+
 export const MathConfigSchema = z.object({
   provisional: z.boolean(),
   contractVersion: z.string(),
@@ -22,8 +30,8 @@ export const MathConfigSchema = z.object({
   celebrationTiersX: z.array(z.number().positive()).min(1),
   modes: z.record(Mode),
   freeSpins: z.object({
-    standard: z.object({ scatters: z.number().int(), spins: z.number().int(), retrigger: z.object({ scatters: z.number().int(), spins: z.number().int() }) }),
-    super: z.object({ scatters: z.number().int(), spins: z.number().int(), retrigger: z.object({ scatters: z.number().int(), spins: z.number().int() }) }),
+    standard: FreeSpins,
+    super: FreeSpins,
   }),
   paytable: z.record(z.union([z.string(), z.record(z.number())])),
   tnt: z.record(z.object({ w: z.number().int(), h: z.number().int() })),

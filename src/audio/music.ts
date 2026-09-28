@@ -626,6 +626,25 @@ function composeBonus(c: BarCtx): NoteEvent[] {
   return ev;
 }
 
+/** accord de cuivres du super bonus : trois notes entre sol 3 et si♭ 4 */
+function brassVoicing(ch: Chord): number[] {
+  return chordTones(ch, 55, 70).slice(0, 3);
+}
+/** relance d'octave des cuivres en fin de section B */
+const brassLift = (m: number): number => m + (m < 62 ? 12 : 0);
+
+/** toutes les notes de cuivres que le super bonus peut jouer (pré-calcul) */
+export function superBrassNotes(): number[] {
+  const set = new Set<number>();
+  for (const names of Object.values(MOODS.super.prog))
+    for (const name of names)
+      for (const m of brassVoicing(CHORDS[name] as Chord)) {
+        set.add(m);
+        set.add(brassLift(m));
+      }
+  return [...set].sort((a, b) => a - b);
+}
+
 function composeSuper(c: BarCtx): NoteEvent[] {
   const { chord, s, fill, rng, i } = c;
   const ev: NoteEvent[] = [];
@@ -659,13 +678,13 @@ function composeSuper(c: BarCtx): NoteEvent[] {
     for (let st = 0; st < 16; st++) ev.push({ step: st, inst: 'shaker', midi: 0, vel: jit(st % 2 ? 0.14 : st % 4 === 2 ? 0.34 : 0.22), len: 1 });
   }
   // cuivres
-  const brass = chordTones(chord, 55, 70).slice(0, 3);
+  const brass = brassVoicing(chord);
   if (kind === 'A') {
     const hits: Array<[number, number, number]> = rng() < 0.5 ? [[0, 3, 0.55], [6, 1, 0.4], [10, 2, 0.46]] : [[0, 2, 0.55], [3, 1, 0.36], [10, 4, 0.48]];
     for (const [st, len, vel] of hits) brass.forEach((m) => ev.push({ step: st, inst: 'brass', midi: m, vel: jit(vel), len }));
   } else if (kind === 'B') {
     brass.forEach((m) => ev.push({ step: 0, inst: 'brass', midi: m, vel: jit(0.38), len: 12 }));
-    brass.forEach((m) => ev.push({ step: 14, inst: 'brass', midi: m + (m < 62 ? 12 : 0), vel: jit(0.5), len: 2 }));
+    brass.forEach((m) => ev.push({ step: 14, inst: 'brass', midi: brassLift(m), vel: jit(0.5), len: 2 }));
   } else if (fill) {
     brass.forEach((m) => ev.push({ step: 14, inst: 'brass', midi: m, vel: jit(0.5), len: 2 }));
   }
@@ -802,71 +821,103 @@ export function biquad(x: Float32Array, type: 'lowpass' | 'highpass' | 'bandpass
   return y;
 }
 
-/** enveloppe : attaque linéaire, maintien, décroissance exponentielle (constante de temps tc) */
-function envAt(tt: number, a: number, hold: number, tc: number): number {
-  if (tt < a) return tt / a;
-  if (tt < a + hold) return 1;
-  return Math.exp(-(tt - a - hold) / tc);
-}
-
-/** sinus à glissando exponentiel f0 → f1 en sweep secondes, puis f1 */
+/**
+ * sinus (ou triangle) à glissando exponentiel f0 → f1 en sw secondes, puis f1.
+ * Fréquence et phase calculées par récurrence (aucune puissance par échantillon).
+ */
 function sweep(n: number, sr: number, f0: number, f1: number, sw: number, tri = false): Float32Array {
   const out = new Float32Array(n);
+  const swN = sw * sr;
+  const ratio = (f1 / f0) ** (1 / swN);
+  const end = f1 / sr;
+  let inc = f0 / sr;
   let ph = 0;
   for (let i = 0; i < n; i++) {
-    const tt = i / sr;
-    const f = tt < sw ? f0 * (f1 / f0) ** (tt / sw) : f1;
-    ph = (ph + f / sr) % 1;
+    ph += i < swN ? inc : end;
+    if (ph >= 1) ph -= 1;
     out[i] = tri ? 1 - 4 * Math.abs(ph - 0.5) : Math.sin(2 * Math.PI * ph);
+    inc *= ratio;
   }
   return out;
 }
+
+const DRUM_LEN: Record<DrumKind, number> = { stomp: 0.4, block: 0.15, blockLo: 0.15, shaker: 0.15, tick: 0.08, brush: 0.6, taiko: 1.1, taikoHi: 0.6 };
+/** kit complet (instrument, hauteur) tel que le jouent les compositeurs et les effets */
+export const DRUM_KIT: ReadonlyArray<readonly [DrumKind, number]> = [
+  ['stomp', 36],
+  ['block', 86],
+  ['blockLo', 79],
+  ['shaker', 0],
+  ['tick', 0],
+  ['brush', 0],
+  ['taiko', 38],
+  ['taikoHi', 45],
+];
 
 /**
  * Rend un coup de percussion (vélocité 1) : planche tapée du pied, wood-blocks accordés, shaker, balais,
  * taikos. Mêmes recettes que des graphes Web Audio (oscillateurs, bruit filtré, enveloppes), calculées
  * une fois en JavaScript. Trois variantes de bruit par instrument évitent l'effet « mitraillette ».
+ * Chaque couche n'est calculée que jusqu'à -100 dB (enveloppe éteinte) ; enveloppes par récurrence.
  */
 export function renderDrum(kind: DrumKind, midi: number, sr: number, seed: number): Float32Array {
   const rng = mulberry32(seed);
-  const len = { stomp: 0.4, block: 0.15, blockLo: 0.15, shaker: 0.15, tick: 0.08, brush: 0.6, taiko: 1.1, taikoHi: 0.6 }[kind];
-  const n = Math.floor(sr * len);
+  const n = Math.floor(sr * DRUM_LEN[kind]);
   const out = new Float32Array(n);
-  const white = () => {
-    const w = new Float32Array(n);
-    for (let i = 0; i < n; i++) w[i] = rng() * 2 - 1;
+  /** échantillons utiles d'une couche : attaque + maintien + 11,5 constantes de temps (-100 dB) */
+  const span = (a: number, hold: number, tc: number) => Math.min(n, Math.ceil((a + hold + tc * 11.5) * sr) + 1);
+  const white = (m: number) => {
+    const w = new Float32Array(m);
+    for (let i = 0; i < m; i++) w[i] = rng() * 2 - 1;
     return w;
   };
+  /** attaque linéaire, maintien, décroissance exponentielle (constante de temps tc) */
   const add = (src: Float32Array, peak: number, a: number, hold: number, tc: number) => {
-    for (let i = 0; i < n; i++) out[i] = (out[i] as number) + (src[i] as number) * peak * envAt(i / sr, a, hold, tc);
+    const aN = a * sr;
+    const hN = (a + hold) * sr;
+    const k = Math.exp(-1 / (tc * sr));
+    let e = -1;
+    for (let i = 0; i < src.length; i++) {
+      let env: number;
+      if (i < aN) env = i / sr / a;
+      else if (i < hN) env = 1;
+      else {
+        if (e < 0) e = Math.exp(-(i / sr - a - hold) / tc);
+        env = e;
+        e *= k;
+      }
+      out[i] = (out[i] as number) + (src[i] as number) * peak * env;
+    }
   };
+  const tone = (f0: number, f1: number, sw: number, peak: number, a: number, hold: number, tc: number, tri = false) => add(sweep(span(a, hold, tc), sr, f0, f1, sw, tri), peak, a, hold, tc);
+  const noise = (type: 'lowpass' | 'highpass' | 'bandpass', fc: number, q: number, peak: number, a: number, hold: number, tc: number) => add(biquad(white(span(a, hold, tc)), type, fc, q, sr), peak, a, hold, tc);
   const f = midiHz(midi);
   switch (kind) {
     case 'stomp':
-      add(sweep(n, sr, 115, 48, 0.1), 0.8, 0.004, 0.02, 0.055);
-      add(biquad(white(), 'bandpass', 420, 1.4, sr), 0.32, 0.002, 0.005, 0.015);
+      tone(115, 48, 0.1, 0.8, 0.004, 0.02, 0.055);
+      noise('bandpass', 420, 1.4, 0.32, 0.002, 0.005, 0.015);
       break;
     case 'block':
     case 'blockLo':
-      add(sweep(n, sr, f, f, 0.01, true), 0.5, 0.001, 0, 0.0175);
-      add(sweep(n, sr, f * 2.76, f * 2.76, 0.01), 0.16, 0.001, 0, 0.0075);
-      add(biquad(white(), 'bandpass', 2600, 3, sr), 0.25, 0.001, 0, 0.003);
+      tone(f, f, 0.01, 0.5, 0.001, 0, 0.0175, true);
+      tone(f * 2.76, f * 2.76, 0.01, 0.16, 0.001, 0, 0.0075);
+      noise('bandpass', 2600, 3, 0.25, 0.001, 0, 0.003);
       break;
     case 'shaker':
-      add(biquad(white(), 'bandpass', 6800, 0.9, sr), 0.42, 0.012, 0, 0.0175);
+      noise('bandpass', 6800, 0.9, 0.42, 0.012, 0, 0.0175);
       break;
     case 'tick':
-      add(biquad(white(), 'highpass', 6500, 0.7, sr), 0.3, 0.001, 0, 0.0075);
+      noise('highpass', 6500, 0.7, 0.3, 0.001, 0, 0.0075);
       break;
     case 'brush':
-      add(biquad(white(), 'bandpass', 2800, 0.5, sr), 0.3, 0.05, 0.15, 0.055);
+      noise('bandpass', 2800, 0.5, 0.3, 0.05, 0.15, 0.055);
       break;
     case 'taiko':
     case 'taikoHi': {
       const low = kind === 'taiko';
-      add(sweep(n, sr, f * 1.7, f, 0.07), low ? 0.85 : 0.6, 0.003, 0.02, low ? 0.19 : 0.1);
-      add(sweep(n, sr, f * 2.3, f * 1.52, 0.06), 0.2, 0.003, 0, 0.05);
-      add(biquad(white(), 'lowpass', low ? 900 : 1500, 0.7, sr), 0.3, 0.002, 0, 0.009);
+      tone(f * 1.7, f, 0.07, low ? 0.85 : 0.6, 0.003, 0.02, low ? 0.19 : 0.1);
+      tone(f * 2.3, f * 1.52, 0.06, 0.2, 0.003, 0, 0.05);
+      noise('lowpass', low ? 900 : 1500, 0.7, 0.3, 0.002, 0, 0.009);
       break;
     }
   }
@@ -878,8 +929,7 @@ export function renderDrum(kind: DrumKind, midi: number, sr: number, seed: numbe
 
 const drumCache = new Map<string, AudioBuffer>();
 let drumRound = 0;
-function drumBuffer(kind: DrumKind, midi: number): AudioBuffer {
-  const variant = drumRound++ % 3;
+function drumVariant(kind: DrumKind, midi: number, variant: number): AudioBuffer {
   const key = `${kind}:${midi}:${variant}`;
   const hit = drumCache.get(key);
   if (hit) return hit;
@@ -891,11 +941,8 @@ function drumBuffer(kind: DrumKind, midi: number): AudioBuffer {
   return b;
 }
 
-/** pré-calcule les percussions d'une humeur (appelé au démarrage : aucun calcul pendant le jeu) */
-export function prewarmDrums(): void {
-  if (!audio.ctx) return;
-  const list: Array<[DrumKind, number]> = [['stomp', 36], ['block', 86], ['blockLo', 79], ['shaker', 0], ['tick', 0], ['brush', 0], ['taiko', 38], ['taikoHi', 45]];
-  for (const [k, m] of list) for (let v = 0; v < 3; v++) drumBuffer(k, m);
+function drumBuffer(kind: DrumKind, midi: number): AudioBuffer {
+  return drumVariant(kind, midi, drumRound++ % 3);
 }
 
 function playDrum(kind: DrumKind, midi: number, t: number, vel: number, dest: AudioNode): void {
@@ -928,18 +975,27 @@ function polyBlep(ph: number, dt: number): number {
 /**
  * Note de cuivre (vélocité 1) : attaque « blat » (glissé de hauteur de -25 cents, filtre qui s'ouvre
  * puis se referme), maintien jusqu'à la fin du tampon. Filtre biquad passe-bas variable, recalculé
- * tous les 16 échantillons.
+ * tous les 16 échantillons. Désaccord asymétrique (-8 / 0 / +6 cents) et amplitudes inégales
+ * (0,8 / 1 / 0,7) : pas d'annulations périodiques entre les trois voix. Incréments de phase
+ * précalculés (une seule puissance par échantillon, pendant le glissé d'attaque seulement) :
+ * ~2 ms par note au lieu de ~18 ms, pour un résultat identique.
  */
 export function renderBrass(midi: number, sr: number, seconds = 2): Float32Array {
   const f = midiHz(midi);
   const n = Math.floor(sr * seconds);
   const out = new Float32Array(n);
-  // désaccord asymétrique et amplitudes inégales : pas d'annulations périodiques entre les trois voix
-  const det = [-8, 0, 6];
-  const amp = [0.8, 1, 0.7];
-  const ph = [0.1, 0.43, 0.77];
+  const d0 = (f * 2 ** (-8 / 1200)) / sr;
+  const d1 = f / sr;
+  const d2 = (f * 2 ** (6 / 1200)) / sr;
+  let p0 = 0.1;
+  let p1 = 0.43;
+  let p2 = 0.77;
   const peak = Math.min(5200, f * 7, sr * 0.45);
   const target = Math.min(3200, f * 3.6, sr * 0.45);
+  const scoopEnd = 0.05 * sr;
+  const attackEnd = 0.028 * sr;
+  const overK = Math.exp(-1 / (0.06 * sr));
+  let over = -1;
   let b0 = 0,
     b1 = 0,
     b2 = 0,
@@ -951,7 +1007,7 @@ export function renderBrass(midi: number, sr: number, seconds = 2): Float32Array
     y2 = 0;
   for (let i = 0; i < n; i++) {
     const tt = i / sr;
-    if (i % 16 === 0) {
+    if ((i & 15) === 0) {
       const fc = tt < 0.05 ? f * 1.4 + (peak - f * 1.4) * (tt / 0.05) : target + (peak - target) * Math.exp(-(tt - 0.05) / 0.12);
       const w = (2 * Math.PI * fc) / sr;
       const cs = Math.cos(w);
@@ -963,24 +1019,30 @@ export function renderBrass(midi: number, sr: number, seconds = 2): Float32Array
       a1 = (-2 * cs) / a0;
       a2 = (1 - al) / a0;
     }
-    const scoop = tt < 0.05 ? -25 * (1 - tt / 0.05) : 0;
-    let x = 0;
-    for (let k = 0; k < 3; k++) {
-      const fk = f * 2 ** (((det[k] as number) + scoop) / 1200);
-      const dt = fk / sr;
-      let p = (ph[k] as number) + dt;
-      if (p >= 1) p -= 1;
-      ph[k] = p;
-      x += (2 * p - 1 - polyBlep(p, dt)) * (amp[k] as number);
-    }
-    x /= 2.5;
+    const sc = i < scoopEnd ? 2 ** ((-25 * (1 - tt / 0.05)) / 1200) : 1;
+    const t0 = d0 * sc;
+    const t1 = d1 * sc;
+    const t2 = d2 * sc;
+    p0 += t0;
+    if (p0 >= 1) p0 -= 1;
+    p1 += t1;
+    if (p1 >= 1) p1 -= 1;
+    p2 += t2;
+    if (p2 >= 1) p2 -= 1;
+    const x = ((2 * p0 - 1 - polyBlep(p0, t0)) * 0.8 + (2 * p1 - 1 - polyBlep(p1, t1)) + (2 * p2 - 1 - polyBlep(p2, t2)) * 0.7) / 2.5;
     const y = b0 * x + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2;
     x2 = x1;
     x1 = x;
     y2 = y1;
     y1 = y;
     // attaque avec léger dépassement (sforzando des coups de cuivres), puis tenue
-    const env = tt < 0.028 ? (tt / 0.028) * 1.3 : 1 + 0.3 * Math.exp(-(tt - 0.028) / 0.06);
+    let env: number;
+    if (i < attackEnd) env = (tt / 0.028) * 1.3;
+    else {
+      if (over < 0) over = 0.3 * Math.exp(-(tt - 0.028) / 0.06);
+      env = 1 + over;
+      over *= overK;
+    }
     out[i] = y * env * 0.1 * 3;
   }
   return out;
@@ -997,6 +1059,92 @@ function brassBuffer(midi: number): AudioBuffer {
   b.getChannelData(0).set(data);
   brassCache.set(midi, b);
   return b;
+}
+
+/* ---------- pré-calcul en tâche de fond ---------- */
+
+/**
+ * Travaux lourds hors du geste d'activation et hors des moments forts : réverbérations (préparation de la
+ * réponse impulsionnelle), bruits de fond des ambiances, puis tampons des voix (percussions, cuivres, cordes).
+ * Sans cela, le premier geste (fermeture de l'accueil, entrée animée) figeait l'image ~100 ms et la première
+ * fanfare de gain maximal ~120 ms. Exécutés un par un pendant le temps libre du navigateur
+ * (requestIdleCallback, sinon petites tranches) ; « first » passe avant les pré-calculs de voix.
+ */
+const urgent: Array<() => void> = [];
+const jobs: Array<() => void> = [];
+let jobsArmed = false;
+type IdleLike = { timeRemaining(): number };
+type IdleHost = { requestIdleCallback?: (cb: (d: IdleLike) => void, o?: { timeout: number }) => number };
+
+const nextJob = (): (() => void) | undefined => urgent.shift() ?? jobs.shift();
+
+function runJob(job: () => void): void {
+  try {
+    job();
+  } catch (e) {
+    audioWarn(e);
+  }
+}
+
+function armJobs(): void {
+  if (jobsArmed || (!urgent.length && !jobs.length)) return;
+  jobsArmed = true;
+  const host = globalThis as IdleHost;
+  if (typeof host.requestIdleCallback === 'function') host.requestIdleCallback((d) => runJobs(d), { timeout: 1500 });
+  else setTimeout(() => runJobs(null), 40);
+}
+
+function runJobs(d: IdleLike | null): void {
+  jobsArmed = false;
+  const until = performance.now() + 6;
+  for (let job = nextJob(); job; job = nextJob()) {
+    runJob(job);
+    if (d ? d.timeRemaining() < 4 : performance.now() > until) break;
+  }
+  armJobs();
+}
+
+/** exécute job pendant le temps libre du navigateur */
+export function whenIdle(job: () => void, first = false): void {
+  (first ? urgent : jobs).push(job);
+  armJobs();
+}
+
+/** exécute tout de suite les travaux en attente (rendu hors ligne, tests, outils QA) */
+export function flushIdle(): void {
+  for (let job = nextJob(); job; job = nextJob()) runJob(job);
+}
+
+/** réverbération partagée d'un module, préparée pendant le temps libre puis branchée entre input et out */
+export function idleReverb(input: AudioNode, out: AudioNode): void {
+  whenIdle(() => {
+    const c = audio.ctx;
+    if (!c) return;
+    const v = c.createConvolver();
+    v.buffer = audio.reverb.buffer;
+    input.connect(v).connect(out);
+  }, true);
+}
+
+const DRUM_SET: ReadonlySet<Inst> = new Set<Inst>(DRUM_KIT.map(([k]) => k));
+
+/** calcule en tâche de fond les tampons de ces voix (déjà calculés : rien à faire) */
+export function prewarm(list: ReadonlyArray<readonly [Inst, number]>): void {
+  for (const [inst, midi] of list) {
+    if (DRUM_SET.has(inst)) {
+      for (let v = 0; v < 3; v++) jobs.push(() => audio.ctx && drumVariant(inst as DrumKind, midi, v));
+    } else if (inst === 'brass') jobs.push(() => audio.ctx && brassBuffer(midi));
+    else if (inst in KS) jobs.push(() => audio.ctx && ksBuffer(inst as KsKind, midi));
+  }
+  armJobs();
+}
+
+let warned = false;
+/** une erreur audio ne doit jamais interrompre le jeu : signalée une fois, puis ignorée */
+export function audioWarn(e: unknown): void {
+  if (warned) return;
+  warned = true;
+  console.warn('[audio]', e);
 }
 
 let reedWave: PeriodicWave | null = null;
@@ -1216,7 +1364,11 @@ class Track {
   readonly clock: StepClock;
   private groups = new Map<Group, AudioNode>();
   private composedBar = -1;
-  private byStep: NoteEvent[][] = [];
+  /** évènements de la mesure en cours, rangés par double-croche (tableaux réutilisés) */
+  private readonly byStep: NoteEvent[][] = Array.from({ length: STEPS }, () => []);
+  /** niveau visé par le dernier fondu, et fin de ce fondu */
+  private level = 0;
+  private fadeEnd = 0;
   endAt: number | null = null;
 
   constructor(
@@ -1289,20 +1441,38 @@ class Track {
     return input;
   }
 
+  /**
+   * Fondu du niveau de la piste vers `to`. Sur une piste stable, il part à l'instant t (un temps) ;
+   * si un fondu est encore en cours, il repart de maintenant et de la valeur courante : annuler une
+   * rampe future déformerait le fondu en cours (saut de niveau audible).
+   */
+  private ramp(to: number, t: number, dur: number): number {
+    const now = (audio.ctx as BaseAudioContext).currentTime;
+    const moving = this.fadeEnd > now;
+    const at = moving ? now : Math.max(now, t);
+    const from = moving ? Math.max(0, Math.min(2, this.bus.gain.value)) : this.level;
+    fade(this.bus.gain, from, to, at, dur);
+    fade(this.sendBus.gain, from, to, at, dur);
+    this.fadeEnd = at + dur;
+    this.level = to;
+    return at;
+  }
+
   fadeIn(t: number, dur: number): void {
-    const level = MOOD_LEVEL[this.mood];
-    fade(this.bus.gain, 0, level, t, dur);
-    fade(this.sendBus.gain, 0, level, t, dur);
+    this.ramp(MOOD_LEVEL[this.mood], t, dur);
   }
 
   fadeOut(t: number, dur: number): void {
-    const from = Math.max(0, Math.min(2, this.bus.gain.value));
-    fade(this.bus.gain, from, 0, t, dur);
-    fade(this.sendBus.gain, from, 0, t, dur);
-    this.endAt = t + dur;
+    this.endAt = this.ramp(0, t, dur) + dur;
   }
 
-  /** planifie tous les pas dont l'heure tombe avant horizon */
+  /** piste encore en fondu de sortie ramenée (retour rapide dans cette humeur) : même forme, même groove */
+  revive(t: number, dur: number): void {
+    this.endAt = null;
+    this.ramp(MOOD_LEVEL[this.mood], t, dur);
+  }
+
+  /** planifie tous les pas dont l'heure tombe avant horizon (aucune allocation hors changement de mesure) */
   schedule(now: number, horizon: number): void {
     for (let guard = 0; guard < 256; guard++) {
       let t = this.clock.time;
@@ -1316,11 +1486,13 @@ class Track {
       if (this.composedBar !== this.clock.bar) {
         this.composedBar = this.clock.bar;
         const plan = this.composer.nextBar();
-        this.byStep = Array.from({ length: STEPS }, () => []);
+        for (const s of this.byStep) s.length = 0;
         for (const e of plan.events) this.byStep[e.step]?.push(e);
       }
       const ss = stepSec(this.clock.bpm);
-      for (const e of this.byStep[this.clock.step] ?? []) {
+      const due = this.byStep[this.clock.step] as NoteEvent[];
+      for (let k = 0; k < due.length; k++) {
+        const e = due[k] as NoteEvent;
         const at = Math.max(now, t + (e.nudge ?? 0) / 1000);
         voice(e.inst, e.midi, at, e.vel, e.len * ss, this.group(GROUP_OF[e.inst]));
       }
@@ -1343,6 +1515,7 @@ class Track {
 interface TensionState {
   clock: StepClock;
   out: GainNode;
+  /** instant de l'arrêt (couche retirée, en fondu de sortie) */
   stopAt: number | null;
   started: number;
   oscs: OscillatorNode[];
@@ -1353,7 +1526,8 @@ const TONIC: Record<Mood, number> = { base: 43, bonus: 40, super: 40 };
 
 export class Music {
   private out: GainNode | null = null;
-  private verb: ConvolverNode | null = null;
+  /** entrée de la réverbération de la musique (la convolution est branchée pendant le temps libre) */
+  private verb: GainNode | null = null;
   private tracks: Track[] = [];
   private composers: Partial<Record<Mood, Composer>> = {};
   private mood: Mood = 'base';
@@ -1361,12 +1535,62 @@ export class Music {
   private running = false;
   private paused = false;
   private waiting = false;
+  /** couche de tension active (null : aucune) */
   private tension: TensionState | null = null;
+  /** couches de tension arrêtées, en fondu de sortie, déconnectées ensuite */
+  private retired: TensionState[] = [];
   /** graine de la forme musicale (identique d'une session à l'autre : identité reconnaissable) */
   seed = 0xb00f;
 
   get currentMood(): Mood {
     return this.mood;
+  }
+
+  /* API publique : aucun appel ne lève d'exception (incident signalé une fois, le jeu continue). */
+
+  /** démarre la musique (attend l'activation audio si nécessaire) ; déjà lancée : change d'humeur */
+  start(mood?: Mood): void {
+    try {
+      this.startNow(mood);
+    } catch (e) {
+      audioWarn(e);
+    }
+  }
+
+  /** fondu enchaîné de 2 s vers l'humeur m, calé sur le prochain temps (en pause : appliqué à la reprise) */
+  setMood(m: Mood): void {
+    try {
+      this.setMoodNow(m);
+    } catch (e) {
+      audioWarn(e);
+    }
+  }
+
+  /** arrêt en fondu */
+  stop(fadeMs = 1200): void {
+    try {
+      this.stopNow(fadeMs);
+    } catch (e) {
+      audioWarn(e);
+    }
+  }
+
+  /** pause musicale du jeu ; reprise sur une nouvelle mesure */
+  pause(p: boolean): void {
+    try {
+      this.pauseNow(p);
+    } catch (e) {
+      audioWarn(e);
+    }
+  }
+
+  /** couche de tension de l'anticipation (filtre du groove, bourdon montant, pulsation de mèche) */
+  setTension(on: boolean): void {
+    try {
+      this.setTensionNow(on);
+    } catch (e) {
+      audioWarn(e);
+    }
   }
 
   get isRunning(): boolean {
@@ -1380,12 +1604,13 @@ export class Music {
     this.out = c.createGain();
     this.out.gain.value = OUT_LEVEL;
     this.out.connect(audio.buses.music);
-    this.verb = c.createConvolver();
-    this.verb.buffer = audio.reverb.buffer;
+    this.verb = c.createGain();
     const wet = c.createGain();
     wet.gain.value = 0.5;
-    this.verb.connect(wet).connect(this.out);
-    prewarmDrums();
+    wet.connect(this.out);
+    idleReverb(this.verb, wet);
+    // percussions puis cuivres du super bonus, calculés pendant le temps libre du navigateur
+    prewarm([...DRUM_KIT, ...superBrassNotes().map((m) => ['brass', m] as const)]);
     return true;
   }
 
@@ -1397,10 +1622,12 @@ export class Music {
     return k;
   }
 
-  /** démarre la musique (attend l'activation audio si nécessaire) */
-  start(mood?: Mood): void {
+  private startNow(mood?: Mood): void {
+    if (this.running) {
+      if (mood) this.setMood(mood);
+      return;
+    }
     if (mood) this.mood = mood;
-    if (this.running) return;
     if (!this.ensureGraph()) {
       if (!this.waiting) {
         this.waiting = true;
@@ -1419,22 +1646,34 @@ export class Music {
     o.gain.cancelScheduledValues(t);
     o.gain.setValueAtTime(o.gain.value, t);
     o.gain.linearRampToValueAtTime(OUT_LEVEL, t + 0.1);
-    this.addTrack(this.mood, t, 1.2);
+    this.bringIn(this.mood, t, 1.2);
     this.ensureTimer();
   }
 
-  private addTrack(m: Mood, t: number, fadeS: number): Track {
+  /**
+   * Fait entrer l'humeur m à l'instant t. Une piste de cette humeur encore en fondu de sortie (aller-retour
+   * rapide, relance pendant un arrêt) est ramenée : deux pistes ne tirent jamais leurs mesures du même
+   * compositeur.
+   */
+  private bringIn(m: Mood, t: number, fadeS: number): void {
+    const i = this.tracks.findIndex((tr) => tr.mood === m && tr.endAt !== null);
+    const back = i >= 0 ? (this.tracks[i] as Track) : null;
+    if (back) {
+      this.tracks.splice(i, 1);
+      this.tracks.push(back);
+      back.revive(t, fadeS);
+      back.setTensionFilter(this.tension !== null, t);
+      return;
+    }
     const k = this.composer(m);
     k.restart('A');
-    const tr = new Track(m, k, this.out as GainNode, this.verb as ConvolverNode, t);
+    const tr = new Track(m, k, this.out as GainNode, this.verb as GainNode, t);
     tr.fadeIn(t, fadeS);
-    if (this.tension && this.tension.stopAt === null) tr.setTensionFilter(true, t);
+    if (this.tension) tr.setTensionFilter(true, t);
     this.tracks.push(tr);
-    return tr;
   }
 
-  /** change d'humeur : fondu enchaîné d'égale puissance (2 s) calé sur le prochain temps */
-  setMood(m: Mood): void {
+  private setMoodNow(m: Mood): void {
     if (m === this.mood) return;
     this.mood = m;
     if (!this.running || this.paused || !audio.ctx) return; // en pause : appliqué à la reprise
@@ -1447,12 +1686,11 @@ export class Music {
     const lead = live[live.length - 1];
     if (lead && lead.mood === m && live.length === 1) return;
     const t0 = lead ? lead.clock.nextBeat(after) : after;
-    for (const tr of live) tr.fadeOut(t0, CROSSFADE_S);
-    this.addTrack(m, t0, CROSSFADE_S);
+    for (const tr of live) if (tr.mood !== m) tr.fadeOut(t0, CROSSFADE_S);
+    if (!live.some((tr) => tr.mood === m)) this.bringIn(m, t0, CROSSFADE_S);
   }
 
-  /** arrêt en fondu */
-  stop(fadeMs = 1200): void {
+  private stopNow(fadeMs = 1200): void {
     if (!audio.ctx || !this.running) return;
     const t = audio.ctx.currentTime;
     for (const tr of this.tracks) if (tr.endAt === null) tr.fadeOut(t, Math.max(0.05, fadeMs / 1000));
@@ -1462,10 +1700,10 @@ export class Music {
   }
 
   /**
-   * Pause musicale (menus plein écran, pause du jeu). L'onglet masqué est déjà géré par la suspension
-   * du contexte (audio engine). À la reprise, la musique repart sur une nouvelle mesure.
+   * Pause musicale (pause du jeu). L'onglet masqué est déjà géré par la suspension du contexte (moteur audio).
+   * À la reprise, la musique repart sur une nouvelle mesure.
    */
-  pause(p: boolean): void {
+  private pauseNow(p: boolean): void {
     if (!audio.ctx || !this.out || p === this.paused) return;
     this.paused = p;
     const t = audio.ctx.currentTime;
@@ -1474,7 +1712,7 @@ export class Music {
     g.setValueAtTime(g.value, t);
     if (p) {
       g.linearRampToValueAtTime(0, t + 0.3);
-      this.stopTimer();
+      if (!this.tension) this.stopTimer();
     } else {
       g.linearRampToValueAtTime(OUT_LEVEL, t + 0.6);
       for (const tr of this.tracks) tr.clock.rebase(tr.clock.nextBeat(t + 0.08));
@@ -1483,15 +1721,14 @@ export class Music {
     }
   }
 
-  /** couche de tension pendant l'anticipation (bourdon montant, pulsation de mèche calée sur le tempo) */
-  setTension(on: boolean): void {
+  private setTensionNow(on: boolean): void {
     const c = audio.ctx;
-    if (!c || !audio.ready) return;
+    if (!c || !audio.ready || !this.ensureGraph()) return;
     const t = c.currentTime;
     const live = this.tracks.filter((tr) => tr.endAt === null);
     for (const tr of live) tr.setTensionFilter(on, t);
     if (on) {
-      if (this.tension && this.tension.stopAt === null) return;
+      if (this.tension) return;
       const lead = live[live.length - 1];
       const bpm = MOODS[this.mood].bpm;
       const start = lead ? lead.clock.nextBeat(t + 0.02) : t + 0.02;
@@ -1531,26 +1768,29 @@ export class Music {
       this.tension = { clock: new StepClock(bpm, 0.5, start), out, stopAt: null, started: t, oscs };
       this.ensureTimer();
       this.pump();
-    } else if (this.tension && this.tension.stopAt === null) {
+    } else if (this.tension) {
       const ts = this.tension;
       ts.stopAt = t;
       ts.out.gain.cancelScheduledValues(t);
       ts.out.gain.setValueAtTime(ts.out.gain.value, t);
       ts.out.gain.linearRampToValueAtTime(0, t + 0.25);
       for (const o of ts.oscs) o.stop(t + 0.3);
+      this.retired.push(ts);
+      this.tension = null;
+      this.ensureTimer(); // déconnexion après le fondu
     }
   }
 
   private pumpTension(now: number, horizon: number): void {
+    for (let i = this.retired.length - 1; i >= 0; i--) {
+      const r = this.retired[i] as TensionState;
+      if (now > (r.stopAt ?? 0) + 0.5) {
+        r.out.disconnect();
+        this.retired.splice(i, 1);
+      }
+    }
     const ts = this.tension;
     if (!ts) return;
-    if (ts.stopAt !== null) {
-      if (now > ts.stopAt + 0.5) {
-        ts.out.disconnect();
-        this.tension = null;
-      }
-      return;
-    }
     for (let guard = 0; guard < 64; guard++) {
       const t = ts.clock.time;
       if (t >= horizon) break;
@@ -1563,27 +1803,36 @@ export class Music {
     }
   }
 
-  /** planificateur : appelé toutes les 25 ms (et à la demande) */
+  /** planificateur : appelé toutes les 25 ms (et à la demande) ; aucune allocation par passage */
   pump(ahead = LOOKAHEAD_S): void {
     const c = audio.ctx;
     if (!c || !this.out) return;
     const now = c.currentTime;
     const horizon = now + ahead;
-    if (!this.paused) for (const tr of this.tracks) tr.schedule(now, horizon);
+    if (!this.paused) for (let i = 0; i < this.tracks.length; i++) (this.tracks[i] as Track).schedule(now, horizon);
     this.pumpTension(now, horizon);
-    this.tracks = this.tracks.filter((tr) => {
-      if (tr.endAt !== null && now > tr.endAt + 0.4) {
-        tr.dispose();
-        return false;
-      }
-      return true;
-    });
-    if (!this.running && !this.tension && this.tracks.length === 0) this.stopTimer();
+    // pistes terminées : retirées sur place
+    let w = 0;
+    for (let r = 0; r < this.tracks.length; r++) {
+      const tr = this.tracks[r] as Track;
+      if (tr.endAt !== null && now > tr.endAt + 0.4) tr.dispose();
+      else this.tracks[w++] = tr;
+    }
+    this.tracks.length = w;
+    // rien à planifier : en pause, ou arrêtée et fondus terminés (la tension garde le planificateur)
+    const idle = this.paused || (!this.running && !w);
+    if (idle && !this.tension && !this.retired.length) this.stopTimer();
   }
 
   private ensureTimer(): void {
     if (this.timer !== null) return;
-    this.timer = setInterval(() => this.pump(), TICK_MS);
+    this.timer = setInterval(() => {
+      try {
+        this.pump();
+      } catch (e) {
+        audioWarn(e);
+      }
+    }, TICK_MS);
   }
 
   private stopTimer(): void {

@@ -39,6 +39,16 @@ export function keys(prefix = ''): string[] {
   return Object.keys(manifest.assets).filter((k) => k.startsWith(prefix));
 }
 
+/** Images de la scène (textures Pixi) : exclut celles affichées seulement en HTML (panneaux, cartes d'accueil,
+ *  vignettes d'interface) et les visuels promotionnels (couverture, vignette de lobby), chargés à la demande. */
+export function sceneKeys(): string[] {
+  return keys().filter((k) => {
+    const e = manifest.assets[k] as ManifestEntry & { ui?: boolean };
+    if (e?.ui) return false;
+    return !/^(scr\.|id\.card\.|id\.cover|id\.tile|id\.crownforge|decor\.portrait)/.test(k);
+  });
+}
+
 /** Charge (et décode) un ensemble de clés ; onProgress reçoit la fraction réellement chargée. */
 export async function loadTextures(list: string[], onProgress?: (f: number) => void): Promise<void> {
   const todo = list.filter((k) => manifest.assets[k] && !textures.has(k));

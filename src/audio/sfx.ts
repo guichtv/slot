@@ -1,5 +1,5 @@
 import { audio, vary } from './engine';
-import { music, voice, type Inst } from './music';
+import { audioWarn, idleReverb, music, prewarm, voice, type Inst } from './music';
 
 /**
  * Effets sonores originaux, 100 % synthétisés (Web Audio), aucun son tiers.
@@ -86,12 +86,12 @@ function bus(): { dry: GainNode; wet: GainNode } {
   if (graph && graph.ctx === c) return graph;
   const dry = c.createGain();
   dry.connect(audio.buses.sfx);
-  const verb = c.createConvolver();
-  verb.buffer = audio.reverb.buffer;
+  // réverbération branchée pendant le temps libre (sa préparation est coûteuse)
   const wet = c.createGain();
   const ret = c.createGain();
   ret.gain.value = 0.55;
-  wet.connect(verb).connect(ret).connect(audio.buses.sfx);
+  ret.connect(audio.buses.sfx);
+  idleReverb(wet, ret);
   graph = { ctx: c, dry, wet };
   return graph;
 }
@@ -225,10 +225,42 @@ export const TRIM: Partial<Record<SfxName, number>> = {
 const G_MAJOR = [55, 59, 62, 67];
 const PENTA = [55, 57, 59, 62, 64, 67, 69, 71, 74, 76, 79, 81, 83];
 
+/**
+ * Notes de cuivres des fanfares (anticipation, déclenchement, relance, paliers, gain maximal, fin de bonus),
+ * banjo aigu (gains, cascades) et tambours : calculés en tâche de fond dès l'activation audio, pour
+ * qu'aucune fanfare ne bloque l'image à son premier passage (mesuré : ~120 ms à froid pour le gain maximal).
+ */
+export const FANFARE_VOICES: ReadonlyArray<readonly [Inst, number]> = [
+  ...[55, 57, 59, 60, 62, 64, 66, 67, 69, 71, 74, 78, 81].map((m) => ['brass', m] as const),
+  ...[...PENTA, 86, 91].map((m) => ['banjo', m] as const),
+  ['taiko', 38],
+  ['taikoHi', 45],
+];
+audio.onUnlock(() => {
+  try {
+    bus();
+    prewarm(FANFARE_VOICES);
+  } catch (e) {
+    audioWarn(e);
+  }
+});
+
 /* ---------------- effets ---------------- */
 
+/**
+ * Joue un effet. Silencieux avant l'activation audio (jamais rejoué plus tard), en sourdine et onglet
+ * masqué. Ne lève jamais d'exception : un incident audio ne doit pas interrompre la manche.
+ */
 export function sfx(name: string, opts: Opts = {}): void {
-  if (!audio.ready) return; // un son demandé avant l'activation n'est jamais rejoué plus tard
+  if (!audio.ready || audio.isMuted) return;
+  try {
+    play(name, opts);
+  } catch (e) {
+    audioWarn(e);
+  }
+}
+
+function play(name: string, opts: Opts): void {
   const c = ctx();
   const t = c.currentTime + 0.005;
   const raw = opts.pitch ?? 1;

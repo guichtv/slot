@@ -4,7 +4,8 @@ import { launch, openGame, step, outDir } from './lib/browser.mjs';
 
 const [name = 'shot', size = '1440x900', ...rest] = process.argv.slice(2);
 const [w, h] = size.split('x').map(Number);
-const opt = Object.fromEntries(rest.map((a) => a.replace(/^--/, '').split('=')).map(([k, v]) => [k, v ?? true]));
+// coupe au premier « = » : --query=lang=fr donne bien query = « lang=fr »
+const opt = Object.fromEntries(rest.map((a) => a.replace(/^--/, '')).map((a) => (a.includes('=') ? [a.slice(0, a.indexOf('=')), a.slice(a.indexOf('=') + 1)] : [a, true])));
 const browser = await launch();
 const { page, errors } = await openGame(browser, { w, h, query: opt.query ?? 'lang=fr', mobile: !!opt.mobile, dpr: Number(opt.dpr ?? 1) });
 const frame = Number(opt.frame ?? 100);
@@ -16,7 +17,7 @@ let i = 0;
 for (const s of steps) {
   await step(page, s, frame);
   const file = `${dir}/${name}-${w}x${h}${steps.length > 1 ? `-${String(i).padStart(2, '0')}` : ''}.png`;
-  await page.screenshot({ path: file });
+  await page.screenshot({ path: file, timeout: 240_000 });
   console.log(file);
   i++;
 }

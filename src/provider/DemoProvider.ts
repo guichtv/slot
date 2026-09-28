@@ -51,8 +51,11 @@ export class DemoProvider implements RoundProvider {
     return ((this.rng >>> 0) % 1_000_003) / 1_000_003;
   }
 
+  /** attente simulée du réseau ; branchée sur l'horloge de présentation en local (captures reproductibles) */
+  wait: (ms: number) => Promise<void> = (ms) => new Promise((r) => setTimeout(r, ms));
+
   private delay(ms = this.latencyMs): Promise<void> {
-    return new Promise((r) => setTimeout(r, ms));
+    return this.wait(ms);
   }
 
   forceNext(id: string): void {

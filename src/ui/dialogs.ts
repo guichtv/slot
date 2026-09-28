@@ -38,6 +38,11 @@ export function artImg(key: string, cls = '', alt = ''): HTMLImageElement {
 
 const ART_VARS: ReadonlyArray<readonly [string, string]> = [
   ['--cf-plaque', 'ui.btn.plaque'],
+  ['--cf-card', 'scr.card'],
+  ['--cf-bg-bonus', 'decor.skyRich'],
+  ['--cf-bg-super', 'decor.nightSky'],
+  ['--cf-bg-blast', 'decor.far'],
+  ['--cf-bg-mega', 'decor.mid'],
   ['--cf-bar', 'ui.btn.bar'],
   ['--cf-round', 'ui.btn.round'],
   ['--cf-step', 'ui.btn.step'],
@@ -95,23 +100,86 @@ export function reducedMotion(): boolean {
 
 /**
  * Montants longs (9-10 chiffres) : réduit la police jusqu'à ce que le texte tienne dans sa boîte.
- * L'élément doit être visible, sur une ligne (white-space: nowrap) et borné (max-width / min-width: 0).
+ * Les éléments doivent être visibles, sur une ligne (white-space: nowrap) et bornés (max-width / min-width: 0).
+ * Lectures et écritures groupées (au plus 4 mises en page pour tout le lot, jamais une par pixel de police).
  */
-export function fitText(el: HTMLElement, minPx = 10): void {
-  el.style.fontSize = '';
-  if (!el.isConnected || el.clientWidth === 0) return;
-  let size = parseFloat(getComputedStyle(el).fontSize) || 16;
-  for (let i = 0; i < 24 && el.scrollWidth - el.clientWidth > 0.5 && size > minPx; i++) {
-    size = Math.max(minPx, size - 1);
-    el.style.fontSize = `${size}px`;
+export function fitBatch(els: readonly HTMLElement[], minPx = 10): void {
+  for (const el of els) el.style.fontSize = '';
+  const todo: Array<{ el: HTMLElement; size: number }> = [];
+  for (const el of els) {
+    if (!el.isConnected || el.clientWidth === 0) continue;
+    todo.push({ el, size: parseFloat(getComputedStyle(el).fontSize) || 16 });
   }
+  let pending = todo;
+  for (let round = 0; round < 3 && pending.length; round++) {
+    // lecture de tout le lot, puis écriture de tout le lot
+    const over = pending.map((p) => ({ p, sw: p.el.scrollWidth, cw: p.el.clientWidth })).filter((m) => m.sw - m.cw > 0.5 && m.p.size > minPx);
+    for (const { p, sw, cw } of over) {
+      const next = Math.max(minPx, Math.floor(p.size * (cw / sw) * 4) / 4 - (round ? 0.5 : 0));
+      p.size = next < p.size ? next : Math.max(minPx, p.size - 1);
+      p.el.style.fontSize = `${p.size}px`;
+    }
+    pending = over.map((m) => m.p);
+  }
+}
+
+export function fitText(el: HTMLElement, minPx = 10): void {
+  fitBatch([el], minPx);
 }
 
 /** Ajuste tous les montants d'un conteneur à la prochaine image (après mise en page). */
 export function fitAll(root: ParentNode, selector = '[data-fit]', minPx = 10): void {
-  const run = () => root.querySelectorAll<HTMLElement>(selector).forEach((el) => fitText(el, minPx));
+  const run = () => fitBatch([...root.querySelectorAll<HTMLElement>(selector)], minPx);
   if (typeof requestAnimationFrame === 'function') requestAnimationFrame(run);
   else run();
+}
+
+/* ------------------------------------------------------------------ */
+/* Piège de focus empilable                                            */
+/* ------------------------------------------------------------------ */
+
+const TABBABLE = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]';
+const traps: HTMLElement[] = [];
+
+/** éléments réellement atteignables au clavier (tabindex >= 0, visibles, hors inert) */
+export function tabbables(root: HTMLElement): HTMLElement[] {
+  return [...root.querySelectorAll<HTMLElement>(TABBABLE)].filter((el) => el.tabIndex >= 0 && !el.closest('[hidden], [inert]') && el.getClientRects().length > 0);
+}
+
+/** le piège le plus récent (seul lui reçoit Tab et Échap) */
+export function isTopTrap(root: HTMLElement): boolean {
+  return traps[traps.length - 1] === root;
+}
+
+/**
+ * trapFocus (focus initial + retour au déclencheur) complété : Tab / Maj+Tab suivent les éléments
+ * réellement atteignables (onglets en tabindex itinérant, éléments inertes ou désactivés exclus),
+ * et ramènent le focus dans le dialogue s'il en était sorti (bouton désactivé pendant une attente).
+ * Les pièges s'empilent : seul le dernier ouvert agit.
+ */
+export function trapDialog(root: HTMLElement): () => void {
+  const untrap = trapFocus(root);
+  traps.push(root);
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key !== 'Tab' || !isTopTrap(root)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const f = tabbables(root);
+    if (!f.length) {
+      root.focus();
+      return;
+    }
+    const i = f.indexOf(document.activeElement as HTMLElement);
+    const next = i < 0 ? (e.shiftKey ? f.length - 1 : 0) : (i + (e.shiftKey ? -1 : 1) + f.length) % f.length;
+    f[next]?.focus();
+  };
+  document.addEventListener('keydown', onKey, true);
+  return () => {
+    document.removeEventListener('keydown', onKey, true);
+    const i = traps.lastIndexOf(root);
+    if (i >= 0) traps.splice(i, 1);
+    untrap();
+  };
 }
 
 /** Bouton plaque bois cerclée d'acier (art réel en 9-slice). */
@@ -245,9 +313,14 @@ export function mapRgsError(e: unknown): ErrorSpec {
   };
 }
 
-/** Boutons proposés pour une erreur (ordre d'affichage : principal d'abord). */
+/**
+ * Boutons proposés pour une erreur (ordre d'affichage : principal d'abord).
+ * Issue incertaine : le contrôleur ne rejoue jamais le pari, il vérifie la manche ; « Réessayer » serait
+ * trompeur, seul OK est proposé (sauf perte de connexion, où Réessayer relance la vérification au retour du réseau).
+ */
 export function errorActions(spec: ErrorSpec): DialogAction[] {
   if (spec.action === 'dismiss') return ['dismiss'];
+  if (spec.uncertain && spec.action === 'retry' && spec.kind !== 'connection') return ['dismiss'];
   return spec.dismissible ? [spec.action, 'dismiss'] : [spec.action];
 }
 
@@ -362,9 +435,11 @@ export class Dialogs {
   }
 
   private showError(spec: ErrorSpec): Promise<DialogAction> {
-    const actions = errorActions(spec).map((id, i) => ({
+    const ids = errorActions(spec);
+    // « Fermer » seulement à côté d'une action principale ; seul, le bouton dit OK
+    const actions = ids.map((id, i) => ({
       id,
-      label: t(id === 'dismiss' && spec.action !== 'dismiss' ? 'common.close' : LABEL[id]),
+      label: t(id === 'dismiss' && ids.length > 1 ? 'common.close' : LABEL[id]),
       primary: i === 0,
     }));
     const connection = spec.kind === 'connection';
@@ -392,16 +467,19 @@ export class Dialogs {
             panel.classList.toggle('is-offline', offline);
             status.textContent = offline ? t('dlg.connection.offline') : '';
           };
+          let timer = 0;
           const online = () => {
             status.textContent = t('dlg.connection.reconnecting');
             panel.classList.remove('is-offline');
             panel.classList.add('is-reconnecting');
-            window.setTimeout(() => resolve('retry'), 400);
+            window.clearTimeout(timer);
+            timer = window.setTimeout(() => resolve('retry'), 400);
           };
           paint();
           window.addEventListener('online', online);
           window.addEventListener('offline', paint);
           undo.push(() => {
+            window.clearTimeout(timer);
             window.removeEventListener('online', online);
             window.removeEventListener('offline', paint);
           });
@@ -442,7 +520,7 @@ export class Dialogs {
         done = true;
         cleanup();
         untrap();
-        panel.removeEventListener('keydown', onKey);
+        document.removeEventListener('keydown', onKey, true);
         veil.remove();
         area.remove();
         this.openCount--;
@@ -453,13 +531,14 @@ export class Dialogs {
         row.append(cfButton(a.label, a.primary ? 'is-primary' : 'is-secondary', () => finish(a.id)));
       }
       panel.append(row);
+      // Échap au niveau du document (même si le focus est sorti) ; consommé : les menus dessous ne se ferment pas
       const onKey = (e: KeyboardEvent) => {
-        if (e.key !== 'Escape') return;
+        if (e.key !== 'Escape' || !isTopTrap(panel)) return;
         e.preventDefault();
         e.stopPropagation();
         if (spec.escape) finish(spec.escape);
       };
-      panel.addEventListener('keydown', onKey);
+      document.addEventListener('keydown', onKey, true);
       const veil = h('div', { class: 'dlg-veil' });
       const area = h('div', { class: 'cf-area dlg-area' }, panel);
       // les gestes sur le voile sont consommés (aucun spin / achat derrière) et le focus reste dans le dialogue
@@ -470,7 +549,7 @@ export class Dialogs {
         });
       this.root.append(veil, area);
       fitAll(panel, '[data-fit]', 12);
-      const untrap = trapFocus(panel);
+      const untrap = trapDialog(panel);
       cleanup = spec.mount?.(panel, finish, status) ?? cleanup;
     });
   }
