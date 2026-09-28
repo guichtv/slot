@@ -245,7 +245,7 @@ describe('karplus-strong', () => {
       expect(rate).toBeGreaterThan(0.97);
       expect(rate).toBeLessThan(1.03);
     }
-  });
+  }, 20_000); // calcul DSP lourd : délai explicite (dépassait 5 s sous charge CPU)
 });
 
 describe('pre-rendered voices', () => {
