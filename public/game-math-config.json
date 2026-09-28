@@ -1,0 +1,37 @@
+{
+  "provisional": true,
+  "_comment": "VALEURS PROVISOIRES fournies par l'équipe front en attendant les maths. Le build Stake est bloqué tant que provisional=true.",
+  "contractVersion": "1.0.0",
+  "game": "boomtooth",
+  "maxWinX": 25000,
+  "celebrationTiersX": [10, 25, 100, 500, 1000],
+  "modes": {
+    "BASE":  { "cost": 1,    "rtp": 0.9650, "kind": "base" },
+    "ANTE":  { "cost": 1.5,  "rtp": 0.9650, "kind": "ante", "bonusChanceFactor": 3 },
+    "BONUS": { "cost": 100,  "rtp": 0.9660, "kind": "bonus", "bonus": "standard", "spins": 10 },
+    "SUPER": { "cost": 350,  "rtp": 0.9660, "kind": "bonus", "bonus": "super", "spins": 12 },
+    "BLAST": { "cost": 25,   "rtp": 0.9655, "kind": "feature", "feature": "blast" },
+    "MEGA":  { "cost": 60,   "rtp": 0.9655, "kind": "feature", "feature": "mega" }
+  },
+  "freeSpins": {
+    "standard": { "scatters": 3, "spins": 10, "retrigger": { "scatters": 3, "spins": 5 } },
+    "super":    { "scatters": 4, "spins": 12, "retrigger": { "scatters": 3, "spins": 5 } }
+  },
+  "paytable": {
+    "_unit": "centièmes de la mise de base par way (100 = x1)",
+    "H1": { "3": 50, "4": 150, "5": 500 },
+    "H2": { "3": 40, "4": 100, "5": 300 },
+    "H3": { "3": 30, "4": 75,  "5": 200 },
+    "H4": { "3": 25, "4": 60,  "5": 150 },
+    "L1": { "3": 10, "4": 25,  "5": 60 },
+    "L2": { "3": 10, "4": 20,  "5": 50 },
+    "L3": { "3": 5,  "4": 15,  "5": 40 },
+    "L4": { "3": 5,  "4": 10,  "5": 30 },
+    "W":  { "3": 50, "4": 150, "5": 500 }
+  },
+  "tnt": {
+    "stick":  { "w": 2, "h": 2 },
+    "bundle": { "w": 3, "h": 3 },
+    "crate":  { "w": 4, "h": 4 }
+  }
+}

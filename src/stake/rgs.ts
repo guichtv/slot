@@ -63,7 +63,7 @@ export class RgsError extends Error {
     readonly status: number,
     /** vrai si l'effet côté serveur est inconnu (pari peut-être accepté) */
     readonly uncertain: boolean,
-    message = code,
+    message: string = code,
   ) {
     super(message);
     this.name = 'RgsError';

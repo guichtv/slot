@@ -1,0 +1,27 @@
+==== F01 (BASE) perte sèche
+-- F01 reveal
+ L1  L2  H3  L4  H1 
+ H2  L3  L1  H4  L2 
+ L4  H1  L2  L1  S  
+ L3  H4  H2  L2  L3 
+ H3  L4  H1  H2  L4 
+
+==== F02 (BASE) petit gain H4 sur 3 rouleaux
+-- F02 reveal
+ H4  L2  H3  L4  H1 
+ H2  L3  H4  L1  L2 
+ L4  H4  L2  H2  S  
+ L3  H1  L1  L2  L3 
+ H3  L4  H1  H2  L4 
+-- F02 wins H4x3=25
+[H4] L2  H3  L4  H1 
+ H2  L3 [H4] L1  L2 
+ L4 [H4] L2  H2  S  
+ L3  H1  L1  L2  L3 
+ H3  L4  H1  H2  L4 
+-- F02 tumble
+ L2  L1  H3  L4  H1 
+ H2  L2  H3  L1  L2 
+ L4  L3  L2  H2  S  
+ L3  H1  L1  L2  L3 
+ H3  L4  H1  H2  L4 

@@ -1,0 +1,46 @@
+Utilise $imagegen et l'outil natif de génération d'images (built-in image_gen, PAS un script CLI/API) pour produire réellement les images décrites. Ta mission porte uniquement sur ces images et leur rapport ; ne crée ni ne modifie aucun code du jeu.
+
+Studio : Crownforge. Racine du projet : le répertoire courant.
+
+RÈGLES COMMUNES
+- Style maison Crownforge : BD / cartoon 2D pour adultes, contours noirs épais légèrement irréguliers, cel-shading deux tons, reflets francs, couleurs saturées maîtrisées, formes simples et lisibles. Jamais photo-réaliste, jamais 3D lisse, jamais de rendu « image IA » (pas de néon générique, pas de dégradés par défaut, pas de flou artistique, pas d'effets de bordure).
+- Transparence (quand demandée) : fond RÉELLEMENT transparent (canal alpha), pas de damier dessiné, pas de fond blanc, pas de halo ; sujet complet non coupé, marge de 3 à 6 % tout autour. Si l'outil ne produit pas d'alpha : fond vert chroma uni #00FF00 sans ombre portée, et signale-le dans ta réponse.
+- Aucun texte, logo, filigrane ou signature, sauf le texte exact demandé.
+- Aucune copie de personnage, de logo ou de composition identifiable d'un autre studio ou d'une marque.
+- Reprise : si un fichier cible existe déjà ET que son .prompt.txt existe, ne le régénère pas ; passe au suivant.
+
+PROCÉDURE pour CHAQUE image :
+1) génère avec image_gen (un appel par asset) ;
+2) inspecte (sujet, style, transparence, marges, texte exact) et régénère UNE fois si un défaut évident existe ;
+3) copie le fichier final depuis $CODEX_HOME/generated_images/… vers le chemin indiqué (crée les dossiers) ;
+4) écris à côté <nom>.prompt.txt avec le prompt exact utilisé.
+
+RÉPONSE FINALE : chemins produits, méthode réellement utilisée, dimensions, canal alpha (oui/non), défauts restants.
+Si image_gen n'est pas accessible, dis-le précisément ; ne remplace PAS les images par du SVG, du code ou une liste de prompts.
+
+STYLE MAISON CROWNFORGE (phase directions : aucune direction n'est encore retenue)
+- BD / cartoon 2D pour adultes, lisible en petit : silhouettes simples, formes franches, lecture immédiate.
+- Contours noirs épais (4 à 7 px à 1536 px de large), légèrement irréguliers comme un encrage au pinceau ; traits intérieurs plus fins.
+- Cel-shading deux tons (clair / ombre) + un reflet franc blanc cassé par volume ; aucune ombre floue ni aérographe.
+- Couleurs saturées mais maîtrisées : une couleur dominante, une complémentaire d'accent, des neutres chauds ; jamais d'arc-en-ciel.
+- Matières dessinées (bois veiné, pierre ébréchée, métal martelé, tissu à carreaux) par des hachures et des taches, pas par des textures photo.
+- Lumière dirigée, une source principale claire, contre-jour franc sur les silhouettes importantes.
+- Interdits : photo-réalisme, 3D lisse ou plastique, néon générique, dégradés par défaut, glow flou partout, bokeh, polices système, emojis, cadres « dashboard » à angles droits.
+
+Projet : BOOMTOOTH, slot 2D « démolition au castor » (Crownforge). Un castor chef de chantier vaniteux et casse-cou, Buck Boomtooth, fait sauter une montagne de granit pour y sculpter un monument à sa propre gloire (« Mount Buckmore »), au-dessus d'un barrage en rondins dans une vallée de pins du Grand Nord.
+
+Mascotte (identique dans toutes les directions) : Buck Boomtooth, castor trapu et musclé, fourrure brun roux, grosse queue plate écailleuse, deux incisives dont une en OR (dent de devant gauche), casque de chantier orange cabossé avec lampe frontale, chemise de bûcheron à carreaux rouges et noirs aux manches retroussées, bretelles, ceinture à outils, allumette coincée au coin de la bouche. Pose : fier, un pied sur une caisse, une main sur la poignée d'un détonateur à piston en bois, l'autre main tenant un bâton de dynamite à la mèche allumée. Expression malicieuse, sourcils hauts, grand sourire qui montre la dent en or.
+
+Grille : 5 colonnes × 5 lignes (25 cases carrées), remplie de symboles lisibles et tous différents par famille :
+- 4 symboles bas (objets du chantier, simples et colorés) : casque de chantier jaune, pioche à manche bleu, lanterne verte, gourde en métal violette ;
+- 4 symboles hauts (l'équipe de Buck, têtes-bustes expressives) : raton laveur artificier (masque, lunettes de soudeur, sourire en coin), élan costaud aux grands bois, loutre géomètre avec plan roulé et crayon à l'oreille, pic-vert foreur avec casque et foret ;
+- WILD : une caisse de dynamite dorée estampillée du mot WILD ;
+- SCATTER : une charge de dynamite rouge en fagot avec détonateur, mot SCATTER ;
+- TNT (spécial) : un bâton de dynamite rouge à mèche courte, sans texte.
+Chaque case a un fond de case plus sombre que le décor. Symboles grands (85-95 % de la case), contours noirs épais.
+
+Composition obligatoire de la maquette (1536 × 1024, paysage, fond opaque) : décor en arrière-plan ; grille au centre, dominante ; logo du jeu « BOOMTOOTH » en haut à gauche de la grille (lettrage illustré, lisible, comme gravé/taillé ou en planches, avec une mèche ou une étincelle) ; Buck à droite de la grille, pieds posés au sol avec ombre de contact ; HUD compact en bas : bouton BUY BONUS illustré à gauche (texte exact « BUY BONUS »), trois cadres de valeurs (solde, mise avec − et +, gain) SANS texte lisible à l'intérieur (simples plaques), gros bouton rond SPIN à droite (texte exact « SPIN »), petits boutons ronds d'icônes. Textes exacts autorisés : « BOOMTOOTH », « SPIN », « BUY BONUS », « WILD », « SCATTER ». Aucun autre texte.
+
+LOT dir-d1 — directions (1 image). Dossier : assets/generated/directions/
+
+1. D1.png — Direction D1 « Carrière à l'heure dorée ». Fin d'après-midi, lumière rasante orangée venant de la gauche. Au fond, une montagne de granit gris-bleu à moitié sculptée : on devine l'ébauche gigantesque d'une tête de castor avec échafaudages en rondins, cordes et poulies. Plan intermédiaire : forêt de pins sombres, une rivière et un grand barrage en rondins avec une petite chute d'eau. Premier plan : caisses, rondins coupés, copeaux. La grille est encadrée par des poutres de bois équarri boulonnées de ferrures d'acier, avec des bandes de sécurité jaune et noir usées aux angles et des rivets. Palette : orange brûlé #E8742A, vert pin #2F5D46, granit #6F7F92, rouge TNT #D7332B, or #F2B233, crème #F4E6C8, encre #1B1410. 1536×1024, fond opaque.

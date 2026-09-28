@@ -17,5 +17,15 @@
     "typescript": "^5.9.3",
     "vite": "^7.3.6",
     "vitest": "^3.2.7"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --mode production",
+    "build:qa": "vite build --mode qa",
+    "preview": "vite preview --outDir dist-qa --port 5302 --strictPort",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p .",
+    "fixtures": "tsx tools/fixtures/build.ts",
+    "assets": "node tools/assets/process.mjs"
   }
 }
