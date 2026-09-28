@@ -216,6 +216,7 @@ async function boot(): Promise<void> {
     onTurbo: (lv) => {
       game.turbo = lv;
       game.player.setSpeed(game.speed);
+      buck.speed = game.speed;
       hud.setTurbo(lv);
     },
     onReducedMotion: (on) => {
@@ -294,6 +295,8 @@ async function boot(): Promise<void> {
   const celebration = new CelebrationFx(scene, buck);
   celebration.reducedMotion = buck.reducedMotion;
   scene.overlay.addChild(celebration.view);
+  // éboulement, champignon de poussière, sommet qui saute : derrière la grille (dans le monde, sous la caméra)
+  scene.camera.world.addChildAt(celebration.back, scene.camera.world.getChildIndex(scene.decor.ground) + 1);
   overlays.celebration = celebration;
   // une fanfare par palier, celle du MAX WIN sur le dernier
   let celebMax = false;
@@ -387,6 +390,7 @@ async function boot(): Promise<void> {
         hud.setWin(null); // le compteur de la célébration fait foi ; le total revient après
         celebMax = max;
         celebTop = math().celebrationTiersX.reduce((top, mx, i) => (amount / bet >= mx ? i : top), 0);
+        celebration.top = celebTop;
         return overlays.celebrate(amount, bet, beat, max); // la fanfare part de onTier(0)
       },
       scatterCount: () => undefined,
@@ -419,6 +423,7 @@ async function boot(): Promise<void> {
   presenter.bet = game.bet;
   menu.setTurboAllowed({ turbo: game.flags.turbo, ultra: game.flags.turbo && !session.jurisdiction.disabledSuperTurbo });
   menu.applyAll();
+  buck.speed = game.speed;
   buck.reducedMotion = menu.settings.reducedMotion;
   scene.logo.reducedMotion = buck.reducedMotion;
   celebration.reducedMotion = buck.reducedMotion;

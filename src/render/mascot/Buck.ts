@@ -51,6 +51,8 @@ export class Buck {
   private scaleK = 0.35;
   facing: 1 | -1 = 1;
   reducedMotion = false;
+  /** vitesse de jeu (turbo) : réactions, performances et célébrations suivent le rythme des événements */
+  speed = 1;
   /** lampe frontale rouge quand l'Ante est actif */
   private lamp = new Graphics();
   anteOn = false;
@@ -274,6 +276,8 @@ export class Buck {
     this.current?.kill();
     this.pri = pri;
     this.current = tl;
+    // turbo : les gestes utiles au jeu (réactions et au-delà) accélèrent comme les attentes du Beat
+    if (pri >= 2) tl.timeScale(this.speed);
     tl.eventCallback('onComplete', () => {
       if (this.current === tl) {
         this.pri = 0;
@@ -326,7 +330,8 @@ export class Buck {
     switch (name) {
       case 'strikeMatch': {
         // 1. main à la bouche : prend l'allumette ; 2. la frotte sur la dent en or ; 3. bras tendu vers la charge
-        const toMouth = this.ik('armF', [215, -20]);
+        // main au coin de la bouche (à côté du menton), jamais devant le visage
+        const toMouth = this.ik('armF', [135, 35]);
         this.front(tl, 0, ['F']);
         R.to({ ...toMouth, handF: { alt: 'grip' }, head: { alt: 'focus', r: -3 }, torso: { r: -2 }, thighF: { r: 2 }, thighB: { r: 2 } }, 0.22, 'power2.out', tl, 0);
         tl.call(() => R.setAlt('head', 'grin'), [], 0.24);

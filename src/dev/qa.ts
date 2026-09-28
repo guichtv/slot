@@ -51,6 +51,14 @@ export function installQa(d: QaDeps): void {
       void play(id, mode);
       return true;
     },
+    /** rejoue une fixture à partir d'un événement (état reconstruit, aucun débit) : captures des moments tardifs */
+    playFrom: (id: string, index: number) => {
+      if (!(provider instanceof DemoProvider)) return false;
+      const f = provider.fixtureById(id);
+      if (!f) throw new Error(`fixture inconnue ${id}`);
+      void game.resumeRound({ id: `qa-${id}-${index}-${Date.now()}`, mode: f.mode, bet: game.bet, book: f.book as never, startAt: index, active: false });
+      return true;
+    },
     fixtures: () => (provider instanceof DemoProvider ? provider.list().map((f) => ({ id: f.id, mode: f.mode, tags: f.tags })) : []),
     refill: () => provider instanceof DemoProvider && provider.refill(),
     skip: () => game.skipPresentation(),

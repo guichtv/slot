@@ -181,6 +181,8 @@ export class Overlays {
     setTier(0);
     // comptage par segments : lent au départ, accélère avant chaque palier
     const tl = gsap.timeline({ onUpdate: render });
+    // turbo : le comptage suit la vitesse du jeu
+    tl.timeScale(Math.max(1, beat.speed));
     let from = 0;
     const stops = tiers.slice(1, reached + 1).map((m) => bet * m).concat([amount]);
     stops.forEach((to, i) => {

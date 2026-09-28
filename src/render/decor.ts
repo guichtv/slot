@@ -59,6 +59,8 @@ export class Decor {
   ambience: Ambience = 'base';
   /** mouvement réduit : pas de vols d'oiseaux, nuages ralentis */
   reducedMotion = false;
+  /** crue de la chute d'eau (0 → 1) : palier DAM GOOD! */
+  private fallBoost = 0;
   private night = 0; // 0 jour -> 1 nuit
   private gold = 0; // teinte dorée (super)
   private dim = 0; // atténuation pendant un gain
@@ -269,6 +271,38 @@ export class Decor {
     return tl;
   }
 
+  /** DAM GOOD! : les vannes cèdent, la chute d'eau double puis retombe */
+  floodFall(hold = 2.2): gsap.core.Timeline {
+    const tl = gsap.timeline();
+    tl.to(this, { fallBoost: 1, duration: 0.35, ease: 'power2.out' }).to(this, { fallBoost: 0, duration: 1.2, ease: 'sine.inOut' }, `+=${hold}`);
+    return tl;
+  }
+
+  /** centre de la sculpture visible (coordonnées globales) : éclats, halo de la dent en or */
+  monumentPoint(): { x: number; y: number; h: number } | null {
+    const m = this.monument.find((s) => s.visible);
+    if (!m) return null;
+    const h = m.texture.height * m.scale.y;
+    const g = m.parent ? m.parent.toGlobal({ x: m.x, y: m.y - h * 0.5 }) : { x: m.x, y: m.y - h * 0.5 };
+    return { x: g.x, y: g.y, h };
+  }
+
+  /** sommet du massif (coordonnées globales) : feu d'artifice de granit du MAX WIN */
+  summitPoint(): { x: number; y: number } | null {
+    const pb = this.portrait && this.portraitBg ? this.portraitBg : null;
+    if (pb) return { x: pb.x, y: pb.texture.height * pb.scale.y * 0.08 };
+    const f = this.far;
+    if (!f) return null;
+    const h = f.texture.height * f.scale.y;
+    return f.parent ? f.parent.toGlobal({ x: f.x, y: f.y - h * 0.97 }) : { x: f.x, y: f.y - h * 0.97 };
+  }
+
+  /** visage doré (MAX WIN) : la sculpture passe à l'étape finale, teintée d'or ; false la rend au granit */
+  setMonumentGold(on: boolean): void {
+    if (on) this.setMonument(3, false);
+    for (const m of this.monument) m.tint = on ? 0xffd46a : 0xffffff;
+  }
+
   /** atténuation pendant la lecture d'un gain */
   setDim(v: number, duration = 0.35): gsap.core.Tween {
     return gsap.to(this, { dim: v, duration, onUpdate: () => this.applyGrade() });
@@ -324,14 +358,16 @@ export class Decor {
     const y0 = top + rect.y * h;
     const ww = rect.w * w;
     const hh = rect.h * h;
-    const alpha = 0.55 * (1 - this.dim * 0.6);
-    for (let i = 0; i < 9; i++) {
+    const boost = this.fallBoost;
+    const alpha = Math.min(0.95, 0.55 * (1 - this.dim * 0.6) + boost * 0.4);
+    const lines = 9 + Math.round(boost * 10);
+    for (let i = 0; i < lines; i++) {
       const lx = x0 + (i / 8) * ww;
       const phase = ((this.t * (0.22 + (i % 3) * 0.05)) / 1000 + i * 0.37) % 1;
       const y = y0 + phase * hh;
       g.moveTo(lx, y).lineTo(lx + ww * 0.01, Math.min(y0 + hh, y + hh * 0.16));
     }
-    g.stroke({ width: Math.max(1.5, ww * 0.018), color: 0xffffff, alpha, cap: 'round' });
+    g.stroke({ width: Math.max(1.5, ww * (0.018 + boost * 0.02)), color: 0xffffff, alpha, cap: 'round' });
   }
 
   /** projecteurs de nuit qui balaient la montagne */
