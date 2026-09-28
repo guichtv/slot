@@ -295,8 +295,10 @@ Paramètres d'URL de développement (`params.dev`) : `?qa` (horloge virtuelle, s
 Outil de développement uniquement. `node tools/mock-rgs.mjs [port]`, port par défaut **5310**. Il sert `public/fixtures/fixtures.json` sur les mêmes routes que le RGS (CORS ouvert).
 
 - Lancer le jeu contre lui : `http://127.0.0.1:5302/?sessionID=mock-session&rgs_url=http://127.0.0.1:5310&lang=fr`.
-- Pilotage : `POST /__mock/next` avec `{"error": "ERR_IB"}`, `{"delayMs": n}`, `{"timeout": true}` (pas de réponse au prochain `play`), `{"fixture": "F07"}`, `{"resume": true}` (manche BONUS ouverte, reprise à l'index 4) ; `GET /__mock/state`.
-- Règles simulées : `sessionID` absent → `ERR_IS` ; `sessionID=expired` → 401 ; manche déjà ouverte → `ERR_BR` ; mise hors paliers → `ERR_OR` ; solde insuffisant → `ERR_IB` ; `end-round` sans manche → `ERR_NR`. Gain = `round(mise × payoutMultiplier / 100)` ; manche active seulement si gain > 0.
+- Pilotage : `POST /__mock/next` (`{"error":"ERR_IPB","status":400,"on":"/wallet/play","delayMs":n,"timeout":true|"after"}` : erreur, délai, absence de réponse — y compris **après** traitement du pari, pour tester l'incertitude) ; `POST /__mock/reset` (`{balance, currency, social, resume:{fixture,event,amount}, betLevels, defaultBetLevel}` : état initial déterministe, manche ouverte à reprendre) ; `GET /__mock/state` ; `GET /__mock/log` (journal des appels, sans sessionID).
+- Importable : `createMockRgs(options)` (utilisé par `tests/rgs-*.test.ts` et `tools/stake-e2e.mjs`).
+- Règles simulées : `sessionID` absent → `ERR_IS` ; manche déjà ouverte → `ERR_BR` ; mise hors paliers → `ERR_OR` ; solde insuffisant → **`ERR_IPB`** ; `end-round` sans manche → `ERR_NR`. Gain = `round(mise × payoutMultiplier / 100)` ; manche active seulement si gain > 0 ; une manche reprise crédite son gain à la clôture.
+- Campagne de bout en bout : `npm run stake-e2e` (build de production temporaire, faux RGS, session / reprise / relecture par clics réels) — résultats dans `docs/VERIFICATION.md` § 5.
 
 ## 11. Hooks QA (`src/dev/qa.ts`)
 
@@ -331,7 +333,7 @@ Aussi : `window.__qaPlay(id)` (version qu'on peut attendre) et `window.__qaBoot`
 | `tools/fixtures/build.ts` | `npm run fixtures` | construit et valide les fixtures (voir `docs/CONTRAT-EVENTS.md`) |
 | `tools/mock-rgs.mjs` | `node tools/mock-rgs.mjs [5310]` | faux RGS local (§ 10.4) |
 
-Outils **ajoutés le 28/09 dans l'arbre de travail** (non commités au moment de la rédaction) :
+Outils **ajoutés le 28/09** :
 
 | Outil | Usage | Rôle |
 |---|---|---|

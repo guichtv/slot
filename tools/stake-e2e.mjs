@@ -167,7 +167,7 @@ async function scenario(browser, name, fn) {
   const trace = await page.evaluate(() => window.__e2e).catch(() => null);
   await ctx.close();
   // erreurs attendues : réponses 4xx volontaires du faux RGS (ex. /bet/event tardif) journalisées par le navigateur
-  const unexpected = errors.filter((e) => !/Failed to load resource: the server responded with a status of 4\d\d/.test(e) && !/^http 4\d\d .*(\/favicon\.ico|\/bet\/event)$/.test(e));
+  const unexpected = errors.filter((e) => !/Failed to load resource: the server responded with a status of 4\d\d/.test(e) && !/^http 4\d\d .*(\/favicon\.(ico|png)|\/bet\/event)$/.test(e));
   if (unexpected.length) checks.push({ label: 'aucune erreur JavaScript', ok: !unexpected.some((e) => e.startsWith('pageerror')), detail: unexpected.slice(0, 5).join(' | ') });
   const ok = !fatal && checks.every((c) => c.ok);
   log(`scénario ${name} : ${ok ? 'OK' : 'KO'} (${((Date.now() - started) / 1000).toFixed(0)} s)`);

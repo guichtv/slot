@@ -63,6 +63,9 @@ export async function showWelcome(host: HTMLElement, opts: { onDismissStart?: ()
     .fromTo(cards, { y: 60, opacity: 0, rotation: (i: number) => (i - 1) * 6 }, { y: 0, opacity: 1, rotation: 0, duration: 0.5, ease: 'back.out(1.6)', stagger: 0.09 }, 0.15)
     .fromTo([max, hint, skip], { opacity: 0 }, { opacity: 1, duration: 0.3, stagger: 0.05 }, 0.55);
 
+  // animations réduites (réglage du menu ou préférence système) : apparition et sortie sans mouvement
+  const reduced = document.documentElement.dataset.motion === 'reduced' || matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) tin.progress(1);
   await new Promise<void>((resolve) => anywhereToDismiss(root, () => resolve(), { armDelayMs: 300, ignore: '.wel-skip' }));
   tin.progress(1);
   opts.onDismissStart?.();
@@ -76,6 +79,7 @@ export async function showWelcome(host: HTMLElement, opts: { onDismissStart?: ()
   out.to(logo, { y: -120, scale: 1.2, opacity: 0, duration: 0.4, ease: 'power2.in' }, 0)
     .to([max, hint, skip], { opacity: 0, duration: 0.2 }, 0)
     .to(root.querySelector('.wel-veil'), { opacity: 0, duration: 0.45 }, 0.15);
-  await new Promise<void>((resolve) => out.eventCallback('onComplete', () => resolve()));
+  if (reduced) out.progress(1);
+  else await new Promise<void>((resolve) => out.eventCallback('onComplete', () => resolve()));
   root.remove();
 }

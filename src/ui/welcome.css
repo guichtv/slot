@@ -94,3 +94,6 @@
 @media (prefers-reduced-motion: reduce) {
   .wel-hint { animation: none; }
 }
+
+/* réglage « animations réduites » du menu (en plus de la préférence système) */
+:root[data-motion='reduced'] .wel-hint { animation: none; }

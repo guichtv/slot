@@ -154,12 +154,13 @@ export class BlastFx {
   }
 
   /** explosion d'une zone : les cases deviennent des gravats (les autres charges prises restent visibles) */
-  async explode(area: Area, pos: [number, number], beat: Beat, opts: { reduced?: boolean; strength?: number } = {}): Promise<void> {
+  async explode(area: Area, pos: [number, number], beat: Beat, opts: { reduced?: boolean; strength?: number; keepSymbols?: boolean } = {}): Promise<void> {
     const r = this.rect(area);
     const fx = fxTextures();
     const size = Math.max(r.w, r.h);
     this.clearStakes();
-    for (let c = area.col; c < area.col + area.w; c++) for (let rr = area.row; rr < area.row + area.h; rr++) {
+    // keepSymbols : souffle seul (Scatters au déclenchement du bonus : jamais détruits)
+    if (!opts.keepSymbols) for (let c = area.col; c < area.col + area.w; c++) for (let rr = area.row; rr < area.row + area.h; rr++) {
       const v = this.grid.viewAt(c, rr);
       const isOtherCharge = v && v.sym === 'T' && (c !== pos[0] || rr !== pos[1]);
       if (v && !isOtherCharge) beat.fire(gsap.to(v, { alpha: 0, duration: 0.08 }));

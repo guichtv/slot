@@ -488,3 +488,6 @@
 @media (prefers-reduced-motion: reduce) {
   .hud-btn, .hud-auto-pop, .hud-win.pulse .hud-value { transition: none; animation: none; }
 }
+
+/* réglage « animations réduites » du menu (en plus de la préférence système) */
+:root[data-motion='reduced'] .hud-btn, :root[data-motion='reduced'] .hud-auto-pop, :root[data-motion='reduced'] .hud-win.pulse .hud-value { transition: none; animation: none; }

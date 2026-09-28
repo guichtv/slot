@@ -36,7 +36,7 @@ export class GameController {
   private busy = false;
   lastRound: PlayedRound | null = null;
   history: PlayedRound[] = [];
-  flags = { turbo: true, autoplay: true, buy: true, spacebar: true };
+  flags = { turbo: true, autoplay: true, buy: true, spacebar: true, slamstop: true };
 
   constructor(
     public provider: RoundProvider,
@@ -80,6 +80,7 @@ export class GameController {
       autoplay: !j.disabledAutoplay,
       buy: !j.disabledBuyFeature,
       spacebar: !j.disabledSpacebar,
+      slamstop: !j.disabledSlamstop,
     };
     this.hud.setJurisdiction({ turbo: this.flags.turbo, autoplay: this.flags.autoplay, buy: this.flags.buy });
     this.refreshHud();
@@ -145,23 +146,30 @@ export class GameController {
         round = r.round;
         break;
       } catch (e) {
-        const uncertain = e instanceof RgsError && e.uncertain;
+        // pari incertain, ou manche précédente encore ouverte côté serveur (ERR_BR) : réconciliation obligatoire
+        const uncertain = e instanceof RgsError && (e.uncertain || e.code === 'ERR_BR');
         this.fsm.go(uncertain ? 'waiting' : 'error');
-        const choice = await this.hooks.onError(e, 'play');
-        if (uncertain) {
-          // réconciliation : on relit l'état serveur ; une manche ouverte est reprise sans nouveau débit
-          try {
-            const s = await this.provider.reconcile?.();
-            if (s) {
-              this.balance = s.balance;
-              if (s.resume) {
-                round = s.resume;
-                this.fsm.go('spinning');
+        let choice = await this.hooks.onError(e, 'play');
+        if (uncertain && this.provider.reconcile) {
+          // on relit l'état serveur ; une manche ouverte est reprise sans nouveau débit.
+          // Tant que la relecture échoue, le jeu reste verrouillé et l'erreur est reproposée.
+          let resumed: PlayedRound | null = null;
+          for (;;) {
+            try {
+              const s = await this.provider.reconcile();
+              if (s) {
+                this.balance = s.balance;
+                resumed = s.resume ?? null;
                 break;
               }
+            } catch (err) {
+              choice = await this.hooks.onError(err, 'play');
             }
-          } catch {
-            /* reste bloqué : l'erreur sera reproposée */
+          }
+          if (resumed) {
+            round = resumed;
+            this.fsm.go('spinning');
+            break;
           }
         }
         this.busy = false;
@@ -284,6 +292,8 @@ export class GameController {
 
   /** second clic / Espace pendant le défilement : arrêt rapide, résultat inchangé */
   quickStop(): void {
+    // juridiction : arrêt rapide interdit (disabledSlamstop) → le clic est sans effet
+    if (!this.flags.slamstop) return;
     this.presenter.quickStop = true;
     this.player.skipCurrent();
   }

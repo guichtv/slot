@@ -57,6 +57,8 @@ export class Decor {
   private layers: Layer[] = [];
   private l: SceneLayout | null = null;
   ambience: Ambience = 'base';
+  /** mouvement réduit : pas de vols d'oiseaux, nuages ralentis */
+  reducedMotion = false;
   private night = 0; // 0 jour -> 1 nuit
   private gold = 0; // teinte dorée (super)
   private dim = 0; // atténuation pendant un gain
@@ -292,7 +294,7 @@ export class Decor {
     const l = this.l;
     if (!l) return;
     for (const c of this.clouds) {
-      c.s.x += (c.speed * dt) / 1000;
+      c.s.x += ((this.reducedMotion ? 0.25 : 1) * c.speed * dt) / 1000;
       if (c.s.x - c.s.width / 2 > l.vw) c.s.x = -c.s.width / 2;
     }
     this.drawWaterfall();
@@ -381,7 +383,7 @@ export class Decor {
   /** vol d'oies en V qui traverse le ciel (3 poses d'ailes ImageGen en boucle) */
   launchFlock(): void {
     const l = this.l;
-    if (!l || !this.birdFrames.length || this.flock.length) return;
+    if (!l || !this.birdFrames.length || this.flock.length || this.reducedMotion) return;
     const n = 3 + Math.floor(rand() * 3);
     const dir: 1 | -1 = rand() < 0.5 ? 1 : -1;
     this.onFlock?.(dir);

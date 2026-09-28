@@ -199,7 +199,8 @@ export class Buck {
   }
 
   private applyBreath(): void {
-    const k = this.breath.k;
+    // mouvement réduit : pas de respiration visible
+    const k = this.reducedMotion ? 0 : this.breath.k;
     const torso = this.rig.part('torso').children[0] as Container;
     torso.scale.y = 1 + k * 0.012;
     // la tête et les épaules suivent le soulèvement de la poitrine
@@ -228,7 +229,8 @@ export class Buck {
   private scheduleGesture(): void {
     this.gestureTimer?.kill();
     this.gestureTimer = gsap.delayedCall(8 + rand() * 8, () => {
-      if (this.pri === 0) this.gesture(Math.floor(rand() * 4));
+      // mouvement réduit : aucun geste d'attente (seules les réactions utiles au jeu restent)
+      if (this.pri === 0 && !this.reducedMotion) this.gesture(Math.floor(rand() * 4));
       this.scheduleGesture();
     });
   }
@@ -318,7 +320,7 @@ export class Buck {
    * Performance bloquante (promesse résolue au moment utile pour l'enchaînement).
    * strikeMatch : l'étincelle part quand la promesse se résout (bras tendu vers la cible).
    */
-  async perform(name: string, beat: Beat, arg?: { target?: { x: number; y: number }; tier?: number }): Promise<void> {
+  async perform(name: string, beat: Beat, arg?: { target?: { x: number; y: number }; tier?: number; throw?: boolean }): Promise<void> {
     const R = this.rig;
     const tl = gsap.timeline();
     switch (name) {
@@ -333,7 +335,8 @@ export class Buck {
         R.to({ foreF: { r: (toMouth.foreF?.r ?? 0) - 16 } }, 0.07, 'power3.in', tl, 0.3);
         R.to({ foreF: { r: (toMouth.foreF?.r ?? 0) + 4 } }, 0.09, 'power2.out', tl, 0.37);
         const t = arg?.target ? this.toTorso(arg.target) : [-500, -200];
-        const aim = this.reach('armF', [t[0], t[1]] as [number, number], 0.8);
+        // prototype blast-throw : pichenette vers le haut (le bras ne vise plus la charge)
+        const aim = arg?.throw ? this.reach('armF', [(t[0] ?? -500) * 0.3, -420], 0.7) : this.reach('armF', [t[0], t[1]] as [number, number], 0.66);
         R.to({ ...aim, head: { r: -6, alt: 'wink' }, torso: { r: -3 } }, 0.2, 'back.out(1.6)', tl, 0.5);
         tl.addLabel('flick', 0.72);
         this.run(tl, 3);

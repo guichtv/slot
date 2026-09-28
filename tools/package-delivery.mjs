@@ -114,6 +114,14 @@ for (const [sub, src] of MEDIA_SRC) {
   const info = await sharp(abs).png({ compressionLevel: 9 }).toFile(out);
   media.push({ src, out: rel(dest, out), w: info.width, h: info.height });
 }
+// vidéos de démonstration enregistrées par tools/record.mjs (captures/video/*.mp4), si présentes
+const VID_SRC = path.join(ROOT, 'captures/video');
+const videos = fs.existsSync(VID_SRC) ? fs.readdirSync(VID_SRC).filter((f) => f.endsWith('.mp4')).sort() : [];
+if (videos.length) {
+  fs.mkdirSync(path.join(MEDIA, 'VIDEOS'), { recursive: true });
+  for (const f of videos) fs.copyFileSync(path.join(VID_SRC, f), path.join(MEDIA, 'VIDEOS', f));
+}
+console.log(`${videos.length ? '✓' : '·'} MEDIA/VIDEOS : ${videos.length} vidéo(s)`);
 const missingMedia = media.filter((m) => m.missing);
 console.log(`${missingMedia.length ? '!' : '✓'} MEDIA : ${media.length - missingMedia.length} PNG${missingMedia.length ? ` (manquants : ${missingMedia.map((m) => m.src).join(', ')})` : ''}`);
 
@@ -279,7 +287,7 @@ Générée le ${new Date().toISOString().slice(0, 16).replace('T', ' ')} UTC dep
 |---|---|
 | \`FRONTEND/\` | build de production (copie de \`dist/\`, aucun outil de dev), à servir en statique |
 | \`${zipName}\` | même contenu, \`index.html\` à la racine du zip (${inZip.length} fichiers) |
-| \`MEDIA/\` | visuels PNG : ${media.filter((x) => !x.missing && path.posix.dirname(x.out) === 'MEDIA').map((x) => path.basename(x.out)).join(', ')} ; \`BG/\` décor de fond ; \`FG/\` premiers plans |
+| \`MEDIA/\` | visuels PNG : ${media.filter((x) => !x.missing && path.posix.dirname(x.out) === 'MEDIA').map((x) => path.basename(x.out)).join(', ')} ; \`BG/\` décor de fond ; \`FG/\` premiers plans${videos.length ? ` ; \`VIDEOS/\` ${videos.join(', ')}` : ''} |
 | \`CONTROLES/\` | \`check-release.txt\` / \`.json\`, \`vitest.txt\`, \`build.txt\`${hud ? ', `hud-report.json`' : ''} |
 | \`GAME-DETAILS-EN.txt\` | fiche du jeu en anglais (modes et coûts lus dans \`game-math-config.json\`) |
 | \`SHA256SUMS\` | empreintes SHA-256 de tous les fichiers (chemins relatifs) |

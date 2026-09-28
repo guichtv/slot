@@ -34,7 +34,7 @@ export interface Stage {
     clearWire(): void;
     spark(from: { x: number; y: number }, to: { x: number; y: number }, beat: Beat, ms?: number, arc?: number): Promise<void>;
     fuse(pos: [number, number], beat: Beat, ms?: number): Promise<void>;
-    explode(area: EventOf<'blast'>['area'], pos: [number, number], beat: Beat, opts?: { reduced?: boolean; strength?: number }): Promise<void>;
+    explode(area: EventOf<'blast'>['area'], pos: [number, number], beat: Beat, opts?: { reduced?: boolean; strength?: number; keepSymbols?: boolean }): Promise<void>;
     carve(area: EventOf<'carve'>['area'], giant: SymbolName, beat: Beat): Promise<void>;
   };
   mascot: {
@@ -59,6 +59,8 @@ export interface Stage {
   sound: { play(name: string, opts?: { pitch?: number; volume?: number }): void; tension(on: boolean): void; ambience(a: 'base' | 'bonus' | 'super'): void };
   reducedMotion: boolean;
   turbo: number;
+  /** prototype de piste alternative (Annexe B, ?variant= en build de dev/QA seulement) */
+  variant?: string | null;
 }
 
 export class GamePresenter implements Presenter {
@@ -89,7 +91,9 @@ export class GamePresenter implements Presenter {
     if (model.fs.active) {
       this.s.decor.setAmbience(model.fs.bonus === 'super' ? 'super' : 'bonus', 0).progress(1);
       this.s.ui.setFs(model.fs.total - model.fs.current, model.fs.total);
-      void this.s.ui.setMultiplier(model.globalMult > 1 ? model.globalMult : null, null);
+      // reprise en plein bonus : Cornerstone (×1 compris) et étape du Mount Buckmore rétablis
+      void this.s.ui.setMultiplier(Math.max(1, model.globalMult), null);
+      this.s.decor.setMonument(Math.min(3, Math.floor((Math.max(1, model.globalMult) - 1) / 3)), false);
     }
     this.s.ui.setSpinWin(model.roundWin ? bookToMoney(model.roundWin, this.bet) : null);
   }
@@ -246,8 +250,11 @@ export class GamePresenter implements Presenter {
       // lecture de la zone, puis Buck frotte l'allumette sur sa dent en or et l'étincelle file jusqu'à la mèche
       this.s.blast.stakes(e.area, beat);
       this.s.sound.play('match');
-      await this.s.mascot.perform('strikeMatch', beat, { target });
-      await this.s.blast.spark(this.s.mascot.matchPoint(), target, beat, 380, g.cellCenter(0, 0).y * 0 + 120);
+      const thrown = this.s.variant === 'blast-throw';
+      await this.s.mascot.perform('strikeMatch', beat, { target, throw: thrown });
+      // piste retenue : étincelle tendue vers la mèche ; prototype blast-throw : allumette lancée en cloche
+      if (thrown) await this.s.blast.spark(this.s.mascot.matchPoint(), target, beat, 560, 260);
+      else await this.s.blast.spark(this.s.mascot.matchPoint(), target, beat, 380, 120);
       this.s.sound.play('fuse');
       await this.s.blast.fuse(e.tnt.pos as [number, number], beat, 240);
     } else {
@@ -277,12 +284,12 @@ export class GamePresenter implements Presenter {
   private async winInfo(e: EventOf<'winInfo'>, beat: Beat): Promise<void> {
     this.s.decor.setDim(1);
     this.s.sound.play('win', { pitch: 1 });
-    const many = e.wins.length > 3;
-    for (const w of e.wins) {
+    // au plus 3 connexions présentées une à une, les plus fortes d'abord (le total s'affiche ensuite)
+    const shown = [...e.wins].sort((a, b) => b.win - a.win).slice(0, 3);
+    for (const w of shown) {
       const amount = w.mult && w.mult > 1 && w.baseWin !== undefined ? `${this.money(w.baseWin)} ${formatMult(w.mult)} = ${this.money(w.win)}` : this.money(w.win);
       this.s.sound.play(w.symbol.startsWith('H') || w.symbol === 'W' ? 'winHigh' : 'winLow');
       await this.s.grid.presentWin(w, amount, beat);
-      if (many) break;
     }
     this.s.grid.endWinPresentation(beat);
     this.s.decor.setDim(0);
@@ -312,10 +319,23 @@ export class GamePresenter implements Presenter {
     for (const [c, r] of e.positions) beat.fire(this.s.grid.viewAt(c, r)!.react());
     await this.s.mascot.perform('triggerCheer', beat);
     // transition thématique : Buck enfonce le piston, les Scatters sautent, la nuit tombe dans le souffle
-    await this.s.mascot.perform('plunger', beat);
-    this.s.sound.play('blastBig');
     const reduced = this.s.reducedMotion;
-    for (const [c, r] of e.positions) void this.s.blast.explode({ col: c, row: r, w: 1, h: 1 }, [c, r], beat, { reduced, strength: 0.7 });
+    if (this.s.variant === 'trigger-wire') {
+      // prototype : fil rouge du détonateur à chaque Scatter ; au piston, l'étincelle court et chaque Scatter claque
+      const from = this.s.mascot.matchPoint();
+      const pts = e.positions.map(([c, r]) => this.s.grid.cellCenter(c, r));
+      this.s.blast.showWire([from, ...pts], beat);
+      await this.s.mascot.perform('plunger', beat);
+      this.s.sound.play('fuse');
+      for (const p of pts) await this.s.blast.spark(from, p, beat, 220, 20);
+      for (const [c, r] of e.positions) beat.fire(this.s.grid.viewAt(c, r)!.react());
+      this.s.sound.play('blastBig');
+      this.s.blast.clearWire();
+    } else {
+      await this.s.mascot.perform('plunger', beat);
+      this.s.sound.play('blastBig');
+      for (const [c, r] of e.positions) void this.s.blast.explode({ col: c, row: r, w: 1, h: 1 }, [c, r], beat, { reduced, strength: 0.7, keepSymbols: true });
+    }
     if (!reduced) beat.fire(this.s.camera.shake(16, 0.55));
     const amb = e.bonus === 'super' ? 'super' : 'bonus';
     this.s.sound.ambience(amb);

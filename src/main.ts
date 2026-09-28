@@ -22,7 +22,8 @@ import { showWelcome, welcomeSkipped } from './ui/welcome';
 import { GameMenu, type HistoryItem } from './ui/menu';
 import { BuyMenu } from './ui/buy';
 import { AntePanel, anteFromConfig } from './ui/ante';
-import { Dialogs, warmArt } from './ui/dialogs';
+import { Dialogs, mapRgsError, warmArt } from './ui/dialogs';
+import { RgsError } from './stake/rgs';
 import { music } from './audio/music';
 import { ambience } from './audio/ambience';
 import type { PlayedRound } from './provider/types';
@@ -66,6 +67,15 @@ function showLoadError(msg: string, retry: () => void): void {
   };
   b.focus();
 }
+
+/** grille affichée avant le premier tour (colonnes de haut en bas) : aucun gain, aucune charge, aucun Scatter */
+const START_BOARD = [
+  ['L1', 'H2', 'L3', 'H4', 'L2'],
+  ['L4', 'H1', 'L1', 'H3', 'H2'],
+  ['L3', 'H4', 'L2', 'H1', 'L4'],
+  ['H2', 'L1', 'H3', 'L3', 'L2'],
+  ['H4', 'L4', 'H1', 'L2', 'H3'],
+];
 
 async function loadFixtures(): Promise<Fixture[]> {
   const res = await fetch('fixtures/fixtures.json', { cache: 'no-cache' });
@@ -120,6 +130,8 @@ async function boot(): Promise<void> {
   // en local, la latence simulée suit l'horloge de présentation (horloge démarrée plus bas, avant tout tour)
   if (provider instanceof DemoProvider) provider.wait = (ms) => clock.wait(ms);
   setProgress(1);
+  // juridiction : casino social imposé par la session (anglais + dictionnaire social)
+  if (session.jurisdiction.socialCasino && !params.social) setLang(getLang(), true);
   setMoneyFormat({ currency: session.currency, locale: intlLocale() });
 
   // interface
@@ -212,6 +224,7 @@ async function boot(): Promise<void> {
       scene.logo.reducedMotion = on;
       scene.camera.reducedMotion = on;
       celebration.reducedMotion = on;
+      scene.decor.reducedMotion = on;
       document.documentElement.dataset.motion = on ? 'reduced' : 'full';
     },
     onQuality: (q) => {
@@ -309,7 +322,7 @@ async function boot(): Promise<void> {
   });
 
   const mascot = {
-    perform: (name: string, beat: Beat, arg?: unknown) => buck.perform(name, beat, arg as { target?: { x: number; y: number }; tier?: number }),
+    perform: (name: string, beat: Beat, arg?: unknown) => buck.perform(name, beat, arg as { target?: { x: number; y: number }; tier?: number; throw?: boolean }),
     react: (name: string) => {
       if (name === 'anticipationWin') sfx('anticipationLand');
       else if (name === 'anticipationLose') sfx('anticipationMiss');
@@ -333,7 +346,12 @@ async function boot(): Promise<void> {
     },
     ui: {
       setSpinWin: (amount, label) => hud.setWin(amount, label === 'total' ? t('hud.total') : undefined),
-      setFs: (n) => overlays.setFs(n),
+      setFs: (n) => {
+        if (replayMode) {
+          if (n === null) overlays.setBanner(t('replay.badge'));
+          else overlays.setFs(n, t('replay.badge'));
+        } else overlays.setFs(n);
+      },
       plusFs: (n, beat) => {
         sfx('plusFs');
         return overlays.plusFs(n, beat);
@@ -366,6 +384,7 @@ async function boot(): Promise<void> {
         await overlays.dialog('outro', { title: t('bonus.end'), big: formatMoney(total), art: assetUrl('scr.total'), artKey: 'scr.total' }, beat);
       },
       celebrate: (amount, bet, beat, max) => {
+        hud.setWin(null); // le compteur de la célébration fait foi ; le total revient après
         celebMax = max;
         celebTop = math().celebrationTiersX.reduce((top, mx, i) => (amount / bet >= mx ? i : top), 0);
         return overlays.celebrate(amount, bet, beat, max); // la fanfare part de onTier(0)
@@ -376,6 +395,8 @@ async function boot(): Promise<void> {
     sound: { play: (n, o) => sfx(n, o), tension, ambience: setSoundMood },
     reducedMotion: menu.settings.reducedMotion,
     turbo: 1,
+    // prototypes de pistes (Annexe B) : builds de dev/QA seulement
+    variant: __DEV_TOOLS__ ? params.dev.variant : null,
   };
   const presenter = new GamePresenter(stage);
   game = new GameController(provider, presenter, hud, {
@@ -402,6 +423,8 @@ async function boot(): Promise<void> {
   scene.logo.reducedMotion = buck.reducedMotion;
   celebration.reducedMotion = buck.reducedMotion;
   scene.camera.reducedMotion = buck.reducedMotion;
+  scene.decor.reducedMotion = buck.reducedMotion;
+  document.documentElement.dataset.motion = buck.reducedMotion ? 'reduced' : 'full';
   syncAnte();
   game.fsm.onChange((st, prev) => {
     syncAnte();
@@ -414,12 +437,8 @@ async function boot(): Promise<void> {
   music.start();
   ambience.start();
 
-  // grille initiale : première révélation d'une perte de la playlist (aucun symbole spécial)
-  if (provider instanceof DemoProvider) {
-    const first = provider.list().find((f) => f.tags.includes('loss'));
-    const reveal = (first?.book as { events: Array<{ type: string; board?: Array<Array<{ name: string }>> }> })?.events?.[0];
-    if (reveal?.board) scene.grid.setBoard(reveal.board.map((c) => c.map((s) => s.name)) as never, new Map());
-  }
+  // grille de départ neutre, identique dans tous les modes (local, Stake, relecture) : aucun symbole spécial
+  scene.grid.setBoard(START_BOARD as never, new Map());
 
   // clavier : Espace lance / arrête (sauf dialogue ouvert)
   window.addEventListener('keydown', (e) => {
@@ -428,12 +447,12 @@ async function boot(): Promise<void> {
     if ((e.target as HTMLElement)?.closest?.('button, input, [role="dialog"]')) return;
     e.preventDefault();
     if (game.fsm.state === 'ready') void game.spin();
-    else if (game.fsm.inRound) game.quickStop();
+    else if (game.fsm.inRound || game.fsm.state === 'requesting') game.quickStop();
   });
   // clic sur la grille pendant une connexion : passe au montant
   host.app.canvas.addEventListener('pointerdown', (e) => {
     const l = scene.layout;
-    if (!l || !game.fsm.inRound) return;
+    if (!l || !(game.fsm.inRound || game.fsm.state === 'replay')) return;
     if (e.clientX >= l.grid.x && e.clientX <= l.grid.x + l.grid.w && e.clientY >= l.grid.y && e.clientY <= l.grid.y + l.grid.h) game.skipPresentation();
   });
 
@@ -483,5 +502,7 @@ async function boot(): Promise<void> {
 
 boot().catch((e) => {
   console.error(e);
-  showLoadError(t('loader.error'), () => location.reload());
+  // session expirée, maintenance, juridiction… : le message du code RGS plutôt qu'un message générique
+  const msg = e instanceof RgsError ? t(mapRgsError(e).messageKey) : t('loader.error');
+  showLoadError(msg, () => location.reload());
 });

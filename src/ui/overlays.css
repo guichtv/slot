@@ -167,3 +167,6 @@
 @media (prefers-reduced-motion: reduce) {
   .ovl-cel-title.pop, .ovl-cel-value.final, .ovl-fs.bump .ovl-fs-value, .ovl-hint { animation: none; }
 }
+
+/* réglage « animations réduites » du menu (en plus de la préférence système) */
+:root[data-motion='reduced'] .ovl-cel-title.pop, :root[data-motion='reduced'] .ovl-cel-value.final, :root[data-motion='reduced'] .ovl-fs.bump .ovl-fs-value, :root[data-motion='reduced'] .ovl-hint { animation: none; }

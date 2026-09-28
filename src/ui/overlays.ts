@@ -64,13 +64,13 @@ export class Overlays {
   }
 
   /** « Spins restants : N » (sur 6 tours : 5 pendant le premier, 0 pendant le dernier) */
-  setFs(remaining: number | null): void {
+  setFs(remaining: number | null, prefix?: string): void {
     if (remaining === null) {
       this.fsBox.hidden = true;
       return;
     }
     this.fsBox.hidden = false;
-    this.fsLabel.textContent = t('fs.left');
+    this.fsLabel.textContent = prefix ? `${prefix} · ${t('fs.left')}` : t('fs.left');
     this.fsValue.textContent = String(remaining);
   }
 
