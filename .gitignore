@@ -1,0 +1,9 @@
+node_modules/
+dist/
+dist-*/
+.cache/
+captures/tmp/
+*.log
+!docs/imagegen/logs/*.log
+.DS_Store
+Thumbs.db
