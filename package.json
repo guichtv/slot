@@ -38,6 +38,7 @@
     "hud-check": "node tools/hud-check.mjs",
     "check-release": "node tools/check-release.mjs",
     "package": "node tools/package-delivery.mjs",
-    "serve-stable": "node tools/serve-stable.mjs"
+    "serve-stable": "node tools/serve-stable.mjs",
+    "stake-e2e": "node tools/stake-e2e.mjs"
   }
 }

@@ -392,7 +392,8 @@
    "family": "mascot",
    "quality": 92,
    "margin": 6,
-   "maxSize": 1200
+   "maxSize": 1200,
+   "noPublic": true
   },
   "buck.heads": {
    "src": "assets/generated/mascot/buck-heads.png",

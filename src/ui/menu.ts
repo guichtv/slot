@@ -531,7 +531,7 @@ export class GameMenu {
     // BLAST & CARVE
     const tnt = cfg.tnt as Record<string, { w: number; h: number }>;
     const charges = h('div', { class: 'gm-charges' });
-    for (const [kind, art] of [['stick', 'sym.T.stick'], ['bundle', 'sym.T.bundle'], ['keg', 'sym.T.keg']] as const) {
+    for (const [kind, art] of [['stick', 'sym.T.stick'], ['bundle', 'sym.T.bundle'], ['keg', 'sym.T.log']] as const) {
       const z = tnt[kind] ?? (kind === 'keg' ? tnt.crate : undefined) ?? { w: kind === 'stick' ? 2 : kind === 'bundle' ? 3 : 4, h: kind === 'stick' ? 2 : kind === 'bundle' ? 3 : 4 };
       charges.append(h('figure', { class: 'gm-charge' }, h('div', { class: 'gm-charge-art' }, artImg(art, '', t(`sym.T.${kind}`))), h('figcaption', { class: 'gm-charge-size' }, `${z.w}×${z.h}`)));
     }

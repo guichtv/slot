@@ -30,7 +30,7 @@ export interface PlayResult {
 }
 
 export interface RoundProvider {
-  readonly kind: 'demo' | 'stake' | 'replay';
+  readonly kind: 'local' | 'stake' | 'replay';
   authenticate(lang: string): Promise<SessionInfo>;
   /** débite bet × coût du mode (côté serveur) et renvoie la manche */
   play(bet: number, mode: string): Promise<PlayResult>;

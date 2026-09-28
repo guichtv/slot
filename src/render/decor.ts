@@ -41,6 +41,11 @@ export class Decor {
   private fg: Sprite[] = [];
   /** tours de projecteurs (visibles la nuit) : les faisceaux partent de leurs lampes */
   private towers: Sprite[] = [];
+  /** décor plein cadre dédié au portrait (ImageGen) : remplace ciel/lointain/intermédiaire/sol en téléphone */
+  private portraitBg: Sprite | null;
+  private portrait = false;
+  /** chute d'eau peinte dans decor.portrait (fractions de l'image) */
+  private portraitFall = { x: 0.105, y: 0.4, w: 0.075, h: 0.13 };
   private birdsLayer = new Container();
   private flock: Array<{ s: Sprite; vx: number; vy: number; phase: number; rate: number }> = [];
   private birdFrames: Texture[] = [];
@@ -69,6 +74,8 @@ export class Decor {
     if (this.farBack) this.farBack.tint = 0xb9c6de;
     this.mid = sprite('decor.mid');
     this.groundS = sprite('decor.ground');
+    this.portraitBg = sprite('decor.portrait');
+    if (this.portraitBg) this.portraitBg.visible = false;
     for (let i = 0; i < 4; i++) {
       const m = sprite(`decor.monument.${i}`);
       if (m) this.monument.push(m);
@@ -89,6 +96,7 @@ export class Decor {
     }
     const land = new Container();
     land.filters = [this.grade];
+    if (this.portraitBg) land.addChild(this.portraitBg);
     if (this.farBack) land.addChild(this.farBack);
     if (this.far) land.addChild(this.far);
     for (const m of this.monument) {
@@ -145,6 +153,21 @@ export class Decor {
     if (this.skyDay) this.cover(this.skyDay, 0, 0, vw, vh);
     if (this.skyNight) this.cover(this.skyNight, 0, 0, vw, vh);
     const portrait = l.cls === 'portrait' || l.cls === 'tablet' || l.cls === 'mini';
+    // portrait : un seul décor peint plein cadre (la chute d'eau à gauche reste visible)
+    const full = portrait && !!this.portraitBg;
+    this.portrait = full;
+    if (this.portraitBg) {
+      const pb = this.portraitBg;
+      pb.visible = full;
+      if (full) {
+        const k = Math.max(vw / (pb.texture.width || 1), vh / (pb.texture.height || 1));
+        pb.scale.set(k);
+        pb.anchor.set(0.42, 0);
+        pb.position.set(vw / 2, 0);
+      }
+    }
+    for (const sp of [this.skyDay, this.far, this.farBack, this.mid, this.groundS]) if (sp) sp.visible = !full;
+    for (const c of this.clouds) c.s.visible = !full;
     // lointain : la face plate de la falaise (≈ 52 % de l'image) doit apparaître hors de la grille
     if (this.far) {
       const tw = this.far.texture.width || 1;
@@ -287,14 +310,18 @@ export class Decor {
   private drawWaterfall(): void {
     const g = this.waterfall;
     g.clear();
-    if (!this.mid || !this.mid.visible) return;
-    const m = this.mid;
+    const pb = this.portraitBg;
+    const usePortrait = this.portrait && !!pb;
+    const m = usePortrait ? pb! : this.mid;
+    if (!m || !m.visible) return;
+    const rect = usePortrait ? this.portraitFall : this.waterfallRect;
     const w = m.texture.width * m.scale.x;
     const h = m.texture.height * m.scale.y;
-    const x0 = m.x - w * m.anchor.x + this.waterfallRect.x * w;
-    const y0 = m.y - h + this.waterfallRect.y * h;
-    const ww = this.waterfallRect.w * w;
-    const hh = this.waterfallRect.h * h;
+    const top = usePortrait ? m.y : m.y - h;
+    const x0 = m.x - w * m.anchor.x + rect.x * w;
+    const y0 = top + rect.y * h;
+    const ww = rect.w * w;
+    const hh = rect.h * h;
     const alpha = 0.55 * (1 - this.dim * 0.6);
     for (let i = 0; i < 9; i++) {
       const lx = x0 + (i / 8) * ww;

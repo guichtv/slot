@@ -208,6 +208,8 @@ async function contactSheet(family, files) {
 function sha(file) { return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex').slice(0, 16); }
 
 async function processAsset(key, spec) {
+  // référence de génération seulement (ex. buck.ref) : jamais copiée dans la build
+  if (spec.noPublic) { report.push({ key, status: 'reference', src: spec.src }); return []; }
   const src = path.join(ROOT, spec.src);
   if (!fs.existsSync(src)) { report.push({ key, status: 'missing', src: spec.src }); return []; }
   const buf = await loadRgba(src);

@@ -37,9 +37,26 @@ Chaque champ vide de la fiche a été décidé ici. Les informations explicites 
 - **Git** : dépôt cloud `guichtv/slot`, branche `claude/funny-lamport-2y5sp6`. Le masterprompt demandait un dépôt local sans push (contexte Windows) ; dans un conteneur éphémère, pousser sur la branche désignée est la seule manière de ne rien perdre. Aucun autre push, aucune PR.
 - **Ports** : serveur de dev 5301, build figée servie sur 5302 (`--strictPort`), mock RGS 5310.
 - **Laboratoire** : aucun (fiche : LABORATOIRE = NON). Les pistes de mise en scène des moments clés sont prototypées via `?variant=` en dev puis archivées.
-- **Spline** : non utilisé (l'application Spline n'est pas disponible dans le conteneur). Les objets qui tournent (pépites, éclats) sont des planches ImageGen.
+- **Spline** : non utilisé. L'utilisateur a proposé Spline pour la mascotte (application ouverte sur son PC), mais cette session tourne dans un conteneur cloud qui ne peut pas joindre une application locale et aucun connecteur Spline n'existe. Buck reste un rig 2D articulé à partir de pièces ImageGen (IK à deux os, pieds ancrés). Si Spline est repris plus tard dans une session locale, seules des séquences d'images exportées sont compatibles avec la build Stake (une scène chargée depuis spline.design serait une dépendance externe).
 
 ## Unités et contrat
 
 - Montants des books : entiers en centièmes de la mise de base (100 = ×1). Monnaie : entiers en base 10^6. Une seule conversion : `bookToMoney()`.
 - Coordonnées : [colonne, ligne], origine en haut à gauche.
+
+
+## Décisions de production (28/09)
+
+- **Quota ImageGen** : épuisé en fin de lot 2 ; arrêt immédiat de la génération (aucune image remplacée par un faux), puis reprise après changement de compte Codex par l'utilisateur (nouvelle connexion par code d'appareil). Lots 3 et 4 générés ensuite ; seul `buck.props` a dû être relancé.
+- **Charge 4×4** : la **bûche-charge** (`sym.T.log`, bûche creuse bourrée de dynamite, cerclée de fer) remplace le tonnelet à l'écran, conformément au choix du concept. Le nom technique du contrat reste `keg`.
+- **Cadre de grille** : recomposé en 9 pièces (coins et platines à l'échelle, planches étirées) pour régler son épaisseur (0,6 case) et laisser la place au HUD.
+- **HUD** : peau 100 % ImageGen (planche à embouts, bouton rouge, boutons de bois, icônes crème). Sur téléphone, la case « mise » ouvre un sélecteur −/valeur/+ (cibles ≥ 44 px) ; l'aide passe dans le menu ; les montants rétrécissent pour tenir au lieu d'être tronqués. Contrôle automatique sur 25 tailles (`tools/hud-check.mjs`) : 25/25.
+- **Panneaux** : menu, achat, confirmation et dialogues utilisent le cadre `scr.card` en 9-slice ; l'Ante la planche `ui.btn.plaque` ; les cartes d'achat ont les vrais décors en fond ; les vignettes de symboles complets (corps + pièces) sont assemblées par `tools/assets/symbol_thumbs.py`. `scr.shop` reste en réserve.
+- **Portrait** : décor peint plein cadre dédié (`decor.portrait`) au lieu des calques paysage.
+- **Déclenchement du bonus** : Buck fait tomber un détonateur à piston (`buck.props`), empoigne la barre en T et l'enfonce ; les Scatters sautent et la nuit tombe dans le souffle, puis le panneau d'intro.
+- **Célébrations** : décor assombri seul (grille et Buck restent éclairés), geysers de pépites d'or, détonation à chaque palier, Buck gradué, logo qui sursaute ; bandeau `scr.banner` pour le nom du palier. Les noms de paliers restent en anglais dans toutes les langues (jeux de mots).
+- **Performance** : textures envoyées au GPU pendant le chargement (Pixi `prepare`), aucune création de texture au moment d'un impact ; pas de BlurFilter (flou de défilement par traînée), pas de ParticleContainer (sprites en pool), pas de filtre CSS `drop-shadow` sur les grands éléments (46 s par image en rendu logiciel mesurées pendant une intro) ; la latence simulée du mode local suit l'horloge de présentation (captures reproductibles).
+- **Machine à états** : le présentateur signale les phases (anticipation, feature, résolution, célébration, intro/bonus/fin) ; le contrôleur ne les applique que si la transition est permise.
+- **Correctif important** : la couche des surcouches (`.ovl`) captait tous les clics au-dessus du HUD (règle `#ui > *` trop forte) ; corrigé, et vérifié par des clics réels (`tools/ui-states.mjs`).
+- **Reprise et relecture** : `GameController.resumeRound` rejoue une manche interrompue à l'événement enregistré, sans nouveau débit ; `replayRound` relit une manche d'historique (aucun appel serveur) ; `/bet/event` enregistre la progression après chaque événement d'une manche active.
+- **Maths** : config provisoire alignée sur le contrat 1.1.0 (`keg`, table `retriggers` 2 → +2, 3 → +5, 4+ → +8 en super). `provisional: true` bloque toujours l'import Stake.

@@ -31,7 +31,7 @@ export const SYMBOL_DEFS: Record<Exclude<SymbolName, 'T'>, SymbolDef> = {
 export const TNT_DEFS: Record<TntKind, { body: string; fill: number; fuse: [number, number]; size: number }> = {
   stick: { body: 'sym.T.stick', fill: 0.84, fuse: [0.66, 0.1], size: 2 },
   bundle: { body: 'sym.T.bundle', fill: 0.88, fuse: [0.55, 0.08], size: 3 },
-  keg: { body: 'sym.T.keg', fill: 0.9, fuse: [0.52, 0.06], size: 4 },
+  keg: { body: 'sym.T.log', fill: 0.92, fuse: [0.74, 0.08], size: 4 }, // bûche-charge (DECISIONS : le baril faisait pirate)
 };
 
 /** symboles de défilement : décoratifs uniquement, jamais de faux Scatter / Wild / TNT */

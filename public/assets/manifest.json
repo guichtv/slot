@@ -852,24 +852,6 @@
    "pivot": null,
    "family": "decor"
   },
-  "buck.ref": {
-   "url": "assets/mascot/buck.ref.webp",
-   "w": 813,
-   "h": 1200,
-   "source": "assets/generated/mascot/buck-ref.png",
-   "sourceHash": "55764f43416bf5fc",
-   "frame": {
-    "x": 45,
-    "y": 80,
-    "w": 933,
-    "h": 1377
-   },
-   "scale": 0.8714596949891068,
-   "pivot": null,
-   "nineSlice": null,
-   "family": "mascot",
-   "visibleFill": 0.991
-  },
   "buck.heads.rest": {
    "url": "assets/mascot/buck.heads.rest.webp",
    "w": 390,
@@ -2111,5 +2093,5 @@
    "ui": true
   }
  },
- "generatedAt": "2026-09-28T11:49:32.452Z"
+ "generatedAt": "2026-09-28T12:44:54.957Z"
 }

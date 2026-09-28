@@ -12,7 +12,7 @@
   user-select: none;
   -webkit-user-select: none;
 }
-.wel-veil { position: absolute; inset: 0; background: rgba(14, 9, 6, 0.55); }
+.wel-veil { position: absolute; inset: 0; background: rgba(14, 9, 6, 0.74); }
 .wel-inner {
   position: relative;
   display: flex;
@@ -81,6 +81,8 @@
   .wel-art { width: 26vw; max-width: 150px; max-height: none; flex: 0 0 auto; }
   .wel-text { text-align: left; max-width: none; }
   .wel-body { font-size: clamp(12px, 3.4vw, 15px); }
+  .wel-inner { gap: 8px; justify-content: center; height: 100%; }
+  .wel-max { font-size: clamp(16px, 4.6vw, 22px); }
 }
 /* paysage court : vignettes réduites */
 @media (max-height: 520px) and (min-aspect-ratio: 4/5) {

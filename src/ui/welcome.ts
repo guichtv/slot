@@ -1,5 +1,5 @@
 import { gsap } from 'gsap';
-import { t } from '../i18n';
+import { intlLocale, t } from '../i18n';
 import { anywhereToDismiss, h } from './dom';
 import { assetUrl } from './overlays';
 
@@ -46,7 +46,7 @@ export async function showWelcome(host: HTMLElement, opts: { onDismissStart?: ()
   check.checked = welcomeSkipped();
   check.addEventListener('change', () => setSkipped(check.checked));
   const skip = h('label', { class: 'wel-skip' }, check, h('span', {}, t('welcome.skip')));
-  const max = h('div', { class: 'wel-max' }, t('welcome.max', { x: opts.maxWinX.toLocaleString() }));
+  const max = h('div', { class: 'wel-max' }, t('welcome.max', { x: opts.maxWinX.toLocaleString(intlLocale()) }));
   const hint = h('div', { class: 'wel-hint', 'aria-hidden': 'true' }, t('common.tapAnywhere'));
   const root = h(
     'div',

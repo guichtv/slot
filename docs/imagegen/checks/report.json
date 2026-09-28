@@ -865,30 +865,8 @@
  },
  {
   "key": "buck.ref",
-  "status": "ok",
-  "src": "assets/generated/mascot/buck-ref.png",
-  "outputs": 1,
-  "alphaBefore": [
-   799286,
-   1402,
-   1152,
-   978,
-   1047,
-   1160,
-   1607,
-   766232
-  ],
-  "alphaAfter": [
-   799286,
-   1402,
-   1152,
-   978,
-   1047,
-   1160,
-   1607,
-   766232
-  ],
-  "opaqueCorners": 0
+  "status": "reference",
+  "src": "assets/generated/mascot/buck-ref.png"
  },
  {
   "key": "buck.heads",

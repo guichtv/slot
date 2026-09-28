@@ -45,7 +45,7 @@ export function sceneKeys(): string[] {
   return keys().filter((k) => {
     const e = manifest.assets[k] as ManifestEntry & { ui?: boolean };
     if (e?.ui) return false;
-    return !/^(scr\.|id\.card\.|id\.cover|id\.tile|id\.crownforge|decor\.portrait)/.test(k);
+    return !/^(scr\.|id\.card\.|id\.cover|id\.tile|id\.crownforge)/.test(k);
   });
 }
 

@@ -25,7 +25,7 @@ export interface DemoOptions {
 }
 
 export class DemoProvider implements RoundProvider {
-  readonly kind = 'demo' as const;
+  readonly kind = 'local' as const;
   balance: number;
   private bags = new Map<string, string[]>();
   private rng: number;

@@ -191,7 +191,7 @@ export function buyVisual(mode: BuyMode): HTMLElement {
   else if (mode === 'BLAST') {
     add('sym.T.bundle', 'bm-bundle');
     add('sym.T.stick', 'bm-stick');
-  } else add('sym.T.keg', 'bm-keg');
+  } else add('sym.T.log', 'bm-keg');
   return v;
 }
 
@@ -218,7 +218,7 @@ export class BuyMenu {
     this.area.append(this.board);
     this.root = h('div', { class: 'cf-ui cf-layer bm-root', hidden: true }, this.veil, this.area);
     applyArt(this.root);
-    warmArt(['ui.btn.buy', 'ui.btn.plaque', 'ui.btn.round', 'ui.ico.plus', 'sym.S.body', 'sym.T.bundle', 'sym.T.stick', 'sym.T.keg']);
+    warmArt(['ui.btn.buy', 'ui.btn.plaque', 'ui.btn.round', 'ui.ico.plus', 'sym.S.body', 'sym.T.bundle', 'sym.T.stick', 'sym.T.log']);
     this.veil.addEventListener('pointerdown', (e) => e.stopPropagation());
     this.veil.addEventListener('click', (e) => {
       e.stopPropagation();
