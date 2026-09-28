@@ -24,10 +24,18 @@ set "VER="
 for /f "usebackq delims=" %%v in (`node -p "require('./package.json').version"`) do set "VER=%%v"
 if not defined VER set "VER=dev"
 
+rem build figee perimee (autre version du jeu) : reconstruite automatiquement
+set "BUILT="
+if exist "dist-stable\.version" set /p BUILT=<"dist-stable\.version"
+if exist "dist-stable\index.html" if not "%BUILT%"=="%VER%" (
+  echo [BOOMTOOTH] Build figee v%BUILT% differente de v%VER% : reconstruction...
+  rmdir /s /q "dist-stable"
+)
 if not exist "dist-stable\index.html" (
   echo [BOOMTOOTH] Construction de la build figee dist-stable...
   call npx vite build --mode production --outDir dist-stable
   if errorlevel 1 goto :fail
+  >"dist-stable\.version" echo %VER%
 )
 
 set "URL=http://127.0.0.1:5320/?v=%VER%"
