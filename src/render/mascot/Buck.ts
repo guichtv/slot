@@ -21,8 +21,9 @@ import { autoVia, bezier, extension, fk, naturalSide, polePoint, solve, solveTip
  *   change de côté que bras tendu. Une action interrompue repart de la position réelle de la main.
  * - Ordre de dessin : bras devant le torse (les manches couvrent les épaules), derrière la tête ; devant la tête
  *   seulement quand la main touche le visage ou le casque. Au coude : l'avant-bras sort de l'ouverture de la manche
- *   (manches redessinées, intérieur sombre visible), dessiné devant elle et masqué en amont de l'ouverture (voir
- *   clipForearm) ; coude très plié : entier devant la manche. Main sur l'avant-bras.
+ *   (manches redessinées, intérieur sombre visible) : dessiné devant elle en aval de l'ouverture, et une copie sous
+ *   elle fait ressortir le bord côté pliure de sous le poignet de manche (voir clipForearm) ; coude très plié :
+ *   entier devant la manche. Main sur l'avant-bras.
  * - Accessoires (détonateur) : timeline à part, jamais tuée par une action suivante ; reset() les range.
  */
 type BuckJson = RigDef & {
@@ -171,6 +172,8 @@ export class Buck {
   private tailPose = { r: 0, sy: TAIL_SY };
   /** avant-bras passés devant la manche (coude très plié, voir clipForearm) */
   private folded: Record<Side, boolean> = { F: false, B: false };
+  /** copie de l'avant-bras SOUS la manche (voir clipForearm) : sa partie coupée ressort de sous le poignet de manche */
+  private foreBack: Record<Side, { holder: Container; sprite: Sprite; mask: Graphics }> | null = null;
   /** masques des avant-bras (voir clipForearm) */
   private elbowMask: Record<Side, Graphics> = { F: new Graphics(), B: new Graphics() };
   private drag: Record<Side, { a: number; last: number; t: number }> = { F: { a: 0, last: NaN, t: 0 }, B: { a: 0, last: NaN, t: 0 } };
@@ -184,10 +187,21 @@ export class Buck {
     this.rig.setAlt('handF', 'open');
     this.rig.setAlt('handB', 'open');
     this.rig.setAlt('tail', 'ground');
+    const back = {} as NonNullable<typeof this.foreBack>;
     for (const side of ['F', 'B'] as const) {
-      this.rig.part(IK[side].upper).addChild(this.elbowMask[side]);
+      const up = this.rig.part(IK[side].upper);
+      up.addChild(this.elbowMask[side]);
       this.rig.sprite(IK[side].fore).mask = this.elbowMask[side];
+      const holder = new Container();
+      holder.zIndex = -1;
+      const sprite = new Sprite(this.rig.sprite(IK[side].fore).texture);
+      const mask = new Graphics();
+      holder.addChild(sprite);
+      up.addChild(holder, mask);
+      sprite.mask = mask;
+      back[side] = { holder, sprite, mask };
     }
+    this.foreBack = back;
     // pieds : semelles des bottes (pas la boîte englobante des textures tournées) -> sur le centre de l'ombre
     this.rig.body.y = -this.soleY() + 3;
     // fin d'image, après toutes les animations : jambes (pieds ancrés), puis bras (respiration, traîne des mains)
@@ -221,6 +235,8 @@ export class Buck {
     this.folded[side] = folded;
     m.clear();
     const op = a.opening;
+    const bk = this.foreBack?.[side];
+    if (bk) bk.holder.visible = !folded && !!op && fore.visible;
     if (folded || !op) {
       m.rect(-5000, -5000, 10000, 10000).fill(0xffffff);
       return;
@@ -230,17 +246,20 @@ export class Buck {
     const cx = (op.c[0] - ap.pivot[0]) * ka;
     const cy = (op.c[1] - ap.pivot[1]) * ka;
     const t = (op.deg * Math.PI) / 180;
-    // plan de l'ouverture : grand axe de l'ellipse ; normale orientée à l'opposé de l'épaule (origine du repère)
+    const L = 3000;
+    const half = (ox: number, oy: number, nx: number, ny: number, g: Graphics) => {
+      const tx = -ny;
+      const ty = nx;
+      g.poly([ox + tx * L, oy + ty * L, ox + tx * L + nx * L, oy + ty * L + ny * L, ox - tx * L + nx * L, oy - ty * L + ny * L, ox - tx * L, oy - ty * L]).fill(0xffffff);
+    };
+    // 1. devant la manche : en aval du plan de l'ouverture (grand axe de l'ellipse) + l'ellipse elle-même
     let nx = -Math.sin(t);
     let ny = Math.cos(t);
     if (nx * cx + ny * cy < 0) {
       nx = -nx;
       ny = -ny;
     }
-    const tx = -ny;
-    const ty = nx;
-    const L = 3000;
-    m.poly([cx + tx * L, cy + ty * L, cx + tx * L + nx * L, cy + ty * L + ny * L, cx - tx * L + nx * L, cy - ty * L + ny * L, cx - tx * L, cy - ty * L]).fill(0xffffff);
+    half(cx, cy, nx, ny, m);
     const pts: number[] = [];
     for (let i = 0; i < 28; i++) {
       const w = (i / 28) * Math.PI * 2;
@@ -249,6 +268,40 @@ export class Buck {
       pts.push(cx + px * Math.cos(t) - py * Math.sin(t), cy + px * Math.sin(t) + py * Math.cos(t));
     }
     m.poly(pts).fill(0xffffff);
+    // 2. sous la manche : la même pièce, visible au-delà de la paroi de la manche côté pliure. Le bord de l'avant-bras
+    //    que le plan de l'ouverture coupait ressort ainsi de sous le poignet de manche, avec son trait ; côté coude
+    //    (extérieur), rien ne dépasse.
+    if (!bk) return;
+    const sp = this.rig.sprite(a.fore);
+    bk.holder.position.copyFrom(fore.position);
+    bk.holder.rotation = fore.rotation;
+    bk.holder.scale.copyFrom(fore.scale);
+    bk.holder.pivot.copyFrom(fore.pivot);
+    bk.sprite.texture = sp.texture;
+    bk.sprite.anchor.copyFrom(sp.anchor);
+    bk.sprite.scale.copyFrom(sp.scale);
+    bk.sprite.position.copyFrom(sp.position);
+    bk.sprite.rotation = sp.rotation;
+    const fa = ((fore.angle + a.foreAxis) * Math.PI) / 180;
+    const dx = Math.cos(fa);
+    const dy = Math.sin(fa);
+    let vx = Math.cos(t);
+    let vy = Math.sin(t);
+    if (vx * dx + vy * dy < 0) {
+      vx = -vx;
+      vy = -vy;
+    }
+    const ex = cx + vx * op.r[0] * ka;
+    const ey = cy + vy * op.r[0] * ka;
+    const ux = Math.cos((a.upperAxis * Math.PI) / 180);
+    const uy = Math.sin((a.upperAxis * Math.PI) / 180);
+    let kx = vx - (vx * ux + vy * uy) * ux;
+    let ky = vy - (vx * ux + vy * uy) * uy;
+    const kl = Math.hypot(kx, ky) || 1;
+    kx /= kl;
+    ky /= kl;
+    bk.mask.clear();
+    half(ex, ey, kx, ky, bk.mask);
   }
 
   /** bas des semelles dans le repère du corps (px), calculé par la chaîne cuisse -> tibia au repos */
