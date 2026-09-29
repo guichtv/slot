@@ -168,6 +168,8 @@ export class Buck {
   /** traîne des mains (action secondaire) : la main suit l'avant-bras avec un léger retard */
   /** pose de la queue (rotation dans le plan du sol : le torse qui pivote ne l'enfonce pas) */
   private tailPose = { r: 0, sy: TAIL_SY };
+  /** masques des avant-bras (voir clipForearm) */
+  private elbowMask: Record<Side, Graphics> = { F: new Graphics(), B: new Graphics() };
   private drag: Record<Side, { a: number; last: number; t: number }> = { F: { a: 0, last: NaN, t: 0 }, B: { a: 0, last: NaN, t: 0 } };
 
   constructor() {
@@ -179,6 +181,10 @@ export class Buck {
     this.rig.setAlt('handF', 'open');
     this.rig.setAlt('handB', 'open');
     this.rig.setAlt('tail', 'ground');
+    for (const side of ['F', 'B'] as const) {
+      this.rig.part(IK[side].upper).addChild(this.elbowMask[side]);
+      this.rig.sprite(IK[side].fore).mask = this.elbowMask[side];
+    }
     // pieds : semelles des bottes (pas la boîte englobante des textures tournées) -> sur le centre de l'ombre
     this.rig.body.y = -this.soleY() + 3;
     // fin d'image, après toutes les animations : jambes (pieds ancrés), puis bras (respiration, traîne des mains)
@@ -187,11 +193,68 @@ export class Buck {
       this.updateDrag();
       this.applyArm('F');
       this.applyArm('B');
+      this.clipForearm('F');
+      this.clipForearm('B');
     };
     this.drawShadow(1);
     this.applyArm('F');
     this.applyArm('B');
     this.startIdle();
+  }
+
+  /**
+   * Coude : l'avant-bras ne se montre qu'au-delà du coude (côté main de la bissectrice du coude) et dans l'ouverture
+   * de la manche ; il ne dépasse plus à côté de la manche vers l'épaule. Masque dans le repère du bras (suit la pliure).
+   */
+  private clipForearm(side: Side): void {
+    const a = IK[side];
+    const m = this.elbowMask[side];
+    const arm = this.rig.part(a.upper);
+    const fore = this.rig.part(a.fore);
+    const hand = PART[a.hand]!;
+    const fp = PART[a.fore]!;
+    const k = fp.scale ?? 1;
+    // coude et directions (repère du bras : origine = épaule)
+    const ex = fore.x;
+    const ey = fore.y;
+    const ul = Math.hypot(ex, ey) || 1;
+    const u: Vec = [-ex / ul, -ey / ul];
+    const vx = (hand.attach![0] - fp.pivot[0]) * k;
+    const vy = (hand.attach![1] - fp.pivot[1]) * k;
+    const c = Math.cos(fore.rotation);
+    const s = Math.sin(fore.rotation);
+    const fx = vx * c - vy * s;
+    const fy = vx * s + vy * c;
+    const fl = Math.hypot(fx, fy) || 1;
+    let nx = fx / fl - u[0];
+    let ny = fy / fl - u[1];
+    const nl = Math.hypot(nx, ny) || 1;
+    nx /= nl;
+    ny /= nl;
+    const d = 12;
+    const L = 3000;
+    const ox = ex - nx * d;
+    const oy = ey - ny * d;
+    const tx = -ny;
+    const ty = nx;
+    m.clear();
+    m.poly([ox + tx * L, oy + ty * L, ox + tx * L + nx * L, oy + ty * L + ny * L, ox - tx * L + nx * L, oy - ty * L + ny * L, ox - tx * L, oy - ty * L]).fill(0xffffff);
+    const op = a.opening;
+    if (op) {
+      const ap = PART[a.upper]!;
+      const ka = ap.scale ?? 1;
+      const cx = (op.c[0] - ap.pivot[0]) * ka;
+      const cy = (op.c[1] - ap.pivot[1]) * ka;
+      const t = (op.deg * Math.PI) / 180;
+      const pts: number[] = [];
+      for (let i = 0; i < 28; i++) {
+        const w = (i / 28) * Math.PI * 2;
+        const px = Math.cos(w) * op.r[0] * ka;
+        const py = Math.sin(w) * op.r[1] * ka;
+        pts.push(cx + px * Math.cos(t) - py * Math.sin(t), cy + px * Math.sin(t) + py * Math.cos(t));
+      }
+      m.poly(pts).fill(0xffffff);
+    }
   }
 
   /** bas des semelles dans le repère du corps (px), calculé par la chaîne cuisse -> tibia au repos */

@@ -236,7 +236,7 @@ async function featherJoint(file, opt, spec) {
  * Manche découpée (pièces du rig) : ImageGen a peint au bout de la manche la section du bras (disque de fourrure
  * cerné de noir). Posé sur l'avant-bras, ce disque fait « moignon ». On le sépare du tissu, sans rien redessiner :
  * - disque = composante de fourrure la plus proche de `hint` (trous comblés) + son trait noir (pixels quasi noirs, 11 px) ;
- * - `<nom>.sleeve.webp` = la manche sans le disque (dessinée au-dessus de l'avant-bras) ;
+ * - `<nom>.sleeve.webp` = la manche sans l'intérieur du disque, bord extérieur gardé (dessinée au-dessus de l'avant-bras) ;
  * - `<nom>.cuff.webp` = le disque seul, élargi de 2 px sous le tissu (dessiné sous l'avant-bras : aucune fente au raccord).
  */
 async function splitCuff(file, opt, spec) {
@@ -307,9 +307,14 @@ async function splitCuff(file, opt, spec) {
   for (let k = 0; k < 11; k++) ring = dilate(ring, dark);
   ring = dilate(ring, null);
   const under = dilate(dilate(ring, null), null);
+  // bord extérieur du poignet de manche (son trait qui touche le fond) : reste sur le tissu, au-dessus de l'avant-bras
+  // (l'avant-bras sort de sous ce bord, comme sur l'illustration de référence) ; seul l'intérieur du disque passe dessous
+  let bg = new Uint8Array(N);
+  for (let i = 0; i < N; i++) bg[i] = data[i * 4 + 3] < 40 ? 1 : 0;
+  for (let k = 0; k < (opt.edge ?? 9); k++) bg = dilate(bg, null);
   const sleeve = Buffer.from(data), cuff = Buffer.from(data);
   for (let i = 0; i < N; i++) {
-    if (ring[i]) sleeve[i * 4 + 3] = 0;
+    if (ring[i] && (mask[i] || !bg[i])) sleeve[i * 4 + 3] = 0;
     if (!under[i]) cuff[i * 4 + 3] = 0;
   }
   const base = file.replace(/\.webp$/, '');

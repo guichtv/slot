@@ -15,6 +15,8 @@ export interface IkArm {
   upperLen: number;
   foreAxis: number;
   foreLen: number;
+  /** ouverture du poignet de manche (px de la texture du bras) : centre, demi-axes, angle du grand axe (deg) */
+  opening?: { c: [number, number]; r: [number, number]; deg: number };
 }
 
 export type Vec = [number, number];

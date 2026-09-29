@@ -69,6 +69,8 @@ async function main(): Promise<void> {
     heads,
     actions,
     hideBar: () => (bar.style.display = 'none'),
+    /** débogage du rig (dev uniquement) */
+    buck,
   };
   if (q.has('qa')) clock.useVirtual();
   else clock.start();

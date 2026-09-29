@@ -375,7 +375,18 @@
    "upperAxis": 126.6,
    "upperLen": 194.6,
    "foreAxis": 105.3,
-   "foreLen": 219.9
+   "foreLen": 219.9,
+   "opening": {
+    "c": [
+     83,
+     234.5
+    ],
+    "r": [
+     80.2,
+     46.3
+    ],
+    "deg": 39.1
+   }
   },
   "armB": {
    "upper": "armB",
@@ -388,7 +399,18 @@
    "upperAxis": 56.3,
    "upperLen": 194.7,
    "foreAxis": 77.1,
-   "foreLen": 217.5
+   "foreLen": 217.5,
+   "opening": {
+    "c": [
+     194.4,
+     242.5
+    ],
+    "r": [
+     80.6,
+     47.0
+    ],
+    "deg": -36.0
+   }
   }
  },
  "points": {
