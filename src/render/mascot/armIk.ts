@@ -81,9 +81,16 @@ export function solveTip(a: IkArm, side: Side, target: Vec, s: number, off: Vec,
   let o = tip(th - a.foreAxis, 0);
   let wrist: Vec = [target[0] - o[0], target[1] - o[1]];
   let r = solve(a, side, wrist, s);
-  for (let i = 0; i < 5; i++) {
+  // point fixe sous-relaxé : bras replié + main longue = itération qui oscille si on la laisse faire des pas entiers
+  const minD = (a.upperLen + a.foreLen) * 0.28;
+  for (let i = 0; i < 14; i++) {
     o = tip(r.upper, r.fore);
-    wrist = [target[0] - o[0], target[1] - o[1]];
+    wrist = [wrist[0] + (target[0] - o[0] - wrist[0]) * 0.5, wrist[1] + (target[1] - o[1] - wrist[1]) * 0.5];
+    // jamais replié à bloc contre l'épaule (branche instable : le coude saute d'un côté à l'autre)
+    const dx = wrist[0] - a.shoulder[0];
+    const dy = wrist[1] - a.shoulder[1];
+    const d = Math.hypot(dx, dy) || 1;
+    if (d < minD) wrist = [a.shoulder[0] + (dx / d) * minD, a.shoulder[1] + (dy / d) * minD];
     r = solve(a, side, wrist, s);
   }
   return { ...r, wrist };
@@ -94,6 +101,16 @@ export function naturalSide(a: IkArm, side: Side, target: Vec): 1 | -1 {
   let th = Math.atan2(target[1] - a.shoulder[1], target[0] - a.shoulder[0]) * DEG;
   if (side === 'B') th = 180 - th;
   return Math.sin((POLE_F - th) * RAD) >= 0 ? 1 : -1;
+}
+
+/**
+ * Point de bascule du coude : bras presque tendu dans la direction naturelle du coude (le long du corps, un peu
+ * dehors). Les deux solutions de coude s'y confondent, le changement de côté y est invisible.
+ */
+export function polePoint(a: IkArm, side: Side, ext = 0.96): Vec {
+  const deg = side === 'F' ? POLE_F : 180 - POLE_F;
+  const r = (a.upperLen + a.foreLen) * ext;
+  return [a.shoulder[0] + Math.cos(deg * RAD) * r, a.shoulder[1] + Math.sin(deg * RAD) * r];
 }
 
 /** allonge relative (0 = replié, 1 = tendu) */
@@ -110,7 +127,7 @@ export function bezier(p0: Vec, c: Vec, p1: Vec, u: number): Vec {
  * Point de contrôle automatique : l'arc bombe vers l'extérieur du corps (gauche pour le bras avant, droite pour
  * l'arrière, un peu vers le bas), et reste loin de l'épaule pour que le bras ne se replie pas en passant.
  */
-export function autoVia(a: IkArm, side: Side, p0: Vec, p1: Vec, bulge = 0.22): Vec {
+export function autoVia(a: IkArm, side: Side, p0: Vec, p1: Vec, bulge = 0.22, toWrist: (q: Vec) => Vec = (q) => q): Vec {
   const mx = (p0[0] + p1[0]) / 2;
   const my = (p0[1] + p1[1]) / 2;
   const dx = p1[0] - p0[0];
@@ -138,13 +155,13 @@ export function autoVia(a: IkArm, side: Side, p0: Vec, p1: Vec, bulge = 0.22): V
   // la main ne doit jamais frôler l'épaule en chemin (bras replié à bloc = coude qui se retourne) : on garde
   // l'arc vers l'extérieur s'il reste assez tendu, sinon on l'élargit, sinon on le fait passer de l'autre côté
   // (devant le ventre) ; à défaut, l'arc le moins replié
-  const e0 = extension(a, p0);
-  const e1 = extension(a, p1);
+  const e0 = extension(a, toWrist(p0));
+  const e1 = extension(a, toWrist(p1));
   let best = at(bulge);
   let bestScore = -Infinity;
   for (const b of [bulge, 0.35, 0.5, 0.7, 0, -0.15, -0.3, -0.45, -0.6]) {
     const c = at(b);
-    const sc = margin(a, p0, c, p1, e0, e1);
+    const sc = margin(a, p0, c, p1, e0, e1, toWrist);
     if (sc >= 0) return c;
     if (sc > bestScore) {
       bestScore = sc;
@@ -155,12 +172,12 @@ export function autoVia(a: IkArm, side: Side, p0: Vec, p1: Vec, bulge = 0.22): V
 }
 
 /** marge minimale d'allonge le long de l'arc par rapport à un plancher (interpolé entre les deux extrémités) */
-function margin(a: IkArm, p0: Vec, c: Vec, p1: Vec, e0: number, e1: number): number {
+function margin(a: IkArm, p0: Vec, c: Vec, p1: Vec, e0: number, e1: number, toWrist: (q: Vec) => Vec): number {
   let m = Infinity;
-  for (let i = 1; i < 16; i++) {
-    const u = i / 16;
-    const floor = Math.min(0.62, e0 + (e1 - e0) * u) - 0.05;
-    m = Math.min(m, extension(a, bezier(p0, c, p1, u)) - floor);
+  for (let i = 1; i < 12; i++) {
+    const u = i / 12;
+    const floor = Math.min(0.5, e0 + (e1 - e0) * u) - 0.05;
+    m = Math.min(m, extension(a, toWrist(bezier(p0, c, p1, u))) - floor);
   }
   return m;
 }

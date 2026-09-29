@@ -1,6 +1,6 @@
 # AVANCEMENT — BOOMTOOTH
 
-Mis à jour le 28/09/2026. Branche `claude/funny-lamport-2y5sp6`.
+Mis à jour le 29/09/2026. Branche `claude/funny-lamport-2y5sp6`.
 
 ## Fait
 
@@ -12,7 +12,7 @@ Mis à jour le 28/09/2026. Branche `claude/funny-lamport-2y5sp6`.
 | **Contrat** | Books v1.1, schéma zod + invariants, 33 fixtures validées (chaînes, charges reliées, relances, MAX WIN) — `docs/CONTRAT-EVENTS.md` |
 | **Moteur** | Horloge de présentation unique, séquences passables/annulables, machine à états explicite suivant chaque phase, lecteur d'événements appliqués une fois |
 | **Scène** | Grille 5×5 à rouleaux, cadre 9 pièces, symboles assemblés (pièces qui réagissent), géants sculptés, explosions par taille, chaînes, fil de mise à feu, tumbles ; décor vivant jour / nuit / super (sunset, aurore, projecteurs, oies, chute d'eau, monument Mount Buckmore) ; décor portrait dédié |
-| **Mascotte** | Buck : rig cut-out IK, repos vivant, allumette sur la dent en or, détonateur à piston, esquive, fierté, célébrations graduées |
+| **Mascotte** | Buck : rig cut-out, **bras pilotés par la main** (arcs, coudes dehors), **pieds ancrés** (genoux qui plient), queue au sol, repos vivant, allumette prise à la bouche et frottée sur la dent en or, détonateur à piston, esquive mains sur le casque, fierté, célébrations graduées (MAX WIN distinct) |
 | **Célébrations** | Paliers ×10 → ×1000 + MAX WIN : bandeau illustré, geysers d'or, détonations, décor assombri |
 | **Interface** | Chargement, accueil 3 cartes, HUD illustré (25 tailles OK), sélecteur de mise compact, turbo, autoplay, Ante, achat 4 modes, menu (règles / réglages / historique + relecture), dialogues d'erreur RGS, attente réseau, reprise |
 | **Son** | Musique procédurale (3 ambiances), nappes, 40+ bruitages synthétisés — `docs/AUDIO.md` |

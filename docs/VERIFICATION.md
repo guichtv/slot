@@ -1,13 +1,13 @@
 # VÉRIFICATION — BOOMTOOTH (front)
 
-État au 28/09/2026. Chaque ligne dit **ce qui a été vérifié, comment, et le résultat réel**. Ce qui n'a pas pu l'être est listé à la fin, sans maquillage.
+État au 29/09/2026. Chaque ligne dit **ce qui a été vérifié, comment, et le résultat réel**. Ce qui n'a pas pu l'être est listé à la fin, sans maquillage.
 
 ## 1. Contrôles automatiques
 
 | Contrôle | Commande | Résultat |
 |---|---|---|
 | Typage strict | `npx tsc --noEmit -p .` | **OK** (0 erreur) |
-| Tests unitaires | `npx vitest run` | **294 / 294 OK** (16 fichiers : argent, social, beat, FSM, fixtures, audio ×3, UI ×5, i18n ×2, …) |
+| Tests unitaires | `npx vitest run` | **299 / 299 OK** (17 fichiers : argent, social, beat, FSM, fixtures, audio ×3, UI ×5, i18n ×2, IK des bras, …) |
 | Books de test | `npm run fixtures` | **33 fixtures, 0 invalide** (F01-F33 : pertes, gains, tumbles, charges 2×2/3×3/4×4, chaînes, charges reliées, bonus, super bonus, relances, paliers ×10 → ×1000, MAX WIN, Ante, sous-centime) |
 | Validateur de contrat | `tools/fixtures/validate.ts` | Totaux, zones, géants = rectangle englobant, multiplicateur +1 par case taillée, compteurs FS, relances selon la table, finalWin = payoutMultiplier |
 | HUD sans chevauchement | `node tools/hud-check.mjs` | **25 / 25 tailles OK** (2560×1440 → 320×568, paysage court, carré 500×500 ; tactile ≥ 44 px, rien hors écran, aucune valeur tronquée, rien sur la grille) — `captures/hud/sheet.png` |
@@ -32,6 +32,16 @@ Captures réelles de la page (canvas + HTML) avec `tools/shot.mjs` sur la build 
 | Achat, menu, dialogues | — | `captures/ui/*` (clics réels) | catalogue illustré, confirmation, règles / réglages / historique, solde insuffisant |
 
 Défauts trouvés **et corrigés** grâce à ces captures : couche des surcouches qui avalait les clics du HUD ; filtre CSS `drop-shadow` qui figeait le rendu (46 s par image en logiciel) ; textures envoyées au GPU au premier usage (à-coup au premier bonus) → envoi pendant le chargement ; Cornerstone caché derrière Buck ; monument caché par l'encart Ante ; bras de Buck qui entrait dans la grille ; cadre trop épais qui débordait sur le HUD.
+
+## 2 bis. Mascotte (bras et mouvements)
+
+| Contrôle | Commande | Résultat |
+|---|---|---|
+| IK des bras | `tests/arm-ik.test.ts` (5 tests) | poignet et point de la main posés exactement ; repos du rig retrouvé ; coude toujours dehors ; trajectoires continues |
+| Pellicules des 28 actions | `node tools/mascot-motion.mjs` (16 images à 90 ms) | `captures/mascot/*.png` |
+| Images fixes zoomées | `node tools/mascot-still.mjs --shots=duck@200,…` | raccords épaule, coude, poignet |
+| Audit indépendant | 5 relecteurs + probes 60 images/s (`captures/mascot-verify/`) | 70 défauts signalés (coude du mauvais côté au retour des poings levés, queue écrasée par la respiration, poignée hors de portée, allumette loin de la dent…), **tous corrigés** puis revérifiés |
+| Dans le jeu | `tools/shot.mjs --play=F10 --from=1` / `--play=F16 --from=3` | allumette frottée puis tenue au bord du cadre (hors grille) ; acclamation puis détonateur |
 
 ## 3. Règles non négociables (§3) — état
 

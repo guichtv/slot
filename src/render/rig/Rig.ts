@@ -121,6 +121,13 @@ export class Rig {
     return p.node;
   }
 
+  /** dessin d'une pièce (ne jamais passer par `children[i]` : Pixi retrie les enfants par zIndex au rendu) */
+  sprite(id: string): Sprite {
+    const p = this.parts.get(id);
+    if (!p) throw new Error(`rig: pièce inconnue ${id}`);
+    return p.sprite;
+  }
+
   has(id: string): boolean {
     return this.parts.has(id);
   }

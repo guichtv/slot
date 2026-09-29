@@ -326,10 +326,10 @@ async function boot(): Promise<void> {
 
   const mascot = {
     perform: (name: string, beat: Beat, arg?: unknown) => buck.perform(name, beat, arg as { target?: { x: number; y: number }; tier?: number; throw?: boolean }),
-    react: (name: string) => {
+    react: (name: string, arg?: { target?: { x: number; y: number } }) => {
       if (name === 'anticipationWin') sfx('anticipationLand');
       else if (name === 'anticipationLose') sfx('anticipationMiss');
-      buck.react(name);
+      buck.react(name, arg);
     },
     matchPoint: () => buck.matchPoint(),
   };

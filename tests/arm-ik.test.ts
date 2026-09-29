@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import RIG from '../src/render/mascot/buckRig.json';
-import { autoVia, bezier, extension, fk, naturalSide, solve, type IkArm, type Side, type Vec } from '../src/render/mascot/armIk';
+import { autoVia, bezier, extension, fk, naturalSide, solve, solveTip, type IkArm, type Side, type Vec } from '../src/render/mascot/armIk';
 
 const IK = (RIG as unknown as { ik: Record<'armF' | 'armB', IkArm> }).ik;
 const ARM: Record<Side, IkArm> = { F: IK.armF, B: IK.armB };
@@ -61,5 +61,33 @@ describe('bras de Buck (IK pilotée par la main)', () => {
     // l'arc bombe vers l'extérieur (gauche pour le bras avant) et reste loin de l'épaule
     expect(c[0]).toBeLessThan(Math.min(p0[0], REST.F[0]));
     expect(dist(c, a.shoulder)).toBeGreaterThan((a.upperLen + a.foreLen) * 0.5 - 1);
+  });
+
+  it("pose un point de la main (jointures) exactement sur une cible atteignable, même bras replié", () => {
+    const a = ARM.B;
+    // jointures du poing : ~150 px au-delà du poignet dans le repère de la main
+    const off: Vec = [-60, 138];
+    const rest0 = rest(a.upper);
+    let tested = 0;
+    let bad = 0;
+    // cibles atteignables par construction : poses réelles (angles), puis on demande au solveur de les retrouver
+    for (let du = -150; du <= 60; du += 15) {
+      for (let df = -150; df <= -20; df += 13) {
+        const upper = rest0 + du;
+        const fore = rest(a.fore) + df;
+        const wrist = fk(a, upper, fore).wrist;
+        if (extension(a, wrist) > 0.97) continue;
+        const w = ((upper + fore) * Math.PI) / 180;
+        const target: Vec = [wrist[0] + Math.cos(w) * off[0] - Math.sin(w) * off[1], wrist[1] + Math.sin(w) * off[0] + Math.cos(w) * off[1]];
+        const s = dist(solve(a, 'B', wrist, 1).elbow, fk(a, upper, fore).elbow) < 1 ? 1 : -1;
+        const r = solveTip(a, 'B', target, s, off, 0);
+        const w2 = ((r.upper + r.fore) * Math.PI) / 180;
+        const tip: Vec = [r.wrist[0] + Math.cos(w2) * off[0] - Math.sin(w2) * off[1], r.wrist[1] + Math.sin(w2) * off[0] + Math.cos(w2) * off[1]];
+        tested++;
+        if (dist(tip, target) > 1) bad++;
+      }
+    }
+    expect(tested).toBeGreaterThan(100);
+    expect(bad / tested).toBeLessThan(0.05);
   });
 });

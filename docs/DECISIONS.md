@@ -63,7 +63,7 @@ Chaque champ vide de la fiche a été décidé ici. Les informations explicites 
 
 Retour de l'utilisateur : « la mascotte a un problème avec ses bras et ses mouvements ». Un audit image par image (pellicules `tools/mascot-motion.mjs`, 16 images à 90 ms par action) a trouvé la cause : les gestes interpolaient des **angles d'articulation** entre deux poses, si bien que les mains traversaient le corps, que les bras passaient en croix au retour, que les coudes partaient vers la tête et que l'allumette pointait vers le sol.
 
-- **Bras pilotés par la main** (`src/render/mascot/armIk.ts`) : chaque geste pose un point de la main (poignet, jointures, anneau du poing, tête d'allumette) sur une cible ; la main y va **en arc**, et l'IK à deux os est résolue à chaque image. Le coude reste à l'extérieur et ne change de côté que bras tendu. Un geste interrompu repart de la position réelle de la main.
+- **Bras pilotés par la main** (`src/render/mascot/armIk.ts`) : chaque geste pose un point de la main (poignet, jointures, paume, anneau du poing, tête d'allumette) sur une cible ; la main y va **en arc**, et l'IK à deux os est résolue à chaque image. Le coude reste à l'extérieur. Il ne change de côté que là où le poignet croise la direction naturelle du coude, ou en passant par le **bras tendu le long du corps** (poings levés ↔ repos : grand arc latéral). La bascule dure au moins trois images. Un geste interrompu repart de la position réelle de la main.
 - **Cibles collées à la tête** (casque, coin de la bouche, dent en or) et à la **barre du détonateur**, suivies à chaque image.
 - **Pieds réellement ancrés** : les jambes sont résolues juste avant chaque rendu. Buck **plie les genoux** (squat pour enfoncer le piston, flexion pour se protéger, petit saut à l'acclamation) et ses semelles ne glissent plus quand le torse pivote.
 - **Rig** :
@@ -74,14 +74,22 @@ Retour de l'utilisateur : « la mascotte a un problème avec ses bras et ses mou
   - au repos, les bras sont fléchis, coudes dehors, comme l'illustration de référence ;
   - la queue est posée au sol derrière la botte et y reste quand Buck s'accroupit.
 - **Raccord poignet-main** : l'alpha de la main s'estompe sur le bord qui s'emboîte dans l'avant-bras. C'est une étape déterministe de la chaîne d'assets (`feather` dans `tools/assets/assets.config.json`) ; l'illustration n'est pas modifiée.
+- **Coude très plié** : l'avant-bras passe devant la manche, qui cache le disque de fourrure du poignet de manche.
+- **Queue** : animée dans le plan du sol, indépendamment du torse, ce qui l'empêche de s'enfoncer dans le sol pendant la danse. La respiration ne l'écrase plus : un bug de Pixi triait les enfants et faisait respirer la queue au lieu du torse.
 - **Gestes réécrits** :
   - l'allumette est prise par le côté au coin de la bouche, frottée sur la dent en or, lancée vers la charge, puis Buck en reprend une ;
   - le balayage d'intro prend de l'élan ;
   - pour mâchonner, la tête s'écrase légèrement sans changer de dessin ;
   - la queue tape le sol ;
   - la dent est lustrée au poing, par-dessous ;
-  - Buck lève d'abord les yeux vers son monument, puis fait un clin d'œil bref.
-- **Accessoires** : le détonateur a sa propre timeline, qu'aucune action ne peut interrompre ; `reset()` le range.
+  - Buck lève d'abord les yeux vers son monument, puis fait un clin d'œil bref ;
+  - Scatter : l'index vise la case du Scatter ;
+  - anticipation : poings sur les hanches, tension tenue jusqu'au résultat ;
+  - échec : Buck s'affaisse ;
+  - pouce levé et bras tendu vers le monument : l'avant-bras reste visible ;
+  - MAX WIN : un grand saut en plus du palier ×1000.
+- **Accessoires** : le détonateur a sa propre timeline, qu'aucune action ne peut interrompre ; `reset()` le range. La poignée est à portée des poings, qui la suivent. L'allumette non allumée (`buck.props.match`) est tenue dans le poing entre la bouche et la dent. L'étincelle part de la flamme, même après le lâcher.
+- **Vérification** : deux audits indépendants, image par image, puis des probes à 60 images/s (`captures/mascot-verify/`). Chaque défaut signalé a été corrigé, puis revérifié sur de nouvelles pellicules et dans le jeu (F10, F16).
 - **Limites (nouvelles illustrations nécessaires)** :
   - les expressions sont des dessins séparés : le clignement redessine le visage, et l'allumette de la bouche change de coin selon l'expression ;
   - il n'existe pas de main « détendue » dédiée.

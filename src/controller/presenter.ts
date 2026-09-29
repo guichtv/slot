@@ -39,7 +39,7 @@ export interface Stage {
   };
   mascot: {
     perform(name: string, beat: Beat, arg?: unknown): Promise<void>;
-    react(name: string): void;
+    react(name: string, arg?: { target?: { x: number; y: number } }): void;
     /** point de départ des étincelles (bout de l'allumette), coordonnées de scène */
     matchPoint(): { x: number; y: number };
   };
@@ -203,7 +203,7 @@ export class GamePresenter implements Presenter {
           this.s.ui.scatterCount(this.scatterSeen);
           this.s.sound.play('scatter', { pitch: 1 + (this.scatterSeen - 1) * 0.12 });
           g.viewAt(col, r)?.react();
-          this.s.mascot.react(this.scatterSeen >= 2 ? 'scatterExcited' : 'scatter');
+          this.s.mascot.react(this.scatterSeen >= 2 ? 'scatterExcited' : 'scatter', { target: g.cellCenter(col, r) });
         }
       }
     };
