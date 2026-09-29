@@ -63,7 +63,7 @@ Défauts trouvés **et corrigés** grâce à ces captures : couche des surcouche
 - **Images par seconde réelles** : le conteneur n'a qu'un rendu WebGL logiciel (swiftshader), des dizaines de fois plus lent qu'un GPU. Aucune mesure de FPS n'y a de sens ; les captures avancent par pas de 100 ms virtuels. **À mesurer sur un vrai téléphone.**
 - **Écoute** : musique, ambiances et bruitages sont synthétisés en code et mesurés (niveaux, crêtes, pas de saturation) mais **personne ne les a écoutés**.
 - **Traductions** : 15 langues produites sans relecture par un natif.
-- **Windows** : `LANCER-BOOMTOOTH.cmd` n'a pas pu être exécuté (pas de Windows ici) ; sa commande de serveur est celle testée par `tools/serve-stable.mjs`.
+- **Windows** : pas de Windows ici. L'utilisateur a lancé `LANCER-BOOMTOOTH.cmd` : premier lancement OK, relancement bloqué par l'ancien serveur resté ouvert (port 5320). Lanceur corrigé et testé sous Linux (port libre, déjà lancé à jour, code modifié, ancien serveur v0.9.0, autre programme sur le port) ; les chemins propres à Windows (PowerShell, taskkill) sont relus mais **pas exécutés** ici.
 - **Maths** : valeurs provisoires ; RTP, fréquences et gains réels dépendent de l'équipe maths.
 - **Intégration Stake réelle** : testée contre le faux RGS local uniquement (voir § 5).
 

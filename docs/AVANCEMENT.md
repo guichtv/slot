@@ -24,7 +24,7 @@ Mis à jour le 29/09/2026. Branche `claude/funny-lamport-2y5sp6`.
 ## Livraison
 
 - **`LIVRAISON-BOOMTOOTH-v0.9.0/`** : FRONTEND (build de production), zip (237 fichiers, `index.html` à la racine), MEDIA (couverture, vignette, logo, décors BG/FG, 3 vidéos 1280×720), CONTROLES, GAME-DETAILS-EN.txt, LIRE-AVANT-IMPORT.md, SHA256SUMS (vérifiées).
-- **Build figée** : `LANCER-BOOMTOOTH.cmd` (Windows) ou `npm run serve-stable` → http://127.0.0.1:5320/?v=0.9.0
+- **Build figée** : `LANCER-BOOMTOOTH.cmd` (Windows) ou `npm run serve-stable` → http://127.0.0.1:5320/ ; après un `git pull`, le lanceur arrête l'ancien serveur BOOMTOOTH encore ouvert et reconstruit la build si le code a changé.
 
 ## Bloquant externe
 
@@ -34,6 +34,6 @@ Mis à jour le 29/09/2026. Branche `claude/funny-lamport-2y5sp6`.
 
 - Mesurer la fluidité sur de vrais appareils (le conteneur n'a qu'un rendu logiciel).
 - Écoute humaine du son ; relecture native des 15 traductions.
-- Essai de `LANCER-BOOMTOOTH.cmd` sur Windows.
+- `LANCER-BOOMTOOTH.cmd` lancé par l'utilisateur sous Windows : premier lancement OK ; au relancement, « port 5320 déjà utilisé » (ancienne fenêtre ouverte) et build non reconstruite à version égale → lanceur corrigé, à re-tester sous Windows.
 - Prototypes `?variant=` des pistes alternatives listées dans `docs/ANIMATIONS.md` (non implémentés).
 - Mascotte en Spline : possible seulement dans une session locale (voir DECISIONS).

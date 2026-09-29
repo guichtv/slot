@@ -1,8 +1,11 @@
 @echo off
 setlocal EnableExtensions
-rem BOOMTOOTH (Crownforge) - lance la build figee dist-stable sur http://127.0.0.1:5320/
-rem Premier lancement : npm ci si node_modules manque, puis construction de dist-stable (production).
-rem Pour reconstruire la build figee : supprimer le dossier dist-stable puis relancer ce fichier.
+rem BOOMTOOTH (Crownforge) - lance la build de production figee sur http://127.0.0.1:5320/
+rem Tout le reste est fait par tools\serve-stable.mjs :
+rem  - un ancien serveur BOOMTOOTH encore ouvert est arrete (jamais un autre programme) ;
+rem  - dependances installees (npm ci) si absentes ou si package-lock.json a change ;
+rem  - build figee reconstruite quand le code a change (apres un git pull) ;
+rem  - le navigateur s'ouvre sur le jeu.
 title BOOMTOOTH
 cd /d "%~dp0"
 
@@ -14,41 +17,8 @@ if errorlevel 1 (
 for /f "delims=" %%v in ('node -v') do set "NODEV=%%v"
 echo [BOOMTOOTH] Node %NODEV%
 
-if not exist "node_modules\" (
-  echo [BOOMTOOTH] Installation des dependances ^(npm ci^)...
-  call npm ci
-  if errorlevel 1 goto :fail
-)
-
-set "VER="
-for /f "usebackq delims=" %%v in (`node -p "require('./package.json').version"`) do set "VER=%%v"
-if not defined VER set "VER=dev"
-
-rem build figee perimee (autre version du jeu) : reconstruite automatiquement
-set "BUILT="
-if exist "dist-stable\.version" set /p BUILT=<"dist-stable\.version"
-if exist "dist-stable\index.html" if not "%BUILT%"=="%VER%" (
-  echo [BOOMTOOTH] Build figee v%BUILT% differente de v%VER% : reconstruction...
-  rmdir /s /q "dist-stable"
-)
-if not exist "dist-stable\index.html" (
-  echo [BOOMTOOTH] Construction de la build figee dist-stable...
-  call npx vite build --mode production --outDir dist-stable
-  if errorlevel 1 goto :fail
-  >"dist-stable\.version" echo %VER%
-)
-
-set "URL=http://127.0.0.1:5320/?v=%VER%"
-echo.
-echo [BOOMTOOTH] v%VER% : %URL%
-echo [BOOMTOOTH] Le navigateur s'ouvre des que le serveur est pret. Ctrl+C ou fermer la fenetre pour arreter.
-echo.
-call npx vite preview --outDir dist-stable --port 5320 --strictPort --host 127.0.0.1 --open "/?v=%VER%"
-if errorlevel 1 (
-  echo [BOOMTOOTH] Le serveur n'a pas demarre : le port 5320 est peut-etre deja utilise.
-  echo [BOOMTOOTH] Si BOOMTOOTH tourne deja, ouvrir %URL%
-  goto :fail
-)
+node tools\serve-stable.mjs --open %*
+if errorlevel 1 goto :fail
 exit /b 0
 
 :fail
