@@ -58,12 +58,15 @@ function tryLock(retry = true) {
     fd = fs.openSync(LOCK, 'wx');
   } catch {
     let pid = 0;
+    let age = 0;
     try {
       pid = Number(fs.readFileSync(LOCK, 'utf8').trim());
+      age = Date.now() - fs.statSync(LOCK).mtimeMs;
     } catch {
       // retiré entre-temps
     }
-    if (retry && (!pid || !alive(pid))) {
+    // verrou périmé : lanceur mort, ou plus de 10 min (Windows réutilise vite les numéros de processus)
+    if (retry && (!pid || !alive(pid) || age > 600000)) {
       // verrou d'un lancement mort (fenêtre fermée en cours de route)
       try {
         fs.unlinkSync(LOCK);
@@ -292,7 +295,8 @@ for (let p = firstPort; p <= firstPort + 9; p++) {
   if (typeof on === 'object') {
     if (on.info && on.info.stamp === stamp && sameRoot(on.info.root) && !opt.rebuild && complete2()) await reuse(p, stamp);
     stale.push({ port: p, info: on.info });
-    if (!target && p === firstPort) target = p;
+    // un ancien serveur de CE dossier libérera son port : on le reprend s'il est avant le premier port libre
+    if (!target && (p === firstPort || !on.info || sameRoot(on.info.root))) target = p;
   } else if (on === 'free') {
     if (!target) target = p;
   } else if (on === 'reserved') reserved = true;
@@ -398,24 +402,40 @@ await stopStale();
 const url = `http://127.0.0.1:${target}/?v=${encodeURIComponent(stamp)}`;
 const args = [vite, 'preview', '--outDir', dir, '--port', String(target), '--strictPort', '--host', '127.0.0.1'];
 if (opt.open) args.push('--open', `/?v=${encodeURIComponent(stamp)}`);
-const child = spawn(process.execPath, args, { cwd: ROOT, stdio: ['inherit', 'pipe', 'pipe'] });
+// couleurs coupées : sous Windows, Vite colore même une sortie redirigée
+const child = spawn(process.execPath, args, { cwd: ROOT, stdio: ['inherit', 'pipe', 'pipe'], env: { ...process.env, NO_COLOR: '1', FORCE_COLOR: '0' } });
 let announced = false;
+const announce = () => {
+  if (announced) return;
+  announced = true;
+  unlock();
+  console.log(`\n  BOOMTOOTH v${version} → ${url}\n  (Ctrl+C ou fermer la fenêtre pour arrêter)\n`);
+};
 const relay = (stream, out) =>
   stream.on('data', (d) => {
     const s = d.toString();
     out.write(s);
-    if (!announced && s.includes(`:${target}`)) {
-      announced = true;
-      unlock();
-      console.log(`\n  BOOMTOOTH v${version} → ${url}\n  (Ctrl+C ou fermer la fenêtre pour arrêter)\n`);
-    }
+    if (s.replace(/\x1b\[[0-9;]*m/g, '').includes(`127.0.0.1:${target}/`)) announce();
   });
 relay(child.stdout, process.stdout);
 relay(child.stderr, process.stderr);
+// démarrage confirmé par le serveur lui-même (indépendant de l'affichage de Vite)
+(async () => {
+  const end = Date.now() + 60000;
+  while (!announced && Date.now() < end) {
+    await sleep(300);
+    try {
+      const info = JSON.parse(await get(`http://127.0.0.1:${target}/${MARK}`));
+      if (info && info.stamp === stamp) announce();
+    } catch {
+      // pas encore prêt
+    }
+  }
+})();
 child.on('exit', (code) => {
   if (!announced) fail(`le serveur n'a pas démarré (code ${code}) : le port ${target} vient d'être pris ? Relancer.`);
-  // arrêt normal (fenêtre fermée, Ctrl+C) ou remplacé par un nouveau lancement
-  log('serveur arrêté.');
+  // arrêt normal (fenêtre fermée, Ctrl+C) ou remplacé par un nouveau lancement : la fenêtre se ferme sans erreur
+  log('serveur arrêté (fenêtre fermée ou remplacée par un nouveau lancement).');
   process.exit(0);
 });
 for (const sig of ['SIGINT', 'SIGTERM']) process.on(sig, () => child.kill(sig));
