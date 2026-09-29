@@ -20,8 +20,9 @@ import { autoVia, bezier, extension, fk, naturalSide, polePoint, solve, solveTip
  *   poing, allumette) sur une cible en px du torse ; la main y va en arc, le coude reste à l'extérieur et ne
  *   change de côté que bras tendu. Une action interrompue repart de la position réelle de la main.
  * - Ordre de dessin : bras devant le torse (les manches couvrent les épaules), derrière la tête ; devant la tête
- *   seulement quand la main touche le visage ou le casque. Au coude : l'avant-bras sort de sous la manche
- *   (manches redessinées, bout creux) ; coude très plié : il passe devant la manche. Main sur l'avant-bras.
+ *   seulement quand la main touche le visage ou le casque. Au coude : l'avant-bras sort de l'ouverture de la manche
+ *   (manches redessinées, intérieur sombre visible), dessiné devant elle et masqué en amont de l'ouverture (voir
+ *   clipForearm) ; coude très plié : entier devant la manche. Main sur l'avant-bras.
  * - Accessoires (détonateur) : timeline à part, jamais tuée par une action suivante ; reset() les range.
  */
 type BuckJson = RigDef & {
@@ -205,69 +206,49 @@ export class Buck {
   }
 
   /**
-   * Coude : l'avant-bras ne se montre qu'au-delà du coude (côté main de la bissectrice du coude) et dans l'ouverture
-   * de la manche ; il ne dépasse plus à côté de la manche vers l'épaule. Masque dans le repère du bras (suit la pliure).
+   * Coude. La manche (dessin ImageGen) montre son ouverture et l'intérieur sombre du tube ; l'avant-bras en sort vers
+   * nous : il est dessiné DEVANT la manche mais n'apparaît qu'en aval du plan de l'ouverture (côté main du grand axe de
+   * l'ellipse) et dans l'ellipse elle-même. En amont, il est dans la manche : caché (jamais de fourrure à côté de la
+   * manche). Coude très plié (> 103°, retour sous 85°) : l'avant-bras passe entier devant la manche.
+   * Masque dans le repère du bras (suit la pliure).
    */
   private clipForearm(side: Side): void {
     const a = IK[side];
     const m = this.elbowMask[side];
     const fore = this.rig.part(a.fore);
-    // coude très plié (> 103°, retour sous 85°) : l'avant-bras passe DEVANT la manche, entier ; sinon il sort de dessous
-    // (replié sous la manche, son bout arrondi réapparaîtrait dans l'ouverture comme un disque)
     const bend = Math.abs(wrap(fore.angle + a.foreAxis - a.upperAxis));
     const folded = this.folded[side] ? bend > 85 : bend > 103;
     this.folded[side] = folded;
-    // réappliqué à chaque image : resetZ() du retour au repos ne doit pas le défaire
-    const z = folded ? 1 : (PART[a.fore]!.z ?? -1);
-    if (fore.zIndex !== z) fore.zIndex = z;
-    if (folded) {
-      m.clear().rect(-5000, -5000, 10000, 10000).fill(0xffffff);
+    m.clear();
+    const op = a.opening;
+    if (folded || !op) {
+      m.rect(-5000, -5000, 10000, 10000).fill(0xffffff);
       return;
     }
-    const hand = PART[a.hand]!;
-    const fp = PART[a.fore]!;
-    const k = fp.scale ?? 1;
-    // coude et directions (repère du bras : origine = épaule)
-    const ex = fore.x;
-    const ey = fore.y;
-    const ul = Math.hypot(ex, ey) || 1;
-    const u: Vec = [-ex / ul, -ey / ul];
-    const vx = (hand.attach![0] - fp.pivot[0]) * k;
-    const vy = (hand.attach![1] - fp.pivot[1]) * k;
-    const c = Math.cos(fore.rotation);
-    const s = Math.sin(fore.rotation);
-    const fx = vx * c - vy * s;
-    const fy = vx * s + vy * c;
-    const fl = Math.hypot(fx, fy) || 1;
-    let nx = fx / fl - u[0];
-    let ny = fy / fl - u[1];
-    const nl = Math.hypot(nx, ny) || 1;
-    nx /= nl;
-    ny /= nl;
-    const d = 12;
-    const L = 3000;
-    const ox = ex - nx * d;
-    const oy = ey - ny * d;
+    const ap = PART[a.upper]!;
+    const ka = ap.scale ?? 1;
+    const cx = (op.c[0] - ap.pivot[0]) * ka;
+    const cy = (op.c[1] - ap.pivot[1]) * ka;
+    const t = (op.deg * Math.PI) / 180;
+    // plan de l'ouverture : grand axe de l'ellipse ; normale orientée à l'opposé de l'épaule (origine du repère)
+    let nx = -Math.sin(t);
+    let ny = Math.cos(t);
+    if (nx * cx + ny * cy < 0) {
+      nx = -nx;
+      ny = -ny;
+    }
     const tx = -ny;
     const ty = nx;
-    m.clear();
-    m.poly([ox + tx * L, oy + ty * L, ox + tx * L + nx * L, oy + ty * L + ny * L, ox - tx * L + nx * L, oy - ty * L + ny * L, ox - tx * L, oy - ty * L]).fill(0xffffff);
-    const op = a.opening;
-    if (op) {
-      const ap = PART[a.upper]!;
-      const ka = ap.scale ?? 1;
-      const cx = (op.c[0] - ap.pivot[0]) * ka;
-      const cy = (op.c[1] - ap.pivot[1]) * ka;
-      const t = (op.deg * Math.PI) / 180;
-      const pts: number[] = [];
-      for (let i = 0; i < 28; i++) {
-        const w = (i / 28) * Math.PI * 2;
-        const px = Math.cos(w) * op.r[0] * ka;
-        const py = Math.sin(w) * op.r[1] * ka;
-        pts.push(cx + px * Math.cos(t) - py * Math.sin(t), cy + px * Math.sin(t) + py * Math.cos(t));
-      }
-      m.poly(pts).fill(0xffffff);
+    const L = 3000;
+    m.poly([cx + tx * L, cy + ty * L, cx + tx * L + nx * L, cy + ty * L + ny * L, cx - tx * L + nx * L, cy - ty * L + ny * L, cx - tx * L, cy - ty * L]).fill(0xffffff);
+    const pts: number[] = [];
+    for (let i = 0; i < 28; i++) {
+      const w = (i / 28) * Math.PI * 2;
+      const px = Math.cos(w) * op.r[0] * ka;
+      const py = Math.sin(w) * op.r[1] * ka;
+      pts.push(cx + px * Math.cos(t) - py * Math.sin(t), cy + px * Math.sin(t) + py * Math.cos(t));
     }
+    m.poly(pts).fill(0xffffff);
   }
 
   /** bas des semelles dans le repère du corps (px), calculé par la chaîne cuisse -> tibia au repos */

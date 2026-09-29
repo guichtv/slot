@@ -2096,13 +2096,13 @@
    "url": "assets/mascot/buck.sleeves.upperL.webp",
    "w": 358,
    "h": 383,
-   "source": "assets/generated/mascot/buck-sleeves.png",
-   "sourceHash": "ba763494b8b90ac1",
+   "source": "assets/generated/mascot/buck-sleeves-lined.png",
+   "sourceHash": "83f37833d47459b0",
    "frame": {
-    "x": 274,
-    "y": 306,
-    "w": 410,
-    "h": 412
+    "x": 254,
+    "y": 283,
+    "w": 452,
+    "h": 449
    },
    "scale": 1,
    "pivot": null,
@@ -2110,12 +2110,12 @@
    "aligned": {
     "ref": "buck.arms.upperL",
     "margin": 40,
-    "iou": 0.9536,
-    "scale": 0.7071,
-    "rotDeg": -2.9,
+    "iou": 0.9381,
+    "scale": 0.6422,
+    "rotDeg": -5.3,
     "t": [
-     25.2,
-     52.8
+     22.5,
+     60.7
     ],
     "size": [
      358,
@@ -2127,13 +2127,13 @@
    "url": "assets/mascot/buck.sleeves.upperR.webp",
    "w": 361,
    "h": 390,
-   "source": "assets/generated/mascot/buck-sleeves.png",
-   "sourceHash": "ba763494b8b90ac1",
+   "source": "assets/generated/mascot/buck-sleeves-lined.png",
+   "sourceHash": "83f37833d47459b0",
    "frame": {
-    "x": 873,
-    "y": 309,
-    "w": 397,
-    "h": 404
+    "x": 839,
+    "y": 289,
+    "w": 440,
+    "h": 442
    },
    "scale": 1,
    "pivot": null,
@@ -2141,12 +2141,12 @@
    "aligned": {
     "ref": "buck.arms.upperR",
     "margin": 40,
-    "iou": 0.9735,
-    "scale": 0.7299,
-    "rotDeg": 363.39,
+    "iou": 0.9693,
+    "scale": 0.6527,
+    "rotDeg": 4.96,
     "t": [
-     49.8,
-     35.8
+     49.9,
+     33.9
     ],
     "size": [
      361,
@@ -2155,5 +2155,5 @@
    }
   }
  },
- "generatedAt": "2026-09-29T20:13:23.848Z"
+ "generatedAt": "2026-09-29T20:59:46.678Z"
 }

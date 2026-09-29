@@ -739,7 +739,7 @@
    "maxSize": 1536
   },
   "buck.sleeves": {
-   "src": "assets/generated/mascot/buck-sleeves.png",
+   "src": "assets/generated/mascot/buck-sleeves-lined.png",
    "family": "mascot",
    "quality": 92,
    "margin": 6,
