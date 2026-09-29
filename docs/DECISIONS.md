@@ -58,5 +58,39 @@ Chaque champ vide de la fiche a été décidé ici. Les informations explicites 
 - **Performance** : textures envoyées au GPU pendant le chargement (Pixi `prepare`), aucune création de texture au moment d'un impact ; pas de BlurFilter (flou de défilement par traînée), pas de ParticleContainer (sprites en pool), pas de filtre CSS `drop-shadow` sur les grands éléments (46 s par image en rendu logiciel mesurées pendant une intro) ; la latence simulée du mode local suit l'horloge de présentation (captures reproductibles).
 - **Machine à états** : le présentateur signale les phases (anticipation, feature, résolution, célébration, intro/bonus/fin) ; le contrôleur ne les applique que si la transition est permise.
 - **Correctif important** : la couche des surcouches (`.ovl`) captait tous les clics au-dessus du HUD (règle `#ui > *` trop forte) ; corrigé, et vérifié par des clics réels (`tools/ui-states.mjs`).
+
+## Mascotte : refonte des bras et des mouvements (29/09)
+
+Retour de l'utilisateur : « la mascotte a un problème avec ses bras et ses mouvements ». Un audit image par image (pellicules `tools/mascot-motion.mjs`, 16 images à 90 ms par action) a trouvé la cause : les gestes interpolaient des **angles d'articulation** entre deux poses, si bien que les mains traversaient le corps, que les bras passaient en croix au retour, que les coudes partaient vers la tête et que l'allumette pointait vers le sol.
+
+- **Bras pilotés par la main** (`src/render/mascot/armIk.ts`) : chaque geste pose un point de la main (poignet, jointures, anneau du poing, tête d'allumette) sur une cible ; la main y va **en arc**, et l'IK à deux os est résolue à chaque image. Le coude reste à l'extérieur et ne change de côté que bras tendu. Un geste interrompu repart de la position réelle de la main.
+- **Cibles collées à la tête** (casque, coin de la bouche, dent en or) et à la **barre du détonateur**, suivies à chaque image.
+- **Pieds réellement ancrés** : les jambes sont résolues juste avant chaque rendu. Buck **plie les genoux** (squat pour enfoncer le piston, flexion pour se protéger, petit saut à l'acclamation) et ses semelles ne glissent plus quand le torse pivote.
+- **Rig** :
+  - les bras passent devant le torse, ce qui fait disparaître les disques marron des épaules restés dans l'image du torse ;
+  - les avant-bras passent sous la manche ;
+  - la main avant est le miroir de la main arrière, ce qui supprime les « deux mains gauches » ;
+  - les avant-bras sont ramenés à 0,88 et les mains à 0,85 ;
+  - au repos, les bras sont fléchis, coudes dehors, comme l'illustration de référence ;
+  - la queue est posée au sol derrière la botte et y reste quand Buck s'accroupit.
+- **Raccord poignet-main** : l'alpha de la main s'estompe sur le bord qui s'emboîte dans l'avant-bras. C'est une étape déterministe de la chaîne d'assets (`feather` dans `tools/assets/assets.config.json`) ; l'illustration n'est pas modifiée.
+- **Gestes réécrits** :
+  - l'allumette est prise par le côté au coin de la bouche, frottée sur la dent en or, lancée vers la charge, puis Buck en reprend une ;
+  - le balayage d'intro prend de l'élan ;
+  - pour mâchonner, la tête s'écrase légèrement sans changer de dessin ;
+  - la queue tape le sol ;
+  - la dent est lustrée au poing, par-dessous ;
+  - Buck lève d'abord les yeux vers son monument, puis fait un clin d'œil bref.
+- **Accessoires** : le détonateur a sa propre timeline, qu'aucune action ne peut interrompre ; `reset()` le range.
+- **Limites (nouvelles illustrations nécessaires)** :
+  - les expressions sont des dessins séparés : le clignement redessine le visage, et l'allumette de la bouche change de coin selon l'expression ;
+  - il n'existe pas de main « détendue » dédiée.
+- **Meshy** : essai demandé par l'utilisateur, mais bloqué. Aucun connecteur Meshy n'existe et aucune clé n'est disponible dans l'environnement (`MESHY_API_KEY`). Aucune autre API payante n'a été utilisée à la place. Une fois la clé ajoutée aux réglages de l'environnement, le plan est le suivant :
+  1. image vers 3D depuis `buck-ref.png` ;
+  2. rig et animations Meshy ;
+  3. rendu en séquences d'images dans le style de la référence ;
+  4. comparaison avec le rig 2D.
+
+  Une scène 3D chargée en ligne ne serait pas compatible avec la build Stake ; seules des images pré-rendues le sont.
 - **Reprise et relecture** : `GameController.resumeRound` rejoue une manche interrompue à l'événement enregistré, sans nouveau débit ; `replayRound` relit une manche d'historique (aucun appel serveur) ; `/bet/event` enregistre la progression après chaque événement d'une manche active.
 - **Maths** : config provisoire alignée sur le contrat 1.1.0 (`keg`, table `retriggers` 2 → +2, 3 → +5, 4+ → +8 en super). `provisional: true` bloque toujours l'import Stake.

@@ -494,7 +494,45 @@
      "handMatch"
     ],
     "minArea": 2000,
-    "dilate": 6
+    "dilate": 6,
+    "feather": {
+     "handOpen": {
+      "pivot": [
+       169,
+       46
+      ]
+     },
+     "handFist": {
+      "pivot": [
+       177,
+       56
+      ]
+     },
+     "handGrip": {
+      "pivot": [
+       184,
+       51
+      ]
+     },
+     "handThumb": {
+      "pivot": [
+       130,
+       255
+      ]
+     },
+     "handPoint": {
+      "pivot": [
+       50,
+       180
+      ]
+     },
+     "handMatch": {
+      "pivot": [
+       85,
+       300
+      ]
+     }
+    }
    }
   },
   "buck.props": {

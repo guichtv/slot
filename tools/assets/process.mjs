@@ -205,6 +205,33 @@ async function contactSheet(family, files) {
   await sharp(bg, { raw: { width: W, height: H, channels: 4 } }).composite(composites).png().toFile(path.join(CHECKS, `${family}.png`));
 }
 
+/**
+ * Raccord d'articulation (pièces du rig) : l'alpha s'estompe sur le bord qui s'emboîte dans la pièce parente
+ * (ex. haut de la main sur l'avant-bras) ; la fourrure du parent apparaît dessous, plus de trait de contour au raccord.
+ * Axe = du pivot vers le centre de masse opaque ; alpha × smoothstep((u - from) / (to - from)), u en px le long de l'axe.
+ */
+async function featherJoint(file, opt, spec) {
+  const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const W = info.width, H = info.height;
+  const [px, py] = opt.pivot;
+  let sx = 0, sy = 0, n = 0;
+  for (let i = 0; i < W * H; i++) if (data[i * 4 + 3] > 127) { sx += i % W; sy += (i / W) | 0; n++; }
+  if (!n) return;
+  let dx = sx / n - px, dy = sy / n - py;
+  const len = Math.hypot(dx, dy) || 1;
+  dx /= len; dy /= len;
+  const from = opt.from ?? -18, to = opt.to ?? 22;
+  for (let i = 0; i < W * H; i++) {
+    const u = ((i % W) - px) * dx + (((i / W) | 0) - py) * dy;
+    let k = Math.max(0, Math.min(1, (u - from) / (to - from)));
+    k = k * k * (3 - 2 * k);
+    data[i * 4 + 3] = Math.round(data[i * 4 + 3] * k);
+  }
+  const tmp = `${file}.tmp`;
+  await sharp(data, { raw: { width: W, height: H, channels: 4 } }).webp({ quality: spec.quality ?? 90, alphaQuality: 100, effort: 5, smartSubsample: true }).toFile(tmp);
+  fs.renameSync(tmp, file);
+}
+
 function sha(file) { return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex').slice(0, 16); }
 
 async function processAsset(key, spec) {
@@ -259,6 +286,7 @@ async function processAsset(key, spec) {
       const name = names[n];
       const out = path.join(OUT, spec.family, `${key}.${name}.webp`);
       const dims = await exportRegion(iso, rect, spec, out);
+      if (spec.split.feather?.[name]) await featherJoint(out, spec.split.feather[name], spec);
       const pivot = spec.split.pivots?.[name] ?? null;
       manifest.assets[`${key}.${name}`] = {
         url: `assets/${spec.family}/${key}.${name}.webp`, w: dims.w, h: dims.h, source: spec.src, sourceHash: sha(src),

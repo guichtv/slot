@@ -30,13 +30,21 @@ async function main(): Promise<void> {
   };
   layout();
   window.addEventListener('resize', layout);
-  const actions = ['rest', 'strikeMatch', 'cheer', 'duck', 'chainWince', 'carve', 'proud', 'thump', 'scatter', 'scatterExcited', 'anticipation', 'anticipationWin', 'anticipationLose', 'smallWin', 'goodWin', 'introSwipe', 'celebrate0', 'celebrate2', 'celebrate4'];
+  const actions = [
+    'rest', 'gesture0', 'gesture1', 'gesture2', 'gesture3',
+    'strikeMatch', 'introSwipe', 'plunger', 'triggerCheer', 'cheer',
+    'duck', 'chainWince', 'carve', 'proud', 'thump',
+    'scatter', 'scatterExcited', 'anticipation', 'anticipationWin', 'anticipationLose',
+    'smallWin', 'goodWin',
+    'celebrate0', 'celebrate1', 'celebrate2', 'celebrate3', 'celebrate4', 'celebrate5',
+  ];
   const play = (name: string) => {
     buck.reset();
     const beat = new Beat();
     if (name === 'rest') return;
-    if (name.startsWith('celebrate')) buck.celebrate(Number(name.slice(9)));
-    else if (['strikeMatch', 'cheer', 'triggerCheer', 'introSwipe'].includes(name)) void buck.perform(name, beat, { target: { x: host.clientWidth * 0.1, y: host.clientHeight * 0.4 } });
+    if (name.startsWith('gesture')) (buck as unknown as { gesture(k: number): void }).gesture(Number(name.slice(7)));
+    else if (name.startsWith('celebrate')) buck.celebrate(Number(name.slice(9)));
+    else if (['strikeMatch', 'cheer', 'triggerCheer', 'introSwipe', 'plunger'].includes(name)) void buck.perform(name, beat, { target: { x: host.clientWidth * 0.1, y: host.clientHeight * 0.4 } });
     else buck.react(name);
   };
   const bar = document.getElementById('bar') as HTMLElement;

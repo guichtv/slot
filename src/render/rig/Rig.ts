@@ -18,12 +18,16 @@ export interface RigPartDef {
   z: number;
   rest?: number;
   scale?: number;
+  /** miroir horizontal du dessin autour de son pivot (ex. main avant = main arrière retournée) */
+  flip?: boolean;
 }
 
 export interface RigAlt {
   key: string;
   pivot: [number, number];
   r?: number;
+  /** remplace le miroir de la pièce pour cette variante */
+  flip?: boolean;
 }
 
 export interface RigDef {
@@ -74,7 +78,7 @@ export class Rig {
       const sprite = new Sprite(this.tex(d.key));
       const scale = d.scale ?? 1;
       this.anchorSprite(sprite, d.pivot);
-      sprite.scale.set(scale);
+      sprite.scale.set(d.flip ? -scale : scale, scale);
       node.addChild(sprite);
       node.sortableChildren = true;
       sprite.zIndex = 0;
@@ -133,11 +137,13 @@ export class Rig {
       p.sprite.texture = this.tex(p.def.key);
       this.anchorSprite(p.sprite, p.def.pivot);
       p.sprite.angle = 0;
+      p.sprite.scale.x = p.def.flip ? -p.scale : p.scale;
       return;
     }
     p.sprite.texture = this.tex(a.key);
     this.anchorSprite(p.sprite, a.pivot);
     p.sprite.angle = a.r ?? 0;
+    p.sprite.scale.x = (a.flip ?? p.def.flip) ? -p.scale : p.scale;
   }
 
   getAlt(partId: string): string {

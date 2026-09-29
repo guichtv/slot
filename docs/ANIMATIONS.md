@@ -42,8 +42,9 @@ Réglage **« Animations réduites »** (menu RÉGLAGES), par défaut = `prefers
 
 | Coupé ou atténué | **Ignore le réglage** (écart) |
 |---|---|
-| zoom et secousses de caméra (`Camera`) | Buck : `Buck.reducedMotion` n'est **lu nulle part** |
-| respiration et sursaut du logo (`Logo`) | décor (nuages, chute d'eau, faisceaux, oiseaux) |
+| zoom et secousses de caméra (`Camera`) | décor (nuages, chute d'eau, faisceaux, oiseaux) |
+| respiration et sursaut du logo (`Logo`) | gestes de jeu de Buck (réactions, performances, célébrations : ils racontent l'événement) |
+| Buck : respiration et gestes d'attente (`Buck.reducedMotion`) | |
 | éclair de célébration 0,55 → 0,15, geysers à 8/s (`CelebrationFx`) | boucles de repos des symboles, étirement des rouleaux |
 | glissements du BUY BONUS → fondus (`BuyMenu`) | accueil et entrées de panneaux (GSAP) |
 | transitions CSS de l'Ante, du BUY, des dialogues (`data-motion`) | `overlays.css`, `welcome.css`, `hud.css` : **préférence système seulement** |
@@ -211,7 +212,7 @@ Réglage **« Animations réduites »** (menu RÉGLAGES), par défaut = `prefers
 | Piste | Idée |
 |---|---|
 | A | Pose fixe. |
-| **B — RETENUE** | **Respiration articulée** (torse, tête, épaules), **clignement** toutes les 2,6-6 s, un **geste de vanité** toutes les 8-16 s : mâcher l'allumette, taper de la queue, lustrer la dent en or, lever les yeux vers son monument avec un clin d'œil. |
+| **B — RETENUE** | **Respiration articulée** (torse, tête, épaules, bras), **clignement** toutes les 2,6-6 s, un **geste de vanité** toutes les 8-16 s : mâchonner l'allumette (la tête s'écrase, sans changer de dessin), taper le sol de la queue, lustrer la dent en or du poing (par-dessous, le visage reste visible), lever les yeux vers son monument puis un clin d'œil bref. |
 | C | Buck lit le journal du chantier. |
 | D | Buck donne des ordres à l'équipe hors champ, en bulles. |
 | E | Buck s'endort et ronfle après une minute sans spin. |
@@ -221,8 +222,8 @@ Réglage **« Animations réduites »** (menu RÉGLAGES), par défaut = `prefers
 | **Pourquoi B** | La vanité porte l'humour sans voler l'attention ; toute réaction interrompt le geste (priorités repos 0 < geste 1 < réaction 2 < performance 3 < célébration 4). |
 | **Durée** | Respiration 1,5 s par demi-cycle ; clignement 0,11 s ; gestes 0,55-1,7 s. |
 | **Turbo / Passer** | Sans objet. |
-| **Mouvement réduit** | Aucun effet (drapeau jamais lu). |
-| **Code** | `src/render/mascot/Buck.ts` → `startIdle`, `applyBreath`, `scheduleBlink`, `scheduleGesture`, `gesture` |
+| **Mouvement réduit** | Pas de respiration visible, aucun geste d'attente (`Buck.reducedMotion`). |
+| **Code** | `src/render/mascot/Buck.ts` → `startIdle`, `applyBreath`, `scheduleBlink`, `scheduleGesture`, `gesture` ; bras pilotés par la main (`armIk.ts`), jambes résolues à chaque image (pieds ancrés) |
 | **Statut** | Implémenté. |
 
 ### M07 · Repos — logo
@@ -470,7 +471,7 @@ Réglage **« Animations réduites »** (menu RÉGLAGES), par défaut = `prefers
 | Piste | Idée |
 |---|---|
 | A | La charge s'allume seule. |
-| **B — RETENUE** | Buck porte la main à la bouche, prend l'allumette, **la frotte sur sa dent en or**, tend le bras vers la charge avec un clin d'œil ; **une traînée d'étincelles file en arc** du bout de l'allumette jusqu'à la mèche. |
+| **B — RETENUE** | La main arrive par le côté, coude dehors, et pince l'allumette au coin de la bouche ; il **la frotte sur sa dent en or** (contact, flamme), puis d'un coup de fouet le bras se tend vers la charge et lâche l'allumette ; **une traînée d'étincelles file en arc** jusqu'à la mèche. Ensuite, il reprend une allumette au coin de la bouche. |
 | C | Buck lance l'allumette d'une pichenette. |
 | D | Un petit détonateur à main par charge. |
 | E | Le raton artificier allume la mèche. |

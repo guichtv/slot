@@ -41,20 +41,20 @@ def compose(pose, alts, scale=0.42, W=800, H=1100):
         alt = alts.get(pid)
         if alt:
             a = RIG['alternates'][pid][alt]
-            return a['key'], a['pivot'], a.get('r', 0)
-        return p['key'], p['pivot'], 0
+            return a['key'], a['pivot'], a.get('r', 0), a.get('flip', p.get('flip', False))
+        return p['key'], p['pivot'], 0, p.get('flip', False)
     def solve(pid):
         if pid in world: return world[pid]
         p = parts[pid]
         pp = pose.get(pid, {})
-        key, pivot, extra_r = key_pivot(pid)
+        key, pivot, extra_r, flip = key_pivot(pid)
         local_r = p.get('rest', 0) + pp.get('r', 0) + extra_r
         ps = p.get('scale', 1)
         if 'parent' in p:
             par = solve(p['parent'])
             ax, ay = p['attach']
             # l'attache est dans l'espace de la texture du parent (repère du parent avant son pivot)
-            m = mat_mul(par['m'], mat_mul(trans(ax + pp.get('x', 0), ay + pp.get('y', 0)), mat_mul(rot(local_r), mat_mul([ps,0,0,0,ps,0], trans(-pivot[0], -pivot[1])))))
+            m = mat_mul(par['m'], mat_mul(trans(ax + pp.get('x', 0), ay + pp.get('y', 0)), mat_mul(rot(local_r), mat_mul([ps * (-1 if flip else 1),0,0,0,ps,0], trans(-pivot[0], -pivot[1])))))
         else:
             m = mat_mul(trans(W/scale/2 + pp.get('x', 0), H/scale*0.52 + pp.get('y', 0)), mat_mul(rot(local_r), trans(-pivot[0], -pivot[1])))
         world[pid] = {'m': m, 'key': key}
@@ -100,7 +100,8 @@ def main():
         else:
             pose = json.loads(a)
     img = compose(pose, alts)
-    ref = tex('buck.ref')
+    # la référence n'est pas publiée (noPublic) : lue depuis sa source ImageGen
+    ref = tex('buck.ref') if 'buck.ref' in MAN else Image.open('assets/generated/mascot/buck-ref.png').convert('RGBA')
     k = img.height * 0.86 / ref.height
     ref = ref.resize((int(ref.width * k), int(ref.height * k)))
     W = img.width + ref.width + 40
