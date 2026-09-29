@@ -88,10 +88,10 @@
   },
   {
    "id": "armB",
-   "key": "buck.arms.upperR.sleeve",
+   "key": "buck.sleeves.upperR",
    "pivot": [
-    83,
-    74
+    123,
+    114
    ],
    "parent": "torso",
    "attach": [
@@ -99,8 +99,7 @@
     110
    ],
    "z": 1,
-   "rest": 18,
-   "under": "buck.arms.upperR.cuff"
+   "rest": 18
   },
   {
    "id": "foreB",
@@ -111,8 +110,8 @@
    ],
    "parent": "armB",
    "attach": [
-    191,
-    236
+    231,
+    276
    ],
    "z": -1,
    "rest": -11,
@@ -136,10 +135,10 @@
   },
   {
    "id": "armF",
-   "key": "buck.arms.upperL.sleeve",
+   "key": "buck.sleeves.upperL",
    "pivot": [
-    204,
-    73
+    244,
+    113
    ],
    "parent": "torso",
    "attach": [
@@ -147,8 +146,7 @@
     105
    ],
    "z": 2,
-   "rest": -22,
-   "under": "buck.arms.upperL.cuff"
+   "rest": -22
   },
   {
    "id": "foreF",
@@ -159,8 +157,8 @@
    ],
    "parent": "armF",
    "attach": [
-    88,
-    229
+    128,
+    269
    ],
    "z": -1,
    "rest": 11,
@@ -378,8 +376,8 @@
    "foreLen": 219.9,
    "opening": {
     "c": [
-     83,
-     234.5
+     123,
+     274.5
     ],
     "r": [
      80.2,
@@ -402,8 +400,8 @@
    "foreLen": 217.5,
    "opening": {
     "c": [
-     194.4,
-     242.5
+     234.4,
+     282.5
     ],
     "r": [
      80.6,

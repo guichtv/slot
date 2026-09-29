@@ -2092,70 +2092,68 @@
    "family": "symbols",
    "ui": true
   },
-  "buck.arms.upperL.sleeve": {
-   "url": "assets/mascot/buck.arms.upperL.sleeve.webp",
-   "w": 278,
-   "h": 303,
-   "source": "assets/generated/mascot/buck-arms.png",
-   "sourceHash": "240e0101cbf22f31",
+  "buck.sleeves.upperL": {
+   "url": "assets/mascot/buck.sleeves.upperL.webp",
+   "w": 358,
+   "h": 383,
+   "source": "assets/generated/mascot/buck-sleeves.png",
+   "sourceHash": "ba763494b8b90ac1",
    "frame": {
-    "x": 31,
-    "y": 120,
-    "w": 278,
-    "h": 303
+    "x": 274,
+    "y": 306,
+    "w": 410,
+    "h": 412
    },
    "scale": 1,
    "pivot": null,
-   "family": "mascot"
+   "family": "mascot",
+   "aligned": {
+    "ref": "buck.arms.upperL",
+    "margin": 40,
+    "iou": 0.9536,
+    "scale": 0.7071,
+    "rotDeg": -2.9,
+    "t": [
+     25.2,
+     52.8
+    ],
+    "size": [
+     358,
+     383
+    ]
+   }
   },
-  "buck.arms.upperL.cuff": {
-   "url": "assets/mascot/buck.arms.upperL.cuff.webp",
-   "w": 278,
-   "h": 303,
-   "source": "assets/generated/mascot/buck-arms.png",
-   "sourceHash": "240e0101cbf22f31",
+  "buck.sleeves.upperR": {
+   "url": "assets/mascot/buck.sleeves.upperR.webp",
+   "w": 361,
+   "h": 390,
+   "source": "assets/generated/mascot/buck-sleeves.png",
+   "sourceHash": "ba763494b8b90ac1",
    "frame": {
-    "x": 31,
-    "y": 120,
-    "w": 278,
-    "h": 303
+    "x": 873,
+    "y": 309,
+    "w": 397,
+    "h": 404
    },
    "scale": 1,
    "pivot": null,
-   "family": "mascot"
-  },
-  "buck.arms.upperR.sleeve": {
-   "url": "assets/mascot/buck.arms.upperR.sleeve.webp",
-   "w": 281,
-   "h": 310,
-   "source": "assets/generated/mascot/buck-arms.png",
-   "sourceHash": "240e0101cbf22f31",
-   "frame": {
-    "x": 351,
-    "y": 121,
-    "w": 281,
-    "h": 310
-   },
-   "scale": 1,
-   "pivot": null,
-   "family": "mascot"
-  },
-  "buck.arms.upperR.cuff": {
-   "url": "assets/mascot/buck.arms.upperR.cuff.webp",
-   "w": 281,
-   "h": 310,
-   "source": "assets/generated/mascot/buck-arms.png",
-   "sourceHash": "240e0101cbf22f31",
-   "frame": {
-    "x": 351,
-    "y": 121,
-    "w": 281,
-    "h": 310
-   },
-   "scale": 1,
-   "pivot": null,
-   "family": "mascot"
+   "family": "mascot",
+   "aligned": {
+    "ref": "buck.arms.upperR",
+    "margin": 40,
+    "iou": 0.9735,
+    "scale": 0.7299,
+    "rotDeg": 363.39,
+    "t": [
+     49.8,
+     35.8
+    ],
+    "size": [
+     361,
+     390
+    ]
+   }
   }
  },
- "generatedAt": "2026-09-29T20:01:25.138Z"
+ "generatedAt": "2026-09-29T20:13:23.848Z"
 }

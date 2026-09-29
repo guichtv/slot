@@ -1,0 +1,4 @@
+[
+ { "key": "buck.sleeves.upperL", "ref": "buck.arms.upperL", "exclude": ".cache/assets/buck.arms.upperL.cuff.png", "margin": 40 },
+ { "key": "buck.sleeves.upperR", "ref": "buck.arms.upperR", "exclude": ".cache/assets/buck.arms.upperR.cuff.png", "margin": 40 }
+]

@@ -33,7 +33,7 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit -p .",
     "fixtures": "tsx tools/fixtures/build.ts",
-    "assets": "node tools/assets/process.mjs && python3 tools/assets/symbol_thumbs.py",
+    "assets": "node tools/assets/process.mjs && python3 tools/assets/align_piece.py --config=tools/assets/align.json && python3 tools/assets/symbol_thumbs.py",
     "record": "node tools/record.mjs",
     "hud-check": "node tools/hud-check.mjs",
     "check-release": "node tools/check-release.mjs",

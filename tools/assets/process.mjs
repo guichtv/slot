@@ -233,13 +233,13 @@ async function featherJoint(file, opt, spec) {
 }
 
 /**
- * Manche découpée (pièces du rig) : ImageGen a peint au bout de la manche la section du bras (disque de fourrure
- * cerné de noir). Posé sur l'avant-bras, ce disque fait « moignon ». On le sépare du tissu, sans rien redessiner :
+ * Manche d'origine (buck-arms.png) : ImageGen y a peint au coude la section du bras (disque de fourrure cerné de noir),
+ * qui faisait « moignon » sur l'avant-bras. Les manches ont été redessinées (buck-sleeves.png, bout creux) ; ce masque
+ * du disque sert seulement à les recaler sur l'ancienne pièce en ignorant cette zone (tools/assets/align_piece.py) :
  * - disque = composante de fourrure la plus proche de `hint` (trous comblés) + son trait noir (pixels quasi noirs, 11 px) ;
- * - `<nom>.sleeve.webp` = la manche sans l'intérieur du disque, bord extérieur gardé (dessinée au-dessus de l'avant-bras) ;
- * - `<nom>.cuff.webp` = le disque seul, élargi de 2 px sous le tissu (dessiné sous l'avant-bras : aucune fente au raccord).
+ * - écrit `<base>.cuff.png` (le disque) et `<base>.sleeve.png` (le reste), hors de la build.
  */
-async function splitCuff(file, opt, spec) {
+async function splitCuff(file, opt, spec, base) {
   const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const W = info.width, H = info.height, N = W * H;
   const fur = new Uint8Array(N), dark = new Uint8Array(N);
@@ -317,12 +317,11 @@ async function splitCuff(file, opt, spec) {
     if (ring[i] && (mask[i] || !bg[i])) sleeve[i * 4 + 3] = 0;
     if (!under[i]) cuff[i * 4 + 3] = 0;
   }
-  const base = file.replace(/\.webp$/, '');
+  fs.mkdirSync(path.dirname(base), { recursive: true });
   const raw = { raw: { width: W, height: H, channels: 4 } };
-  const webp = { quality: spec.quality ?? 90, alphaQuality: 100, effort: 5, smartSubsample: true };
-  await sharp(sleeve, raw).webp(webp).toFile(`${base}.sleeve.webp`);
-  await sharp(cuff, raw).webp(webp).toFile(`${base}.cuff.webp`);
-  return { sleeve: `${base}.sleeve.webp`, cuff: `${base}.cuff.webp` };
+  await sharp(sleeve, raw).png().toFile(`${base}.sleeve.png`);
+  await sharp(cuff, raw).png().toFile(`${base}.cuff.png`);
+  return { sleeve: `${base}.sleeve.png`, cuff: `${base}.cuff.png` };
 }
 
 function sha(file) { return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex').slice(0, 16); }
@@ -386,16 +385,8 @@ async function processAsset(key, spec) {
         frame: rect, scale: dims.scale, pivot, family: spec.family,
       };
       outputs.push(out);
-      if (spec.split.cuffs?.[name]) {
-        // manche : calque « tissu » (dessus de l'avant-bras) + calque « disque du poignet de manche » (dessous)
-        for (const [layer, file] of Object.entries(await splitCuff(out, spec.split.cuffs[name], spec))) {
-          manifest.assets[`${key}.${name}.${layer}`] = {
-            url: `assets/${spec.family}/${path.basename(file)}`, w: dims.w, h: dims.h, source: spec.src, sourceHash: sha(src),
-            frame: rect, scale: dims.scale, pivot, family: spec.family,
-          };
-          outputs.push(file);
-        }
-      }
+      // manche d'origine : masque du disque peint au coude (.cache/assets/), sert au recalage des manches redessinées
+      if (spec.split.cuffs?.[name]) await splitCuff(out, spec.split.cuffs[name], spec, path.join(ROOT, '.cache', 'assets', `${key}.${name}`));
     }
   } else {
     const trimmed = spec.opaque || spec.noTrim ? { x: 0, y: 0, w: buf.width, h: buf.height } : bbox(buf, 8);

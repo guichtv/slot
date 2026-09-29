@@ -1,0 +1,41 @@
+Utilise $imagegen et l'outil natif de génération d'images (built-in image_gen, PAS un script CLI/API) pour produire réellement les images décrites. Ta mission porte uniquement sur ces images et leur rapport ; ne crée ni ne modifie aucun code du jeu.
+
+Studio : Crownforge. Racine du projet : le répertoire courant.
+
+RÈGLES COMMUNES
+- Style maison Crownforge : BD / cartoon 2D pour adultes, contours noirs épais légèrement irréguliers, cel-shading deux tons, reflets francs, couleurs saturées maîtrisées, formes simples et lisibles. Jamais photo-réaliste, jamais 3D lisse, jamais de rendu « image IA » (pas de néon générique, pas de dégradés par défaut, pas de flou artistique, pas d'effets de bordure).
+- Transparence (quand demandée) : fond RÉELLEMENT transparent (canal alpha), pas de damier dessiné, pas de fond blanc, pas de halo ; sujet complet non coupé, marge de 3 à 6 % tout autour. Si l'outil ne produit pas d'alpha : fond vert chroma uni #00FF00 sans ombre portée, et signale-le dans ta réponse.
+- Aucun texte, logo, filigrane ou signature, sauf le texte exact demandé.
+- Aucune copie de personnage, de logo ou de composition identifiable d'un autre studio ou d'une marque.
+- Reprise : si un fichier cible existe déjà ET que son .prompt.txt existe, ne le régénère pas ; passe au suivant.
+
+PROCÉDURE pour CHAQUE image :
+1) génère avec image_gen (un appel par asset) ;
+2) inspecte (sujet, style, transparence, marges, texte exact) et régénère UNE fois si un défaut évident existe ;
+3) copie le fichier final depuis $CODEX_HOME/generated_images/… vers le chemin indiqué (crée les dossiers) ;
+4) écris à côté <nom>.prompt.txt avec le prompt exact utilisé.
+
+RÉPONSE FINALE : chemins produits, méthode réellement utilisée, dimensions, canal alpha (oui/non), défauts restants.
+Si image_gen n'est pas accessible, dis-le précisément ; ne remplace PAS les images par du SVG, du code ou une liste de prompts.
+
+Projet : BOOMTOOTH, slot 2D « démolition au castor » (Crownforge). Buck Boomtooth, castor chef de chantier vaniteux et casse-cou, fait sauter une montagne de granit pour y sculpter un monument à sa gloire (« Mount Buckmore ») au-dessus d'un barrage en rondins, dans une vallée de pins du Grand Nord.
+
+Direction artistique RETENUE (référence obligatoire) : assets/generated/directions/D1.png — charge-la avec view_image avant de générer et reproduis son style exact :
+- encrage noir épais (4 à 7 px à 1024 px), légèrement irrégulier comme au pinceau, traits intérieurs plus fins ;
+- cel-shading deux tons nets (clair + ombre franche) et un reflet blanc cassé par volume ; pas d'aérographe, pas de flou ;
+- matières dessinées : bois équarri veiné, granit gris-bleu ébréché, métal riveté, flanelle à carreaux rouges et noirs, copeaux ;
+- lumière principale chaude de fin d'après-midi venant de la gauche (orange doré), ombres bleu-violet ;
+- couleurs saturées maîtrisées.
+Palette : orange brûlé #E8742A, orange ciel #F39A3C, vert pin #2F5D46, vert pin sombre #1E3B2E, granit #6F7F92, granit ombre #46526A, rouge TNT #D7332B, or #F2B233, bois miel #C98A45, bois sombre #6B4526, crème #F4E6C8, encre #1B1410.
+Référence d'ambiance NUIT (bonus) : assets/generated/directions/D3.png (aurore turquoise #3FD6B8, bleu nuit #14233A, projecteurs orange #FF9A3C) — même vallée, même trait.
+Jamais photo-réaliste, jamais 3D lisse, jamais de néon générique ni de dégradé par défaut.
+
+LOT mascot-rig — reprise ciblée des DEUX manches de Buck (1 image). Dossier : assets/generated/mascot/
+Pourquoi : dans assets/generated/mascot/buck-arms.png, les deux bras supérieurs (pièces 1 et 2, rangée du haut, à gauche) se terminent au coude par un disque de fourrure cerné de noir (la coupe du bras). En animation, ce disque se pose sur l'avant-bras et fait « moignon ». Il faut les mêmes manches, mais dont le bout est une vraie ouverture de manche retroussée, vue de côté.
+Références à charger avec view_image AVANT de générer : (image 1) assets/generated/mascot/buck-arms.png — reproduis ses pièces 1 et 2 à l'identique : même taille, même angle, même silhouette d'épaule, mêmes carreaux rouges et noirs, mêmes plis du retroussis, même encrage ; (image 2) assets/generated/mascot/buck-ref.png — regarde ses coudes : le bord du retroussis est un simple trait courbe et l'avant-bras poilu sort de DESSOUS ce bord ; (image 3) assets/generated/directions/D1.png pour le style.
+Ne régénère QUE buck-sleeves.png (les autres fichiers du lot existent déjà, ne les touche pas).
+buck-sleeves.png — Planche 1536×1024, fond TRANSPARENT (vrai canal alpha), exactement 2 pièces séparées sur une rangée, aucune étiquette :
+(a) à gauche (centre vers x=420, y=512) : bras supérieur GAUCHE de Buck = la pièce 1 de buck-arms.png redessinée à la même échelle et dans la même orientation (épaule arrondie en haut à droite de la pièce, coude en bas à gauche) ;
+(b) à droite (centre vers x=1110, y=512) : bras supérieur DROIT = la pièce 2, même échelle, même orientation (épaule en haut à gauche, coude en bas à droite).
+Seule différence avec buck-arms.png, pour les deux pièces : au bout côté coude, AUCUN disque de fourrure, AUCUNE coupe de bras, AUCUNE fourrure du tout. Le retroussis de flanelle se termine par son bord d'étoffe : un bourrelet de tissu arrondi cerné d'un trait noir épais, avec seulement une fine ombre sombre (intérieur de la manche, brun-noir #2A1712) le long de l'ouverture, comme une manche vide vue de côté dont on devine l'intérieur. L'ouverture reste assez large pour qu'un avant-bras de la largeur de la pièce 3 de buck-arms.png s'y glisse par-dessous.
+Pièces complètes, non coupées, au moins 80 px de transparence autour de chacune et entre elles, aucune ne touche le bord. Pas de texte, pas de fond, pas d'ombre portée, pas de halo.
