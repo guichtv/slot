@@ -20,6 +20,11 @@ export interface RigPartDef {
   scale?: number;
   /** miroir horizontal du dessin autour de son pivot (ex. main avant = main arrière retournée) */
   flip?: boolean;
+  /**
+   * second dessin de la pièce, placé SOUS ses pièces enfants (même taille, même pivot) : ex. l'intérieur du
+   * poignet de manche, que l'avant-bras recouvre, alors que le tissu de la manche passe au-dessus de l'avant-bras
+   */
+  under?: string;
 }
 
 export interface RigAlt {
@@ -82,6 +87,13 @@ export class Rig {
       node.addChild(sprite);
       node.sortableChildren = true;
       sprite.zIndex = 0;
+      if (d.under) {
+        const u = new Sprite(this.tex(d.under));
+        this.anchorSprite(u, d.pivot);
+        u.scale.set(d.flip ? -scale : scale, scale);
+        u.zIndex = -50;
+        node.addChild(u);
+      }
       const parent = d.parent ? (this.parts.get(d.parent) as PartState) : null;
       let bx = 0;
       let by = 0;

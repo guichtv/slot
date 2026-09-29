@@ -68,6 +68,8 @@ def compose(pose, alts, scale=0.42, W=800, H=1100):
     def draw_order(pid):
         kids = sorted(children.get(pid, []), key=lambda c: zover.get(c['id'], c['z']))
         out = []
+        # second dessin de la pièce (« under ») : sous tous ses enfants
+        if parts[pid].get('under'): out.append(('under', pid))
         for k in kids:
             if zover.get(k['id'], k['z']) < 0: out += draw_order(k['id'])
         out.append(pid)
@@ -78,9 +80,10 @@ def compose(pose, alts, scale=0.42, W=800, H=1100):
     seq = draw_order(root)
     canvas = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     S = [scale, 0, 0, 0, scale, 0]
-    for pid in seq:
+    for item in seq:
+        pid = item[1] if isinstance(item, tuple) else item
         w = world[pid]
-        im = tex(w['key'])
+        im = tex(parts[pid]['under'] if isinstance(item, tuple) else w['key'])
         m = mat_mul(S, w['m'])
         mi = inv(m)
         layer = im.transform((W, H), Image.AFFINE, data=tuple(mi), resample=Image.BICUBIC)

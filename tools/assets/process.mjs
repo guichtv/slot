@@ -232,6 +232,94 @@ async function featherJoint(file, opt, spec) {
   fs.renameSync(tmp, file);
 }
 
+/**
+ * Manche découpée (pièces du rig) : ImageGen a peint au bout de la manche la section du bras (disque de fourrure
+ * cerné de noir). Posé sur l'avant-bras, ce disque fait « moignon ». On le sépare du tissu, sans rien redessiner :
+ * - disque = composante de fourrure la plus proche de `hint` (trous comblés) + son trait noir (pixels quasi noirs, 11 px) ;
+ * - `<nom>.sleeve.webp` = la manche sans le disque (dessinée au-dessus de l'avant-bras) ;
+ * - `<nom>.cuff.webp` = le disque seul, élargi de 2 px sous le tissu (dessiné sous l'avant-bras : aucune fente au raccord).
+ */
+async function splitCuff(file, opt, spec) {
+  const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const W = info.width, H = info.height, N = W * H;
+  const fur = new Uint8Array(N), dark = new Uint8Array(N);
+  for (let i = 0; i < N; i++) {
+    const r = data[i * 4], g = data[i * 4 + 1], b = data[i * 4 + 2], a = data[i * 4 + 3];
+    const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn || 1;
+    let h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    h = (h * 60 + 360) % 360;
+    fur[i] = a > 200 && h > 12 && h < 50 && mx > 70 && g > r * 0.35 ? 1 : 0;
+    dark[i] = a > 60 && mx < 52 && mx - mn < 34 ? 1 : 0;
+  }
+  const n4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  const lab = new Int32Array(N).fill(-1);
+  let best = null, bestD = Infinity;
+  for (let s0 = 0; s0 < N; s0++) {
+    if (!fur[s0] || lab[s0] >= 0) continue;
+    const stack = [s0], px = [];
+    lab[s0] = s0;
+    while (stack.length) {
+      const i = stack.pop();
+      px.push(i);
+      const x = i % W, y = (i / W) | 0;
+      for (const [dx, dy] of n4) {
+        const nx = x + dx, ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+        const j = ny * W + nx;
+        if (fur[j] && lab[j] < 0) { lab[j] = s0; stack.push(j); }
+      }
+    }
+    if (px.length < 800) continue;
+    let sx = 0, sy = 0;
+    for (const i of px) { sx += i % W; sy += (i / W) | 0; }
+    const dd = Math.hypot(sx / px.length - opt.hint[0], sy / px.length - opt.hint[1]);
+    if (dd < bestD) { bestD = dd; best = px; }
+  }
+  if (!best) throw new Error(`${file} : disque de manche introuvable près de ${opt.hint}`);
+  const mask = new Uint8Array(N);
+  for (const i of best) mask[i] = 1;
+  // trous : pixels non joignables depuis le bord sans traverser le disque
+  const outside = new Uint8Array(N), q = [];
+  const seed = (i) => { if (!mask[i] && !outside[i]) { outside[i] = 1; q.push(i); } };
+  for (let x = 0; x < W; x++) { seed(x); seed((H - 1) * W + x); }
+  for (let y = 0; y < H; y++) { seed(y * W); seed(y * W + W - 1); }
+  while (q.length) {
+    const i = q.pop(), x = i % W, y = (i / W) | 0;
+    for (const [dx, dy] of n4) {
+      const nx = x + dx, ny = y + dy;
+      if (nx >= 0 && ny >= 0 && nx < W && ny < H) seed(ny * W + nx);
+    }
+  }
+  for (let i = 0; i < N; i++) if (!outside[i]) mask[i] = 1;
+  const dilate = (m, only) => {
+    const o = new Uint8Array(m);
+    for (let i = 0; i < N; i++) {
+      if (m[i] || (only && !only[i])) continue;
+      const x = i % W, y = (i / W) | 0;
+      outer: for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+        const nx = x + dx, ny = y + dy;
+        if (nx >= 0 && ny >= 0 && nx < W && ny < H && m[ny * W + nx]) { o[i] = 1; break outer; }
+      }
+    }
+    return o;
+  };
+  let ring = mask;
+  for (let k = 0; k < 11; k++) ring = dilate(ring, dark);
+  ring = dilate(ring, null);
+  const under = dilate(dilate(ring, null), null);
+  const sleeve = Buffer.from(data), cuff = Buffer.from(data);
+  for (let i = 0; i < N; i++) {
+    if (ring[i]) sleeve[i * 4 + 3] = 0;
+    if (!under[i]) cuff[i * 4 + 3] = 0;
+  }
+  const base = file.replace(/\.webp$/, '');
+  const raw = { raw: { width: W, height: H, channels: 4 } };
+  const webp = { quality: spec.quality ?? 90, alphaQuality: 100, effort: 5, smartSubsample: true };
+  await sharp(sleeve, raw).webp(webp).toFile(`${base}.sleeve.webp`);
+  await sharp(cuff, raw).webp(webp).toFile(`${base}.cuff.webp`);
+  return { sleeve: `${base}.sleeve.webp`, cuff: `${base}.cuff.webp` };
+}
+
 function sha(file) { return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex').slice(0, 16); }
 
 async function processAsset(key, spec) {
@@ -293,6 +381,16 @@ async function processAsset(key, spec) {
         frame: rect, scale: dims.scale, pivot, family: spec.family,
       };
       outputs.push(out);
+      if (spec.split.cuffs?.[name]) {
+        // manche : calque « tissu » (dessus de l'avant-bras) + calque « disque du poignet de manche » (dessous)
+        for (const [layer, file] of Object.entries(await splitCuff(out, spec.split.cuffs[name], spec))) {
+          manifest.assets[`${key}.${name}.${layer}`] = {
+            url: `assets/${spec.family}/${path.basename(file)}`, w: dims.w, h: dims.h, source: spec.src, sourceHash: sha(src),
+            frame: rect, scale: dims.scale, pivot, family: spec.family,
+          };
+          outputs.push(file);
+        }
+      }
     }
   } else {
     const trimmed = spec.opaque || spec.noTrim ? { x: 0, y: 0, w: buf.width, h: buf.height } : bbox(buf, 8);

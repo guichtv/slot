@@ -20,7 +20,8 @@ import { autoVia, bezier, extension, fk, naturalSide, polePoint, solve, solveTip
  *   poing, allumette) sur une cible en px du torse ; la main y va en arc, le coude reste à l'extérieur et ne
  *   change de côté que bras tendu. Une action interrompue repart de la position réelle de la main.
  * - Ordre de dessin : bras devant le torse (les manches couvrent les épaules), derrière la tête ; devant la tête
- *   seulement quand la main touche le visage ou le casque. Avant-bras sous la manche, main sur l'avant-bras.
+ *   seulement quand la main touche le visage ou le casque. Au coude : intérieur du poignet de manche, puis
+ *   avant-bras, puis tissu de la manche (l'avant-bras sort de la manche) ; main sur l'avant-bras.
  * - Accessoires (détonateur) : timeline à part, jamais tuée par une action suivante ; reset() les range.
  */
 type BuckJson = RigDef & {
@@ -167,8 +168,6 @@ export class Buck {
   /** traîne des mains (action secondaire) : la main suit l'avant-bras avec un léger retard */
   /** pose de la queue (rotation dans le plan du sol : le torse qui pivote ne l'enfonce pas) */
   private tailPose = { r: 0, sy: TAIL_SY };
-  /** avant-bras passé devant la manche (coude très plié) */
-  private foreFront: Record<Side, boolean> = { F: false, B: false };
   private drag: Record<Side, { a: number; last: number; t: number }> = { F: { a: 0, last: NaN, t: 0 }, B: { a: 0, last: NaN, t: 0 } };
 
   constructor() {
@@ -401,13 +400,6 @@ export class Buck {
     const r = solve(a, side, [st.p[0] + b[0], st.p[1] + b[1]], st.s);
     st.upper = r.upper;
     st.fore = r.fore;
-    // coude très plié : l'avant-bras passe devant la manche (son bout arrondi couvre l'ouverture du poignet de manche)
-    const bend = Math.abs(wrap(r.fore + a.foreAxis - a.upperAxis));
-    const front = this.foreFront[side] ? bend > 70 : bend > 82;
-    if (front !== this.foreFront[side]) {
-      this.foreFront[side] = front;
-      this.rig.setZ({ [a.fore]: front ? 1 : -1 });
-    }
     this.rig.set({
       [a.upper]: { r: wrap(r.upper - REST_ANGLE(a.upper)) },
       [a.fore]: { r: wrap(r.fore - REST_ANGLE(a.fore)) },
@@ -734,7 +726,6 @@ export class Buck {
 
   private resetZ(): void {
     this.rig.resetZ();
-    this.foreFront = { F: false, B: false };
   }
 
   /** passe un ou deux bras devant la tête (z 6 : main sur le visage ou le casque) */

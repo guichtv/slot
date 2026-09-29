@@ -2091,7 +2091,71 @@
    "nineSlice": null,
    "family": "symbols",
    "ui": true
+  },
+  "buck.arms.upperL.sleeve": {
+   "url": "assets/mascot/buck.arms.upperL.sleeve.webp",
+   "w": 278,
+   "h": 303,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 31,
+    "y": 120,
+    "w": 278,
+    "h": 303
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.arms.upperL.cuff": {
+   "url": "assets/mascot/buck.arms.upperL.cuff.webp",
+   "w": 278,
+   "h": 303,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 31,
+    "y": 120,
+    "w": 278,
+    "h": 303
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.arms.upperR.sleeve": {
+   "url": "assets/mascot/buck.arms.upperR.sleeve.webp",
+   "w": 281,
+   "h": 310,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 351,
+    "y": 121,
+    "w": 281,
+    "h": 310
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
+  },
+  "buck.arms.upperR.cuff": {
+   "url": "assets/mascot/buck.arms.upperR.cuff.webp",
+   "w": 281,
+   "h": 310,
+   "source": "assets/generated/mascot/buck-arms.png",
+   "sourceHash": "240e0101cbf22f31",
+   "frame": {
+    "x": 351,
+    "y": 121,
+    "w": 281,
+    "h": 310
+   },
+   "scale": 1,
+   "pivot": null,
+   "family": "mascot"
   }
  },
- "generatedAt": "2026-09-29T19:05:24.691Z"
+ "generatedAt": "2026-09-29T19:49:48.323Z"
 }

@@ -88,7 +88,7 @@
   },
   {
    "id": "armB",
-   "key": "buck.arms.upperR",
+   "key": "buck.arms.upperR.sleeve",
    "pivot": [
     83,
     74
@@ -99,7 +99,8 @@
     110
    ],
    "z": 1,
-   "rest": 18
+   "rest": 18,
+   "under": "buck.arms.upperR.cuff"
   },
   {
    "id": "foreB",
@@ -135,7 +136,7 @@
   },
   {
    "id": "armF",
-   "key": "buck.arms.upperL",
+   "key": "buck.arms.upperL.sleeve",
    "pivot": [
     204,
     73
@@ -146,7 +147,8 @@
     105
    ],
    "z": 2,
-   "rest": -22
+   "rest": -22,
+   "under": "buck.arms.upperL.cuff"
   },
   {
    "id": "foreF",

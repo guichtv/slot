@@ -74,7 +74,7 @@ Retour de l'utilisateur : « la mascotte a un problème avec ses bras et ses mou
   - au repos, les bras sont fléchis, coudes dehors, comme l'illustration de référence ;
   - la queue est posée au sol derrière la botte et y reste quand Buck s'accroupit.
 - **Raccord poignet-main** : l'alpha de la main s'estompe sur le bord qui s'emboîte dans l'avant-bras. C'est une étape déterministe de la chaîne d'assets (`feather` dans `tools/assets/assets.config.json`) ; l'illustration n'est pas modifiée.
-- **Coude très plié** : l'avant-bras passe devant la manche, qui cache le disque de fourrure du poignet de manche.
+- **Coude** (retour de l'utilisateur : « le haut du bras passe dessus le bas du bras ») : ImageGen a peint au bout de chaque manche la section du bras, un disque de fourrure cerné de noir, qui faisait moignon sur l'avant-bras. La chaîne d'assets sépare la manche en deux calques sans rien redessiner (`splitCuff` dans `tools/assets/process.mjs` : `upperL.sleeve` et `upperL.cuff`). L'ordre de dessin devient disque, puis avant-bras, puis tissu de la manche : l'avant-bras sort de la manche comme sur l'illustration de référence. Le rig accepte pour cela un dessin `under` placé sous les pièces enfants.
 - **Queue** : animée dans le plan du sol, indépendamment du torse, ce qui l'empêche de s'enfoncer dans le sol pendant la danse. La respiration ne l'écrase plus : un bug de Pixi triait les enfants et faisait respirer la queue au lieu du torse.
 - **Gestes réécrits** :
   - l'allumette est prise par le côté au coin de la bouche, frottée sur la dent en or, lancée vers la charge, puis Buck en reprend une ;
