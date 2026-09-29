@@ -1,0 +1,9 @@
+LOT mascot-rig — retouche des DEUX manches redessinées de Buck (1 image). Dossier : assets/generated/mascot/
+Pourquoi : dans assets/generated/mascot/buck-sleeves.png, le creux de l'ouverture de chaque manche (sous l'arche du retroussis, entre ses deux pointes recourbées) est TRANSPARENT. En animation, quand le coude se plie, on voit le décor à travers le bout de la manche.
+Références à charger avec view_image AVANT de générer : (image 1) assets/generated/mascot/buck-sleeves.png — reproduis ses DEUX pièces À L'IDENTIQUE (même taille, même position, même angle, même silhouette, mêmes carreaux, mêmes plis, même encrage) ; (image 2) assets/generated/mascot/buck-ref.png pour l'aspect de la manche retroussée ; (image 3) assets/generated/directions/D1.png pour le style.
+Ne régénère QUE buck-sleeves-lined.png (les autres fichiers du lot existent déjà, ne les touche pas).
+buck-sleeves-lined.png — Planche 1536×1024, fond TRANSPARENT (vrai canal alpha), exactement les 2 mêmes pièces aux mêmes endroits que dans buck-sleeves.png, aucune étiquette.
+Seules différences, pour les deux pièces :
+(1) le creux de l'ouverture de la manche est REMPLI (opaque) par l'intérieur sombre de la manche : la paroi intérieure du tube de flanelle, brun-noir #2A1712 avec une ombre plus sombre #160B08 vers le fond, deux tons nets, sans dégradé ni flou, cernée par le trait noir du bord — comme une manche vide vue de biais dont on voit l'intérieur. AUCUNE fourrure, AUCUN bras, AUCUN disque de fourrure dedans ;
+(2) les deux pointes recourbées du bord du retroussis sont un peu raccourcies et resserrées pour épouser un avant-bras de la largeur de la pièce 3 de assets/generated/mascot/buck-arms.png.
+Tout le reste strictement identique. Pièces complètes, non coupées, au moins 80 px de transparence autour de chacune, aucune ne touche le bord. Pas de texte, pas de fond, pas d'ombre portée, pas de halo.

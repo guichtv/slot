@@ -20,8 +20,8 @@ import { autoVia, bezier, extension, fk, naturalSide, polePoint, solve, solveTip
  *   poing, allumette) sur une cible en px du torse ; la main y va en arc, le coude reste à l'extérieur et ne
  *   change de côté que bras tendu. Une action interrompue repart de la position réelle de la main.
  * - Ordre de dessin : bras devant le torse (les manches couvrent les épaules), derrière la tête ; devant la tête
- *   seulement quand la main touche le visage ou le casque. Au coude : intérieur du poignet de manche, puis
- *   avant-bras, puis tissu de la manche (l'avant-bras sort de la manche) ; main sur l'avant-bras.
+ *   seulement quand la main touche le visage ou le casque. Au coude : l'avant-bras sort de sous la manche
+ *   (manches redessinées, bout creux) ; coude très plié : il passe devant la manche. Main sur l'avant-bras.
  * - Accessoires (détonateur) : timeline à part, jamais tuée par une action suivante ; reset() les range.
  */
 type BuckJson = RigDef & {
@@ -168,6 +168,8 @@ export class Buck {
   /** traîne des mains (action secondaire) : la main suit l'avant-bras avec un léger retard */
   /** pose de la queue (rotation dans le plan du sol : le torse qui pivote ne l'enfonce pas) */
   private tailPose = { r: 0, sy: TAIL_SY };
+  /** avant-bras passés devant la manche (coude très plié, voir clipForearm) */
+  private folded: Record<Side, boolean> = { F: false, B: false };
   /** masques des avant-bras (voir clipForearm) */
   private elbowMask: Record<Side, Graphics> = { F: new Graphics(), B: new Graphics() };
   private drag: Record<Side, { a: number; last: number; t: number }> = { F: { a: 0, last: NaN, t: 0 }, B: { a: 0, last: NaN, t: 0 } };
@@ -209,8 +211,19 @@ export class Buck {
   private clipForearm(side: Side): void {
     const a = IK[side];
     const m = this.elbowMask[side];
-    const arm = this.rig.part(a.upper);
     const fore = this.rig.part(a.fore);
+    // coude très plié (> 103°, retour sous 85°) : l'avant-bras passe DEVANT la manche, entier ; sinon il sort de dessous
+    // (replié sous la manche, son bout arrondi réapparaîtrait dans l'ouverture comme un disque)
+    const bend = Math.abs(wrap(fore.angle + a.foreAxis - a.upperAxis));
+    const folded = this.folded[side] ? bend > 85 : bend > 103;
+    this.folded[side] = folded;
+    // réappliqué à chaque image : resetZ() du retour au repos ne doit pas le défaire
+    const z = folded ? 1 : (PART[a.fore]!.z ?? -1);
+    if (fore.zIndex !== z) fore.zIndex = z;
+    if (folded) {
+      m.clear().rect(-5000, -5000, 10000, 10000).fill(0xffffff);
+      return;
+    }
     const hand = PART[a.hand]!;
     const fp = PART[a.fore]!;
     const k = fp.scale ?? 1;
