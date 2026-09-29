@@ -34,9 +34,11 @@ function fail(s) {
 }
 if (WIN) process.title = 'BOOMTOOTH';
 
-// Vite 7 : Node ^20.19 ou >= 22.12
+// Vite 7 : Node ^20.19 ou >= 22.12 conseillé ; il ne casse vraiment que sans crypto.hash (Node < 20.12 / 21.7)
 const [maj, min] = process.versions.node.split('.').map(Number);
-if (!(maj > 22 || (maj === 22 && min >= 12) || (maj === 20 && min >= 19))) fail(`Node ${process.versions.node} trop ancien : installer Node.js 22 LTS ou plus récent (https://nodejs.org).`);
+if (typeof crypto.hash !== 'function') fail(`Node ${process.versions.node} trop ancien : installer Node.js 22 LTS ou plus récent (https://nodejs.org).`);
+if (!(maj > 22 || (maj === 22 && min >= 12) || (maj === 20 && min >= 19))) log(`Node ${process.versions.node} : Node.js 22 LTS ou plus récent est conseillé (la suite peut afficher un avertissement de Vite).`);
+if (!Number.isInteger(firstPort) || firstPort < 1 || firstPort > 65526) fail(`port invalide : ${opt.port}`);
 fs.mkdirSync(CACHE, { recursive: true });
 
 // ------------------------------------------------------------------ un seul lancement à la fois
@@ -203,7 +205,9 @@ async function stopOldServer(port) {
   if (!targets.length) {
     if (await waitFree(port, 500)) return true;
     const unknown = all.find((p) => !p.cmd);
+    const other = all.find((p) => p.cmd);
     if (unknown) log(`processus ${unknown.pid} sur le port ${port} : ligne de commande illisible, laissé tel quel (fermer l'ancienne fenêtre du serveur à la main)`);
+    else if (other) log(`le port ${port} est occupé par un autre programme qui sert BOOMTOOTH (${other.cmd.slice(0, 120)}) : laissé tel quel`);
     return false;
   }
   for (const t of targets) {
@@ -264,7 +268,7 @@ if (!tryLock()) {
     await sleep(1500);
     for (let p = firstPort; p <= firstPort + 9; p++) {
       const on = await whoIsOn(p);
-      if (typeof on === 'object' && on.info && on.info.stamp === stamp && sameRoot(on.info.root)) await reuse(p, stamp);
+      if (typeof on === 'object' && on.info && on.info.stamp === stamp && sameRoot(on.info.root) && complete2()) await reuse(p, stamp);
     }
     if (tryLock()) break;
   }
@@ -286,7 +290,7 @@ let reserved = false;
 for (let p = firstPort; p <= firstPort + 9; p++) {
   const on = await whoIsOn(p);
   if (typeof on === 'object') {
-    if (on.info && on.info.stamp === stamp && sameRoot(on.info.root) && !opt.rebuild) await reuse(p, stamp);
+    if (on.info && on.info.stamp === stamp && sameRoot(on.info.root) && !opt.rebuild && complete2()) await reuse(p, stamp);
     stale.push({ port: p, info: on.info });
     if (!target && p === firstPort) target = p;
   } else if (on === 'free') {
@@ -311,7 +315,7 @@ if (!target) {
   else fail(`aucun port libre entre ${firstPort} et ${firstPort + 9}.`);
 }
 for (const s of stale) {
-  const why = opt.rebuild && s.info && s.info.stamp === stamp ? 'reconstruction demandée' : s.info ? (sameRoot(s.info.root) ? 'build plus ancienne' : `autre copie du jeu : ${s.info.root}`) : 'build d\'avant ce lanceur';
+  const why = s.info && s.info.stamp === stamp && sameRoot(s.info.root) ? (opt.rebuild ? 'reconstruction demandée' : 'build incomplète') : s.info ? (sameRoot(s.info.root) ? 'build plus ancienne' : `autre copie du jeu : ${s.info.root}`) : 'build d\'avant ce lanceur';
   log(`ancien serveur BOOMTOOTH sur le port ${s.port} (${why})`);
 }
 if (target !== firstPort && !stale.some((s) => s.port === target)) log(`BOOMTOOTH utilisera le port ${target}`);
@@ -319,7 +323,7 @@ const stopStale = async () => {
   for (const s of stale) {
     const ok = await stopOldServer(s.port);
     if (!ok && s.port === target) {
-      log(`impossible d'arrêter le serveur du port ${s.port} : fermer son ancienne fenêtre (titre « BOOMTOOTH » ou « cmd.exe »)`);
+      log(`serveur du port ${s.port} non arrêté : BOOMTOOTH prend un autre port`);
       target = 0;
     }
   }
@@ -336,7 +340,10 @@ const lockHash = fs.existsSync(lockFile) ? crypto.createHash('sha256').update(fs
 const vite = path.join(ROOT, 'node_modules/vite/bin/vite.js');
 const complete = () => fs.existsSync(vite) && fs.existsSync(path.join(ROOT, 'node_modules', '.package-lock.json'));
 const seen = fs.existsSync(depMark) ? fs.readFileSync(depMark, 'utf8').trim() : null;
-if (!complete() || seen === 'installing' || (seen !== null && seen !== lockHash)) {
+// premier passage de ce lanceur : package-lock.json plus récent que la copie de npm → dépendances sans doute périmées
+const npmCopy = path.join(ROOT, 'node_modules', '.package-lock.json');
+const lockNewer = seen === null && fs.existsSync(npmCopy) && fs.existsSync(lockFile) && fs.statSync(lockFile).mtimeMs > fs.statSync(npmCopy).mtimeMs + 1000;
+if (!complete() || seen === 'installing' || lockNewer || (seen !== null && seen !== lockHash)) {
   // npm ci remplace node_modules : les anciens serveurs de CE dossier doivent s'arrêter avant
   const own = stale.filter((s) => !s.info || sameRoot(s.info.root));
   if (own.length) {
@@ -359,12 +366,26 @@ try {
 } catch {
   // absente ou d'avant ce lanceur
 }
-const fresh = built && built.stamp === stamp && fs.existsSync(path.join(dir, 'index.html'));
+/** build complète : chaque fichier listé à la construction est présent (sinon : index.html et ce qu'il référence) */
+function complete2() {
+  const idx = path.join(dir, 'index.html');
+  if (!fs.existsSync(idx)) return false;
+  let files = null;
+  try {
+    files = JSON.parse(fs.readFileSync(path.join(dir, MARK), 'utf8')).files;
+  } catch {
+    // marqueur absent ou illisible
+  }
+  const refs = Array.isArray(files) ? files : [...fs.readFileSync(idx, 'utf8').matchAll(/(?:src|href)="\.\/(assets\/[^"?#]+)"/g)].map((m) => m[1]);
+  return refs.every((r) => fs.existsSync(path.join(dir, r)));
+}
+const whole = complete2();
+const fresh = built && built.stamp === stamp && whole;
 if (opt.rebuild || !fresh) {
-  log(opt.rebuild ? 'reconstruction demandée…' : built ? `le code a changé depuis la build figée (${built.stamp} → ${stamp}) : reconstruction…` : `construction de la build figée ${rel(ROOT, dir)} (${stamp})…`);
+  log(opt.rebuild ? 'reconstruction demandée…' : built && built.stamp === stamp && !whole ? 'build figée incomplète : reconstruction…' : built ? `le code a changé depuis la build figée (${built.stamp} → ${stamp}) : reconstruction…` : `construction de la build figée ${rel(ROOT, dir)} (${stamp})…`);
   const b = spawnSync(process.execPath, [vite, 'build', '--mode', 'production', '--outDir', dir, '--emptyOutDir', '--logLevel', 'warn'], { cwd: ROOT, stdio: 'inherit' });
   if (b.status !== 0) fail('échec de la construction (l\'ancien serveur, s\'il tournait, est resté en place).');
-  built = { game: 'boomtooth', version, stamp, root: ROOT, builtAt: new Date().toISOString() };
+  built = { game: 'boomtooth', version, stamp, root: ROOT, builtAt: new Date().toISOString(), files: walk(dir).map((f) => rel(dir, f)) };
   fs.writeFileSync(path.join(dir, MARK), JSON.stringify(built, null, 1));
 } else {
   if (!sameRoot(built.root)) fs.writeFileSync(path.join(dir, MARK), JSON.stringify({ ...built, root: ROOT }, null, 1));
