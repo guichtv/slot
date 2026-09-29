@@ -391,3 +391,125 @@ ls: cannot access 'assets/generated/mascot/buck-front*': No such file or directo
 exec
 /bin/bash -lc "rg --files -g AGENTS.md -g '"'!node_modules'"' -g '"'!vendor'"'" in /home/user/slot
  exited 1 in 0ms:
+exec
+/bin/bash -lc "python - <<'PY'
+from PIL import Image
+p='/root/.codex/generated_images/01a0ef48-edbf-7181-a60b-d03f4d6daa0d/exec-9d3a830a-8bf1-45ee-b95b-8fd2ff7a0f07.png'
+im=Image.open(p)
+print(im.size, im.mode)
+print(im.getchannel('A').getextrema() if 'A' in im.getbands() else 'No alpha')
+PY" in /home/user/slot
+ succeeded in 69ms:
+(1024, 1536) RGBA
+(0, 254)
+
+exec
+/bin/bash -lc "python - <<'PY'
+from PIL import Image
+im=Image.open('/root/.codex/generated_images/01a0ef48-edbf-7181-a60b-d03f4d6daa0d/exec-9d3a830a-8bf1-45ee-b95b-8fd2ff7a0f07.png')
+a=im.getchannel('A')
+print('alpha bbox',a.getbbox(),'samples',[(p,im.getpixel(p)) for p in [(0,0),(512,20),(15,800),(512,500),(1000,1500),(512,1500)]])
+print('alpha histogram',[(i,n) for i,n in enumerate(a.histogram()) if n>10000])
+PY" in /home/user/slot
+ succeeded in 33ms:
+alpha bbox (0, 39, 1004, 1516) samples [((0, 0), (1, 1, 1, 0)), ((512, 20), (46, 43, 38, 0)), ((15, 800), (65, 50, 27, 0)), ((512, 500), (185, 111, 60, 253)), ((1000, 1500), (5, 1, 1, 0)), ((512, 1500), (14, 7, 2, 0))]
+alpha histogram [(0, 728471), (252, 43451), (253, 748149), (254, 11886)]
+
+codex
+Le premier rendu respecte la vue de face et les principaux détails du costume. Le fichier mesure bien 1024 × 1536 et possède un canal alpha, mais les mains sont trop proches des bords et des pixels résiduels dépassent la silhouette. Je lance l’unique reprise prévue pour corriger ces points.
+
+
+exec
+/bin/bash -lc "python - <<'PY'
+from PIL import Image
+p='/root/.codex/generated_images/01a0ef48-edbf-7181-a60b-d03f4d6daa0d/exec-ef0d58f8-d9a2-4251-a575-4ef2b3e090e9.png'
+im=Image.open(p);a=im.getchannel('A');print(im.size,im.mode,a.getextrema(),a.getbbox());print('solid silhouette bbox',a.point(lambda x:255 if x>128 else 0).getbbox())
+p='/root/.codex/generated_images/01a0ef48-edbf-7181-a60b-d03f4d6daa0d/exec-9d3a830a-8bf1-45ee-b95b-8fd2ff7a0f07.png'
+im=Image.open(p);a=im.getchannel('A');print('first silhouette bbox',a.point(lambda x:255 if x>128 else 0).getbbox())
+PY" in /home/user/slot
+ succeeded in 73ms:
+(1024, 1536) RGBA (0, 254) (0, 20, 1024, 1512)
+solid silhouette bbox (13, 23, 1013, 1478)
+first silhouette bbox (26, 69, 999, 1460)
+
+codex
+La reprise n’a pas amélioré les marges ; je retiens donc le premier rendu. Il possède une vraie transparence, mais conserve des marges latérales d’environ 2,5 % et quelques pixels semi-transparents hors silhouette. Je l’enregistre avec son prompt exact en signalant ces écarts.
+
+
+exec
+/bin/bash -lc 'cp /root/.codex/generated_images/01a0ef48-edbf-7181-a60b-d03f4d6daa0d/exec-9d3a830a-8bf1-45ee-b95b-8fd2ff7a0f07.png assets/generated/mascot/buck-front.png' in /home/user/slot
+ succeeded in 0ms:
+apply patch
+patch: completed
+/home/user/slot/assets/generated/mascot/buck-front.prompt.txt
+diff --git a/assets/generated/mascot/buck-front.prompt.txt b/assets/generated/mascot/buck-front.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..845497de2eeb3381b9b5204058b92ef26c4ddbac
+--- /dev/null
++++ b/assets/generated/mascot/buck-front.prompt.txt
+@@ -0,0 +1,9 @@
++Use case: stylized-concept
++Asset type: BOOMTOOTH / Crownforge front model sheet for future rigging or image-to-3D. Generate ONE single complete connected character, not separated parts, no multiple views.
++Input images: Image 1 (/home/user/slot/assets/generated/mascot/buck-ref.png) is the mandatory character identity, costume, proportions and drawing reference. Image 2 (/home/user/slot/assets/generated/directions/D1.png) is the mandatory exact house drawing style reference. Use references only; do not reproduce their backgrounds or lettering.
++Output: exactly 1024×1536 portrait PNG with genuine transparent alpha background. Entire centered character from boots through top of helmet; about 5% clear margin on all sides, nothing cropped. No scenery, no ground shadow, no halo, no checkerboard, no white background.
++Subject: Buck Boomtooth, stocky burly brown beaver construction foreman, same character and proportions as buck-ref. Strictly FRONT view, orthographic, body, head and gaze facing straight at viewer, never three-quarter. Symmetric balanced standing A-pose, feet slightly apart flat on ground, weight equally distributed. Arms spread roughly 30 degrees away from body on each side, elbows only slightly bent; furry forearms emerge below elbow-length rolled cuffs. Hands open relaxed, palms facing thighs, exactly four chunky clawed digits clearly readable on each hand. Clear gaps between arms/hands and torso/hips; all limbs and boots unobscured and readable.
++Head: battered orange hardhat with centered round headlamp; two large forward-facing eyes, pale muzzle, two large incisors: character's LEFT incisor (RIGHT side of image) GOLD, other incisor cream. Matchstick held at character's right mouth corner (LEFT side of image). Neutral expression with subtle confident crooked smile, mouth almost closed, no wide grin. Preserve familiar cheek fur, nose and facial identity from image 1.
++Costume exactly matching image 1: red and black plaid flannel shirt with sleeves rolled to elbows, black suspenders with metal fittings, brown leather belt with large gold buckle and tool pouches, worn blue jeans, heavy brown work boots with golden laces. Large flat dark brown crosshatched scaly beaver tail behind legs, centered, with tip resting at ground level between and behind boots. Tail visible through leg gap, not sticking sideways.
++Style: match D1 and buck-ref exactly: adult 2D comic/cartoon, heavy slightly irregular black brush contours (4–7 px at 1024px), finer interior lines, crisp two-tone cel shading per volume, one sharp off-white highlight per volume, simple readable shapes, drawn materials and fur, riveted metal. Warm golden-orange late-afternoon key light from image LEFT, blue-violet shadows. Controlled saturated palette: burnt orange #E8742A, sky orange #F39A3C, pine #2F5D46 / #1E3B2E, granite #6F7F92 / #46526A, red #D7332B, gold #F2B233, honey wood #C98A45, dark wood #6B4526, cream #F4E6C8, ink #1B1410.
++No text, logos, watermark, signatures, decor, photorealism, smooth 3D, generic neon, airbrush, gradients, artistic blur or border effects. Preserve real background transparency.
+
+diff --git a/assets/generated/mascot/buck-front.prompt.txt b/assets/generated/mascot/buck-front.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..845497de2eeb3381b9b5204058b92ef26c4ddbac
+--- /dev/null
++++ b/assets/generated/mascot/buck-front.prompt.txt
+@@ -0,0 +1,9 @@
++Use case: stylized-concept
++Asset type: BOOMTOOTH / Crownforge front model sheet for future rigging or image-to-3D. Generate ONE single complete connected character, not separated parts, no multiple views.
++Input images: Image 1 (/home/user/slot/assets/generated/mascot/buck-ref.png) is the mandatory character identity, costume, proportions and drawing reference. Image 2 (/home/user/slot/assets/generated/directions/D1.png) is the mandatory exact house drawing style reference. Use references only; do not reproduce their backgrounds or lettering.
++Output: exactly 1024×1536 portrait PNG with genuine transparent alpha background. Entire centered character from boots through top of helmet; about 5% clear margin on all sides, nothing cropped. No scenery, no ground shadow, no halo, no checkerboard, no white background.
++Subject: Buck Boomtooth, stocky burly brown beaver construction foreman, same character and proportions as buck-ref. Strictly FRONT view, orthographic, body, head and gaze facing straight at viewer, never three-quarter. Symmetric balanced standing A-pose, feet slightly apart flat on ground, weight equally distributed. Arms spread roughly 30 degrees away from body on each side, elbows only slightly bent; furry forearms emerge below elbow-length rolled cuffs. Hands open relaxed, palms facing thighs, exactly four chunky clawed digits clearly readable on each hand. Clear gaps between arms/hands and torso/hips; all limbs and boots unobscured and readable.
++Head: battered orange hardhat with centered round headlamp; two large forward-facing eyes, pale muzzle, two large incisors: character's LEFT incisor (RIGHT side of image) GOLD, other incisor cream. Matchstick held at character's right mouth corner (LEFT side of image). Neutral expression with subtle confident crooked smile, mouth almost closed, no wide grin. Preserve familiar cheek fur, nose and facial identity from image 1.
++Costume exactly matching image 1: red and black plaid flannel shirt with sleeves rolled to elbows, black suspenders with metal fittings, brown leather belt with large gold buckle and tool pouches, worn blue jeans, heavy brown work boots with golden laces. Large flat dark brown crosshatched scaly beaver tail behind legs, centered, with tip resting at ground level between and behind boots. Tail visible through leg gap, not sticking sideways.
++Style: match D1 and buck-ref exactly: adult 2D comic/cartoon, heavy slightly irregular black brush contours (4–7 px at 1024px), finer interior lines, crisp two-tone cel shading per volume, one sharp off-white highlight per volume, simple readable shapes, drawn materials and fur, riveted metal. Warm golden-orange late-afternoon key light from image LEFT, blue-violet shadows. Controlled saturated palette: burnt orange #E8742A, sky orange #F39A3C, pine #2F5D46 / #1E3B2E, granite #6F7F92 / #46526A, red #D7332B, gold #F2B233, honey wood #C98A45, dark wood #6B4526, cream #F4E6C8, ink #1B1410.
++No text, logos, watermark, signatures, decor, photorealism, smooth 3D, generic neon, airbrush, gradients, artistic blur or border effects. Preserve real background transparency.
+
+codex
+Produits :
+- [buck-front.png](/home/user/slot/assets/generated/mascot/buck-front.png)
+- [buck-front.prompt.txt](/home/user/slot/assets/generated/mascot/buck-front.prompt.txt)
+
+Méthode : outil natif `image_gen`, avec références, puis une reprise. Premier rendu conservé.
+Dimensions : **1024 × 1536**. Canal alpha : **oui**.
+
+Défauts restants : marges latérales ≈ 2,5 % au lieu de 5 %, pixels semi-transparents résiduels autour de la silhouette, queue légèrement au-dessus du niveau des semelles.
+
+Aucun code du jeu modifié.
+diff --git a/assets/generated/mascot/buck-front.prompt.txt b/assets/generated/mascot/buck-front.prompt.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..845497de2eeb3381b9b5204058b92ef26c4ddbac
+--- /dev/null
++++ b/assets/generated/mascot/buck-front.prompt.txt
+@@ -0,0 +1,9 @@
++Use case: stylized-concept
++Asset type: BOOMTOOTH / Crownforge front model sheet for future rigging or image-to-3D. Generate ONE single complete connected character, not separated parts, no multiple views.
++Input images: Image 1 (/home/user/slot/assets/generated/mascot/buck-ref.png) is the mandatory character identity, costume, proportions and drawing reference. Image 2 (/home/user/slot/assets/generated/directions/D1.png) is the mandatory exact house drawing style reference. Use references only; do not reproduce their backgrounds or lettering.
++Output: exactly 1024×1536 portrait PNG with genuine transparent alpha background. Entire centered character from boots through top of helmet; about 5% clear margin on all sides, nothing cropped. No scenery, no ground shadow, no halo, no checkerboard, no white background.
++Subject: Buck Boomtooth, stocky burly brown beaver construction foreman, same character and proportions as buck-ref. Strictly FRONT view, orthographic, body, head and gaze facing straight at viewer, never three-quarter. Symmetric balanced standing A-pose, feet slightly apart flat on ground, weight equally distributed. Arms spread roughly 30 degrees away from body on each side, elbows only slightly bent; furry forearms emerge below elbow-length rolled cuffs. Hands open relaxed, palms facing thighs, exactly four chunky clawed digits clearly readable on each hand. Clear gaps between arms/hands and torso/hips; all limbs and boots unobscured and readable.
++Head: battered orange hardhat with centered round headlamp; two large forward-facing eyes, pale muzzle, two large incisors: character's LEFT incisor (RIGHT side of image) GOLD, other incisor cream. Matchstick held at character's right mouth corner (LEFT side of image). Neutral expression with subtle confident crooked smile, mouth almost closed, no wide grin. Preserve familiar cheek fur, nose and facial identity from image 1.
++Costume exactly matching image 1: red and black plaid flannel shirt with sleeves rolled to elbows, black suspenders with metal fittings, brown leather belt with large gold buckle and tool pouches, worn blue jeans, heavy brown work boots with golden laces. Large flat dark brown crosshatched scaly beaver tail behind legs, centered, with tip resting at ground level between and behind boots. Tail visible through leg gap, not sticking sideways.
++Style: match D1 and buck-ref exactly: adult 2D comic/cartoon, heavy slightly irregular black brush contours (4–7 px at 1024px), finer interior lines, crisp two-tone cel shading per volume, one sharp off-white highlight per volume, simple readable shapes, drawn materials and fur, riveted metal. Warm golden-orange late-afternoon key light from image LEFT, blue-violet shadows. Controlled saturated palette: burnt orange #E8742A, sky orange #F39A3C, pine #2F5D46 / #1E3B2E, granite #6F7F92 / #46526A, red #D7332B, gold #F2B233, honey wood #C98A45, dark wood #6B4526, cream #F4E6C8, ink #1B1410.
++No text, logos, watermark, signatures, decor, photorealism, smooth 3D, generic neon, airbrush, gradients, artistic blur or border effects. Preserve real background transparency.
+
+tokens used
+27,782
+Produits :
+- [buck-front.png](/home/user/slot/assets/generated/mascot/buck-front.png)
+- [buck-front.prompt.txt](/home/user/slot/assets/generated/mascot/buck-front.prompt.txt)
+
+Méthode : outil natif `image_gen`, avec références, puis une reprise. Premier rendu conservé.
+Dimensions : **1024 × 1536**. Canal alpha : **oui**.
+
+Défauts restants : marges latérales ≈ 2,5 % au lieu de 5 %, pixels semi-transparents résiduels autour de la silhouette, queue légèrement au-dessus du niveau des semelles.
+
+Aucun code du jeu modifié.
