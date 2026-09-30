@@ -5,26 +5,21 @@
 import type * as T from 'three';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-export type ThreeMod = typeof import('three');
+// Named imports only: three is tree-shaken to what the cat uses (budget: three + loaders <= 200 KB gzip).
+import {
+  WebGLRenderer, Scene, PerspectiveCamera, Group, PMREMGenerator, DirectionalLight, SRGBColorSpace, NeutralToneMapping,
+  AnimationMixer, LoopOnce, LoopRepeat, Vector3, Quaternion, PropertyBinding,
+} from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
-export interface ThreeBundle {
-  THREE: ThreeMod;
-  GLTFLoader: typeof import('three/examples/jsm/loaders/GLTFLoader.js').GLTFLoader;
-  MeshoptDecoder: typeof import('three/examples/jsm/libs/meshopt_decoder.module.js').MeshoptDecoder;
-  RoomEnvironment: typeof import('three/examples/jsm/environments/RoomEnvironment.js').RoomEnvironment;
-}
-
-let bundlePromise: Promise<ThreeBundle> | null = null;
-/** Starts downloading three + loaders (called as soon as the welcome screen shows). */
-export function loadThreeBundle(): Promise<ThreeBundle> {
-  bundlePromise ??= Promise.all([
-    import('three'),
-    import('three/examples/jsm/loaders/GLTFLoader.js'),
-    import('three/examples/jsm/libs/meshopt_decoder.module.js'),
-    import('three/examples/jsm/environments/RoomEnvironment.js'),
-  ]).then(([THREE, g, m, r]) => ({ THREE, GLTFLoader: g.GLTFLoader, MeshoptDecoder: m.MeshoptDecoder, RoomEnvironment: r.RoomEnvironment }));
-  return bundlePromise;
-}
+export const THREE_SUBSET = { WebGLRenderer, Scene, PerspectiveCamera, Group, PMREMGenerator, DirectionalLight, SRGBColorSpace, NeutralToneMapping, AnimationMixer, LoopOnce, LoopRepeat, Vector3, Quaternion, PropertyBinding };
+export type ThreeMod = typeof THREE_SUBSET;
+export const bundle = { THREE: THREE_SUBSET, GLTFLoader, MeshoptDecoder, RoomEnvironment };
+export type ThreeBundle = typeof bundle;
+/** kept for the tools pages */
+export function loadThreeBundle(): Promise<ThreeBundle> { return Promise.resolve(bundle); }
 
 export interface CatStageOptions {
   width: number; // CSS px of the cat zone

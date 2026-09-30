@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite --port 5340 --strictPort",
     "build": "vite build --mode production --outDir dist-public",
-    "build:qa": "vite build --mode qa --outDir dist-qa",
+    "build:qa": "vite build --mode qa --outDir dist-qa && node tools/qa-extras.mjs dist-qa",
     "preview": "vite preview --outDir dist-qa --port 5341 --strictPort",
     "preview:public": "vite preview --outDir dist-public --port 5342 --strictPort",
     "typecheck": "tsc --noEmit -p .",

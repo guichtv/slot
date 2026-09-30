@@ -3,7 +3,7 @@
 // cat if WebGL2 is missing, the GLB fails or takes > 8 s, the game stays < 40 fps for 3 s, or
 // the context is lost and not restored. Update order inside one tick:
 //   director.update(dt) -> mixer.update(dt) -> three render -> texture.source.update() -> Pixi render.
-import { Container, Sprite, Texture, Graphics, CanvasSource, Assets, Point } from 'pixi.js';
+import { Container, Sprite, Texture, Graphics, CanvasSource, Assets, Point, type PointData } from 'pixi.js';
 import type { CatStage, ThreeBundle } from './cat-stage';
 import type { CatRig } from './cat-rig';
 import type { CatDirector, CatMoment, Background } from './cat-director';
@@ -197,7 +197,7 @@ export class CatView {
   }
 
   /** Make the head follow a global point (grid, laser dot, scatter). null = free. */
-  lookAtGlobal(p: Point | null): void {
+  lookAtGlobal(p: PointData | null): void {
     if (!this.rig) return;
     if (!p) { this.rig.clearLook(); return; }
     const local = this.sprite.toLocal(p);

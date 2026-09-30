@@ -1,0 +1,34 @@
+Utilise $imagegen et l'outil natif image_gen (PAS un script CLI/API) ; mission limitée à ces images et à leur rapport, ne crée ni ne modifie aucun code du jeu, aucun autre fichier du dépôt.
+
+STYLE CYBER CAT (à lire avant chaque image)
+Rendu 3D stylisé propre de jeu vidéo, même famille que le chat robot de référence (docs/imagegen/ref/cat-pose-ref.png) : céramique blanche brillante (#EEF3F9, ombres #C9D3E0), métal anodisé bleu satiné (#2F6FE0, contours #1B3F8F), lumière émissive cyan (#3FEAFF, cœur #9AF6FF) qui éclaire vraiment son voisinage, visière et verre sombres (#0A0D14, indigo #0B1230). Décor : ville néon de nuit sous une pluie fine, indigo #0B1230 à #141D45, brume sarcelle #0F3B4A, néons rares magenta #FF3FA4 et ambre #FFB547 en tubes de verre ; le décor est plus sombre et moins contrasté que les symboles et que le chat.
+Lumière identique partout : principale blanche chaude en haut à gauche (environ 45°), contour cyan en arrière à droite, remplissage bleu très faible, ombres douces.
+Interdits : photo-réalisme, plastique générique, style BD à l'encre, dégradés par défaut, halo flou sans source, bordures lumineuses décoratives, emoji, texte non demandé, marque ou logo existant, copie d'un studio.
+Détourage : vrai canal alpha, pas de damier, pas de halo ni de frange, sujet entier non coupé, marge de 3 à 6 %. À défaut seulement : fond chroma #00FF00 uni, à signaler dans le rapport.
+
+Références à charger avec view_image AVANT de générer :
+- docs/imagegen/ref/cat-pose-ref.png : le chat rendu depuis le GLB (palette, matières, lumière).
+- assets/generated/ref/ref.screen.png : l'écran de référence validé (composition, style du décor et de l'interface).
+
+Mission « decor-p » : Decor portrait + ambiances bonus. Un appel image_gen par image, dans cet ordre :
+1. Fichier : assets/generated/decor-p/decor.p.bg.png
+   Sujet : Portrait version of the whole background (sky + far + mid city with the maglev track at 30% height), same style as the desktop layers, lower contrast in the centre where the grid sits.
+   Taille : 1024x1536 px ; image pleine, sans transparence.
+2. Fichier : assets/generated/decor-p/decor.p.near.png
+   Sujet : Portrait foreground: glass lab frame on the edges and the wet rooftop floor on the bottom 20% with a small platform on the right (feet line 83% height, 74% width).
+   Taille : 1024x1536 px ; fond transparent (vrai alpha).
+3. Fichier : assets/generated/decor-p/decor.scan.png
+   Sujet : Bonus 'scan mode' layer: the mid city redrawn as cyan wireframe / holographic scan lines over transparency, matching decor.mid silhouettes.
+   Taille : 1920x1080 px ; fond transparent (vrai alpha).
+4. Fichier : assets/generated/decor-p/decor.scan2.png
+   Sujet : DOUBLE REGARD variant of the scan layer: two overlapping scan sweeps (cyan and white), a large faint cat-eye iris in the sky. Transparent.
+   Taille : 1920x1080 px ; fond transparent (vrai alpha).
+
+Pour chaque image :
+- générer avec image_gen ;
+- l'inspecter avec view_image (sujet entier, pas de coupe, pas de texte parasite, pas de damier, pas de halo, conformité au style et aux couleurs) ;
+- si un défaut est visible, régénérer UNE seule fois, en mode édition depuis l'image obtenue ;
+- copier le fichier final depuis $CODEX_HOME/generated_images/… vers le chemin indiqué (créer le dossier si besoin) ;
+- écrire à côté un fichier <nom>.prompt.txt contenant le prompt exact utilisé.
+
+Rapport final (dans ta réponse, en français) : pour chaque image, le chemin, la méthode réellement utilisée (image_gen natif, édition), les dimensions, la présence d'un vrai alpha ou d'un fond chroma #00FF00, et les défauts restants. Si image_gen est inaccessible ou refuse, dis-le clairement et arrête-toi : ne produis jamais de SVG, de dessin en code, de copie d'une autre image ni d'image factice à la place.

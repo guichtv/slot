@@ -13,6 +13,7 @@ export type CatMoment =
   | 'tier1' // dance loop while the counter runs
   | 'tierHigh' | 'maxWin' // flip (salto) -> dance
   | 'bonusEnter' // hooks (punch tears the popup) -> run -> alert
+  | 'trigger' // bonus triggered: salto, back to the background
   | 'winEnd'; // gain over: back to background in 0.2 s
 
 export type Background = 'idle' | 'idle34';
@@ -136,6 +137,9 @@ export class CatDirector {
         this.schedule(0.22, () => this.onCue?.('punch'));
         return true;
       }
+      case 'trigger':
+        this.gesture('flip', 3, { fadeIn: CAT_FADES.loopToGesture, fadeOut: CAT_FADES.gestureToBg, speed: this.scale(true) });
+        return true;
       case 'winEnd':
         this.toBackground(0.2);
         return true;
@@ -161,5 +165,5 @@ export class CatDirector {
 
 const PRIORITY: Record<CatMoment, number> = {
   intro: 3, bonusReturn: 3, spinStart: 0, laser: 1, scatterLand: 1, anticipation: 1, nothing: 0,
-  smallWin: 2, tier1: 3, tierHigh: 3, maxWin: 3, bonusEnter: 3, winEnd: 0,
+  smallWin: 2, tier1: 3, tierHigh: 3, maxWin: 3, bonusEnter: 3, trigger: 3, winEnd: 0,
 };

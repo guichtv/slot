@@ -1,0 +1,39 @@
+Utilise $imagegen et l'outil natif image_gen (PAS un script CLI/API) ; mission limitée à ces images et à leur rapport, ne crée ni ne modifie aucun code du jeu, aucun autre fichier du dépôt.
+
+STYLE CYBER CAT (à lire avant chaque image)
+Rendu 3D stylisé propre de jeu vidéo, même famille que le chat robot de référence (docs/imagegen/ref/cat-pose-ref.png) : céramique blanche brillante (#EEF3F9, ombres #C9D3E0), métal anodisé bleu satiné (#2F6FE0, contours #1B3F8F), lumière émissive cyan (#3FEAFF, cœur #9AF6FF) qui éclaire vraiment son voisinage, visière et verre sombres (#0A0D14, indigo #0B1230). Décor : ville néon de nuit sous une pluie fine, indigo #0B1230 à #141D45, brume sarcelle #0F3B4A, néons rares magenta #FF3FA4 et ambre #FFB547 en tubes de verre ; le décor est plus sombre et moins contrasté que les symboles et que le chat.
+Lumière identique partout : principale blanche chaude en haut à gauche (environ 45°), contour cyan en arrière à droite, remplissage bleu très faible, ombres douces.
+Interdits : photo-réalisme, plastique générique, style BD à l'encre, dégradés par défaut, halo flou sans source, bordures lumineuses décoratives, emoji, texte non demandé, marque ou logo existant, copie d'un studio.
+Détourage : vrai canal alpha, pas de damier, pas de halo ni de frange, sujet entier non coupé, marge de 3 à 6 %. À défaut seulement : fond chroma #00FF00 uni, à signaler dans le rapport.
+
+Références à charger avec view_image AVANT de générer :
+- docs/imagegen/ref/cat-pose-ref.png : le chat rendu depuis le GLB (palette, matières, lumière).
+- assets/generated/ref/ref.screen.png : l'écran de référence validé (composition, style du décor et de l'interface).
+
+Mission « ui-pop-a » : Popup, fin de bonus, banniere +N FS, plaques de paliers. Un appel image_gen par image, dans cet ordre :
+1. Fichier : assets/generated/ui-pop-a/ui.popup.png
+   Sujet : Rounded holographic popup frame: dark translucent navy glass, white ceramic corners, cyan edge light. Empty inside, for 9-slice.
+   Taille : 1536x1024 px ; fond transparent (vrai alpha).
+   Cadre pour 9-slice : coins et bords réguliers, marges 140/140/140/140 px (gauche/haut/droite/bas) sans détail qui change le long des bords, centre vide ou uniforme.
+2. Fichier : assets/generated/ui-pop-a/ui.total.png
+   Sujet : End of bonus plate: large rounded holo plate with a laurel of circuit traces and chips around an empty centre for the amount. No text.
+   Taille : 1536x1024 px ; fond transparent (vrai alpha).
+3. Fichier : assets/generated/ui-pop-a/ui.banner.fs.png
+   Sujet : Banner ribbon for '+N FS': anodized blue ribbon with cyan light edges and a cat-eye emblem, empty centre for the text.
+   Taille : 1024x512 px ; fond transparent (vrai alpha).
+4. Fichier : assets/generated/ui-pop-a/ui.tier.png
+   Sujet : Big win title plate: wide beveled plate of white ceramic and blue anodized metal with cyan edge light, empty centre for the tier word; cat ears on the top edge.
+   Taille : 1536x768 px ; fond transparent (vrai alpha).
+5. Fichier : assets/generated/ui-pop-a/ui.tier.max.png
+   Sujet : MAX WIN variant of the plate: gold-white chrome, stronger light, crown of chips. Empty centre.
+   Taille : 1536x768 px ; fond transparent (vrai alpha).
+   À faire en MODE ÉDITION depuis ui.tier (même cadrage, même lumière) : seule la différence décrite change.
+
+Pour chaque image :
+- générer avec image_gen ;
+- l'inspecter avec view_image (sujet entier, pas de coupe, pas de texte parasite, pas de damier, pas de halo, conformité au style et aux couleurs) ;
+- si un défaut est visible, régénérer UNE seule fois, en mode édition depuis l'image obtenue ;
+- copier le fichier final depuis $CODEX_HOME/generated_images/… vers le chemin indiqué (créer le dossier si besoin) ;
+- écrire à côté un fichier <nom>.prompt.txt contenant le prompt exact utilisé.
+
+Rapport final (dans ta réponse, en français) : pour chaque image, le chemin, la méthode réellement utilisée (image_gen natif, édition), les dimensions, la présence d'un vrai alpha ou d'un fond chroma #00FF00, et les défauts restants. Si image_gen est inaccessible ou refuse, dis-le clairement et arrête-toi : ne produis jamais de SVG, de dessin en code, de copie d'une autre image ni d'image factice à la place.

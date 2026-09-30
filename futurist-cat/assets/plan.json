@@ -1,0 +1,831 @@
+{
+  "version": 1,
+  "note": "Source of truth for every illustration (ImageGen via Codex CLI). Sources: assets/generated/<lot>/<id>.png. Exports: public/assets/<out>. The public build refuses to build while a 'required' image is missing.",
+  "lots": {
+    "ref": {
+      "title": "Image de reference de l'ecran (1536x1024)",
+      "order": 1
+    },
+    "identity": {
+      "title": "Logo, ecran Crownforge, cartes d'accueil",
+      "order": 2
+    },
+    "decor-a": {
+      "title": "Decor desktop en calques (ciel, lointain, milieu, labo + sol)",
+      "order": 3
+    },
+    "decor-b": {
+      "title": "Elements animables du decor (train, drone, enseignes)",
+      "order": 4
+    },
+    "decor-p": {
+      "title": "Decor portrait + ambiances bonus",
+      "order": 5
+    },
+    "grid": {
+      "title": "Cadre de grille et fond de case",
+      "order": 6
+    },
+    "sym-low": {
+      "title": "Glyphes holographiques L1-L4",
+      "order": 7
+    },
+    "sym-high": {
+      "title": "Premiums H1-H4 + pieces animees",
+      "order": 8
+    },
+    "sym-special": {
+      "title": "WILD et SCATTER + pieces",
+      "order": 9
+    },
+    "mech": {
+      "title": "Point laser, puces, jeton multiplicateur",
+      "order": 10
+    },
+    "ui-hud": {
+      "title": "HUD : SPIN, BUY BONUS, boutons, panneau",
+      "order": 11
+    },
+    "ui-pop-a": {
+      "title": "Popup, fin de bonus, banniere +N FS, plaques de paliers",
+      "order": 12
+    },
+    "ui-pop-b": {
+      "title": "Illustrations d'intro des bonus et features",
+      "order": 13
+    },
+    "ui-shop": {
+      "title": "Boutique : cartes d'offres",
+      "order": 14
+    },
+    "fx": {
+      "title": "Planches de FX",
+      "order": 15
+    },
+    "media": {
+      "title": "Medias Stake",
+      "order": 16
+    }
+  },
+  "images": {
+    "ref.screen": {
+      "lot": "ref",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": false,
+      "required": false,
+      "out": null,
+      "subject": "Full game screen reference: rooftop glass lab above rainy neon city at night, central 5x4 slot grid with readable symbols, CYBER CAT logo top-left, empty space for the cat on the right of the grid (the cat pose image is given as reference and must be pasted in place as a guide), compact HUD at the bottom with a big round SPIN button on the right, BALANCE / BET / WIN fields and an illustrated BUY BONUS button on the left. Exact texts: CYBER CAT, SPIN, BUY BONUS."
+    },
+    "logo": {
+      "lot": "identity",
+      "size": [
+        1536,
+        768
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/logo.webp",
+      "maxW": 900,
+      "subject": "Game logo 'CYBER CAT' in chunky beveled sci-fi letters: white glossy ceramic faces, anodized blue sides, thin cyan emissive edge light; a stylised cat-eye / 'C' emblem integrated in the first C; readable at 180 px wide. Exact text: CYBER CAT."
+    },
+    "loading.crownforge": {
+      "lot": "identity",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/crownforge.webp",
+      "maxW": 640,
+      "subject": "Studio logo 'CROWNFORGE': a crown forged from glowing metal over an anvil silhouette, same clean 3D render and light, cyan rim light. Exact text: CROWNFORGE."
+    },
+    "welcome.laser": {
+      "lot": "identity",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/welcome-laser.webp",
+      "maxW": 640,
+      "subject": "Welcome card art: the robot cat's cyan eyes firing a laser dot that hops across three slot cells, each cell turning into a better symbol, last cell stamped with a multiplier token. No text."
+    },
+    "welcome.ninelives": {
+      "lot": "identity",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/welcome-ninelives.webp",
+      "maxW": 640,
+      "subject": "Welcome card art: nine cyan cat-eye lights arranged like lives over a slot grid glowing like a circuit board with small chips on cells. No text."
+    },
+    "welcome.doublegaze": {
+      "lot": "identity",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/welcome-doublegaze.webp",
+      "maxW": 640,
+      "subject": "Welcome card art: two laser beams from two cat eyes crossing over a grid, two multiplier tokens meeting. No text."
+    },
+    "decor.sky": {
+      "lot": "decor-a",
+      "size": [
+        1920,
+        1080
+      ],
+      "alpha": false,
+      "required": true,
+      "out": "decor/sky.webp",
+      "subject": "Background layer 1: deep indigo night sky over the city, soft rain haze, distant clouds lit from below by city glow. No buildings."
+    },
+    "decor.far": {
+      "lot": "decor-a",
+      "size": [
+        1920,
+        1080
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "decor/far.webp",
+      "subject": "Background layer 2: distant skyline silhouettes, hazy, low contrast, tiny window lights, a few far neon towers. Transparent above the skyline."
+    },
+    "decor.mid": {
+      "lot": "decor-a",
+      "size": [
+        1920,
+        1080
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "decor/mid.webp",
+      "subject": "Background layer 3: mid-distance towers with neon signage (without readable text), an elevated maglev track crossing horizontally at 38% height (empty track, the train is a separate sprite). Transparent sky."
+    },
+    "decor.near": {
+      "lot": "decor-a",
+      "size": [
+        1920,
+        1080
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "decor/near.webp",
+      "subject": "Foreground: the glass rooftop lab frame around the scene (slim white ceramic pillars and glass panes with rain drops on the left and right edges), open in the middle so the grid and the cat stay unobstructed; reflective wet rooftop floor along the bottom 22% with neon reflections; a low platform on the right where the cat stands (feet line at 80% height, 80% width)."
+    },
+    "decor.train": {
+      "lot": "decor-b",
+      "size": [
+        1536,
+        256
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "decor/train.webp",
+      "subject": "Side view of a sleek white-and-blue maglev train, 4 cars, lit windows, cyan underglow, facing right. Isolated on transparency."
+    },
+    "decor.drone": {
+      "lot": "decor-b",
+      "size": [
+        512,
+        512
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "decor/drone.webp",
+      "subject": "Small city surveillance drone, white ceramic shell, four rotors, cyan status light, three-quarter view. Isolated."
+    },
+    "decor.sign1": {
+      "lot": "decor-b",
+      "size": [
+        512,
+        768
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "decor/sign1.webp",
+      "subject": "Vertical neon sign made of glass tubes shaped like a cat head outline, magenta tubes ON, on a small dark metal bracket. Isolated. No text."
+    },
+    "decor.sign2": {
+      "lot": "decor-b",
+      "size": [
+        768,
+        512
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "decor/sign2.webp",
+      "subject": "Horizontal neon sign of glass tubes: a fish skeleton and a paw print, amber and cyan tubes ON, dark metal frame. Isolated. No text."
+    },
+    "decor.sign1_off": {
+      "lot": "decor-b",
+      "size": [
+        512,
+        768
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "decor/sign1-off.webp",
+      "edit_of": "decor.sign1",
+      "subject": "Same sign as decor.sign1, tubes OFF (unlit glass, dark)."
+    },
+    "decor.p.bg": {
+      "lot": "decor-p",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha": false,
+      "required": true,
+      "out": "decor/portrait-bg.webp",
+      "subject": "Portrait version of the whole background (sky + far + mid city with the maglev track at 30% height), same style as the desktop layers, lower contrast in the centre where the grid sits."
+    },
+    "decor.p.near": {
+      "lot": "decor-p",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "decor/portrait-near.webp",
+      "subject": "Portrait foreground: glass lab frame on the edges and the wet rooftop floor on the bottom 20% with a small platform on the right (feet line 83% height, 74% width)."
+    },
+    "decor.scan": {
+      "lot": "decor-p",
+      "size": [
+        1920,
+        1080
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "decor/scan.webp",
+      "subject": "Bonus 'scan mode' layer: the mid city redrawn as cyan wireframe / holographic scan lines over transparency, matching decor.mid silhouettes."
+    },
+    "decor.scan2": {
+      "lot": "decor-p",
+      "size": [
+        1920,
+        1080
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "decor/scan2.webp",
+      "subject": "DOUBLE REGARD variant of the scan layer: two overlapping scan sweeps (cyan and white), a large faint cat-eye iris in the sky. Transparent."
+    },
+    "grid.frame": {
+      "lot": "grid",
+      "size": [
+        1536,
+        1280
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "grid/frame.webp",
+      "slice9": [
+        170,
+        170,
+        170,
+        170
+      ],
+      "subject": "Slot grid frame (empty inside, fully transparent centre): glossy white ceramic border with anodized blue inner lip, thin cyan emissive line, small bolts, cat-ear notches at the two top corners. Front view, flat for 9-slice."
+    },
+    "grid.cell": {
+      "lot": "grid",
+      "size": [
+        512,
+        512
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "grid/cell.webp",
+      "slice9": [
+        60,
+        60,
+        60,
+        60
+      ],
+      "subject": "Single dark glass cell tile: very dark navy glass, rounded corners, subtle hex micro-pattern, faint top highlight. Front view."
+    },
+    "sym.L1": {
+      "lot": "sym-low",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "symbols/L1.webp",
+      "subject": "Low symbol: holographic TRIANGLE glyph projected from a tiny white ceramic emitter base, teal-green (#3FFFB2) light, one clear triangle outline with inner facet. Front view, centred."
+    },
+    "sym.L2": {
+      "lot": "sym-low",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "symbols/L2.webp",
+      "subject": "Low symbol: holographic RING glyph (thick circle) from the same emitter base, cyan (#3FE0FF) light."
+    },
+    "sym.L3": {
+      "lot": "sym-low",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "symbols/L3.webp",
+      "subject": "Low symbol: holographic DIAMOND glyph (rhombus) from the same emitter base, violet (#9B7BFF) light."
+    },
+    "sym.L4": {
+      "lot": "sym-low",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "symbols/L4.webp",
+      "subject": "Low symbol: holographic HEXAGON glyph from the same emitter base, magenta (#FF5FD1) light."
+    },
+    "sym.H1": {
+      "lot": "sym-high",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "symbols/H1.webp",
+      "subject": "Premium 1: a can of 'nano-food' for robot cats: white ceramic can with blue anodized rims, cyan glowing fish-bone emblem on the label (no text), pull-tab lid on top. Three-quarter view."
+    },
+    "sym.H1.lid": {
+      "lot": "sym-high",
+      "size": [
+        512,
+        512
+      ],
+      "alpha": true,
+      "required": false,
+      "out": "symbols/H1-lid.webp",
+      "edit_of": "sym.H1",
+      "subject": "Only the pull-tab lid of sym.H1, isolated, same angle (animated part)."
+    },
+    "sym.H2": {
+      "lot": "sym-high",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "symbols/H2.webp",
+      "subject": "Premium 2: a ball of fibre-optic yarn, translucent fibres wound around a white core, fibre tips glowing cyan and soft violet, one loose strand. Three-quarter view."
+    },
+    "sym.H3": {
+      "lot": "sym-high",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "symbols/H3.webp",
+      "subject": "Premium 3: a chrome robot fish, mirror chrome body with blue anodized fins, cyan eye light, segmented tail, side view facing left."
+    },
+    "sym.H3.tail": {
+      "lot": "sym-high",
+      "size": [
+        512,
+        512
+      ],
+      "alpha": true,
+      "required": false,
+      "out": "symbols/H3-tail.webp",
+      "edit_of": "sym.H3",
+      "subject": "Only the segmented tail of sym.H3, isolated (animated part)."
+    },
+    "sym.H4": {
+      "lot": "sym-high",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "symbols/H4.webp",
+      "subject": "Top premium: a mouse-drone: white ceramic mouse-shaped body with round ears, blue anodized details, cyan eyes, long cable tail, two small rotors on the back. Three-quarter view."
+    },
+    "sym.H4.rotor": {
+      "lot": "sym-high",
+      "size": [
+        256,
+        256
+      ],
+      "alpha": true,
+      "required": false,
+      "out": "symbols/H4-rotor.webp",
+      "subject": "Single small rotor seen from above (animated part, spins)."
+    },
+    "sym.W": {
+      "lot": "sym-special",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "symbols/W.webp",
+      "subject": "WILD: the cat's 'C' emblem as a chunky beveled badge: white ceramic C with anodized blue inner ring and bright cyan core light, the word WILD in bold sci-fi letters under it. Exact text: WILD. Flashy, own light."
+    },
+    "sym.W.ring": {
+      "lot": "sym-special",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": false,
+      "out": "symbols/W-ring.webp",
+      "subject": "Glowing cyan circuit ring halo that sits behind the WILD badge (animated, rotates). No text."
+    },
+    "sym.S": {
+      "lot": "sym-special",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "symbols/S.webp",
+      "subject": "SCATTER: a round portal shaped like a cat's eye: slit iris of cyan light inside a white ceramic ring with blue anodized teeth, the word SCATTER in bold sci-fi letters under it. Exact text: SCATTER. Flashy, own light."
+    },
+    "sym.S.iris": {
+      "lot": "sym-special",
+      "size": [
+        512,
+        512
+      ],
+      "alpha": true,
+      "required": false,
+      "out": "symbols/S-iris.webp",
+      "subject": "Only the cyan slit iris of the scatter portal, isolated (animated part, dilates)."
+    },
+    "mech.dot": {
+      "lot": "mech",
+      "size": [
+        512,
+        512
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "mech/dot.webp",
+      "subject": "The laser dot: a small bright cyan light sphere with a white-hot core and a crisp lens flare ring. Isolated on transparency."
+    },
+    "mech.chip1": {
+      "lot": "mech",
+      "size": [
+        512,
+        512
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "mech/chip1.webp",
+      "subject": "Overclock chip level 1: small square microchip badge, white ceramic with blue pins, ONE cyan chevron on it, empty lower third reserved for the number. Front view."
+    },
+    "mech.chip2": {
+      "lot": "mech",
+      "size": [
+        512,
+        512
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "mech/chip2.webp",
+      "edit_of": "mech.chip1",
+      "subject": "Same chip, level 2: TWO stacked chevrons, brighter cyan."
+    },
+    "mech.chip3": {
+      "lot": "mech",
+      "size": [
+        512,
+        512
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "mech/chip3.webp",
+      "edit_of": "mech.chip1",
+      "subject": "Same chip, level 3: THREE stacked chevrons, white-hot cyan, small sparks."
+    },
+    "mech.mult": {
+      "lot": "mech",
+      "size": [
+        512,
+        512
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "mech/mult.webp",
+      "subject": "Multiplier token: round anodized blue coin with white ceramic rim and a cyan glowing centre plate left EMPTY for the value (the value is written by the game). Front view."
+    },
+    "ui.spin": {
+      "lot": "ui-hud",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/spin.webp",
+      "subject": "Big round SPIN button base WITHOUT any text: white ceramic disc with blue anodized ring, circular arrow of cyan light around an empty dark-glass centre (the word is written by the game). Front view."
+    },
+    "ui.spin_stop": {
+      "lot": "ui-hud",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/spin-stop.webp",
+      "edit_of": "ui.spin",
+      "subject": "Same button in 'stop' state: the arrow replaced by a rounded square stop glyph, no text."
+    },
+    "ui.buy": {
+      "lot": "ui-hud",
+      "size": [
+        1024,
+        640
+      ],
+      "alpha": true,
+      "required": true,
+      "subject": "Illustrated BUY BONUS button base WITHOUT text: capsule plate in anodized blue with white ceramic rim, a small cat-eye portal icon on the left, the right two thirds left empty for the label written by the game.",
+      "out": "ui/buy.webp"
+    },
+    "ui.round": {
+      "lot": "ui-hud",
+      "size": [
+        512,
+        512
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/round.webp",
+      "subject": "Small round secondary button base (for -, +, turbo, autoplay, menu, sound): white ceramic ring, dark glass centre, thin cyan edge. Empty centre (icons are separate)."
+    },
+    "ui.panel": {
+      "lot": "ui-hud",
+      "size": [
+        1536,
+        256
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/panel.webp",
+      "slice9": [
+        90,
+        60,
+        90,
+        60
+      ],
+      "subject": "HUD bar plate: dark navy glass with white ceramic top edge and thin cyan line, rounded ends, for 9-slice."
+    },
+    "ui.icons": {
+      "lot": "ui-hud",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/icons.webp",
+      "sheet": [
+        4,
+        2
+      ],
+      "subject": "Sheet of 8 icons on a 4x2 grid, white with cyan accent, same stroke: minus, plus, lightning (turbo), circular arrows (autoplay), i in a circle (info), speaker, speaker muted, gear. Isolated, equal margins."
+    },
+    "ui.popup": {
+      "lot": "ui-pop-a",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/popup.webp",
+      "slice9": [
+        140,
+        140,
+        140,
+        140
+      ],
+      "subject": "Rounded holographic popup frame: dark translucent navy glass, white ceramic corners, cyan edge light. Empty inside, for 9-slice."
+    },
+    "ui.intro.ninelives": {
+      "lot": "ui-pop-b",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/intro-ninelives.webp",
+      "subject": "Bonus intro illustration '9 VIES': nine cat-eye lights forming an arc above a glowing grid, one laser beam. No text."
+    },
+    "ui.intro.doublegaze": {
+      "lot": "ui-pop-b",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/intro-doublegaze.webp",
+      "subject": "Bonus intro illustration 'DOUBLE REGARD': two eye beams crossing, chips already lit on the grid. No text."
+    },
+    "ui.intro.scan": {
+      "lot": "ui-pop-b",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/intro-scan.webp",
+      "subject": "Feature intro 'SCAN': one scan beam sweeping a grid, one guaranteed laser dot. No text."
+    },
+    "ui.intro.doublescan": {
+      "lot": "ui-pop-b",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/intro-doublescan.webp",
+      "subject": "Feature intro 'DOUBLE SCAN': two scan beams, two dots. No text."
+    },
+    "ui.total": {
+      "lot": "ui-pop-a",
+      "size": [
+        1536,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/total.webp",
+      "subject": "End of bonus plate: large rounded holo plate with a laurel of circuit traces and chips around an empty centre for the amount. No text."
+    },
+    "ui.banner.fs": {
+      "lot": "ui-pop-a",
+      "size": [
+        1024,
+        512
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/banner-fs.webp",
+      "subject": "Banner ribbon for '+N FS': anodized blue ribbon with cyan light edges and a cat-eye emblem, empty centre for the text."
+    },
+    "ui.tier": {
+      "lot": "ui-pop-a",
+      "size": [
+        1536,
+        768
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/tier.webp",
+      "subject": "Big win title plate: wide beveled plate of white ceramic and blue anodized metal with cyan edge light, empty centre for the tier word; cat ears on the top edge."
+    },
+    "ui.tier.max": {
+      "lot": "ui-pop-a",
+      "size": [
+        1536,
+        768
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "ui/tier-max.webp",
+      "edit_of": "ui.tier",
+      "subject": "MAX WIN variant of the plate: gold-white chrome, stronger light, crown of chips. Empty centre."
+    },
+    "shop.ninelives": {
+      "lot": "ui-shop",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "shop/ninelives.webp",
+      "subject": "Buy card art for 9 VIES (portrait card, frame included, empty lower third for name and price): nine cat-eye lights over a circuit grid."
+    },
+    "shop.doublegaze": {
+      "lot": "ui-shop",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "shop/doublegaze.webp",
+      "subject": "Buy card art for DOUBLE REGARD: two crossing eye beams, stronger glow, premium frame."
+    },
+    "shop.scan": {
+      "lot": "ui-shop",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "shop/scan.webp",
+      "subject": "Buy card art for SCAN: one scan beam and one laser dot."
+    },
+    "shop.doublescan": {
+      "lot": "ui-shop",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "shop/doublescan.webp",
+      "subject": "Buy card art for DOUBLE SCAN: two beams and two dots."
+    },
+    "fx.sheet": {
+      "lot": "fx",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": true,
+      "out": "fx/sheet.webp",
+      "sheet": [
+        4,
+        4
+      ],
+      "subject": "FX sheet 4x4 on transparency: spark star, soft cyan glow disc, shockwave ring, lens flare streak, holo chip coin (front), holo chip coin (edge), rain streak, neon bokeh, small electric arc, pixel square, cat-eye glint, dust puff, circuit node, laser streak, confetti strip cyan, confetti strip white. Each centred in its cell."
+    },
+    "media.bg": {
+      "lot": "media",
+      "size": [
+        1920,
+        1080
+      ],
+      "alpha": false,
+      "required": false,
+      "out": "../../media/CYBERCAT-BG.webp",
+      "subject": "Stake media background: the rooftop lab and neon city, no text, no cat, clean composition."
+    },
+    "media.crownforge": {
+      "lot": "media",
+      "size": [
+        1024,
+        1024
+      ],
+      "alpha": true,
+      "required": false,
+      "out": "../../media/Crownforge-Logo.png",
+      "subject": "Crownforge studio logo on transparency (same as loading.crownforge, HD)."
+    },
+    "media.tile": {
+      "lot": "media",
+      "size": [
+        1152,
+        1536
+      ],
+      "alpha": false,
+      "required": false,
+      "out": "../../media/CYBERCAT-tile-3x4.webp",
+      "subject": "Game tile 3:4: the cat (from the reference render) on the rooftop with the logo CYBER CAT at the top. Exact text: CYBER CAT."
+    },
+    "media.cover": {
+      "lot": "media",
+      "size": [
+        1920,
+        1080
+      ],
+      "alpha": false,
+      "required": false,
+      "out": "../../media/CYBERCAT-cover-16x9.webp",
+      "subject": "Cover 16:9: the cat firing the laser over the grid, logo CYBER CAT left. Exact text: CYBER CAT."
+    }
+  }
+}

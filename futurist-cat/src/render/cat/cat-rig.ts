@@ -17,7 +17,7 @@ export interface PlayOptions {
 const LOOK_LIMIT = (20 * Math.PI) / 180;
 
 export class CatRig {
-  readonly THREE: typeof import('three');
+  readonly THREE: import('./cat-stage').ThreeMod;
   readonly mixer: T.AnimationMixer;
   readonly actions = new Map<ClipId, T.AnimationAction>();
   readonly clips = new Map<ClipId, T.AnimationClip>();

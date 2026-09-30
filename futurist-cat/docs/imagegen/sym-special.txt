@@ -1,0 +1,34 @@
+Utilise $imagegen et l'outil natif image_gen (PAS un script CLI/API) ; mission limitée à ces images et à leur rapport, ne crée ni ne modifie aucun code du jeu, aucun autre fichier du dépôt.
+
+STYLE CYBER CAT (à lire avant chaque image)
+Rendu 3D stylisé propre de jeu vidéo, même famille que le chat robot de référence (docs/imagegen/ref/cat-pose-ref.png) : céramique blanche brillante (#EEF3F9, ombres #C9D3E0), métal anodisé bleu satiné (#2F6FE0, contours #1B3F8F), lumière émissive cyan (#3FEAFF, cœur #9AF6FF) qui éclaire vraiment son voisinage, visière et verre sombres (#0A0D14, indigo #0B1230). Décor : ville néon de nuit sous une pluie fine, indigo #0B1230 à #141D45, brume sarcelle #0F3B4A, néons rares magenta #FF3FA4 et ambre #FFB547 en tubes de verre ; le décor est plus sombre et moins contrasté que les symboles et que le chat.
+Lumière identique partout : principale blanche chaude en haut à gauche (environ 45°), contour cyan en arrière à droite, remplissage bleu très faible, ombres douces.
+Interdits : photo-réalisme, plastique générique, style BD à l'encre, dégradés par défaut, halo flou sans source, bordures lumineuses décoratives, emoji, texte non demandé, marque ou logo existant, copie d'un studio.
+Détourage : vrai canal alpha, pas de damier, pas de halo ni de frange, sujet entier non coupé, marge de 3 à 6 %. À défaut seulement : fond chroma #00FF00 uni, à signaler dans le rapport.
+
+Références à charger avec view_image AVANT de générer :
+- docs/imagegen/ref/cat-pose-ref.png : le chat rendu depuis le GLB (palette, matières, lumière).
+- assets/generated/ref/ref.screen.png : l'écran de référence validé (composition, style du décor et de l'interface).
+
+Mission « sym-special » : WILD et SCATTER + pieces. Un appel image_gen par image, dans cet ordre :
+1. Fichier : assets/generated/sym-special/sym.W.png
+   Sujet : WILD: the cat's 'C' emblem as a chunky beveled badge: white ceramic C with anodized blue inner ring and bright cyan core light, the word WILD in bold sci-fi letters under it. Exact text: WILD. Flashy, own light.
+   Taille : 1024x1024 px ; fond transparent (vrai alpha).
+2. Fichier : assets/generated/sym-special/sym.W.ring.png
+   Sujet : Glowing cyan circuit ring halo that sits behind the WILD badge (animated, rotates). No text.
+   Taille : 1024x1024 px ; fond transparent (vrai alpha).
+3. Fichier : assets/generated/sym-special/sym.S.png
+   Sujet : SCATTER: a round portal shaped like a cat's eye: slit iris of cyan light inside a white ceramic ring with blue anodized teeth, the word SCATTER in bold sci-fi letters under it. Exact text: SCATTER. Flashy, own light.
+   Taille : 1024x1024 px ; fond transparent (vrai alpha).
+4. Fichier : assets/generated/sym-special/sym.S.iris.png
+   Sujet : Only the cyan slit iris of the scatter portal, isolated (animated part, dilates).
+   Taille : 512x512 px ; fond transparent (vrai alpha).
+
+Pour chaque image :
+- générer avec image_gen ;
+- l'inspecter avec view_image (sujet entier, pas de coupe, pas de texte parasite, pas de damier, pas de halo, conformité au style et aux couleurs) ;
+- si un défaut est visible, régénérer UNE seule fois, en mode édition depuis l'image obtenue ;
+- copier le fichier final depuis $CODEX_HOME/generated_images/… vers le chemin indiqué (créer le dossier si besoin) ;
+- écrire à côté un fichier <nom>.prompt.txt contenant le prompt exact utilisé.
+
+Rapport final (dans ta réponse, en français) : pour chaque image, le chemin, la méthode réellement utilisée (image_gen natif, édition), les dimensions, la présence d'un vrai alpha ou d'un fond chroma #00FF00, et les défauts restants. Si image_gen est inaccessible ou refuse, dis-le clairement et arrête-toi : ne produis jamais de SVG, de dessin en code, de copie d'une autre image ni d'image factice à la place.

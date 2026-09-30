@@ -1,0 +1,326 @@
+{
+  "processed": [],
+  "missing": [
+    {
+      "id": "logo",
+      "lot": "identity",
+      "required": true
+    },
+    {
+      "id": "loading.crownforge",
+      "lot": "identity",
+      "required": true
+    },
+    {
+      "id": "welcome.laser",
+      "lot": "identity",
+      "required": true
+    },
+    {
+      "id": "welcome.ninelives",
+      "lot": "identity",
+      "required": true
+    },
+    {
+      "id": "welcome.doublegaze",
+      "lot": "identity",
+      "required": true
+    },
+    {
+      "id": "decor.sky",
+      "lot": "decor-a",
+      "required": true
+    },
+    {
+      "id": "decor.far",
+      "lot": "decor-a",
+      "required": true
+    },
+    {
+      "id": "decor.mid",
+      "lot": "decor-a",
+      "required": true
+    },
+    {
+      "id": "decor.near",
+      "lot": "decor-a",
+      "required": true
+    },
+    {
+      "id": "decor.train",
+      "lot": "decor-b",
+      "required": true
+    },
+    {
+      "id": "decor.drone",
+      "lot": "decor-b",
+      "required": true
+    },
+    {
+      "id": "decor.sign1",
+      "lot": "decor-b",
+      "required": true
+    },
+    {
+      "id": "decor.sign2",
+      "lot": "decor-b",
+      "required": true
+    },
+    {
+      "id": "decor.sign1_off",
+      "lot": "decor-b",
+      "required": true
+    },
+    {
+      "id": "decor.p.bg",
+      "lot": "decor-p",
+      "required": true
+    },
+    {
+      "id": "decor.p.near",
+      "lot": "decor-p",
+      "required": true
+    },
+    {
+      "id": "decor.scan",
+      "lot": "decor-p",
+      "required": true
+    },
+    {
+      "id": "decor.scan2",
+      "lot": "decor-p",
+      "required": true
+    },
+    {
+      "id": "grid.frame",
+      "lot": "grid",
+      "required": true
+    },
+    {
+      "id": "grid.cell",
+      "lot": "grid",
+      "required": true
+    },
+    {
+      "id": "sym.L1",
+      "lot": "sym-low",
+      "required": true
+    },
+    {
+      "id": "sym.L2",
+      "lot": "sym-low",
+      "required": true
+    },
+    {
+      "id": "sym.L3",
+      "lot": "sym-low",
+      "required": true
+    },
+    {
+      "id": "sym.L4",
+      "lot": "sym-low",
+      "required": true
+    },
+    {
+      "id": "sym.H1",
+      "lot": "sym-high",
+      "required": true
+    },
+    {
+      "id": "sym.H1.lid",
+      "lot": "sym-high",
+      "required": false
+    },
+    {
+      "id": "sym.H2",
+      "lot": "sym-high",
+      "required": true
+    },
+    {
+      "id": "sym.H3",
+      "lot": "sym-high",
+      "required": true
+    },
+    {
+      "id": "sym.H3.tail",
+      "lot": "sym-high",
+      "required": false
+    },
+    {
+      "id": "sym.H4",
+      "lot": "sym-high",
+      "required": true
+    },
+    {
+      "id": "sym.H4.rotor",
+      "lot": "sym-high",
+      "required": false
+    },
+    {
+      "id": "sym.W",
+      "lot": "sym-special",
+      "required": true
+    },
+    {
+      "id": "sym.W.ring",
+      "lot": "sym-special",
+      "required": false
+    },
+    {
+      "id": "sym.S",
+      "lot": "sym-special",
+      "required": true
+    },
+    {
+      "id": "sym.S.iris",
+      "lot": "sym-special",
+      "required": false
+    },
+    {
+      "id": "mech.dot",
+      "lot": "mech",
+      "required": true
+    },
+    {
+      "id": "mech.chip1",
+      "lot": "mech",
+      "required": true
+    },
+    {
+      "id": "mech.chip2",
+      "lot": "mech",
+      "required": true
+    },
+    {
+      "id": "mech.chip3",
+      "lot": "mech",
+      "required": true
+    },
+    {
+      "id": "mech.mult",
+      "lot": "mech",
+      "required": true
+    },
+    {
+      "id": "ui.spin",
+      "lot": "ui-hud",
+      "required": true
+    },
+    {
+      "id": "ui.spin_stop",
+      "lot": "ui-hud",
+      "required": true
+    },
+    {
+      "id": "ui.buy",
+      "lot": "ui-hud",
+      "required": true
+    },
+    {
+      "id": "ui.round",
+      "lot": "ui-hud",
+      "required": true
+    },
+    {
+      "id": "ui.panel",
+      "lot": "ui-hud",
+      "required": true
+    },
+    {
+      "id": "ui.icons",
+      "lot": "ui-hud",
+      "required": true
+    },
+    {
+      "id": "ui.popup",
+      "lot": "ui-pop-a",
+      "required": true
+    },
+    {
+      "id": "ui.intro.ninelives",
+      "lot": "ui-pop-b",
+      "required": true
+    },
+    {
+      "id": "ui.intro.doublegaze",
+      "lot": "ui-pop-b",
+      "required": true
+    },
+    {
+      "id": "ui.intro.scan",
+      "lot": "ui-pop-b",
+      "required": true
+    },
+    {
+      "id": "ui.intro.doublescan",
+      "lot": "ui-pop-b",
+      "required": true
+    },
+    {
+      "id": "ui.total",
+      "lot": "ui-pop-a",
+      "required": true
+    },
+    {
+      "id": "ui.banner.fs",
+      "lot": "ui-pop-a",
+      "required": true
+    },
+    {
+      "id": "ui.tier",
+      "lot": "ui-pop-a",
+      "required": true
+    },
+    {
+      "id": "ui.tier.max",
+      "lot": "ui-pop-a",
+      "required": true
+    },
+    {
+      "id": "shop.ninelives",
+      "lot": "ui-shop",
+      "required": true
+    },
+    {
+      "id": "shop.doublegaze",
+      "lot": "ui-shop",
+      "required": true
+    },
+    {
+      "id": "shop.scan",
+      "lot": "ui-shop",
+      "required": true
+    },
+    {
+      "id": "shop.doublescan",
+      "lot": "ui-shop",
+      "required": true
+    },
+    {
+      "id": "fx.sheet",
+      "lot": "fx",
+      "required": true
+    },
+    {
+      "id": "media.bg",
+      "lot": "media",
+      "required": false
+    },
+    {
+      "id": "media.crownforge",
+      "lot": "media",
+      "required": false
+    },
+    {
+      "id": "media.tile",
+      "lot": "media",
+      "required": false
+    },
+    {
+      "id": "media.cover",
+      "lot": "media",
+      "required": false
+    }
+  ],
+  "warnings": []
+}
