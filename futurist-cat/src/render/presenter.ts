@@ -370,6 +370,7 @@ export class GamePresenter implements Presenter {
     this.d.ui.setSpinsLeft(null);
     this.d.sound.play('bonus_end');
     this.d.sound.duck(true);
+    sc.catFront(true); // the cat stays bright over the veil while the total rolls
     sc.veilTo(0.34);
     const micros = this.money(e.amount);
     const dec = this.d.digits(micros);
@@ -383,7 +384,7 @@ export class GamePresenter implements Presenter {
     await ctx.waitClick(this.d.autoplaying() ? 5 : undefined);
     await this.d.ui.closePopup(el);
     this.d.sound.duck(false);
-    sc.veilTo(0, 0.3);
+    sc.veilTo(0, 0.3).eventCallback('onComplete', () => sc.catFront(false));
     // exit: chips go out one by one, the city leaves scan mode, the cat dives back
     ctx.resetSkip();
     const out = gsap.timeline();

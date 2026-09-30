@@ -113,7 +113,11 @@ Toutes dans `docs/preuves/videos/` avec leur planche (`*-planche.jpg`, une image
 | `testanim-mobile.mp4` | 390×844 DPR3 (sortie 780 px), 15 i/s | 109,9 s | même enchaînement en portrait : grille en haut, chat dessous, BUY BONUS au-dessus du HUD, boutons système en haut à droite, texte tactile « TOUCHEZ N'IMPORTE OÙ », plaques de palier lisibles, chat lumineux pendant les célébrations. 15 i/s au lieu de 30 : en DPR3 le rendu logiciel dépasse la limite de 2 h par tâche du conteneur |
 | `bonus-9vies.mp4` | 1280×720, 24 i/s | 97,0 s | anticipation ≈ 2 s, salto, intro 9 VIES (chat devant le voile), déchirure, mode scan, « Spins restants », puces, +3 FS, « 1,50 € → ×8 → 12,10 € », GROS GAIN en bonus (maintien 3,6 s), dernier spin, GAIN TOTAL qui roule jusqu'à 17,05 €, puces éteintes, plongeon retour, solde 1 016,05 € |
 
+| `achat.mp4` (= bonus DOUBLE REGARD) | 1280×720, 24 i/s | 107,0 s | BUY BONUS → boutique (4 cartes : 9 VIES 100,00 €, DOUBLE REGARD 300,00 €, SCAN 5,00 €, DOUBLE SCAN 15,00 €) → confirmation à devis figé (DOUBLE REGARD · 9 free spins, mise 1,00 €, coût 300,00 €) → ACHETER : solde 700,00 € ; les 4 Scatters tombent un par un avec anticipation, salto, intro DOUBLE REGARD, déchirure, puces déjà posées, deux points par spin, GROS GAIN 24,00 € en bonus, GAIN TOTAL qui roule de 103,25 à 104,25 s jusqu'à 40,40 € exacts, plongeon retour ; HUD final GAIN 40,40 € · SOLDE 740,40 € (1000 − 300 + 40,40) |
+
 Les TEST ANIM rejouent les fixtures par le lecteur de replay (aucun appel au portefeuille) : le solde n'y bouge pas, c'est voulu ; débit et crédit sont prouvés par l'e2e et par `bonus-9vies.mp4` (solde final 1 016,05 €).
+
+Défaut vu dans `achat.mp4` et `bonus-9vies.mp4`, corrigé **après** ces prises (non refilmé : 1 h 30 de rendu logiciel) : le chat restait grisé sous le voile pendant GAIN TOTAL ; il passe maintenant devant, comme pour les paliers.
 
 Défauts vus dans une première prise de TEST ANIM (122,8 s) et corrigés avant la prise retenue : anticipation à 3,0 s (atterrissages hors budget, D45), plaque de palier figée 9 s (D44), chat grisé par le voile (D43).
 
