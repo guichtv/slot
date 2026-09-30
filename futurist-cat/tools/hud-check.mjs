@@ -1,5 +1,5 @@
 // HUD non-overlap test on 6 sizes with 10-digit amounts, on the SERVED QA build.
-//   node tools/hud-check.mjs [--dist dist-qa] [--out docs/preuves/hud]
+//   node tools/hud-check.mjs [--dist dist-qa] [--out docs/preuves/hud] [--lang fr] [--only 960x720,popout-S-400x300]
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -25,7 +25,8 @@ const browser = await launch({ webgl: 'swiftshader' });
 const results = [];
 let failures = 0;
 try {
-  for (const s of SIZES) {
+  const only = opt('only', null)?.split(',');
+  for (const s of SIZES.filter((x) => !only || only.includes(x.name))) {
     const ctx = await browser.newContext({ viewport: { width: s.w, height: s.h }, deviceScaleFactor: s.dpr, isMobile: s.touch, hasTouch: s.touch });
     const page = await ctx.newPage();
     // virtual clock: the intro is stepped through without waiting for software rendering
@@ -36,7 +37,7 @@ try {
     await page.waitForTimeout(300);
     const r = await page.evaluate((touch) => {
       const vis = (e) => { const cs = getComputedStyle(e); const b = e.getBoundingClientRect(); return cs.display !== 'none' && cs.visibility !== 'hidden' && !e.hidden && b.width > 0 && b.height > 0; };
-      const pick = [...document.querySelectorAll('.hud .btn, .hud .field, .top .ante, .top .logo')].filter(vis);
+      const pick = [...document.querySelectorAll('.hud .btn, .hud .field, .ante, .top .logo')].filter(vis);
       const boxes = pick.map((e) => { const b = e.getBoundingClientRect(); return { name: e.className.replace(/\s+/g, '.'), x: b.left, y: b.top, w: b.width, h: b.height }; });
       const issues = [];
       const ov = (a, b) => Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x) > 1 && Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y) > 1;
@@ -48,7 +49,7 @@ try {
       for (const b of boxes) if (b.x < -1 || b.y < -1 || b.x + b.w > innerWidth + 1 || b.y + b.h > innerHeight + 1) issues.push(`hors ecran ${b.name}`);
       for (const v of document.querySelectorAll('.hud .field .val')) if (vis(v) && v.scrollWidth > v.clientWidth + 1) issues.push(`montant tronque dans ${v.parentElement.className} (${v.textContent})`);
       // the Ante button shows its whole text (no clipped line, no cut word)
-      const ante = document.querySelector('.top .ante');
+      const ante = document.querySelector('.ante');
       if (ante && vis(ante)) for (const e of [ante, ...ante.querySelectorAll('.ante-title, .ante-state, .ante-cost, .ante-desc')].filter(vis)) if (e.scrollWidth > e.clientWidth + 1 || e.scrollHeight > e.clientHeight + 1) issues.push(`Ante tronque (${e.className} : ${e.textContent})`);
       if (touch) for (const b of boxes.filter((x) => x.name.includes('btn'))) if (Math.min(b.w, b.h) < 43.5) issues.push(`cible < 44 px : ${b.name} ${Math.round(b.w)}x${Math.round(b.h)}`);
       const R = window.__qaRects();

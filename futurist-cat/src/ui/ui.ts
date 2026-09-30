@@ -56,6 +56,7 @@ export class Ui implements UiBridge {
   private spinBtn: HTMLButtonElement;
   private spinLabel: HTMLSpanElement;
   private buyBtn: HTMLButtonElement;
+  private anteSlot: HTMLElement;
   private betVal: HTMLSpanElement;
   private betUp: HTMLButtonElement;
   private betDown: HTMLButtonElement;
@@ -93,6 +94,8 @@ export class Ui implements UiBridge {
     this.counter = el('div', { class: 'spins-counter', role: 'status', 'aria-live': 'polite' });
     this.sessionInfo = el('div', { class: 'session-info', 'aria-live': 'off' });
     this.top = el('div', { class: 'top' }, this.logo, this.anteBtn, this.counter, this.sessionInfo);
+    // very low windows (Popout S): the Ante button moves into the HUD column, where it stays readable
+    this.anteSlot = el('div', { class: 'grp grp-ante' });
     // HUD
     this.buyBtn = el('button', { class: 'btn buy', type: 'button' }, el('span', { class: 'buy-label' }));
     this.betDown = el('button', { class: 'btn round minus', type: 'button' });
@@ -116,6 +119,7 @@ export class Ui implements UiBridge {
       el('div', { class: 'hud-panel' }),
       el('div', { class: 'grp grp-buy' }, this.buyBtn),
       el('div', { class: 'grp grp-bet' }, this.betDown, bet, this.betUp),
+      this.anteSlot,
       el('div', { class: 'grp grp-fields' }, win, bal),
       el('div', { class: 'grp grp-spin' }, this.turboBtn, this.spinBtn, this.autoBtn),
       el('div', { class: 'grp grp-sys' }, this.menuBtn, this.soundBtn, this.fsBtn),
@@ -226,8 +230,16 @@ export class Ui implements UiBridge {
       Object.assign(node.style, { left: `${p.x}px`, top: `${p.y}px`, width: `${r.w * l.scale}px`, height: `${r.h * l.scale}px` });
     };
     place(this.logo, d.logo);
-    place(this.anteBtn, d.ante);
-    this.anteFont = Math.max(10, 17 * l.scale);
+    const inHud = l.cls === 'short' && l.vh < 340;
+    if (inHud) {
+      if (this.anteBtn.parentElement !== this.anteSlot) this.anteSlot.append(this.anteBtn);
+      Object.assign(this.anteBtn.style, { left: '', top: '', width: '', height: '' });
+      this.anteFont = 11;
+    } else {
+      if (this.anteBtn.parentElement !== this.top) this.logo.after(this.anteBtn);
+      place(this.anteBtn, d.ante);
+      this.anteFont = Math.max(10, 17 * l.scale);
+    }
     this.fitAnte();
     const c = l.toScreen(d.counter.x, d.counter.y);
     Object.assign(this.counter.style, { left: `${c.x}px`, top: `${c.y}px`, fontSize: `${Math.max(12, 30 * l.scale)}px` });

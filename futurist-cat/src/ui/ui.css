@@ -145,7 +145,12 @@ button:disabled { cursor: default; }
 .ui[data-cls="short"] .btn.buy { min-width: 0; width: calc(var(--hud-right) - 30px); height: 44px; padding: 0 6px 0 36px; background-position: 18px 50%; }
 .ui[data-cls="short"] .buy-label { font-size: 11px; }
 .ui[data-cls="short"] .ante-desc, .ui[data-cls="portrait"] .ante-desc { display: none; }
-/* very short windows (Popout S 400x300): everything a notch smaller */
+/* very short windows (Popout S 400x300): everything a notch smaller, turbo SPIN auto on one row,
+   the Ante button inside the column (title + state only) */
+.grp-ante:empty { display: none; }
+.grp-ante .ante { position: static; width: calc(var(--hud-right) - 30px); height: 30px; grid-template-rows: auto; padding: 0 .7em; border-radius: 99px; }
+.grp-ante .ante-desc, .grp-ante .ante-cost { display: none; }
+.ui[data-cls="short"] .grp-ante { order: 2; }
 @media (max-height: 340px) {
   .ui[data-cls="short"] .btn.round { width: 36px; height: 36px; }
   .ui[data-cls="short"] .btn.spin { width: 62px; height: 62px; }
@@ -153,6 +158,7 @@ button:disabled { cursor: default; }
   .ui[data-cls="short"] .btn.buy { height: 34px; }
   .ui[data-cls="short"] .field .val { font-size: 11px; }
   .ui[data-cls="short"] .field .lbl { font-size: 8px; }
+  .ui[data-cls="short"] .grp-spin { display: flex; gap: 6px; }
 }
 
 /* phases */
