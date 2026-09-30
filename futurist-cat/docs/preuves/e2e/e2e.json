@@ -1,0 +1,62 @@
+[
+  {
+    "name": "spin_and_win",
+    "ok": true,
+    "msg": "solde 1000 -> 1000.3, gain affiche \"1,30 €\"",
+    "sec": 16
+  },
+  {
+    "name": "quick_stop_same_result",
+    "ok": true,
+    "msg": "resultat inchange (F07, +0,60 EUR), une seule requete",
+    "sec": 29
+  },
+  {
+    "name": "buy_bonus_single_request",
+    "ok": true,
+    "msg": "devis 100,00 €, 1 requete, solde 1000 -> 906.5",
+    "sec": 116
+  },
+  {
+    "name": "buy_cancel_no_debit",
+    "ok": true,
+    "msg": "ouvert puis annule : aucune requete, solde inchange",
+    "sec": 9
+  },
+  {
+    "name": "ante_cost",
+    "ok": true,
+    "msg": "Ante actif \"ANTEACTIFScatters ×2 · ×1.25Prochain spin 1,25 €\", debit 1,25 EUR",
+    "sec": 12
+  },
+  {
+    "name": "refusal_consistent",
+    "ok": true,
+    "msg": "refus \"Solde insuffisant.\", solde inchange, etat idle",
+    "sec": 8
+  },
+  {
+    "name": "uncertain_reconcile",
+    "ok": true,
+    "msg": "requete incertaine -> reconciliation -> idle, solde inchange",
+    "sec": 8
+  },
+  {
+    "name": "autoplay_counter_and_stop",
+    "ok": true,
+    "msg": "compteur \"9\", arrete apres 2 spins",
+    "sec": 24
+  },
+  {
+    "name": "keyboard_space",
+    "ok": true,
+    "msg": "Espace lance un spin (1)",
+    "sec": 11
+  },
+  {
+    "name": "menu_rules",
+    "ok": true,
+    "msg": "regles completes, fermeture Echap",
+    "sec": 8
+  }
+]

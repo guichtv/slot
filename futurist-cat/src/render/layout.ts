@@ -47,8 +47,8 @@ const SHORT: Design = {
 const PORTRAIT: Design = {
   w: 1080, h: 1920,
   box: { x: 24, y: 20, w: 1032, h: 1580 },
-  logo: { x: 34, y: 28, w: 300, h: 130 },
-  ante: { x: 34, y: 166, w: 300, h: 86 },
+  logo: { x: 34, y: 22, w: 236, h: 104 },
+  ante: { x: 34, y: 134, w: 310, h: 118 },
   grid: { x: 40, y: 262, cell: 180, gap: 8, pad: 34 },
   counter: { x: 540, y: 228 },
   cat: { x: 800, y: 1590, height: 440 },

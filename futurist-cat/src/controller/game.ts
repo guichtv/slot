@@ -14,7 +14,7 @@ import { costMicros, bookToMicros } from '../contract/money';
 import type { GameConfig } from '../config/game-config';
 import type { GamePresenter } from '../render/presenter';
 import type { Ui } from '../ui/ui';
-import { t } from '../i18n/i18n';
+import { t, i18n } from '../i18n/i18n';
 
 export interface GameDeps {
   clock: GameClock;
@@ -335,4 +335,5 @@ export class GameController {
   cancelRound(reason: string): void { this.roundToken?.cancel(reason); }
 }
 
-function fmtNum(x: number): string { return new Intl.NumberFormat(undefined, { maximumFractionDigits: 2 }).format(x); }
+// in the GAME language (Latin digits), never the browser's
+function fmtNum(x: number): string { return new Intl.NumberFormat(i18n.locale, { maximumFractionDigits: 2 }).format(x); }

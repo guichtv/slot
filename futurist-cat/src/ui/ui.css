@@ -144,7 +144,7 @@ button:disabled { cursor: default; }
 .ui[data-cls="short"] .field.bet { min-width: 0; width: 56px; }
 .ui[data-cls="short"] .btn.buy { min-width: 0; width: calc(var(--hud-right) - 30px); height: 44px; padding: 0 6px 0 36px; background-position: 18px 50%; }
 .ui[data-cls="short"] .buy-label { font-size: 11px; }
-.ui[data-cls="short"] .ante-desc { display: none; }
+.ui[data-cls="short"] .ante-desc, .ui[data-cls="portrait"] .ante-desc { display: none; }
 /* very short windows (Popout S 400x300): everything a notch smaller */
 @media (max-height: 340px) {
   .ui[data-cls="short"] .btn.round { width: 36px; height: 36px; }

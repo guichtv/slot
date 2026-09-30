@@ -28,10 +28,12 @@ try {
   for (const s of SIZES) {
     const ctx = await browser.newContext({ viewport: { width: s.w, height: s.h }, deviceScaleFactor: s.dpr, isMobile: s.touch, hasTouch: s.touch });
     const page = await ctx.newPage();
-    await page.goto(`http://127.0.0.1:5349/?seed=7&skipWelcome=1&persist=0&lang=${opt('lang', 'fr')}`);
-    await page.waitForFunction(() => window.__qa && window.__qa().state === 'idle', null, { timeout: 120000 });
-    await page.evaluate(() => { window.__qaSetBalance(1234567890.12); window.__qaSetWin(9876543210.99); });
-    await page.waitForTimeout(400);
+    // virtual clock: the intro is stepped through without waiting for software rendering
+    await page.goto(`http://127.0.0.1:5349/?virtual=1&seed=7&skipWelcome=1&persist=0&lang=${opt('lang', 'fr')}`);
+    await page.waitForFunction(() => typeof window.__qaStep === 'function', null, { timeout: 120000 });
+    for (let i = 0; i < 400 && (await page.evaluate(() => window.__qa().state)) !== 'idle'; i++) await page.evaluate(() => window.__qaStep(250, false));
+    await page.evaluate(() => { window.__qaSetBalance(1234567890.12); window.__qaSetWin(9876543210.99); window.__qaStep(600, true); });
+    await page.waitForTimeout(300);
     const r = await page.evaluate((touch) => {
       const vis = (e) => { const cs = getComputedStyle(e); const b = e.getBoundingClientRect(); return cs.display !== 'none' && cs.visibility !== 'hidden' && !e.hidden && b.width > 0 && b.height > 0; };
       const pick = [...document.querySelectorAll('.hud .btn, .hud .field, .top .ante, .top .logo')].filter(vis);
@@ -45,6 +47,9 @@ try {
       }
       for (const b of boxes) if (b.x < -1 || b.y < -1 || b.x + b.w > innerWidth + 1 || b.y + b.h > innerHeight + 1) issues.push(`hors ecran ${b.name}`);
       for (const v of document.querySelectorAll('.hud .field .val')) if (vis(v) && v.scrollWidth > v.clientWidth + 1) issues.push(`montant tronque dans ${v.parentElement.className} (${v.textContent})`);
+      // the Ante button shows its whole text (no clipped line, no cut word)
+      const ante = document.querySelector('.top .ante');
+      if (ante && vis(ante)) for (const e of [ante, ...ante.querySelectorAll('.ante-title, .ante-state, .ante-cost, .ante-desc')].filter(vis)) if (e.scrollWidth > e.clientWidth + 1 || e.scrollHeight > e.clientHeight + 1) issues.push(`Ante tronque (${e.className} : ${e.textContent})`);
       if (touch) for (const b of boxes.filter((x) => x.name.includes('btn'))) if (Math.min(b.w, b.h) < 43.5) issues.push(`cible < 44 px : ${b.name} ${Math.round(b.w)}x${Math.round(b.h)}`);
       const R = window.__qaRects();
       for (const b of boxes.filter((x) => !x.name.includes('logo') && !x.name.includes('ante'))) if (ov(b, R.grid)) issues.push(`le HUD couvre la grille : ${b.name}`);

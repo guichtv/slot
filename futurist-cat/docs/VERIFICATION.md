@@ -65,3 +65,22 @@ Fichiers : `docs/preuves/chat-squelette-de-test/` (rapport `PREPARE.md`, planche
 | mémoire GPU estimée | 34,3 Mo | 25,5 Mo |
 | canvas du chat | 384×774 | 243×489 |
 
+### Build servie, vrais gestes (souris : pointerdown + click), horloge virtuelle pilotée
+
+`node tools/play-e2e.mjs` sur `dist-qa` servi, fournisseur local (fixtures), 1280×720 : **10/10 OK** (`docs/preuves/e2e/e2e.json`).
+
+| scénario | résultat |
+|---|---|
+| spin_and_win | solde 1000 → 1000,30 ; gain affiché « 1,30 € » ; le clic d'accueil ne lance pas de spin (clic consommé) |
+| quick_stop_same_result | arrêt rapide : même résultat (F07, +0,60 €), une seule requête |
+| buy_bonus_single_request | devis figé « 100,00 € », double clic sur ACHETER → **une** requête ; bonus joué jusqu'au bout ; solde 1000 → 906,50 |
+| buy_cancel_no_debit | boutique → carte → Annuler : aucune requête, solde inchangé |
+| ante_cost | Ante actif, débit 1,25 € pour une mise de 1 € |
+| refusal_consistent | refus ERR_IPB : « Solde insuffisant. », solde inchangé, retour au repos |
+| uncertain_reconcile | requête incertaine → réconciliation → repos, solde inchangé |
+| autoplay_counter_and_stop | compteur « 9 » après le 1er spin, arrêt demandé → arrêt après 2 spins |
+| keyboard_space | Espace lance un spin (1 requête) |
+| menu_rules | menu Infos : règles complètes (dysfonctionnement, 1024, WILD, SCATTER, ANTE, RTP), fermeture par Échap |
+
+Défaut trouvé et corrigé en route : le pilote d'horloge en `setTimeout(0)` affamait le compositeur (la boutique ne recevait jamais sa classe d'entrée) → pilote cadencé par `requestAnimationFrame` (D42).
+

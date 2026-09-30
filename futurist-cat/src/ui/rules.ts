@@ -2,7 +2,7 @@
 // bet), Wild, Scatter, laser dot, chips, bonuses, features and their prices, Ante, max win, RTP per
 // mode, "Malfunction voids all pays and plays." (translated). Fully visible on mobile.
 import { el } from './dom';
-import { t } from '../i18n/i18n';
+import { t, i18n } from '../i18n/i18n';
 import type { GameConfig } from '../config/game-config';
 import { LADDER } from '../contract/symbols';
 import { MODES } from '../contract/events';
@@ -14,7 +14,7 @@ export function buildRules(cfg: GameConfig, o: { symbolUrl: (id: string) => stri
     return el('div', { class: 'pay' }, img(`sym.${s}`), el('ul', {}, ...[5, 4, 3].map((k) => el('li', {}, el('span', { text: t('rules.kind', { n: k }) }), el('b', { text: o.money(p[k - 3]! * o.bet) })))));
   });
   const cost = (m: string) => o.costs[m] ?? cfg.modes[m as keyof GameConfig['modes']]?.cost ?? 1;
-  const nf = (x: number) => new Intl.NumberFormat(undefined, { maximumFractionDigits: 2 }).format(x);
+  const nf = (x: number) => new Intl.NumberFormat(i18n.locale, { maximumFractionDigits: 2 }).format(x);
   const ladder = el('div', { class: 'ladder' }, ...LADDER.flatMap((s, i) => (i ? [el('span', { text: '→' }), img(`sym.${s}`)] : [img(`sym.${s}`)])));
   const retrig = Object.entries(cfg.bonus.retrigger).map(([s, n]) => el('p', { text: t('rules.retrigger', { s, n }) }));
   const rtp = MODES.filter((m) => cfg.modes[m]).map((m) => el('div', { text: t('rules.rtpMode', { mode: t(`rules.modes.${m}`), rtp: nf(cfg.modes[m]!.rtp) }) }));
