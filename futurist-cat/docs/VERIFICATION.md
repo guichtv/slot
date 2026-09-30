@@ -103,3 +103,14 @@ Défaut trouvé et corrigé en route : le pilote d'horloge en `setTimeout(0)` af
 
 Défauts trouvés par ce test puis corrigés : à 960 px et sur tablette, boutons superposés et montants coupés (boutons système passés en haut à droite, montants dont la police se réduit) ; en 844×390 et Popout S, boutons hors écran (colonne élargie, SPIN au-dessus de turbo / auto) ; en portrait, texte de l'Ante coupé (vu sur capture en arabe, puis ajouté au test) ; en Popout S, Ante illisible (déplacé dans la colonne du HUD).
 
+### Vidéos (horloge virtuelle, image par image ; regardées en planches contact à 0,25-1 s)
+
+Toutes dans `docs/preuves/videos/` avec leur planche (`*-planche.jpg`, une image toutes les 0,5 s). Build QA servie, remplaçants de dev + squelette de test.
+
+| vidéo | taille | durée | ce qui a été regardé / constaté |
+|---|---|---|---|
+| `testanim-desktop.mp4` | 1440×900, 30 i/s | 107,8 s | F07 laser ×2 → 1,60 € ; F25 souris « pleine » → 3,00 € ; F10 anticipation ratée (≈ 2,0 s, mesurée de 14,8 à 16,8 s) ; F13 DOUBLE SCAN : intro avant les rouleaux, déchirure, deux points, ×3 × ×5 croisés → 30,00 €, GROS → SUPER GAIN, 30,80 € exacts ; F12 SCAN ; F15 exactement ×10 → GROS GAIN (seuil inclus) ; F17 GROS → SUPER → MÉGA, 60,20 € ; F19 tous les paliers jusqu'à CYBER, 1 536,00 € exacts. Aucune erreur de page |
+| `bonus-9vies.mp4` | 1280×720, 24 i/s | 97,0 s | anticipation ≈ 2 s, salto, intro 9 VIES (chat devant le voile), déchirure, mode scan, « Spins restants », puces, +3 FS, « 1,50 € → ×8 → 12,10 € », GROS GAIN en bonus (maintien 3,6 s), dernier spin, GAIN TOTAL qui roule jusqu'à 17,05 €, puces éteintes, plongeon retour, solde 1 016,05 € |
+
+Défauts vus dans une première prise de TEST ANIM (122,8 s) et corrigés avant la prise retenue : anticipation à 3,0 s (atterrissages hors budget, D45), plaque de palier figée 9 s (D44), chat grisé par le voile (D43).
+
