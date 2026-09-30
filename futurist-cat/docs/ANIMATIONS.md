@@ -20,7 +20,7 @@ Une ligne par moment (Annexe B), par premium, par palier et par offre. Phrase d'
 | A12 | Ante | bouton lumineux ACTIF, facteur + coût du prochain spin ; aucun effet de débit | 0,18 s | e2e + capture |
 | A13 | Spin | départ décalé par rouleau (petit recul puis vitesse), symboles étirés, arrêt aligné net + rebond (back.out), son par arrêt (3 variantes) | 1,2-1,6 s | vidéo |
 | A14 | Scatter qui tombe | réaction du portail, son montant (1, 2, 3), le chat le regarde, alert si tension | 0,5 s | vidéo |
-| A15a | Anticipation réussie | derniers rouleaux ralentis (1,8 s pour un rouleau ; 2,1 s partagées pour plusieurs), contour cyan, Scatters déjà posés qui réagissent, boucle de tension + montée, alert ×1,15, zoom de scène 1,06 (HUD fixe) | 1,8-2,1 s | vidéo (F09) : durée corrigée après constat (6 s sur deux rouleaux) |
+| A15a | Anticipation réussie | derniers rouleaux ralentis (1,8 s pour un rouleau ; 2,1 s partagées pour plusieurs, atterrissages compris), contour cyan, Scatters déjà posés qui réagissent, boucle de tension + montée, alert ×1,15, zoom de scène 1,06 (HUD fixe) | 1,8-2,1 s | vidéo : 6 s constatées (F09), puis 3,0 s (TEST ANIM, atterrissages en plus) → corrigé (D45) |
 | A15b | Anticipation ratée | idem puis « scatter_fail », le chat revient au fond, zoom remis | — | code (F10) |
 | A15c | Bait d'achat | non applicable : le jeu ne fait jamais miroiter l'achat pendant l'anticipation (choix : pas d'incitation pendant un tour payant) | — | n/a |
 | A16 | Intros | popup 9 VIES / DOUBLE REGARD / SCAN / DOUBLE SCAN : nom, nombre réel de spins, règle clé, illustration | — | vidéo (F09) |
@@ -31,7 +31,7 @@ Une ligne par moment (Annexe B), par premium, par palier et par offre. Phrase d'
 | A21 | Multiplicateurs | jeton ×N frappé sur la case d'arrivée (2,2 → 1 + onde) ; au gain : « base → ×N → final », le jeton envoie un trait vers le montant ; croisés : ×3 × ×5 affiché ×15 (valeur du book) | 0,34 s / étape | vidéo (F07, F13) |
 | A22 | +N FS | bannière au centre puis vole vers le compteur, compteur qui pulse | 1,1 s | vidéo (F09) |
 | A23 | Petit gain < ×10 | réaction des symboles + hop du chat (supprimé en turbo), rien de cinématique | 0,6-1,3 s | vidéo |
-| A24 | Paliers | voile léger, zoom de scène ×1,1 dans le décor, plaque + titre, compteur à chiffres fixes qui accélère avant chaque seuil et converge exactement ; 1er clic état final, 2e fermeture | voir paliers | vidéo (F09 : BIG WIN en bonus) ; défaut vu : décimales variables pendant la montée (« €0.005693 ») → corrigé (décimales du montant final), à revoir en vidéo |
+| A24 | Paliers | voile léger (le chat reste devant, D43), zoom de scène ×1,1 dans le décor, plaque + titre, compteur à chiffres fixes qui accélère avant chaque seuil et converge exactement ; 1er clic état final, 2e fermeture, sinon fermeture seule après 5,4 s (D44) | voir paliers | vidéo (TEST ANIM : GROS → SUPER → MÉGA → ÉPIQUE → CYBER, décimales fixes, convergence exacte 30,80 / 60,20 / 1 536,00) ; défauts vus et corrigés : maintien 9 s, chat grisé par le voile |
 | A25 | Montée de palier | titre qui change (pop), son de palier, secousse, nouvelle idée de décor | 0,35 s | code |
 | A26 | MAX WIN | uniquement sur `wincap` ; les yeux du chat emplissent le ciel, la manche s'arrête | 10,5 s | code (F20) |
 | A27 | Fin de bonus | GAIN TOTAL seul, centré (montant qui roule puis exact), clic → puces qui s'éteignent une à une, fin du mode scan | 0,6-2,2 s | vidéo (F09) |

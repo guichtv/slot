@@ -101,6 +101,7 @@ export class GamePresenter implements Presenter {
     this.d.sound.play('bonus_intro');
     this.d.sound.duck(true);
     const el = ui.showIntro(kind, spins);
+    this.d.scene.catFront(true); // the cat punches the intro popup: in front of the veil
     this.d.scene.veilTo(0.3);
     await ctx.waitClick(this.d.autoplaying() ? 6 : undefined);
     // the cat's hook tears the popup (<= 0.3 s after the click), then runs in place while the city slides
@@ -108,7 +109,7 @@ export class GamePresenter implements Presenter {
     this.d.sound.play('punch_tear');
     await ui.tearIntro(el, this.d.reduced());
     const sc = this.d.scene;
-    sc.veilTo(0, 0.3);
+    sc.veilTo(0, 0.3).eventCallback('onComplete', () => sc.catFront(false));
     this.d.sound.duck(false);
     if (kind === 'nineLives' || kind === 'doubleGaze') {
       this.d.sound.play('run_whoosh');
@@ -140,6 +141,7 @@ export class GamePresenter implements Presenter {
     let anticipated = false;
     this.d.ui.setPhase('stopping');
     for (let c = 0; c < COLS; c++) {
+      const land = ctx.skipped() ? T.spin.quickStopLand : T.spin.land * (this.turbo ? 0.75 : 1);
       if (tense(c)) {
         anticipated = true;
         if (!this.anticipationLoop) {
@@ -152,17 +154,17 @@ export class GamePresenter implements Presenter {
         grid.anticipate(c, true);
         // the scatters already on the grid react while waiting
         for (let cc = 0; cc < c; cc++) grid.reels[cc]!.cells.forEach((v) => { if (v.id === 'S') v.react(); });
-        // the whole slowdown lasts 1.8-2.1 s whatever the number of reels in tension
+        // the whole slowdown, landings included, lasts 1.8 s (one reel) or 2.1 s shared (1.3 + 0.8,
+        // 1.1 + 0.5 + 0.5...) whatever the number of reels in tension (measured 3 s before: landings were extra)
         const n = antic.filter((a) => a > 0).length;
         const first = !antic.slice(0, c).some((a) => a > 0);
         const next = n === 2 ? 0.8 : 0.5;
-        const dur = n <= 1 ? T.spin.anticipationTotal1 : first ? T.spin.anticipationTotal - (n - 1) * next : next;
-        await ctx.wait((bought ? T.bonus.scatterDrop : dur) * (this.turbo ? 0.8 : 1));
+        const slot = n <= 1 ? T.spin.anticipationTotal1 : first ? T.spin.anticipationTotal - (n - 1) * next : next;
+        await ctx.wait(bought ? T.bonus.scatterDrop * (this.turbo ? 0.8 : 1) : Math.max(0.12, slot * (this.turbo ? 0.8 : 1) - land));
         grid.anticipate(c, false);
       } else if (c > 0) await ctx.wait(T.spin.reelGap * k);
       const pad = e.padding?.top[c] ?? null;
-      const land = ctx.skipped() ? T.spin.quickStopLand : T.spin.land * (this.turbo ? 0.75 : 1);
-      await grid.reels[c]!.stop(e.board[c]!, pad && pad !== 'W' ? pad : null, land);
+      await grid.reels[c]!.stop(e.board[c]!, pad && pad !== 'W' ? pad : null, ctx.skipped() ? T.spin.quickStopLand : land);
       this.d.sound.play(c === COLS - 1 ? 'reel_stop_last' : 'reel_stop', { variant: true });
       if (e.board[c]!.includes('S')) {
         scatters += e.board[c]!.filter((s) => s === 'S').length;
@@ -299,7 +301,9 @@ export class GamePresenter implements Presenter {
     const tl = c.build(micros, this.d.baseBet(), tier, this.d.reduced(), this.turbo);
     await ctx.play(tl); // first click: final state
     const hold = (this.turbo ? T.tiers.holdAtEndTurbo : T.tiers.holdAtEnd);
-    await ctx.waitClick(this.d.autoplaying() || this.inBonus ? hold : hold * 2.5); // second click: close
+    // second click closes; without a click it closes by itself (manual play: a little longer, 5.4 s max,
+    // was 9 s - too long in the TEST ANIM video)
+    await ctx.waitClick(this.d.autoplaying() || this.inBonus ? hold : hold * 1.5);
     await new Promise<void>((res) => c.close(this.d.reduced()).eventCallback('onComplete', () => res()));
     this.d.ui.setPhase(this.inBonus ? 'bonus' : 'resolving');
   }
@@ -407,7 +411,7 @@ export class GamePresenter implements Presenter {
     this.anticipationLoop?.stop(0.1); this.anticipationLoop = null;
     this.label.visible = false;
     this.fsBanner.visible = false;
-    if (cancelled) { sc.veilTo(0, 0.2); sc.resetZoom(0.2); this.d.ui.setPhase('idle'); }
+    if (cancelled) { sc.veilTo(0, 0.2); sc.catFront(false); sc.resetZoom(0.2); this.d.ui.setPhase('idle'); }
     // otherwise the controller switches to idle once the end-round answer is in
   }
 
@@ -446,6 +450,7 @@ export class GamePresenter implements Presenter {
     const sc = this.d.scene;
     sc.mech.clearAll();
     sc.decor.setScan(0, true);
+    sc.catFront(false);
     this.inBonus = false;
     this.d.ui.setSpinsLeft(null);
   }

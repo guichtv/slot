@@ -168,6 +168,7 @@ export class Celebration {
     const setText = () => { const s = this.hooks.format(Math.round(state.v), dec); this.amount.set(s.padStart(len, '\u2007')); };
     let t = 0;
     tl.call(() => { this.hooks.duck(true); this.hooks.sound('bigwin_intro'); this.hooks.cat(top === 'big' ? 'tier1' : top === 'max' ? 'maxWin' : 'tierHigh'); }, undefined, 0);
+    this.scene.catFront(true);
     tl.add(this.scene.veilTo(0.34, 0.3), 0);
     if (!reduced) tl.add(this.scene.zoomTo({ x: this.scene.layoutNow!.design.focus.x, y: this.scene.layoutNow!.design.focus.y }, T.scene.celebrateZoom, T.scene.zoomIn), 0);
     tl.fromTo(this.root.scale, { x: 0.6, y: 0.6 }, { x: 1, y: 1, duration: 0.35, ease: 'back.out(2)' }, 0);
@@ -194,6 +195,7 @@ export class Celebration {
     const tl = gsap.timeline();
     tl.to(this.root, { alpha: 0, duration: 0.25 }, 0);
     tl.add(this.scene.veilTo(0, 0.3), 0);
+    tl.call(() => this.scene.catFront(false), [], 0.3);
     if (!reduced) tl.add(this.scene.resetZoom(T.scene.zoomOut), 0);
     tl.call(() => {
       this.root.visible = false; this.active = false;

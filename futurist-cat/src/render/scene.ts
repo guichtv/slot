@@ -1,7 +1,7 @@
 // Scene graph. `cam` is the scene camera: every zoom (anticipation, celebrations, transitions)
 // scales decor + grid + cat TOGETHER, so the cat never zooms twice and its feet stay on its
 // shadow. The HUD is HTML and stays fixed. Screen-space layers (veil, celebration) sit above.
-import { Container, Graphics, Point, type Renderer } from 'pixi.js';
+import { Container, Graphics, Point, RenderLayer, type Renderer } from 'pixi.js';
 import gsap from 'gsap';
 import { Decor } from './decor';
 import { GridView } from './grid';
@@ -17,6 +17,8 @@ export class Scene {
   readonly world = new Container({ label: 'world' });
   readonly screen = new Container({ label: 'screen' });
   readonly veil = new Graphics();
+  /** the cat is drawn here (above the veil, below the plates) while it is the star: celebrations, intros */
+  readonly catLayer = new RenderLayer();
   readonly celebrationLayer = new Container({ label: 'celebration' });
   readonly bannerLayer = new Container({ label: 'banners' });
   readonly decor: Decor;
@@ -44,7 +46,7 @@ export class Scene {
     this.grid.overlay.addChild(this.mech.circuit, this.mech.chipsLayer, this.mech.tokens);
     this.world.addChild(this.decor.back, this.decor.front, this.grid.root, this.catSlot, this.mech.dotLayer, this.shapes.root, this.particles.root, this.decor.fore);
     this.cam.addChild(this.world);
-    this.screen.addChild(this.veil, this.celebrationLayer, this.bannerLayer);
+    this.screen.addChild(this.veil, this.catLayer, this.celebrationLayer, this.bannerLayer);
     this.veil.alpha = 0;
   }
 
@@ -109,6 +111,11 @@ export class Scene {
 
   shake(dur = 0.08, amp = 6): void { if (this.reduced) return; this.shakeT = dur; this.shakeAmp = amp; }
 
+  /** cat above the veil (keeps its world transform: zoom, camera) or back in the world order */
+  catFront(on: boolean): void {
+    if (on && this.catSlot.parentRenderLayer !== this.catLayer) this.catLayer.attach(this.catSlot);
+    else if (!on && this.catSlot.parentRenderLayer === this.catLayer) this.catLayer.detach(this.catSlot);
+  }
   veilTo(alpha: number, dur = 0.25): gsap.core.Tween { return gsap.to(this.veil, { alpha, duration: dur }); }
 
   update(dt: number, idleAllowed: boolean): void {
