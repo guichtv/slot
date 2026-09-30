@@ -39,6 +39,9 @@ if (!gate) {
 
 // ---------------- the rest
 if (existsSync(resolve(ROOT, 'media'))) cpSync(resolve(ROOT, 'media'), join(OUT, 'MEDIA'), { recursive: true }); else mkdirSync(join(OUT, 'MEDIA'));
+if (!['CYBERCAT-BG.webp', 'CYBERCAT-FG.webp'].every((f) => existsSync(join(OUT, 'MEDIA', f)))) {
+  writeFileSync(join(OUT, 'MEDIA', 'MEDIA-ABSENT.txt'), `Medias Stake absents ou incomplets : CYBERCAT-BG (mission ImageGen "media", sans texte ni chat) et CYBERCAT-FG (rendu HD du chat depuis le GLB : npm run cat:poses), puis node tools/media.mjs (BG + FG < 3 Mo, apercu superpose).\nAucune image de remplacement n'est livree.\n`);
+}
 cpSync(resolve(ROOT, 'CONTRAT-EVENTS.md'), join(OUT, 'CONTRAT-EVENTS.md'));
 cpSync(resolve(ROOT, 'public/game-math-config.json'), join(OUT, 'game-math-config.example.json'));
 const C = join(OUT, 'CONTROLES');
