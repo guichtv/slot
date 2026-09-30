@@ -57,7 +57,7 @@ try {
       if (R.grid.x < -1 || R.grid.y < -1 || R.grid.x + R.grid.w > innerWidth + 1 || R.grid.y + R.grid.h > innerHeight + 1) issues.push('grille tronquee');
       return { cls: R.cls, grid: R.grid, count: boxes.length, issues, bal: document.querySelector('.field.balance .val')?.textContent, win: document.querySelector('.field.win .val')?.textContent };
     }, s.touch);
-    await page.screenshot({ path: resolve(OUT, `${s.name}.png`) });
+    await page.screenshot({ path: resolve(OUT, `${s.name}.png`), timeout: 120000 });
     results.push({ size: s.name, ...r });
     failures += r.issues.length;
     console.log(`${r.issues.length ? 'KO' : 'OK'} ${s.name} (${r.cls}) ${r.count} elements${r.issues.length ? '\n   ' + r.issues.join('\n   ') : ''}`);

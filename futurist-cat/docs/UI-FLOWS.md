@@ -9,6 +9,20 @@ Tous les écrans « clic n'importe où » (accueil, intros, fin de bonus, célé
 3. **Entrée** (au clic) : le logo vole vers sa place en haut à gauche, décor + grille + HUD s'installent, le chat atterrit (dive, traînée depuis le haut, onde cyan, poussière, secousse de 80 ms). Mouvements réduits : fondu. GLB indisponible ou > 8 s : pose fixe puis fondu, jamais de dive tardif.
 4. Manche active côté serveur (rechargement en plein bonus) : reprise au point sauvegardé (`/bet/event`), sans nouveau débit.
 
+## HUD par classe de largeur
+
+La grille et le chat ne passent jamais sous le HUD : le monde est mis à l'échelle dans la zone laissée libre. Les montants ne sont jamais coupés : à 10 chiffres, leur police se réduit pour tenir (`fitVal`).
+
+| classe | quand | disposition |
+|---|---|---|
+| xl | ≥ 1280 px | une barre en bas : BUY BONUS · − mise + · gain · solde · turbo SPIN auto · menu son plein écran |
+| md | 960-1279 px | même barre sans les boutons système, qui passent en haut à droite |
+| tablette | tactile < 1366 px | comme md, cibles ≥ 44 px |
+| portrait | hauteur > largeur × 1,08 | ligne 1 gain / solde ; ligne 2 − mise + / turbo SPIN auto ; BUY BONUS au-dessus du HUD à gauche ; boutons système en haut à droite |
+| court | hauteur < 520 px (paysage mobile, Popout) | colonne à droite : système, SPIN avec turbo et auto dessous, mise, gain / solde, BUY BONUS ; encore plus compact sous 340 px de haut (Popout S) |
+
+Le bouton Ante suit la même règle : il affiche toujours son titre, son état et le coût du prochain spin, et sa police se réduit pour tenir (la description des chances est masquée en portrait et en court).
+
 ## Spin
 
 SPIN / Espace / Entrée → le bouton passe en « arrêt rapide » (carré) pendant le défilement ; un 2e appui arrête les rouleaux sans changer le résultat (sauf `disabledSlamstop`). Pendant la résolution et les célébrations, SPIN / clic = passer à l'état final. Aucun spin payant ne part pendant un bonus.
