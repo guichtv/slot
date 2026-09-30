@@ -110,7 +110,10 @@ Toutes dans `docs/preuves/videos/` avec leur planche (`*-planche.jpg`, une image
 | vidéo | taille | durée | ce qui a été regardé / constaté |
 |---|---|---|---|
 | `testanim-desktop.mp4` | 1440×900, 30 i/s | 107,8 s | F07 laser ×2 → 1,60 € ; F25 souris « pleine » → 3,00 € ; F10 anticipation ratée (≈ 2,0 s, mesurée de 14,8 à 16,8 s) ; F13 DOUBLE SCAN : intro avant les rouleaux, déchirure, deux points, ×3 × ×5 croisés → 30,00 €, GROS → SUPER GAIN, 30,80 € exacts ; F12 SCAN ; F15 exactement ×10 → GROS GAIN (seuil inclus) ; F17 GROS → SUPER → MÉGA, 60,20 € ; F19 tous les paliers jusqu'à CYBER, 1 536,00 € exacts. Aucune erreur de page |
+| `testanim-mobile.mp4` | 390×844 DPR3 (sortie 780 px), 15 i/s | 109,9 s | même enchaînement en portrait : grille en haut, chat dessous, BUY BONUS au-dessus du HUD, boutons système en haut à droite, texte tactile « TOUCHEZ N'IMPORTE OÙ », plaques de palier lisibles, chat lumineux pendant les célébrations. 15 i/s au lieu de 30 : en DPR3 le rendu logiciel dépasse la limite de 2 h par tâche du conteneur |
 | `bonus-9vies.mp4` | 1280×720, 24 i/s | 97,0 s | anticipation ≈ 2 s, salto, intro 9 VIES (chat devant le voile), déchirure, mode scan, « Spins restants », puces, +3 FS, « 1,50 € → ×8 → 12,10 € », GROS GAIN en bonus (maintien 3,6 s), dernier spin, GAIN TOTAL qui roule jusqu'à 17,05 €, puces éteintes, plongeon retour, solde 1 016,05 € |
+
+Les TEST ANIM rejouent les fixtures par le lecteur de replay (aucun appel au portefeuille) : le solde n'y bouge pas, c'est voulu ; débit et crédit sont prouvés par l'e2e et par `bonus-9vies.mp4` (solde final 1 016,05 €).
 
 Défauts vus dans une première prise de TEST ANIM (122,8 s) et corrigés avant la prise retenue : anticipation à 3,0 s (atterrissages hors budget, D45), plaque de palier figée 9 s (D44), chat grisé par le voile (D43).
 
