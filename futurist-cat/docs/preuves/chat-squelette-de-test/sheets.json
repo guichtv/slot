@@ -1,0 +1,34 @@
+{
+  "idle": {
+    "file": "/home/user/slot/futurist-cat/tools/.work/report/sheets/idle.png",
+    "clip": "idle",
+    "duration": 11.329999923706055,
+    "drawCalls": 1,
+    "textures": 5,
+    "gpuBytes": 31581167
+  },
+  "flip": {
+    "file": "/home/user/slot/futurist-cat/tools/.work/report/sheets/flip.png",
+    "clip": "flip",
+    "duration": 2.450000047683716,
+    "drawCalls": 1,
+    "textures": 5,
+    "gpuBytes": 31581167
+  },
+  "dive": {
+    "file": "/home/user/slot/futurist-cat/tools/.work/report/sheets/dive.png",
+    "clip": "dive",
+    "duration": 2.866666793823242,
+    "drawCalls": 1,
+    "textures": 5,
+    "gpuBytes": 31581167
+  },
+  "run": {
+    "file": "/home/user/slot/futurist-cat/tools/.work/report/sheets/run.png",
+    "clip": "run",
+    "duration": 0.6666666865348816,
+    "drawCalls": 1,
+    "textures": 5,
+    "gpuBytes": 31581167
+  }
+}

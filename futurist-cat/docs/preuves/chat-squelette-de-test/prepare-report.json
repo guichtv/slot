@@ -1,0 +1,800 @@
+{
+  "source": "tools/.work/test-rig.glb",
+  "sourceBytes": 603252,
+  "sourceSha256": "859c4c4b0663c2dc2900be1876bb271a6977924cdf67c84e5fe4746b668280b8",
+  "steps": [
+    {
+      "step": "uv-coverage",
+      "coveredPct": 1.67
+    },
+    {
+      "step": "emissive-mask",
+      "eyePixelsPct": 0.238,
+      "expectedPct": 0.1
+    },
+    {
+      "step": "uv-padding",
+      "px": 8
+    },
+    {
+      "step": "material",
+      "metallic": 0.1,
+      "roughness": 0.45,
+      "emissive": "mask 512 cyan x2.2",
+      "doubleSided": false,
+      "removed": [
+        "emissive=basecolor",
+        "KHR_materials_specular",
+        "KHR_materials_ior"
+      ]
+    },
+    {
+      "step": "run-freeze-source",
+      "freezeMs": 33
+    },
+    {
+      "step": "clips",
+      "removed": 3,
+      "subclips": {
+        "flip": [
+          0.45,
+          2.9
+        ],
+        "hooks": [
+          2.75,
+          3.95
+        ],
+        "dive": [
+          0.3,
+          3.167
+        ],
+        "run": "frames 1-21 (fin exclue) + cle de bouclage",
+        "hop": "dance frames 0-39 (fin exclue)"
+      }
+    },
+    {
+      "step": "idle34-yaw",
+      "deg": 32
+    }
+  ],
+  "clips": {
+    "idle": {
+      "sourceClip": "Long_Breathe_and_Look_Around",
+      "source": {
+        "duration": 11.33,
+        "frames": 341,
+        "minYcm": 1.7,
+        "p25cm": 1.8,
+        "maxOfMinCm": 2.3,
+        "lowestAt": 2.83,
+        "lowestBone": "mixamorigLeftFoot",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -14,
+        "yawEnd": -14,
+        "hipsStartCm": [
+          -1.8,
+          95,
+          20.5
+        ]
+      },
+      "before": {
+        "duration": 11.33,
+        "frames": 341,
+        "minYcm": 1.7,
+        "p25cm": 1.8,
+        "maxOfMinCm": 2.3,
+        "lowestAt": 2.83,
+        "lowestBone": "mixamorigLeftFoot",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -14,
+        "yawEnd": -14,
+        "hipsStartCm": [
+          -1.8,
+          95,
+          20.5
+        ]
+      },
+      "correction": {
+        "constantCm": -1.8,
+        "maxLiftCm": 0.1
+      },
+      "after": {
+        "duration": 11.33,
+        "frames": 341,
+        "minYcm": 0,
+        "p25cm": 0,
+        "maxOfMinCm": 0.5,
+        "lowestAt": 2.83,
+        "lowestBone": "mixamorigLeftFoot",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -14,
+        "yawEnd": -14,
+        "hipsStartCm": [
+          -1.8,
+          93.2,
+          20.5
+        ],
+        "yawGapToIdle": 0
+      }
+    },
+    "alert": {
+      "sourceClip": "Alert",
+      "source": {
+        "duration": 4.033,
+        "frames": 122,
+        "minYcm": 0.6,
+        "p25cm": 0.6,
+        "maxOfMinCm": 0.6,
+        "lowestAt": 0,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -14,
+        "yawEnd": -14,
+        "hipsStartCm": [
+          -1.8,
+          92,
+          20.5
+        ]
+      },
+      "before": {
+        "duration": 4.033,
+        "frames": 122,
+        "minYcm": 0.6,
+        "p25cm": 0.6,
+        "maxOfMinCm": 0.6,
+        "lowestAt": 0,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -14,
+        "yawEnd": -14,
+        "hipsStartCm": [
+          -1.8,
+          92,
+          20.5
+        ]
+      },
+      "correction": {
+        "constantCm": -0.6,
+        "maxLiftCm": 0
+      },
+      "after": {
+        "duration": 4.033,
+        "frames": 122,
+        "minYcm": 0,
+        "p25cm": 0,
+        "maxOfMinCm": 0,
+        "lowestAt": 0,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -14,
+        "yawEnd": -14,
+        "hipsStartCm": [
+          -1.8,
+          91.4,
+          20.5
+        ],
+        "yawGapToIdle": 0
+      }
+    },
+    "idle34": {
+      "sourceClip": "Axe_Breathe_and_Look_Around",
+      "source": {
+        "duration": 11.33,
+        "frames": 341,
+        "minYcm": -4.2,
+        "p25cm": -4.1,
+        "maxOfMinCm": -3.6,
+        "lowestAt": 2.83,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -42,
+        "yawEnd": -42,
+        "hipsStartCm": [
+          -11.8,
+          86.5,
+          20.5
+        ]
+      },
+      "before": {
+        "duration": 11.33,
+        "frames": 341,
+        "minYcm": -4.2,
+        "p25cm": -4.1,
+        "maxOfMinCm": -3.6,
+        "lowestAt": 2.83,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -10,
+        "yawEnd": -10,
+        "hipsStartCm": [
+          -11.8,
+          86.5,
+          20.5
+        ]
+      },
+      "correction": {
+        "constantCm": 4.1,
+        "maxLiftCm": 0.1
+      },
+      "after": {
+        "duration": 11.33,
+        "frames": 341,
+        "minYcm": 0,
+        "p25cm": 0,
+        "maxOfMinCm": 0.5,
+        "lowestAt": 2.83,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -10,
+        "yawEnd": -10,
+        "hipsStartCm": [
+          -11.8,
+          90.6,
+          20.5
+        ],
+        "yawGapToIdle": 4
+      }
+    },
+    "dance": {
+      "sourceClip": "Step_Hip_Hop_Dance",
+      "source": {
+        "duration": 2.667,
+        "frames": 81,
+        "minYcm": -12.5,
+        "p25cm": -5.9,
+        "maxOfMinCm": 6,
+        "lowestAt": 0.33,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 6,
+        "driftZcm": 69.9,
+        "yawStart": -14,
+        "yawEnd": -14.2,
+        "hipsStartCm": [
+          -1.8,
+          95,
+          20.5
+        ]
+      },
+      "before": {
+        "duration": 2.667,
+        "frames": 81,
+        "minYcm": -12.5,
+        "p25cm": -5.9,
+        "maxOfMinCm": 6,
+        "lowestAt": 0.33,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -14,
+        "yawEnd": -14.2,
+        "hipsStartCm": [
+          -1.8,
+          95,
+          20.5
+        ]
+      },
+      "correction": {
+        "constantCm": 5.9,
+        "maxLiftCm": 6.6
+      },
+      "after": {
+        "duration": 2.667,
+        "frames": 81,
+        "minYcm": 0,
+        "p25cm": 3.7,
+        "maxOfMinCm": 11.9,
+        "lowestAt": 0.33,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -14,
+        "yawEnd": -14.2,
+        "hipsStartCm": [
+          -1.8,
+          101.1,
+          20.5
+        ],
+        "yawGapToIdle": 0.2
+      }
+    },
+    "flip": {
+      "sourceClip": "Backflip_and_Hooks",
+      "source": {
+        "duration": 5.867,
+        "frames": 177,
+        "minYcm": -15.4,
+        "p25cm": -3,
+        "maxOfMinCm": 104.7,
+        "lowestAt": 2.5,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 110,
+        "yawStart": -46,
+        "yawEnd": -46,
+        "hipsStartCm": [
+          -1.8,
+          90,
+          20.5
+        ]
+      },
+      "before": {
+        "duration": 2.45,
+        "frames": 75,
+        "minYcm": -15.4,
+        "p25cm": -10.8,
+        "maxOfMinCm": 104.7,
+        "lowestAt": 2.05,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -45.9,
+        "yawEnd": 0,
+        "hipsStartCm": [
+          -1.8,
+          90,
+          20.5
+        ]
+      },
+      "correction": {
+        "constantCm": 10.8,
+        "maxLiftCm": 4.6
+      },
+      "after": {
+        "duration": 2.45,
+        "frames": 75,
+        "minYcm": 0,
+        "p25cm": 3.5,
+        "maxOfMinCm": 115.5,
+        "lowestAt": 2.05,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -45.9,
+        "yawEnd": 0,
+        "hipsStartCm": [
+          -1.8,
+          100.8,
+          20.5
+        ],
+        "yawGapToIdle": 14
+      }
+    },
+    "hooks": {
+      "sourceClip": "Backflip_and_Hooks",
+      "source": {
+        "duration": 5.867,
+        "frames": 177,
+        "minYcm": -15.4,
+        "p25cm": -3,
+        "maxOfMinCm": 104.7,
+        "lowestAt": 2.5,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 110,
+        "yawStart": -46,
+        "yawEnd": -46,
+        "hipsStartCm": [
+          -1.8,
+          90,
+          20.5
+        ]
+      },
+      "before": {
+        "duration": 1.2,
+        "frames": 38,
+        "minYcm": -4.1,
+        "p25cm": -3,
+        "maxOfMinCm": -3,
+        "lowestAt": 0,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": 0,
+        "yawEnd": 0,
+        "hipsStartCm": [
+          -1.8,
+          89.3,
+          20.5
+        ]
+      },
+      "correction": {
+        "constantCm": 3,
+        "maxLiftCm": 1.1
+      },
+      "after": {
+        "duration": 1.2,
+        "frames": 38,
+        "minYcm": 0,
+        "p25cm": 0,
+        "maxOfMinCm": 0.9,
+        "lowestAt": 0.25,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": 0,
+        "yawEnd": 0,
+        "hipsStartCm": [
+          -1.8,
+          93.4,
+          20.5
+        ],
+        "yawGapToIdle": 14
+      }
+    },
+    "dive": {
+      "sourceClip": "Dive_Down_and_Land_2",
+      "source": {
+        "duration": 3.167,
+        "frames": 96,
+        "minYcm": -22.9,
+        "p25cm": -20.6,
+        "maxOfMinCm": 730.3,
+        "lowestAt": 2,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 31.8,
+        "driftZcm": 70.5,
+        "yawStart": 180,
+        "yawEnd": 15,
+        "hipsStartCm": [
+          30,
+          800,
+          -50
+        ]
+      },
+      "before": {
+        "duration": 2.867,
+        "frames": 87,
+        "minYcm": -22.9,
+        "p25cm": -20.6,
+        "maxOfMinCm": 518.4,
+        "lowestAt": 1.7,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": 0,
+        "yawEnd": 15,
+        "hipsStartCm": [
+          -1.8,
+          611.4,
+          20.5
+        ]
+      },
+      "correction": {
+        "constantCm": -2,
+        "maxLiftCm": 0
+      },
+      "after": {
+        "duration": 2.867,
+        "frames": 87,
+        "minYcm": -24.9,
+        "p25cm": -22.6,
+        "maxOfMinCm": 516.4,
+        "lowestAt": 1.7,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": 0,
+        "yawEnd": 15,
+        "hipsStartCm": [
+          -1.8,
+          609.4,
+          20.5
+        ],
+        "yawGapToIdle": 29
+      }
+    },
+    "run": {
+      "sourceClip": "Running",
+      "source": {
+        "duration": 0.7,
+        "frames": 22,
+        "minYcm": -11.4,
+        "p25cm": -10.2,
+        "maxOfMinCm": 2.8,
+        "lowestAt": 0.7,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": 0,
+        "yawEnd": 0,
+        "hipsStartCm": [
+          -1.8,
+          85,
+          20.5
+        ]
+      },
+      "before": {
+        "duration": 0.667,
+        "frames": 21,
+        "minYcm": -11.4,
+        "p25cm": -10.2,
+        "maxOfMinCm": 2.8,
+        "lowestAt": 0.67,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": 0,
+        "yawEnd": 0,
+        "hipsStartCm": [
+          -1.8,
+          85,
+          20.5
+        ]
+      },
+      "correction": {
+        "constantCm": 10.2,
+        "maxLiftCm": 1.2
+      },
+      "after": {
+        "duration": 0.667,
+        "frames": 21,
+        "minYcm": 0,
+        "p25cm": 1.1,
+        "maxOfMinCm": 13.7,
+        "lowestAt": 0.67,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": 0,
+        "yawEnd": 0,
+        "hipsStartCm": [
+          -1.8,
+          96.4,
+          20.5
+        ],
+        "yawGapToIdle": 14
+      }
+    },
+    "hop": {
+      "sourceClip": "Step_Hip_Hop_Dance",
+      "source": {
+        "duration": 2.667,
+        "frames": 81,
+        "minYcm": -12.5,
+        "p25cm": -5.9,
+        "maxOfMinCm": 6,
+        "lowestAt": 0.33,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 6,
+        "driftZcm": 69.9,
+        "yawStart": -14,
+        "yawEnd": -14.2,
+        "hipsStartCm": [
+          -1.8,
+          95,
+          20.5
+        ]
+      },
+      "before": {
+        "duration": 1.267,
+        "frames": 39,
+        "minYcm": -12.5,
+        "p25cm": -6,
+        "maxOfMinCm": 6,
+        "lowestAt": 0.33,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -14,
+        "yawEnd": -17.6,
+        "hipsStartCm": [
+          -1.8,
+          95,
+          20.5
+        ]
+      },
+      "correction": {
+        "constantCm": 6,
+        "maxLiftCm": 6.6
+      },
+      "after": {
+        "duration": 1.267,
+        "frames": 39,
+        "minYcm": 0,
+        "p25cm": 3.7,
+        "maxOfMinCm": 12,
+        "lowestAt": 0.33,
+        "lowestBone": "mixamorigLeftToeBase",
+        "driftXcm": 0,
+        "driftZcm": 0,
+        "yawStart": -14,
+        "yawEnd": -17.6,
+        "hipsStartCm": [
+          -1.8,
+          101.2,
+          20.5
+        ],
+        "yawGapToIdle": 3.6
+      }
+    }
+  },
+  "warnings": [
+    "dive : fin tournee de 29 deg par rapport a idle (fondu long prevu)"
+  ],
+  "inventory": {
+    "joints": 23,
+    "jointNames": [
+      "mixamorig:Hips",
+      "mixamorig:Spine",
+      "mixamorig:Spine1",
+      "mixamorig:Spine2",
+      "mixamorig:Neck",
+      "mixamorig:Head",
+      "headfront",
+      "mixamorig:LeftShoulder",
+      "mixamorig:LeftArm",
+      "mixamorig:LeftForeArm",
+      "mixamorig:LeftHand",
+      "mixamorig:RightShoulder",
+      "mixamorig:RightArm",
+      "mixamorig:RightForeArm",
+      "mixamorig:RightHand",
+      "mixamorig:LeftUpLeg",
+      "mixamorig:LeftLeg",
+      "mixamorig:LeftFoot",
+      "mixamorig:LeftToeBase",
+      "mixamorig:RightUpLeg",
+      "mixamorig:RightLeg",
+      "mixamorig:RightFoot",
+      "mixamorig:RightToeBase"
+    ],
+    "triangles": 396,
+    "materials": 1,
+    "textures": [
+      {
+        "name": "Cyber_Cat_texture",
+        "mime": "image/png",
+        "size": [
+          2048,
+          2048
+        ],
+        "bytes": 15929
+      }
+    ],
+    "animations": [
+      {
+        "name": "Long_Breathe_and_Look_Around",
+        "duration": 11.33
+      },
+      {
+        "name": "Alert",
+        "duration": 4.033
+      },
+      {
+        "name": "Axe_Breathe_and_Look_Around",
+        "duration": 11.33
+      },
+      {
+        "name": "Step_Hip_Hop_Dance",
+        "duration": 2.667
+      },
+      {
+        "name": "Backflip_and_Hooks",
+        "duration": 5.867
+      },
+      {
+        "name": "Dive_Down_and_Land_2",
+        "duration": 3.167
+      },
+      {
+        "name": "Running",
+        "duration": 0.7
+      },
+      {
+        "name": "Walking",
+        "duration": 1
+      },
+      {
+        "name": "Alert_Quick_Turn_Right",
+        "duration": 2
+      },
+      {
+        "name": "Armature|clip0|baselayer",
+        "duration": 0
+      }
+    ],
+    "rootScale": [
+      {
+        "name": "Armature",
+        "scale": [
+          0.01,
+          0.01,
+          0.01
+        ],
+        "rotation": [
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "idleHipsFrame0": {
+    "x": -1.8,
+    "y": 95,
+    "z": 20.5,
+    "expected": {
+      "x": -1.8,
+      "z": 20.5
+    }
+  },
+  "output": {
+    "glbBytes": 64528,
+    "textures": [
+      {
+        "name": "Cyber_Cat_texture",
+        "mime": "image/webp",
+        "size": [
+          2048,
+          2048
+        ],
+        "bytes": 8004
+      },
+      {
+        "name": "cat_emissive_mask",
+        "mime": "image/webp",
+        "size": [
+          512,
+          512
+        ],
+        "bytes": 582
+      }
+    ],
+    "clips": [
+      {
+        "name": "idle",
+        "duration": 11.33
+      },
+      {
+        "name": "alert",
+        "duration": 4.033
+      },
+      {
+        "name": "idle34",
+        "duration": 11.33
+      },
+      {
+        "name": "dance",
+        "duration": 2.667
+      },
+      {
+        "name": "flip",
+        "duration": 2.45
+      },
+      {
+        "name": "hooks",
+        "duration": 1.2
+      },
+      {
+        "name": "dive",
+        "duration": 2.867
+      },
+      {
+        "name": "run",
+        "duration": 0.667
+      },
+      {
+        "name": "hop",
+        "duration": 1.267
+      }
+    ],
+    "extensions": [
+      "EXT_meshopt_compression",
+      "EXT_texture_webp",
+      "KHR_materials_emissive_strength",
+      "KHR_mesh_quantization"
+    ]
+  },
+  "validate": " ERROR\ninfo: No errors found.\n WARNING\n INFO\n HINT\ninfo: No hints found.",
+  "inspect": "ok"
+}
