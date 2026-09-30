@@ -97,3 +97,9 @@ Défaut trouvé et corrigé en route : le pilote d'horloge en `setTimeout(0)` af
 | social_mode_no_dollar | solde « 1 000,00 SC », libellé « JEU », BUY BONUS et turbo masqués par la juridiction, aucun « $ » |
 | replay_no_wallet | `/bet/replay/cyber-cat/1/base/7` seulement, aucun appel au portefeuille |
 
+### HUD : 5 langues × 7 tailles, montants à 10 chiffres
+
+`docs/preuves/hud/RESULTATS.md` et 35 captures (`docs/preuves/hud/<langue>/<taille>.jpg`) : **35/35 OK** en fr, ar (droite à gauche), ru, id, fi (les libellés les plus longs) sur 1920×1080, 1440×900, 960×720, tablette 1024×768 tactile, portrait 390×844 DPR3, court 844×390 DPR3, Popout S 400×300.
+
+Défauts trouvés par ce test puis corrigés : à 960 px et sur tablette, boutons superposés et montants coupés (boutons système passés en haut à droite, montants dont la police se réduit) ; en 844×390 et Popout S, boutons hors écran (colonne élargie, SPIN au-dessus de turbo / auto) ; en portrait, texte de l'Ante coupé (vu sur capture en arabe, puis ajouté au test) ; en Popout S, Ante illisible (déplacé dans la colonne du HUD).
+
