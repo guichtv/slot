@@ -71,11 +71,11 @@ export class GameApp {
   stop(): void { this.running = false; cancelAnimationFrame(this.raf); }
 
   /** QA: advance game time by ms in fixed 1/fps steps; `renderEvery` > 1 skips Pixi renders (logic only) */
-  step(ms: number, fps = 60, renderEvery = 1): void {
+  step(ms: number, fps = 60, renderEvery = 1, renderLast = true): void {
     const n = Math.max(1, Math.round((ms / 1000) * fps));
     for (let i = 0; i < n; i++) {
       this.o.clock.advance(1 / fps);
-      if (renderEvery <= 1 || i === n - 1 || i % renderEvery === 0) this.frame(1 / fps);
+      if (renderEvery <= 1 || (renderLast && i === n - 1) || i % renderEvery === renderEvery - 1) this.frame(1 / fps);
       else { gsap.updateRoot(this.o.clock.time); for (const f of this.onBeforeRender) f(1 / fps); }
     }
   }

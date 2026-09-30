@@ -27,6 +27,24 @@ export interface HistoryRow { id: number; mode: string; bet: string; win: string
 
 const AUTO_STEPS = [10, 25, 50, 100, 250, 500, 1000];
 
+const overflows = (e: HTMLElement) => e.clientWidth > 0 && (e.scrollWidth > e.clientWidth + 1 || e.scrollHeight > e.clientHeight + 1);
+/** shrink `node`'s font until it and the given parts fit their boxes (long translations, small screens) */
+function fitFont(node: HTMLElement, basePx: number, minPx: number, parts: HTMLElement[] = []): void {
+  let px = basePx;
+  node.style.fontSize = `${px}px`;
+  while (px > minPx && (overflows(node) || parts.some(overflows))) { px = Math.max(minPx, px - 0.5); node.style.fontSize = `${px}px`; }
+}
+/** a HUD amount never gets cut: its font shrinks to fit (10-digit amounts), re-measured only when needed */
+function fitVal(v: HTMLElement, cls: string): void {
+  const key = `${v.textContent?.length ?? 0}/${cls}`;
+  if (v.dataset.fit === key) return;
+  v.dataset.fit = key;
+  v.style.fontSize = '';
+  if (!overflows(v)) return;
+  const base = parseFloat(getComputedStyle(v).fontSize);
+  v.style.fontSize = `${Math.max(base * 0.55, Math.floor(((base * (v.clientWidth - 2)) / v.scrollWidth) * 10) / 10)}px`;
+}
+
 export class Ui implements UiBridge {
   readonly root: HTMLDivElement;
   readonly catcher: ClickCatcher;
@@ -209,17 +227,23 @@ export class Ui implements UiBridge {
     };
     place(this.logo, d.logo);
     place(this.anteBtn, d.ante);
-    this.anteBtn.style.fontSize = `${Math.max(10, 17 * l.scale)}px`;
+    this.anteFont = Math.max(10, 17 * l.scale);
+    this.fitAnte();
     const c = l.toScreen(d.counter.x, d.counter.y);
     Object.assign(this.counter.style, { left: `${c.x}px`, top: `${c.y}px`, fontSize: `${Math.max(12, 30 * l.scale)}px` });
     this.root.style.setProperty('--hud-bottom', `${l.hud.bottom}px`);
     this.root.style.setProperty('--hud-right', `${l.hud.right}px`);
+    for (const v of [this.betVal, this.winVal, this.balVal]) fitVal(v, l.cls);
+  }
+  private anteFont = 12;
+  private fitAnte(): void {
+    fitFont(this.anteBtn, this.anteFont, 7, [...this.anteBtn.querySelectorAll<HTMLElement>('.ante-desc, .ante-cost')].filter((e) => getComputedStyle(e).display !== 'none'));
   }
 
   // ------------------------------------------------------------------ HUD state
-  setBet(text: string, canDown: boolean, canUp: boolean): void { this.betVal.textContent = text; this.betDown.disabled = !canDown || this.phase !== 'idle'; this.betUp.disabled = !canUp || this.phase !== 'idle'; this.betDown.dataset.can = String(canDown); this.betUp.dataset.can = String(canUp); }
-  setBalanceText(text: string): void { this.balVal.textContent = text; }
-  setWinText(text: string, total: boolean): void { this.winLbl.textContent = total ? t('hud.totalWin') : t('hud.win'); this.winVal.textContent = text; }
+  setBet(text: string, canDown: boolean, canUp: boolean): void { this.betVal.textContent = text; fitVal(this.betVal, this.root.dataset.cls ?? ''); this.betDown.disabled = !canDown || this.phase !== 'idle'; this.betUp.disabled = !canUp || this.phase !== 'idle'; this.betDown.dataset.can = String(canDown); this.betUp.dataset.can = String(canUp); }
+  setBalanceText(text: string): void { this.balVal.textContent = text; fitVal(this.balVal, this.root.dataset.cls ?? ''); }
+  setWinText(text: string, total: boolean): void { this.winLbl.textContent = total ? t('hud.totalWin') : t('hud.win'); this.winVal.textContent = text; fitVal(this.winVal, this.root.dataset.cls ?? ''); }
   private fmtMoney: (m: number) => string = (m) => String(m);
   setFormatter(f: (m: number) => string): void { this.fmtMoney = f; }
   setWin(micros: number, total = false): void { this.setWinText(micros > 0 || total ? this.fmtMoney(micros) : '', total); }
@@ -236,6 +260,7 @@ export class Ui implements UiBridge {
       el('span', { class: 'ante-cost', text: t('ante.cost', { cost: nextCostText }) }),
     );
     this.anteBtn.setAttribute('aria-label', t('ante.aria', { x: factorText.replace('×', '') }));
+    this.fitAnte();
   }
 
   setAuto(left: number | null): void { this.autoLeft = left; this.autoCount.textContent = left === null ? '' : String(left); this.autoBtn.classList.toggle('running', left !== null); this.autoBtn.setAttribute('aria-label', left === null ? t('hud.auto') : t('hud.autoStop')); this.renderSpin(); }

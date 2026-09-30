@@ -38,7 +38,7 @@ const SHORT: Design = {
   w: 1920, h: 1080,
   box: { x: 20, y: 16, w: 1690, h: 800 },
   logo: { x: 20, y: 18, w: 222, h: 102 },
-  ante: { x: 26, y: 132, w: 210, h: 80 },
+  ante: { x: 20, y: 128, w: 226, h: 104 },
   grid: { x: 252, y: 26, cell: 170, gap: 8, pad: 34 },
   counter: { x: 727, y: 10 },
   cat: { x: 1450, y: 800, height: 600 },
@@ -70,7 +70,7 @@ export function hudSize(cls: WidthClass, vw: number, vh: number): { bottom: numb
     case 'md': return { bottom: 100, right: 0 };
     case 'tablet': return { bottom: 118, right: 0 };
     case 'portrait': return { bottom: Math.round(Math.min(250, Math.max(176, vh * 0.23))), right: 0 };
-    case 'short': return { bottom: 0, right: Math.round(Math.min(170, Math.max(120, vw * 0.16))) };
+    case 'short': return { bottom: 0, right: Math.round(Math.min(196, Math.max(156, vw * 0.2))) };
   }
 }
 

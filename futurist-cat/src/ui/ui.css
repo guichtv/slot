@@ -87,22 +87,22 @@ button:disabled { cursor: default; }
 .has-art .btn.buy { background: var(--img-buy) center / 100% 100% no-repeat; border: 0; }
 .buy-label { font-family: var(--f-display); font-weight: 800; font-size: 19px; letter-spacing: .05em; line-height: 1; text-shadow: 0 2px 0 var(--c-deep); white-space: nowrap; }
 
-/* md: 960-1279 */
-.ui[data-cls="md"] .hud { grid-template-columns: auto auto minmax(220px, 1fr) auto auto; gap: 10px; }
-.ui[data-cls="md"] .btn.buy { min-width: 140px; height: 56px; padding-left: 54px; }
-.ui[data-cls="md"] .buy-label { font-size: 15px; }
-.ui[data-cls="md"] .field.balance, .ui[data-cls="md"] .field.win { min-width: 118px; }
-.ui[data-cls="md"] .field .val { font-size: 18px; }
-.ui[data-cls="md"] .grp-fields { gap: 14px; }
-.ui[data-cls="md"] .btn.spin { width: 108px; height: 108px; }
+/* md 960-1279 and tablet: one row BUY | bet | win + balance | turbo SPIN auto; the system buttons
+   (menu, sound, fullscreen) go top-right so 10-digit amounts keep room at 960 px */
+.ui[data-cls="md"] .hud, .ui[data-cls="tablet"] .hud { grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 10px; }
+.ui[data-cls="md"] .grp-sys, .ui[data-cls="tablet"] .grp-sys { position: fixed; right: max(10px, env(safe-area-inset-right)); top: max(10px, env(safe-area-inset-top)); gap: 8px; }
+.ui[data-cls="md"] .grp-fields, .ui[data-cls="tablet"] .grp-fields { gap: 12px; }
+.ui[data-cls="md"] .field.balance, .ui[data-cls="md"] .field.win, .ui[data-cls="tablet"] .field.balance, .ui[data-cls="tablet"] .field.win { min-width: 0; flex: 1 1 0; }
+.ui[data-cls="md"] .field.bet, .ui[data-cls="tablet"] .field.bet { min-width: 84px; }
+.ui[data-cls="md"] .btn.buy { min-width: 136px; height: 56px; padding-left: 54px; }
+.ui[data-cls="md"] .buy-label, .ui[data-cls="tablet"] .buy-label { font-size: 15px; }
+.ui[data-cls="md"] .field .val, .ui[data-cls="tablet"] .field .val { font-size: 18px; }
+.ui[data-cls="md"] .btn.spin { width: 104px; height: 104px; }
 .ui[data-cls="md"] .btn.round { width: 46px; height: 46px; }
-/* tablet: bigger targets */
-.ui[data-cls="tablet"] .hud { grid-template-columns: auto auto minmax(200px, 1fr) auto auto; gap: 10px; }
-.ui[data-cls="tablet"] .btn.round { width: 54px; height: 54px; }
-.ui[data-cls="tablet"] .field .val { font-size: 18px; }
-.ui[data-cls="tablet"] .field.balance, .ui[data-cls="tablet"] .field.win { min-width: 110px; }
-.ui[data-cls="tablet"] .btn.buy { min-width: 130px; height: 58px; padding-left: 54px; }
-.ui[data-cls="tablet"] .buy-label { font-size: 15px; }
+.ui[data-cls="md"] .grp-spin, .ui[data-cls="tablet"] .grp-spin { gap: 10px; }
+.ui[data-cls="tablet"] .btn.round { width: 50px; height: 50px; }
+.ui[data-cls="tablet"] .btn.spin { width: 104px; height: 104px; }
+.ui[data-cls="tablet"] .btn.buy { min-width: 128px; height: 58px; padding-left: 54px; }
 /* portrait: row 1 win | balance (full width, 10-digit amounts); row 2 bet (- value +) | turbo SPIN auto;
    BUY BONUS above the HUD on the left (free space under the grid); system buttons in a row top-right */
 .ui[data-cls="portrait"] .hud { grid-template-columns: auto 1fr; grid-template-rows: auto 1fr; gap: 2px 8px; padding-top: 12px; align-items: center; }
@@ -127,19 +127,33 @@ button:disabled { cursor: default; }
   padding: max(6px, env(safe-area-inset-top)) max(6px, env(safe-area-inset-right)) max(6px, env(safe-area-inset-bottom)) 6px; }
 .ui[data-cls="short"] .hud-panel { inset: 4px 4px 4px 6px; border-radius: 26px; }
 .ui[data-cls="short"] .grp-sys { order: 0; gap: 6px; }
-.ui[data-cls="short"] .grp-spin { order: 1; gap: 6px; }
+/* SPIN on top, turbo and auto under it: the column stays narrow */
+.ui[data-cls="short"] .grp-spin { order: 1; display: grid; grid-template-columns: 1fr 1fr; justify-items: center; gap: 4px 8px; }
+.ui[data-cls="short"] .btn.spin { grid-column: 1 / -1; grid-row: 1; }
+.ui[data-cls="short"] .btn.turbo { grid-column: 1; grid-row: 2; }
+.ui[data-cls="short"] .btn.auto { grid-column: 2; grid-row: 2; }
 .ui[data-cls="short"] .grp-bet { order: 2; gap: 4px; }
-.ui[data-cls="short"] .grp-fields { order: 3; flex-direction: column; gap: 2px; }
+.ui[data-cls="short"] .grp-fields { order: 3; flex-direction: column; gap: 2px; width: 100%; }
 .ui[data-cls="short"] .grp-buy { order: 4; }
 .ui[data-cls="short"] .btn.spin { margin: 0; width: 84px; height: 84px; }
 .ui[data-cls="short"] .spin-label { font-size: 18px; }
 .ui[data-cls="short"] .btn.round { width: 44px; height: 44px; }
 .ui[data-cls="short"] .field .val { font-size: 13px; }
 .ui[data-cls="short"] .field .lbl { font-size: 9px; }
-.ui[data-cls="short"] .field.balance, .ui[data-cls="short"] .field.win, .ui[data-cls="short"] .field.bet { min-width: 0; }
+.ui[data-cls="short"] .field.balance, .ui[data-cls="short"] .field.win { min-width: 0; width: 100%; }
+.ui[data-cls="short"] .field.bet { min-width: 0; width: 56px; }
 .ui[data-cls="short"] .btn.buy { min-width: 0; width: calc(var(--hud-right) - 18px); height: 44px; padding: 0 6px 0 36px; background-position: 18px 50%; }
 .ui[data-cls="short"] .buy-label { font-size: 11px; }
-.ui[data-cls="short"] .ante { font-size: 11px !important; }
+.ui[data-cls="short"] .ante-desc { display: none; }
+/* very short windows (Popout S 400x300): everything a notch smaller */
+@media (max-height: 340px) {
+  .ui[data-cls="short"] .btn.round { width: 36px; height: 36px; }
+  .ui[data-cls="short"] .btn.spin { width: 62px; height: 62px; }
+  .ui[data-cls="short"] .spin-label { font-size: 14px; }
+  .ui[data-cls="short"] .btn.buy { height: 34px; }
+  .ui[data-cls="short"] .field .val { font-size: 11px; }
+  .ui[data-cls="short"] .field .lbl { font-size: 8px; }
+}
 
 /* phases */
 .ui[data-phase="celebrating"] .hud, .ui[data-phase="bonus"] .grp-buy, .ui[data-phase="bonus"] .grp-bet { }

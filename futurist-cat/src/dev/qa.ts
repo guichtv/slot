@@ -61,7 +61,9 @@ export function installQa(d: QaDeps): void {
     driving = on;
     // paced by requestAnimationFrame: a setTimeout(0) chain starved the compositor (no rAF, no
     // screenshots, dialogs never received their 'in' class)
-    const loop = () => { if (!driving) return; d.app.step(ms, 60, 6); requestAnimationFrame(loop); };
+    // Pixi renders once every 4 ticks only: e2e reads state and DOM, and software GL is the bottleneck
+    let tick = 0;
+    const loop = () => { if (!driving) return; d.app.step(ms, 60, 1e9, tick++ % 4 === 0); requestAnimationFrame(loop); };
     if (on) loop();
   };
   w.__qaAuto = (on: boolean) => { autoClick = on; armWatch(); };

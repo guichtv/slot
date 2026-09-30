@@ -1,7 +1,7 @@
 // Frame-exact videos of the SERVED QA build on the virtual clock (?virtual=1): every frame is
 // rendered at t = n/fps whatever the speed of the machine, then encoded with ffmpeg (H.264).
 //   node tools/record.mjs --out captures/v.mp4 --size 1440x900 --dpr 1 --play F07,F13 [--testanim] [--fps 30]
-//        [--url "&turbo=1"] [--tail 1.5] [--max 90] [--vw 780] [--port 5347]
+//        [--url "&turbo=1"] [--tail 1.5] [--max 90] [--vw 780] [--port 5347] [--crf 24]
 import { spawn } from 'node:child_process';
 import { mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -21,12 +21,13 @@ const play = (opt('play', '') || '').split(',').filter(Boolean);
 const tail = Number(opt('tail', '1.2'));
 const maxSec = Number(opt('max', '120'));
 const port = Number(opt('port', '5348'));
+const crf = opt('crf', '24');
 const vw = Number(opt('vw', '0')); // output video width (e.g. 780 for a 390x844 DPR3 capture)
 mkdirSync(dirname(out), { recursive: true });
 
 const server = await serveDir(resolve(ROOT, opt('dist', 'dist-qa')), port);
 const browser = await launch({ webgl: 'swiftshader' });
-const ff = spawn(ffmpeg, ['-y', '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '22', '-preset', 'veryfast', '-vf', vw ? `scale=${vw}:-2` : 'scale=trunc(iw/2)*2:trunc(ih/2)*2', out], { stdio: ['pipe', 'ignore', 'inherit'] });
+const ff = spawn(ffmpeg, ['-y', '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', crf, '-preset', 'veryfast', '-vf', vw ? `scale=${vw}:-2` : 'scale=trunc(iw/2)*2:trunc(ih/2)*2', out], { stdio: ['pipe', 'ignore', 'inherit'] });
 let frames = 0;
 const logs = [];
 try {

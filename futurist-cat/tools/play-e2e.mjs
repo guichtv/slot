@@ -24,7 +24,7 @@ async function open(extra = '', persist = '0') {
   const page = await ctx.newPage();
   page.on('pageerror', (e) => console.error('   [pageerror]', e.message));
   await page.goto(`http://127.0.0.1:${PORT}/?virtual=1&seed=3&persist=${persist}&lang=fr${extra}`);
-  await page.waitForSelector('.welcome', { timeout: 120000 });
+  await page.waitForSelector('.welcome', { timeout: 240000 });
   return { ctx, page };
 }
 const qa = (page) => page.evaluate(() => window.__qa());
@@ -166,18 +166,19 @@ const scenarios = {
 
 for (const [name, fn] of Object.entries(scenarios)) {
   if (ONLY && !ONLY.split(',').includes(name)) continue;
-  const { ctx, page } = await open();
+  let ctx = null, page = null;
   const t0 = Date.now();
   try {
+    ({ ctx, page } = await open());
     const msg = await fn(page);
     results.push({ name, ok: true, msg, sec: Math.round((Date.now() - t0) / 1000) });
     console.log(`OK  ${name} : ${msg}`);
   } catch (e) {
     results.push({ name, ok: false, msg: e.message });
     console.log(`KO  ${name} : ${e.message}`);
-    await page.screenshot({ path: resolve(OUT, `KO-${name}.png`), timeout: 8000 }).catch(() => console.log('   (capture impossible : page figee)'));
+    if (page) await page.screenshot({ path: resolve(OUT, `KO-${name}.png`), timeout: 8000 }).catch(() => console.log('   (capture impossible : page figee)'));
   }
-  await ctx.close();
+  await ctx?.close();
 }
 await browser.close();
 server.close();

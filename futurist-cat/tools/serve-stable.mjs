@@ -24,8 +24,13 @@ function codeStamp() {
 const stamp = codeStamp();
 const current = existsSync(STAMP) ? readFileSync(STAMP, 'utf8') : '';
 if (args.includes('--rebuild') || current !== stamp) {
-  console.log(`[stable] build ${pkg.version} -> dist-stable/`);
-  execSync(`npx vite build --mode qa --outDir dist-stable --emptyOutDir`, { cwd: ROOT, stdio: 'inherit' });
+  // public build as soon as the release gate passes (real images); until then the QA build, which
+  // shows the dev stand-ins instead of the missing ImageGen images
+  let mode = 'production';
+  try { execSync(`node tools/check-release.mjs --pre`, { cwd: ROOT, stdio: 'pipe' }); } catch { mode = 'qa'; }
+  console.log(`[stable] build ${pkg.version} (${mode === 'qa' ? 'QA : illustrations ImageGen absentes, remplacants de dev' : 'publique'}) -> dist-stable/`);
+  execSync(`npx vite build --mode ${mode} --outDir dist-stable --emptyOutDir`, { cwd: ROOT, stdio: 'inherit' });
+  if (mode === 'qa') execSync(`node tools/qa-extras.mjs dist-stable`, { cwd: ROOT, stdio: 'inherit' });
   writeFileSync(STAMP, stamp);
 }
 
