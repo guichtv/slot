@@ -1,0 +1,32 @@
+[
+  {
+    "name": "play_end_round_once",
+    "ok": true,
+    "msg": "/wallet/authenticate > /__force > /wallet/play > /wallet/end-round > /__log"
+  },
+  {
+    "name": "resume_active_round_no_new_debit",
+    "ok": true,
+    "msg": "reprise depuis l'evenement 12, /wallet/authenticate > /bet/event > /bet/event > /bet/event > /bet/event > /bet/event > /bet/event > /bet/event > /bet/event > /wallet/end-round > /__log"
+  },
+  {
+    "name": "insufficient_balance",
+    "ok": true,
+    "msg": "message : Solde insuffisant."
+  },
+  {
+    "name": "invalid_session_no_local_fallback",
+    "ok": true,
+    "msg": "erreur propre au chargement : \"Votre session a expiré. Rechargez le jeu.\""
+  },
+  {
+    "name": "social_mode_no_dollar",
+    "ok": true,
+    "msg": "{\"bal\":\"1 000,00 SC\",\"bet\":\"JEU\",\"buyHidden\":true,\"turboHidden\":true,\"session\":\"NET +0,00 SC   SESSION 00:00:01\"}"
+  },
+  {
+    "name": "replay_no_wallet",
+    "ok": true,
+    "msg": "/bet/replay/cyber-cat/1/base/7 > /__log"
+  }
+]

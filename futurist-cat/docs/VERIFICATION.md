@@ -84,3 +84,16 @@ Fichiers : `docs/preuves/chat-squelette-de-test/` (rapport `PREPARE.md`, planche
 
 Défaut trouvé et corrigé en route : le pilote d'horloge en `setTimeout(0)` affamait le compositeur (la boutique ne recevait jamais sa classe d'entrée) → pilote cadencé par `requestAnimationFrame` (D42).
 
+### Flux Stake contre le mock RGS (outil de dev, **pas** un test Engine)
+
+`node tools/stake-e2e.mjs` : build QA servie + `tools/mock-rgs.mjs` (forme publique de l'API : `/wallet/authenticate`, `/wallet/play`, `/wallet/end-round`, `/bet/event`, `/bet/replay`) : **6/6 OK** (`docs/preuves/e2e/stake-e2e.json`).
+
+| scénario | journal des appels / résultat |
+|---|---|
+| play_end_round_once | authenticate → play → **un seul** end-round |
+| resume_active_round_no_new_debit | rechargement en plein bonus : reprise à l'événement 12, `/bet/event` à chaque étape, **aucun** `/wallet/play`, un end-round |
+| insufficient_balance | « Solde insuffisant. » |
+| invalid_session_no_local_fallback | « Votre session a expiré. Rechargez le jeu. », jamais de repli sur les fixtures locales |
+| social_mode_no_dollar | solde « 1 000,00 SC », libellé « JEU », BUY BONUS et turbo masqués par la juridiction, aucun « $ » |
+| replay_no_wallet | `/bet/replay/cyber-cat/1/base/7` seulement, aucun appel au portefeuille |
+
