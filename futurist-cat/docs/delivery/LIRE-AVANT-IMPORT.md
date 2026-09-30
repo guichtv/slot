@@ -22,3 +22,5 @@
 3. `node tools/package-delivery.mjs --stake` : build public vérifié, zip avec `index.html` à la racine, sans fixtures locales.
 4. Portail Engine : importer le zip du front, les books et la config ; vérifier sur l'environnement de test Engine (le mock RGS local n'est **pas** un test Engine).
 5. Revérifier la liste des langues Engine en vigueur (16 fournies, traductions non relues par des locuteurs natifs).
+6. Écouter les 75 sons (casque et haut-parleur de téléphone) : ils sont mesurés (`docs/AUDIO.md`) mais n'ont jamais été écoutés.
+7. Faire relire les 16 langues (`docs/I18N.md` liste les termes à confirmer).
