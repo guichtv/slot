@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dist-*/
+captures/
+.cache/
+*.log
+!docs/imagegen/logs/*.log
+.DS_Store
+Thumbs.db
+# intermediate 3D files (the prepared cat.glb in public/ is versioned)
+tools/.work/
