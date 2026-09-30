@@ -12,6 +12,13 @@ export default defineConfig(({ mode }) => ({
     __BUILD_STAMP__: JSON.stringify(new Date().toISOString()),
   },
   server: { port: 5340, strictPort: true, host: '127.0.0.1' },
+  optimizeDeps: {
+    entries: ['index.html', 'tools/*.html'],
+    include: [
+      'three', 'three/examples/jsm/loaders/GLTFLoader.js', 'three/examples/jsm/libs/meshopt_decoder.module.js',
+      'three/examples/jsm/environments/RoomEnvironment.js', 'pixi.js', 'gsap', 'zod',
+    ],
+  },
   preview: { host: '127.0.0.1', strictPort: true },
   build: {
     target: 'es2022',
