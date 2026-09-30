@@ -11,15 +11,19 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const fail = [];
 const warn = [];
-// « démo », « test », « fun », « crédit », « PROVISOIRE », placeholders - in every Engine language
+// « démo », « test », « fun », « crédit », « PROVISOIRE », placeholders - in every Engine language.
+// Same patterns as tests/i18n.test.ts: `\b` only knows ASCII letters, so Latin-script words get
+// Unicode-aware boundaries and other scripts are matched as is.
+const W = (words) => new RegExp(`(?<![\\p{L}\\p{N}])(${words})(?![\\p{L}\\p{N}])`, 'iu');
 const FORBIDDEN = [
-  /\bd[ée]mo\b/i, /\btest\b/i, /\bfun\b/i, /\bcr[ée]dits?\b/i, /\bPROVISOIRE\b/i, /placeholder/i, /\blorem\b/i, /\bTODO\b/,
-  /d[ée]monstra/i, /demostraci/i, /\bprueba\b/i, /\bteste\b/i, /\btesti\b/i, /\btestu\b/i, /\bdeneme\b/i, /\buji coba\b/i, /th[ửu] nghi[ệe]m/i, /d[ùu]ng th[ửu]/i,
-  /cr[ée]dito/i, /\bkredi(t|ts|ty|tt)?\b/i, /\bkredyt/i, /krediitti/i, /t[íi]n d[ụu]ng/i, /\bSpa(ß|ss)\b/i, /\bdivers[ãa]o\b/i, /\bdiversi[óo]n\b/i,
-  /демо/i, /тест/i, /кредит/i, /デモ/, /テスト/, /クレジット/, /데모/, /테스트/, /크레딧/, /演示/, /测试/, /试玩/, /信用/,
-  /تجريبي/, /اختبار/, /ائتمان/, /डेमो/, /टेस्ट/, /परीक्षण/, /क्रेडिट/,
+  W('d[ée]mo|demostraci[óo]n|demonstra[çc][ãa]o|d[ée]monstration'),
+  W('test|tests|prueba|teste|testi|testu|deneme|uji coba|thử nghiệm|dùng thử'),
+  W('fun|spa(ß|ss)|divers[ãa]o|diversi[óo]n'),
+  W('cr[ée]dits?|cr[ée]ditos?|kredit|kredits|kredyt\\p{L}*|krediitti\\p{L}*|kredi|tín dụng'),
+  W('provisoire|provisional|vorläufig|TODO'),
+  /placeholder|lorem/i,
+  /демо|тест|кредит|デモ|テスト|クレジット|데모|테스트|크레딧|演示|测试|试玩|积分|信用|डेमो|टेस्ट|परीक्षण|क्रेडिट|تجريبي|اختبار|ائتمان/u,
 ];
-
 
 if (args.includes('--pre')) {
   const plan = JSON.parse(readFileSync(resolve(ROOT, 'assets/plan.json'), 'utf8'));
