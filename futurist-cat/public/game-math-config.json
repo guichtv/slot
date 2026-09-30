@@ -1,0 +1,42 @@
+{
+  "provisional": true,
+  "contractVersion": 1,
+  "gameId": "cyber-cat",
+  "ways": 1024,
+  "maxWinX": 25000,
+  "wildReels": [1, 2, 3, 4],
+  "paytable": {
+    "L1": [0.05, 0.1, 0.25],
+    "L2": [0.05, 0.1, 0.3],
+    "L3": [0.1, 0.15, 0.4],
+    "L4": [0.1, 0.2, 0.5],
+    "H1": [0.2, 0.4, 1.0],
+    "H2": [0.25, 0.5, 1.5],
+    "H3": [0.3, 0.75, 2.0],
+    "H4": [0.5, 1.0, 3.0],
+    "W": [0.5, 1.0, 3.0]
+  },
+  "modes": {
+    "BASE": { "cost": 1, "rtp": 96.2, "feature": false },
+    "ANTE": { "cost": 1.25, "rtp": 96.2, "feature": false, "scatterChanceX": 2 },
+    "SCAN": { "cost": 5, "rtp": 96.2, "feature": true, "dots": 1, "spins": 1 },
+    "DOUBLE_SCAN": { "cost": 15, "rtp": 96.2, "feature": true, "dots": 2, "spins": 1 },
+    "BONUS": { "cost": 100, "rtp": 96.2, "feature": true, "bonus": "nineLives" },
+    "SUPER": { "cost": 300, "rtp": 96.2, "feature": true, "bonus": "doubleGaze" }
+  },
+  "bonus": {
+    "nineLives": { "spins": 9, "scatters": 3, "dotsPerSpin": 1 },
+    "doubleGaze": { "spins": 9, "scatters": 4, "dotsPerSpin": 2, "startChipsMin": 3, "startChipsMax": 5 },
+    "retrigger": { "3": 3, "4": 5 }
+  },
+  "laser": { "pathMin": 3, "pathMax": 8, "multMin": 2, "multMax": 10, "chipMax": 3, "multCombine": "multiply" },
+  "winTiers": [
+    { "id": "big", "x": 10 },
+    { "id": "super", "x": 25 },
+    { "id": "mega", "x": 50 },
+    { "id": "epic", "x": 100 },
+    { "id": "cyber", "x": 500 }
+  ],
+  "localBetLadder": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30, 40, 50, 75, 100],
+  "defaultBet": 1
+}

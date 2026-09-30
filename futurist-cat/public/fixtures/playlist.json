@@ -1,0 +1,329 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "id": "F01",
+      "title": "perte",
+      "weight": 30,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "perte"
+      ]
+    },
+    {
+      "id": "F02",
+      "title": "petit gain (glyphes)",
+      "weight": 22,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "petit gain"
+      ]
+    },
+    {
+      "id": "F03",
+      "title": "gain canette (H1)",
+      "weight": 8,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "premium",
+        "H1"
+      ]
+    },
+    {
+      "id": "F04",
+      "title": "gain pelote (H2)",
+      "weight": 7,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "premium",
+        "H2"
+      ]
+    },
+    {
+      "id": "F05",
+      "title": "gain poisson (H3, 5 colonnes)",
+      "weight": 6,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "premium",
+        "H3"
+      ]
+    },
+    {
+      "id": "F06",
+      "title": "gain souris-drone (H4)",
+      "weight": 5,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "premium",
+        "H4"
+      ]
+    },
+    {
+      "id": "F07",
+      "title": "point laser (3 cases, x2)",
+      "weight": 7,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "laser"
+      ]
+    },
+    {
+      "id": "F08",
+      "title": "point laser long (8 cases, x10) -> BIG WIN",
+      "weight": 3,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "laser",
+        "big"
+      ]
+    },
+    {
+      "id": "F09",
+      "title": "anticipation reussie -> 9 VIES complet (puces +1/+2/+3, +3 FS, dernier tour sans gain)",
+      "weight": 2,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "anticipation",
+        "bonus",
+        "9vies",
+        "retrigger"
+      ]
+    },
+    {
+      "id": "F10",
+      "title": "anticipation ratee (2 Scatters)",
+      "weight": 3,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "anticipation"
+      ]
+    },
+    {
+      "id": "F11",
+      "title": "DOUBLE REGARD (4 Scatters) complet",
+      "weight": 1,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "bonus",
+        "double",
+        "anticipation"
+      ]
+    },
+    {
+      "id": "F12",
+      "title": "SCAN : 1 spin, 1 point garanti",
+      "weight": 1,
+      "modes": [
+        "SCAN"
+      ],
+      "tags": [
+        "feature",
+        "scan"
+      ]
+    },
+    {
+      "id": "F13",
+      "title": "DOUBLE SCAN : 1 spin, 2 points (multiplicateurs croises x3 x x5)",
+      "weight": 1,
+      "modes": [
+        "DOUBLE_SCAN"
+      ],
+      "tags": [
+        "feature",
+        "doublescan",
+        "croisement"
+      ]
+    },
+    {
+      "id": "F14",
+      "title": "gain juste sous x10",
+      "weight": 2,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "seuil"
+      ]
+    },
+    {
+      "id": "F15",
+      "title": "gain exactement x10 (BIG WIN inclus)",
+      "weight": 2,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "seuil",
+        "big"
+      ]
+    },
+    {
+      "id": "F16",
+      "title": "SUPER WIN (>= x25)",
+      "weight": 1,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "super"
+      ]
+    },
+    {
+      "id": "F17",
+      "title": "MEGA WIN (>= x50)",
+      "weight": 1,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "mega"
+      ]
+    },
+    {
+      "id": "F18",
+      "title": "EPIC WIN (>= x100)",
+      "weight": 1,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "epic"
+      ]
+    },
+    {
+      "id": "F19",
+      "title": "CYBER WIN (>= x500)",
+      "weight": 1,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "cyber"
+      ]
+    },
+    {
+      "id": "F20",
+      "title": "MAX WIN (plafond 25 000x en bonus)",
+      "weight": 0,
+      "modes": [
+        "SUPER"
+      ],
+      "tags": [
+        "max"
+      ]
+    },
+    {
+      "id": "F21",
+      "title": "achat 9 VIES",
+      "weight": 1,
+      "modes": [
+        "BONUS"
+      ],
+      "tags": [
+        "achat",
+        "bonus",
+        "9vies"
+      ]
+    },
+    {
+      "id": "F22",
+      "title": "achat DOUBLE REGARD",
+      "weight": 1,
+      "modes": [
+        "SUPER"
+      ],
+      "tags": [
+        "achat",
+        "bonus",
+        "double"
+      ]
+    },
+    {
+      "id": "F23",
+      "title": "Ante : spin normal en mode ANTE",
+      "weight": 0,
+      "modes": [
+        "ANTE"
+      ],
+      "tags": [
+        "ante"
+      ]
+    },
+    {
+      "id": "F24",
+      "title": "sous-centime (x0,05 : 0,005 EUR a 0,10 EUR)",
+      "weight": 1,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "sous-centime"
+      ]
+    },
+    {
+      "id": "F25",
+      "title": "point laser sur souris-drone (H4 ne monte plus)",
+      "weight": 3,
+      "modes": [
+        "BASE",
+        "ANTE"
+      ],
+      "tags": [
+        "laser",
+        "H4"
+      ]
+    },
+    {
+      "id": "F26",
+      "title": "gros gain en bonus (montants longs avec une grosse mise, panneau DEV)",
+      "weight": 0,
+      "modes": [
+        "BASE"
+      ],
+      "tags": [
+        "long"
+      ]
+    }
+  ]
+}
