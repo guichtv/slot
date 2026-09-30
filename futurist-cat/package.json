@@ -6,7 +6,9 @@
   "description": "CYBER CAT - slot web front (Crownforge), Stake Engine ready",
   "scripts": {
     "dev": "vite --port 5340 --strictPort",
+    "prebuild": "node tools/check-release.mjs --pre",
     "build": "vite build --mode production --outDir dist-public",
+    "postbuild": "node tools/check-release.mjs --post dist-public",
     "build:qa": "vite build --mode qa --outDir dist-qa && node tools/qa-extras.mjs dist-qa",
     "preview": "vite preview --outDir dist-qa --port 5341 --strictPort",
     "preview:public": "vite preview --outDir dist-public --port 5342 --strictPort",

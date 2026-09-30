@@ -39,3 +39,29 @@ Voir « Résultats ».
 - Traductions : non relues par des locuteurs natifs.
 
 ## Résultats
+
+Session du 30/09/2026, conteneur cloud (4 cœurs, rendu logiciel). Chaque ligne dit ce qui a été lancé et ce qui en est sorti.
+
+### Code
+
+| preuve | résultat |
+|---|---|
+| `npx tsc --noEmit -p .` | 0 erreur |
+| `npx vitest run` | **103 tests OK** / 6 fichiers : contrat 15, moteur 7, RGS 8, pipeline d'images 1, son 22, langues 50 (16 langues : mêmes clés et placeholders, mots interdits dans toutes les écritures, phrase de dysfonctionnement) |
+| `npm run fixtures:check` | 26 fixtures valides (le validateur contrôle, ne corrige jamais) |
+| `node tools/check-release.mjs --locales` | ok (16 langues) |
+| `node tools/check-release.mjs --pre` | **bloquant, comme prévu** : illustrations ImageGen et chat absents → `npm run build` et la livraison refusent de produire le build public |
+| scan du bundle public (`vite build --mode production` dans un dossier temporaire puis `check-release --post`) | ok : aucun outil de dev (`__qaPlay`, panneau DEV, remplaçants, squelette de test), aucun mot interdit dans les 16 langues ni dans le HTML, chemins relatifs. Une URL `jcgt.org` dans un commentaire de shader three.js (aucun appel). Contre-épreuve : un mot interdit en russe et un outil de dev injectés dans un faux bundle sont bien bloqués |
+
+### Chat 3D (squelette de test, pas le chat)
+
+Fichiers : `docs/preuves/chat-squelette-de-test/` (rapport `PREPARE.md`, planches idle / run / flip / dive, masque émissif, `proof.json`).
+
+| mesure (swiftshader, non représentatif des fps réels) | desktop 1440×900 | mobile 390×844 DPR3, CPU ÷4 |
+|---|---|---|
+| chat par image (médiane / p95) | 0,5 / 0,7 ms | 1,2 / 2,3 ms |
+| rendu three / mixer / copie canvas → texture | 0,3 / 0,1 / 0,1 ms | 0,6 / 0,1 / 0,1 ms |
+| draw calls chat | 1 | 1 |
+| mémoire GPU estimée | 34,3 Mo | 25,5 Mo |
+| canvas du chat | 384×774 | 243×489 |
+

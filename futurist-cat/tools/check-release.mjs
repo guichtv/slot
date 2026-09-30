@@ -68,12 +68,17 @@ if (args.includes('--post')) {
     const urls = [...s.matchAll(/https?:\/\/[a-z0-9.-]+/gi)].map((m) => m[0]).filter((u) => !/w3\.org|khronos\.org|github\.com\/mrdoob|threejs\.org|pixijs|greensock|gsap\.com|mozilla\.org|mdn|ecma|json-schema|webkit\.org|chromium\.org|schema\.org|example\.com|localhost|127\.0\.0\.1/.test(u));
     if (urls.length) warn.push(`${rel} : URL(s) externes presentes (a verifier, aucun appel attendu) : ${[...new Set(urls)].slice(0, 6).join(', ')}`);
   }
-  // translations: forbidden visible words in every language
-  for (const f of text.filter((x) => /locales|i18n|index-.*\.js$/.test(x))) {
+  // visible words: the translation entries ("key.name":"text") of every JS chunk (the 16 languages)
+  // and the HTML text; code such as `re.test(x)` is not visible text
+  let entries = 0;
+  for (const f of text.filter((x) => ['.js', '.html'].includes(extname(x)))) {
     const s = readFileSync(f, 'utf8');
-    const strings = [...s.matchAll(/"([^"\\]{3,200})"/g)].map((m) => m[1]);
-    for (const str of strings) for (const re of FORBIDDEN) if (re.test(str) && !/^[a-z]+\.[a-z.@]+$/i.test(str)) { fail.push(`${relative(dir, f)} : mot interdit dans "${str.slice(0, 60)}"`); break; }
+    const strings = extname(f) === '.html' ? [s.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<[^>]+>/g, ' ')]
+      : [...s.matchAll(/"([a-z][\w]*(?:\.[\w@]+)+)":"((?:[^"\\]|\\.)*)"/g)].map((m) => m[2]);
+    entries += strings.length;
+    for (const str of strings) for (const re of FORBIDDEN) if (re.test(str)) { fail.push(`${relative(dir, f)} : mot interdit (${re}) dans "${str.slice(0, 60)}"`); break; }
   }
+  if (entries < 16 * 150) fail.push(`seulement ${entries} entrees de traduction trouvees dans le bundle (16 langues attendues)`);
   if (!existsSync(join(dir, 'index.html'))) fail.push('index.html absent a la racine');
   const bigs = files.filter((f) => statSync(f).size > 3 * 1024 * 1024).map((f) => `${relative(dir, f)} ${(statSync(f).size / 1048576).toFixed(1)} Mo`);
   if (bigs.length) warn.push(`fichiers > 3 Mo : ${bigs.join(', ')}`);

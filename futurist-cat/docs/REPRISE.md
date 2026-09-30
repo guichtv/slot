@@ -13,16 +13,17 @@ Tranche jouable complète (base, point laser, bonus, boutique, paliers, replay) 
 - Rendu : scène + caméra, décor vivant, rouleaux 9 vues recyclées, symboles (réactions, montées), point laser, puces + circuit, jetons ×N, connexions « base → ×N → final », paliers (une idée par palier), MAX WIN, bonus complet, +N FS.
 - UI HTML : HUD 5 classes, popups clic-n'importe-où, boutique à devis figé, autoplay, menu Infos (règles, réglages, historique/replay), chargement réel, accueil, erreurs, replay, infos de session (juridiction).
 - Stake : provider RGS, replay, drapeaux de juridiction, mode social, mock RGS (outil de dev).
-- Son (sous-agent) : synthèse OGG + M4A, moteur WebAudio. i18n : FR/EN + 14 langues (sous-agent).
+- Son : 75 sons synthétisés (OGG + M4A), contrôles mesurés (`tools/audio/check.mjs`), moteur WebAudio ; **jamais écoutés**. i18n : les 16 langues Engine, variantes sociales, mots interdits contrôlés dans toutes les écritures (`docs/I18N.md`).
 - ImageGen : bible, `_style.txt`, 16 briefs, lanceurs Codex (Git Bash), quota ; `npm run assets` testé sur images synthétiques.
-- Outils de preuve : `shot`, `record` (horloge virtuelle), `hud-check`, `play-e2e`, `stake-e2e`, `check-release`, `package-delivery`, `serve-stable` + `LANCER-CYBERCAT.cmd`.
+- Outils de preuve : `shot`, `record` (horloge virtuelle), `record-proofs.sh` (toutes les vidéos + planches), `video-sheet`, `hud-check`, `play-e2e`, `stake-e2e`, `check-release` (`--pre`, `--post`, `--locales`), `package-delivery`, `serve-stable` + `LANCER-CYBERCAT.cmd`.
 
 ## Reste
 
 1. Sur le PC : GLB → `npm run cat:prepare`, `cat:sheets`, `cat:poses` ; missions ImageGen → `npm run assets`.
 2. Regarder les planches du vrai chat (sol, dérive, « C », matériau, yeux) et ajuster `cat-prepare` si besoin.
-3. Juger toutes les vidéos sur les vraies images ; mesurer les fps sur GPU (`npm run cat:proof -- --gpu --headed`, chrome-devtools).
-4. Remplacer la config provisoire par celle des maths ; build Stake (`node tools/package-delivery.mjs --stake`).
+3. Rejouer `bash tools/record-proofs.sh` avec les vraies images et le vrai chat, juger les vidéos ; mesurer les fps sur GPU (`npm run cat:proof -- --gpu --headed`, chrome-devtools).
+4. Écouter les sons (casque + haut-parleur de téléphone) ; faire relire les traductions.
+5. Remplacer la config provisoire par celle des maths ; build Stake (`node tools/package-delivery.mjs --stake`).
 
 ## Défauts connus
 
