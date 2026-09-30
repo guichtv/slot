@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, statSync, readdirSy
 import { dirname, resolve, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+const ROOT = process.env.CC_ROOT ? resolve(process.env.CC_ROOT) : resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const plan = JSON.parse(readFileSync(resolve(ROOT, 'assets/plan.json'), 'utf8'));
 const OUT = resolve(ROOT, 'public/assets');
 const PROOF = resolve(ROOT, 'docs/preuves/assets');

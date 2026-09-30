@@ -45,6 +45,8 @@ export interface PlayerOptions {
   onProgress?: (e: BookEvent, state: LogicalState) => void | Promise<void>;
   /** click source: resolves on the next consumed click/Enter/Space */
   nextClick: (token: CancelToken) => Promise<void>;
+  /** true while a skip jumps a timeline to its end (sounds / cosmetic particles stay silent) */
+  jumping?: (on: boolean) => void;
 }
 
 export class RoundPlayer {
@@ -119,8 +121,9 @@ export class RoundPlayer {
           const t = tl;
           t.eventCallback('onComplete', done);
           const off = token.onCancel((r) => { t.kill(); reject(new Cancelled(r)); });
-          if (self.skipFlag) { t.progress(1, false); done(); return; }
-          skipPromise().then(() => { if (!token.cancelled) { t.progress(1, false); done(); } });
+          const jump = () => { self.o.jumping?.(true); try { t.progress(1, false); } finally { self.o.jumping?.(false); } done(); };
+          if (self.skipFlag) { jump(); return; }
+          skipPromise().then(() => { if (!token.cancelled) jump(); });
         });
       },
       waitClick(autoSec?: number) {

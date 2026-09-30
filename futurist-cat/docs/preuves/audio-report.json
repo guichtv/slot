@@ -1,0 +1,2347 @@
+{
+  "tool": "tools/audio/check.mjs",
+  "manifestVersion": "5f38c28631",
+  "sampleRate": 48000,
+  "thresholds": {
+    "maxPeakDb": -0.5,
+    "maxTruePeakDb": -0.5,
+    "maxDc": 0.002,
+    "maxEdgeDb": -60,
+    "seamRatio": 2.5,
+    "seamMinAbs": 0.003,
+    "maxEncodedPeakDb": -0.5,
+    "maxDurationDiffMs": 1,
+    "maxCodecPadSamples": 2048
+  },
+  "summary": {
+    "cues": 75,
+    "ok": 75,
+    "failed": 0,
+    "globalIssues": [],
+    "medianRmsDbByBus": {
+      "sfx": -17.4,
+      "ui": -19.3,
+      "music": -20,
+      "amb": -30
+    },
+    "medianLoudnessMaxDbByBus": {
+      "sfx": -12.5,
+      "ui": -12.2,
+      "music": -17.4,
+      "amb": -24
+    },
+    "bytes": {
+      "ogg": 3346399,
+      "m4a": 3527196,
+      "total": 6873595,
+      "totalMB": 6.56
+    },
+    "verdict": "PASS"
+  },
+  "cues": {
+    "ui_click": {
+      "status": "ok",
+      "bus": "ui",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.17008,
+      "peakDb": -1.2,
+      "truePeakDb": -1,
+      "rmsDb": -23.4,
+      "loudnessMaxDb": -20.9,
+      "gainDb": 0,
+      "dc": 0.00004,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -40,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5285,
+          "peakDb": -1.5,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 3172,
+          "peakDb": -1.2,
+          "lengthDiffSamples": 28
+        }
+      },
+      "issues": []
+    },
+    "ui_click_2": {
+      "status": "ok",
+      "bus": "ui",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.15013,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -22.9,
+      "loudnessMaxDb": -20.7,
+      "gainDb": -0.5,
+      "dc": 0.00004,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -43.7,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5119,
+          "peakDb": -1.5,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 2911,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 986
+        }
+      },
+      "issues": []
+    },
+    "ui_click_3": {
+      "status": "ok",
+      "bus": "ui",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.1791,
+      "peakDb": -2.4,
+      "truePeakDb": -1,
+      "rmsDb": -23.2,
+      "loudnessMaxDb": -20.3,
+      "gainDb": -0.5,
+      "dc": 0.00005,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -35,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5382,
+          "peakDb": -2.9,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 3470,
+          "peakDb": -3.9,
+          "lengthDiffSamples": 619
+        }
+      },
+      "issues": []
+    },
+    "ui_hover": {
+      "status": "ok",
+      "bus": "ui",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.1786,
+      "peakDb": -1.2,
+      "truePeakDb": -1,
+      "rmsDb": -19.8,
+      "loudnessMaxDb": -16.6,
+      "gainDb": -12.5,
+      "dc": 0.00003,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -44.1,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5360,
+          "peakDb": -1.4,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 3480,
+          "peakDb": -1.2,
+          "lengthDiffSamples": 643
+        }
+      },
+      "issues": []
+    },
+    "ui_open": {
+      "status": "ok",
+      "bus": "ui",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.74067,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -17.6,
+      "loudnessMaxDb": -10.6,
+      "gainDb": -8.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -46.6,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 8968,
+          "peakDb": -0.9,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 9997,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 288
+        }
+      },
+      "issues": []
+    },
+    "ui_close": {
+      "status": "ok",
+      "bus": "ui",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.58938,
+      "peakDb": -1.1,
+      "truePeakDb": -1,
+      "rmsDb": -17.2,
+      "loudnessMaxDb": -11,
+      "gainDb": -9,
+      "dc": 0.00001,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -50.3,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 8027,
+          "peakDb": -1.1,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 8178,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 382
+        }
+      },
+      "issues": []
+    },
+    "ui_toggle": {
+      "status": "ok",
+      "bus": "ui",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.20646,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -19.5,
+      "loudnessMaxDb": -16.8,
+      "gainDb": -4,
+      "dc": 0.00003,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -41.5,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5506,
+          "peakDb": -1.3,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 3733,
+          "peakDb": -1,
+          "lengthDiffSamples": 330
+        }
+      },
+      "issues": []
+    },
+    "ui_bet_up": {
+      "status": "ok",
+      "bus": "ui",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.25692,
+      "peakDb": -1.1,
+      "truePeakDb": -1,
+      "rmsDb": -15.1,
+      "loudnessMaxDb": -12.2,
+      "gainDb": -9,
+      "dc": 0.00005,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -37.9,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5551,
+          "peakDb": -1.4,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 4282,
+          "peakDb": -1.3,
+          "lengthDiffSamples": 980
+        }
+      },
+      "issues": []
+    },
+    "ui_bet_down": {
+      "status": "ok",
+      "bus": "ui",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.29823,
+      "peakDb": -1.1,
+      "truePeakDb": -1,
+      "rmsDb": -14.5,
+      "loudnessMaxDb": -11.2,
+      "gainDb": -10,
+      "dc": 0.00004,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -46,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5908,
+          "peakDb": -1.6,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 4648,
+          "peakDb": -1.3,
+          "lengthDiffSamples": 21
+        }
+      },
+      "issues": []
+    },
+    "ui_error": {
+      "status": "ok",
+      "bus": "ui",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.47123,
+      "peakDb": -3.4,
+      "truePeakDb": -3.4,
+      "rmsDb": -19.8,
+      "loudnessMaxDb": -16.4,
+      "gainDb": -2.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -40.9,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5024,
+          "peakDb": -3.4,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 5973,
+          "peakDb": -4.4,
+          "lengthDiffSamples": 933
+        }
+      },
+      "issues": []
+    },
+    "ui_buy_confirm": {
+      "status": "ok",
+      "bus": "ui",
+      "loop": false,
+      "channels": 1,
+      "duration": 1.2,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -19.3,
+      "loudnessMaxDb": -12,
+      "gainDb": -4,
+      "dc": 0.00001,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -49,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 13614,
+          "peakDb": -1.5,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 15418,
+          "peakDb": -1,
+          "lengthDiffSamples": 768
+        }
+      },
+      "issues": []
+    },
+    "ui_autoplay_start": {
+      "status": "ok",
+      "bus": "ui",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.53344,
+      "peakDb": -1.3,
+      "truePeakDb": -1.3,
+      "rmsDb": -15.6,
+      "loudnessMaxDb": -9.8,
+      "gainDb": -9,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -46.1,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 8373,
+          "peakDb": -0.9,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 7583,
+          "peakDb": -1.3,
+          "lengthDiffSamples": -5
+        }
+      },
+      "issues": []
+    },
+    "spin_start": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.39619,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -21.4,
+      "loudnessMaxDb": -18.6,
+      "gainDb": 0,
+      "dc": 0.00001,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -36.7,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 7103,
+          "peakDb": -1.3,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 5979,
+          "peakDb": -1.2,
+          "lengthDiffSamples": 439
+        }
+      },
+      "issues": []
+    },
+    "reel_loop": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": true,
+      "channels": 1,
+      "duration": 1.2,
+      "peakDb": -8,
+      "truePeakDb": -8,
+      "rmsDb": -20,
+      "loudnessMaxDb": -17.4,
+      "gainDb": -9.5,
+      "dc": 0,
+      "firstSampleDb": -16.3,
+      "lastSampleDb": -16.1,
+      "tail60msDb": -2.1,
+      "seam": {
+        "jump": 0.00307,
+        "ratio": 0,
+        "curvRatio": 0
+      },
+      "encoded": {
+        "ogg": {
+          "bytes": 14969,
+          "peakDb": -8.4,
+          "lengthDiffSamples": 0,
+          "startLagSamples": 0
+        },
+        "m4a": {
+          "bytes": 16036,
+          "peakDb": -8.1,
+          "lengthDiffSamples": 768,
+          "startLagSamples": 0
+        }
+      },
+      "issues": []
+    },
+    "reel_stop": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.32329,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -19.3,
+      "loudnessMaxDb": -17.6,
+      "gainDb": -1.5,
+      "dc": 0.00007,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -47,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 6127,
+          "peakDb": -0.8,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 4969,
+          "peakDb": -1,
+          "lengthDiffSamples": 866
+        }
+      },
+      "issues": []
+    },
+    "reel_stop_2": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.32823,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -19.2,
+      "loudnessMaxDb": -17.4,
+      "gainDb": -1.5,
+      "dc": 0.00006,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -43.9,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 6212,
+          "peakDb": -1,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 5009,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 629
+        }
+      },
+      "issues": []
+    },
+    "reel_stop_3": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.32235,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -20,
+      "loudnessMaxDb": -18.2,
+      "gainDb": -1,
+      "dc": 0.00007,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -42.6,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5991,
+          "peakDb": -0.8,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 4977,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 911
+        }
+      },
+      "issues": []
+    },
+    "reel_stop_last": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.8,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -19.2,
+      "loudnessMaxDb": -14,
+      "gainDb": -2,
+      "dc": 0.00002,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -53.8,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 8853,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 960
+        },
+        "m4a": {
+          "bytes": 9894,
+          "peakDb": -1,
+          "lengthDiffSamples": 512
+        }
+      },
+      "issues": []
+    },
+    "quick_stop": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 0.68765,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -19.2,
+      "loudnessMaxDb": -14.4,
+      "gainDb": 0,
+      "dc": 0.00002,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -47.7,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 13685,
+          "peakDb": -1,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 11543,
+          "peakDb": -1.3,
+          "lengthDiffSamples": 785
+        }
+      },
+      "issues": []
+    },
+    "anticipation_loop": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": true,
+      "channels": 1,
+      "duration": 2,
+      "peakDb": -5.2,
+      "truePeakDb": -5.2,
+      "rmsDb": -18,
+      "loudnessMaxDb": -17.4,
+      "gainDb": -3.5,
+      "dc": 0,
+      "firstSampleDb": -31.3,
+      "lastSampleDb": -32.7,
+      "tail60msDb": -5.6,
+      "seam": {
+        "jump": 0.00398,
+        "ratio": 0.1,
+        "curvRatio": 0.2
+      },
+      "encoded": {
+        "ogg": {
+          "bytes": 20530,
+          "peakDb": -5.1,
+          "lengthDiffSamples": 0,
+          "startLagSamples": 0
+        },
+        "m4a": {
+          "bytes": 25505,
+          "peakDb": -5,
+          "lengthDiffSamples": 256,
+          "startLagSamples": 0
+        }
+      },
+      "issues": []
+    },
+    "anticipation_riser": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 1.9,
+      "peakDb": -1.1,
+      "truePeakDb": -1,
+      "rmsDb": -17.8,
+      "loudnessMaxDb": -11.2,
+      "gainDb": -5,
+      "dc": 0.00001,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -16.7,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 31946,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 31588,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 960
+        }
+      },
+      "issues": []
+    },
+    "scatter_land_1": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 1.3,
+      "peakDb": -1.1,
+      "truePeakDb": -1,
+      "rmsDb": -18.9,
+      "loudnessMaxDb": -12.9,
+      "gainDb": -3,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -49.1,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 11379,
+          "peakDb": -0.7,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 16026,
+          "peakDb": -1.2,
+          "lengthDiffSamples": 64
+        }
+      },
+      "issues": []
+    },
+    "scatter_land_2": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 1.4,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -17.1,
+      "loudnessMaxDb": -10.4,
+      "gainDb": -4.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -56.2,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 12038,
+          "peakDb": -1,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 17397,
+          "peakDb": -1,
+          "lengthDiffSamples": 384
+        }
+      },
+      "issues": []
+    },
+    "scatter_land_3": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 2.2,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -18.6,
+      "loudnessMaxDb": -11.4,
+      "gainDb": -1.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -51.5,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 35183,
+          "peakDb": -0.7,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 36172,
+          "peakDb": -1,
+          "lengthDiffSamples": 896
+        }
+      },
+      "issues": []
+    },
+    "scatter_fail": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.66402,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -18,
+      "loudnessMaxDb": -14.7,
+      "gainDb": -4.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -48.2,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 7719,
+          "peakDb": -1.4,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 9159,
+          "peakDb": -1,
+          "lengthDiffSamples": 895
+        }
+      },
+      "issues": []
+    },
+    "eyes_charge": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.82829,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -15.5,
+      "loudnessMaxDb": -8.2,
+      "gainDb": -10,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -45.2,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 10353,
+          "peakDb": -1.3,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 11241,
+          "peakDb": -1,
+          "lengthDiffSamples": 178
+        }
+      },
+      "issues": []
+    },
+    "laser_fire": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.508,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -16.5,
+      "loudnessMaxDb": -11.1,
+      "gainDb": -5,
+      "dc": 0.00002,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -45,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 7078,
+          "peakDb": -0.8,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 7278,
+          "peakDb": -0.6,
+          "lengthDiffSamples": 192
+        }
+      },
+      "issues": []
+    },
+    "laser_hop": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.23075,
+      "peakDb": -1.3,
+      "truePeakDb": -1.3,
+      "rmsDb": -16.9,
+      "loudnessMaxDb": -15.2,
+      "gainDb": -5,
+      "dc": 0.00004,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -38.4,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5380,
+          "peakDb": -1,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 3856,
+          "peakDb": -1.3,
+          "lengthDiffSamples": 188
+        }
+      },
+      "issues": []
+    },
+    "laser_hop_2": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.22996,
+      "peakDb": -1.4,
+      "truePeakDb": -1.4,
+      "rmsDb": -15.7,
+      "loudnessMaxDb": -14.1,
+      "gainDb": -6,
+      "dc": 0.00007,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -40.8,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5403,
+          "peakDb": -1.2,
+          "lengthDiffSamples": 930
+        },
+        "m4a": {
+          "bytes": 3899,
+          "peakDb": -1.4,
+          "lengthDiffSamples": 226
+        }
+      },
+      "issues": []
+    },
+    "laser_hop_3": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.262,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -14.7,
+      "loudnessMaxDb": -12.8,
+      "gainDb": -7,
+      "dc": 0.00009,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -39.8,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5585,
+          "peakDb": -1,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 4138,
+          "peakDb": -1,
+          "lengthDiffSamples": 736
+        }
+      },
+      "issues": []
+    },
+    "laser_hop_4": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.23177,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -15.1,
+      "loudnessMaxDb": -13.7,
+      "gainDb": -6.5,
+      "dc": 0.00009,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -39.1,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5446,
+          "peakDb": -1.2,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 3858,
+          "peakDb": -1,
+          "lengthDiffSamples": 139
+        }
+      },
+      "issues": []
+    },
+    "upgrade_tick": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.44779,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -15.2,
+      "loudnessMaxDb": -10.7,
+      "gainDb": -8.5,
+      "dc": 0.00003,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -42.4,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 6899,
+          "peakDb": -1,
+          "lengthDiffSamples": 970
+        },
+        "m4a": {
+          "bytes": 6546,
+          "peakDb": -1.3,
+          "lengthDiffSamples": 10
+        }
+      },
+      "issues": []
+    },
+    "upgrade_max": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.53977,
+      "peakDb": -1.1,
+      "truePeakDb": -1,
+      "rmsDb": -19.6,
+      "loudnessMaxDb": -11.7,
+      "gainDb": -8.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -45.5,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 9039,
+          "peakDb": -1.4,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 7854,
+          "peakDb": -1.2,
+          "lengthDiffSamples": 715
+        }
+      },
+      "issues": []
+    },
+    "mult_stamp": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.7,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -20.3,
+      "loudnessMaxDb": -15.3,
+      "gainDb": 0,
+      "dc": 0.00003,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -60,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 7896,
+          "peakDb": -1,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 8996,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 192
+        }
+      },
+      "issues": []
+    },
+    "chip_place": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.2325,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -17.3,
+      "loudnessMaxDb": -16,
+      "gainDb": -4,
+      "dc": 0.00007,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -43.3,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5492,
+          "peakDb": -1.3,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 3842,
+          "peakDb": -1,
+          "lengthDiffSamples": 104
+        }
+      },
+      "issues": []
+    },
+    "chip_level": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.53577,
+      "peakDb": -1.8,
+      "truePeakDb": -1.8,
+      "rmsDb": -14.5,
+      "loudnessMaxDb": -9,
+      "gainDb": -10,
+      "dc": 0.00004,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -42.1,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 7354,
+          "peakDb": -1.3,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 7618,
+          "peakDb": -1.7,
+          "lengthDiffSamples": 907
+        }
+      },
+      "issues": []
+    },
+    "chip_off": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.24317,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -16.3,
+      "loudnessMaxDb": -15,
+      "gainDb": -6,
+      "dc": 0.00001,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -34.5,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5577,
+          "peakDb": -1.4,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 4073,
+          "peakDb": -1,
+          "lengthDiffSamples": 616
+        }
+      },
+      "issues": []
+    },
+    "chip_off_2": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.26494,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -15.3,
+      "loudnessMaxDb": -13.7,
+      "gainDb": -7.5,
+      "dc": 0.00001,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -35.4,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5719,
+          "peakDb": -1.4,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 4302,
+          "peakDb": -1,
+          "lengthDiffSamples": 595
+        }
+      },
+      "issues": []
+    },
+    "chip_off_3": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.25846,
+      "peakDb": -1.3,
+      "truePeakDb": -1.3,
+      "rmsDb": -16.7,
+      "loudnessMaxDb": -14.8,
+      "gainDb": -6,
+      "dc": 0.00001,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -34,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 5643,
+          "peakDb": -1.3,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 4176,
+          "peakDb": -1.4,
+          "lengthDiffSamples": 906
+        }
+      },
+      "issues": []
+    },
+    "circuit_hum": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": true,
+      "channels": 1,
+      "duration": 2,
+      "peakDb": -16.2,
+      "truePeakDb": -16.2,
+      "rmsDb": -24,
+      "loudnessMaxDb": -23.7,
+      "gainDb": -5.5,
+      "dc": 0,
+      "firstSampleDb": -20.1,
+      "lastSampleDb": -20.3,
+      "tail60msDb": -1.7,
+      "seam": {
+        "jump": 0.00213,
+        "ratio": 0.3,
+        "curvRatio": 0.1
+      },
+      "encoded": {
+        "ogg": {
+          "bytes": 20050,
+          "peakDb": -16,
+          "lengthDiffSamples": 0,
+          "startLagSamples": 0
+        },
+        "m4a": {
+          "bytes": 25608,
+          "peakDb": -14.4,
+          "lengthDiffSamples": 256,
+          "startLagSamples": 0
+        }
+      },
+      "issues": []
+    },
+    "win_small": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 1.1,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -18.5,
+      "loudnessMaxDb": -11.1,
+      "gainDb": -6,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -54.2,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 11327,
+          "peakDb": -1.2,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 14140,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 448
+        }
+      },
+      "issues": []
+    },
+    "win_connect": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.97183,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -18.1,
+      "loudnessMaxDb": -11.3,
+      "gainDb": -6.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -50.1,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 11740,
+          "peakDb": -1.1,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 13036,
+          "peakDb": -1,
+          "lengthDiffSamples": 456
+        }
+      },
+      "issues": []
+    },
+    "win_count_loop": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": true,
+      "channels": 1,
+      "duration": 1,
+      "peakDb": -5.5,
+      "truePeakDb": -5.5,
+      "rmsDb": -18,
+      "loudnessMaxDb": -14.3,
+      "gainDb": -7.5,
+      "dc": 0,
+      "firstSampleDb": -37.8,
+      "lastSampleDb": -47.1,
+      "tail60msDb": -6.9,
+      "seam": {
+        "jump": 0.00849,
+        "ratio": 0.1,
+        "curvRatio": 0
+      },
+      "encoded": {
+        "ogg": {
+          "bytes": 14024,
+          "peakDb": -5.6,
+          "lengthDiffSamples": 0,
+          "startLagSamples": 0
+        },
+        "m4a": {
+          "bytes": 13472,
+          "peakDb": -5.7,
+          "lengthDiffSamples": 128,
+          "startLagSamples": 0
+        }
+      },
+      "issues": []
+    },
+    "win_count_end": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 1.4,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -19.8,
+      "loudnessMaxDb": -11.8,
+      "gainDb": -4,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -52.8,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 13020,
+          "peakDb": -1.2,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 17470,
+          "peakDb": -1,
+          "lengthDiffSamples": 384
+        }
+      },
+      "issues": []
+    },
+    "sym_H1": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.65346,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -23.5,
+      "loudnessMaxDb": -17.7,
+      "gainDb": -0.5,
+      "dc": 0.00001,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -43.4,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 9800,
+          "peakDb": -0.8,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 9113,
+          "peakDb": -1.2,
+          "lengthDiffSamples": 378
+        }
+      },
+      "issues": []
+    },
+    "sym_H2": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.75523,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -14.4,
+      "loudnessMaxDb": -8.3,
+      "gainDb": -9.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -41.5,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 10445,
+          "peakDb": -1,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 10299,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 613
+        }
+      },
+      "issues": []
+    },
+    "sym_H3": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 0.75881,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -18.7,
+      "loudnessMaxDb": -11.8,
+      "gainDb": -6,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -42.2,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 9407,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 1017
+        },
+        "m4a": {
+          "bytes": 10366,
+          "peakDb": -1,
+          "lengthDiffSamples": 441
+        }
+      },
+      "issues": []
+    },
+    "sym_H4": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 0.82565,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -20.8,
+      "loudnessMaxDb": -15.4,
+      "gainDb": -2.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -42.4,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 15355,
+          "peakDb": -1.4,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 14368,
+          "peakDb": -1.5,
+          "lengthDiffSamples": 305
+        }
+      },
+      "issues": []
+    },
+    "sym_W": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 1.3,
+      "peakDb": -1.1,
+      "truePeakDb": -1,
+      "rmsDb": -20.4,
+      "loudnessMaxDb": -12.5,
+      "gainDb": -3.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -47.8,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 14612,
+          "peakDb": -1,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 17566,
+          "peakDb": -1,
+          "lengthDiffSamples": 64
+        }
+      },
+      "issues": []
+    },
+    "sym_S": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 1,
+      "duration": 1.2,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -18.5,
+      "loudnessMaxDb": -12.9,
+      "gainDb": -4,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -50.1,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 10120,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 14985,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 768
+        }
+      },
+      "issues": []
+    },
+    "bigwin_intro": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 1.3,
+      "peakDb": -1.5,
+      "truePeakDb": -1,
+      "rmsDb": -15.6,
+      "loudnessMaxDb": -10.9,
+      "gainDb": -2,
+      "dc": 0.00003,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -8.6,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 22111,
+          "peakDb": -1.2,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 22269,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 64
+        }
+      },
+      "issues": []
+    },
+    "tier_big": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 2.6,
+      "peakDb": -1.5,
+      "truePeakDb": -1.3,
+      "rmsDb": -15.3,
+      "loudnessMaxDb": -11.4,
+      "gainDb": -2.5,
+      "dc": 0.00001,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -57.7,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 41460,
+          "peakDb": -1,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 43790,
+          "peakDb": -1.3,
+          "lengthDiffSamples": 128
+        }
+      },
+      "issues": []
+    },
+    "tier_super": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 2.9,
+      "peakDb": -1.2,
+      "truePeakDb": -1,
+      "rmsDb": -14.3,
+      "loudnessMaxDb": -10.5,
+      "gainDb": -3,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -56.4,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 45208,
+          "peakDb": -0.8,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 48305,
+          "peakDb": -0.8,
+          "lengthDiffSamples": 64
+        }
+      },
+      "issues": []
+    },
+    "tier_mega": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 3.2,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -15.7,
+      "loudnessMaxDb": -11.3,
+      "gainDb": -1.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -54.9,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 50671,
+          "peakDb": -1,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 53245,
+          "peakDb": -0.7,
+          "lengthDiffSamples": 0
+        }
+      },
+      "issues": []
+    },
+    "tier_epic": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 3.6,
+      "peakDb": -1.3,
+      "truePeakDb": -1.3,
+      "rmsDb": -13.5,
+      "loudnessMaxDb": -11,
+      "gainDb": -1.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -51.3,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 58831,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 59657,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 256
+        }
+      },
+      "issues": []
+    },
+    "tier_cyber": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 4,
+      "peakDb": -1.2,
+      "truePeakDb": -1,
+      "rmsDb": -16.3,
+      "loudnessMaxDb": -11.7,
+      "gainDb": 0,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -57.3,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 60884,
+          "peakDb": -0.6,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 65464,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 512
+        }
+      },
+      "issues": []
+    },
+    "maxwin": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 5.8,
+      "peakDb": -1.9,
+      "truePeakDb": -1.6,
+      "rmsDb": -15.8,
+      "loudnessMaxDb": -11.6,
+      "gainDb": 0,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -53.2,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 90409,
+          "peakDb": -1.5,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 95484,
+          "peakDb": -1.6,
+          "lengthDiffSamples": 128
+        }
+      },
+      "issues": []
+    },
+    "coin_rain": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 1.8,
+      "peakDb": -1.4,
+      "truePeakDb": -1,
+      "rmsDb": -14.3,
+      "loudnessMaxDb": -9.4,
+      "gainDb": -6.5,
+      "dc": 0.00001,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -31.5,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 40005,
+          "peakDb": -0.7,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 30022,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 640
+        }
+      },
+      "issues": []
+    },
+    "drone_swarm": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 1.99273,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -16.7,
+      "loudnessMaxDb": -11,
+      "gainDb": -6,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -65,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 28882,
+          "peakDb": -0.8,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 33664,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 605
+        }
+      },
+      "issues": []
+    },
+    "train_pass": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 2.8,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -17.4,
+      "loudnessMaxDb": -12.6,
+      "gainDb": -2.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -42.5,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 36398,
+          "peakDb": -1,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 46432,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 768
+        }
+      },
+      "issues": []
+    },
+    "city_lights_on": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 1.9,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -17.7,
+      "loudnessMaxDb": -12.8,
+      "gainDb": -2,
+      "dc": 0.00001,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -49,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 33815,
+          "peakDb": -1,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 31432,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 960
+        }
+      },
+      "issues": []
+    },
+    "bonus_trigger": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 2,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -17.9,
+      "loudnessMaxDb": -12,
+      "gainDb": 0,
+      "dc": 0.00002,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -37.9,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 32760,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 33263,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 256
+        }
+      },
+      "issues": []
+    },
+    "bonus_intro": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 2.5,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -17.6,
+      "loudnessMaxDb": -12.8,
+      "gainDb": 0,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -50.7,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 41127,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 41332,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 832
+        }
+      },
+      "issues": []
+    },
+    "punch_tear": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 0.5605,
+      "peakDb": -1.2,
+      "truePeakDb": -1,
+      "rmsDb": -19.2,
+      "loudnessMaxDb": -13.8,
+      "gainDb": -1,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -40.5,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 12629,
+          "peakDb": -1.4,
+          "lengthDiffSamples": -128
+        },
+        "m4a": {
+          "bytes": 9800,
+          "peakDb": -1,
+          "lengthDiffSamples": 744
+        }
+      },
+      "issues": []
+    },
+    "run_whoosh": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 0.97206,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -16.6,
+      "loudnessMaxDb": -11.6,
+      "gainDb": -5.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -42.9,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 16175,
+          "peakDb": -1,
+          "lengthDiffSamples": 1021
+        },
+        "m4a": {
+          "bytes": 16522,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 445
+        }
+      },
+      "issues": []
+    },
+    "fs_add": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 1.2,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -16.3,
+      "loudnessMaxDb": -11.2,
+      "gainDb": -3,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -39.8,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 22547,
+          "peakDb": -0.8,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 20094,
+          "peakDb": -1.1,
+          "lengthDiffSamples": 768
+        }
+      },
+      "issues": []
+    },
+    "bonus_end": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 3,
+      "peakDb": -1.1,
+      "truePeakDb": -1,
+      "rmsDb": -15,
+      "loudnessMaxDb": -11.3,
+      "gainDb": -0.5,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -52,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 47036,
+          "peakDb": -0.7,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 50039,
+          "peakDb": -0.7,
+          "lengthDiffSamples": 384
+        }
+      },
+      "issues": []
+    },
+    "dive_impact": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 1.2,
+      "peakDb": -1,
+      "truePeakDb": -1,
+      "rmsDb": -18.3,
+      "loudnessMaxDb": -13,
+      "gainDb": 0,
+      "dc": 0.00002,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -54.4,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 20792,
+          "peakDb": -1,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 20725,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 768
+        }
+      },
+      "issues": []
+    },
+    "scan_mode_on": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 1.6,
+      "peakDb": -1.1,
+      "truePeakDb": -1,
+      "rmsDb": -15.1,
+      "loudnessMaxDb": -10.9,
+      "gainDb": -4,
+      "dc": 0,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -49.7,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 26046,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 26683,
+          "peakDb": -1.2,
+          "lengthDiffSamples": 0
+        }
+      },
+      "issues": []
+    },
+    "scan_mode_off": {
+      "status": "ok",
+      "bus": "sfx",
+      "loop": false,
+      "channels": 2,
+      "duration": 1.35,
+      "peakDb": -1.1,
+      "truePeakDb": -1,
+      "rmsDb": -13.9,
+      "loudnessMaxDb": -11.2,
+      "gainDb": -5,
+      "dc": 0.00001,
+      "firstSampleDb": "-inf",
+      "lastSampleDb": "-inf",
+      "tail60msDb": -47.3,
+      "seam": null,
+      "encoded": {
+        "ogg": {
+          "bytes": 22578,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 0
+        },
+        "m4a": {
+          "bytes": 22499,
+          "peakDb": -0.9,
+          "lengthDiffSamples": 736
+        }
+      },
+      "issues": []
+    },
+    "music_base": {
+      "status": "ok",
+      "bus": "music",
+      "loop": true,
+      "channels": 2,
+      "duration": 40,
+      "peakDb": -6.8,
+      "truePeakDb": -6.7,
+      "rmsDb": -20,
+      "loudnessMaxDb": -17.4,
+      "gainDb": 0,
+      "dc": 0,
+      "firstSampleDb": -23.1,
+      "lastSampleDb": -22.8,
+      "tail60msDb": -8.1,
+      "seam": {
+        "jump": 0.00239,
+        "ratio": 0.1,
+        "curvRatio": 0
+      },
+      "encoded": {
+        "ogg": {
+          "bytes": 576375,
+          "peakDb": -6.5,
+          "lengthDiffSamples": 0,
+          "startLagSamples": 0
+        },
+        "m4a": {
+          "bytes": 668914,
+          "peakDb": -6.5,
+          "lengthDiffSamples": 0,
+          "startLagSamples": 0
+        }
+      },
+      "issues": []
+    },
+    "music_bonus": {
+      "status": "ok",
+      "bus": "music",
+      "loop": true,
+      "channels": 2,
+      "duration": 34.90908,
+      "peakDb": -7,
+      "truePeakDb": -6.9,
+      "rmsDb": -20,
+      "loudnessMaxDb": -17.3,
+      "gainDb": 0,
+      "dc": 0,
+      "firstSampleDb": -37.2,
+      "lastSampleDb": -40.1,
+      "tail60msDb": -8.7,
+      "seam": {
+        "jump": 0.00389,
+        "ratio": 0.1,
+        "curvRatio": 0
+      },
+      "encoded": {
+        "ogg": {
+          "bytes": 516934,
+          "peakDb": -6.7,
+          "lengthDiffSamples": 0,
+          "startLagSamples": 0
+        },
+        "m4a": {
+          "bytes": 585897,
+          "peakDb": -6.8,
+          "lengthDiffSamples": 652,
+          "startLagSamples": 0
+        }
+      },
+      "issues": []
+    },
+    "music_bonus_double": {
+      "status": "ok",
+      "bus": "music",
+      "loop": true,
+      "channels": 2,
+      "duration": 34.90908,
+      "peakDb": -6.6,
+      "truePeakDb": -6.5,
+      "rmsDb": -20,
+      "loudnessMaxDb": -18.2,
+      "gainDb": 0,
+      "dc": 0,
+      "firstSampleDb": -21.9,
+      "lastSampleDb": -21.5,
+      "tail60msDb": -6.6,
+      "seam": {
+        "jump": 0.00952,
+        "ratio": 0.2,
+        "curvRatio": 0.1
+      },
+      "encoded": {
+        "ogg": {
+          "bytes": 533571,
+          "peakDb": -6.4,
+          "lengthDiffSamples": 0,
+          "startLagSamples": 0
+        },
+        "m4a": {
+          "bytes": 582455,
+          "peakDb": -6.1,
+          "lengthDiffSamples": 652,
+          "startLagSamples": 0
+        }
+      },
+      "issues": []
+    },
+    "amb_city": {
+      "status": "ok",
+      "bus": "amb",
+      "loop": true,
+      "channels": 2,
+      "duration": 20,
+      "peakDb": -12.9,
+      "truePeakDb": -12.7,
+      "rmsDb": -30,
+      "loudnessMaxDb": -25.1,
+      "gainDb": 0,
+      "dc": 0,
+      "firstSampleDb": -32.2,
+      "lastSampleDb": -31.3,
+      "tail60msDb": -8.5,
+      "seam": {
+        "jump": 0.00686,
+        "ratio": 0.2,
+        "curvRatio": 0.2
+      },
+      "encoded": {
+        "ogg": {
+          "bytes": 240833,
+          "peakDb": -13.1,
+          "lengthDiffSamples": 0,
+          "startLagSamples": 0
+        },
+        "m4a": {
+          "bytes": 205008,
+          "peakDb": -12.4,
+          "lengthDiffSamples": 512,
+          "startLagSamples": 0
+        }
+      },
+      "issues": []
+    },
+    "amb_scan": {
+      "status": "ok",
+      "bus": "amb",
+      "loop": true,
+      "channels": 2,
+      "duration": 20,
+      "peakDb": -12.8,
+      "truePeakDb": -12.7,
+      "rmsDb": -32,
+      "loudnessMaxDb": -24,
+      "gainDb": 0,
+      "dc": 0,
+      "firstSampleDb": -34.3,
+      "lastSampleDb": -31,
+      "tail60msDb": -11.8,
+      "seam": {
+        "jump": 0.00896,
+        "ratio": 0.2,
+        "curvRatio": 0.2
+      },
+      "encoded": {
+        "ogg": {
+          "bytes": 231706,
+          "peakDb": -12.9,
+          "lengthDiffSamples": 0,
+          "startLagSamples": 0
+        },
+        "m4a": {
+          "bytes": 205002,
+          "peakDb": -12.6,
+          "lengthDiffSamples": 512,
+          "startLagSamples": 0
+        }
+      },
+      "issues": []
+    }
+  }
+}

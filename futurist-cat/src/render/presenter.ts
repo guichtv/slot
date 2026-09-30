@@ -34,7 +34,8 @@ export interface PresenterDeps {
   sound: SoundPort;
   cfg: GameConfig;
   baseBet: () => number; // micros
-  format: (micros: number) => string;
+  format: (micros: number, digits?: number) => string;
+  digits: (micros: number) => number;
   t: (k: string, p?: Record<string, string | number>) => string;
   turbo: () => boolean;
   reduced: () => boolean;
@@ -151,7 +152,12 @@ export class GamePresenter implements Presenter {
         grid.anticipate(c, true);
         // the scatters already on the grid react while waiting
         for (let cc = 0; cc < c; cc++) grid.reels[cc]!.cells.forEach((v) => { if (v.id === 'S') v.react(); });
-        await ctx.wait((bought ? T.bonus.scatterDrop : T.spin.anticipationExtra) * (this.turbo ? 0.8 : 1));
+        // the whole slowdown lasts 1.8-2.1 s whatever the number of reels in tension
+        const n = antic.filter((a) => a > 0).length;
+        const first = !antic.slice(0, c).some((a) => a > 0);
+        const next = n === 2 ? 0.8 : 0.5;
+        const dur = n <= 1 ? T.spin.anticipationTotal1 : first ? T.spin.anticipationTotal - (n - 1) * next : next;
+        await ctx.wait((bought ? T.bonus.scatterDrop : dur) * (this.turbo ? 0.8 : 1));
         grid.anticipate(c, false);
       } else if (c > 0) await ctx.wait(T.spin.reelGap * k);
       const pad = e.padding?.top[c] ?? null;
@@ -271,6 +277,7 @@ export class GamePresenter implements Presenter {
     // HUD: spin win in base game; bonus total during the bonus (three distinct informations)
     if (st.bonus) this.d.ui.setWin(this.money(st.bonus.win), true);
     else this.d.ui.setWin(this.money(e.amount), false);
+    if (e.amount > 0) this.d.ui.announce(`${this.d.t('hud.win')} ${this.d.format(this.money(e.amount))}`);
     const tier = capNext ? null : tierFor(e.amount, this.d.cfg);
     if (tier) await this.celebrate(this.money(e.amount), tier, ctx);
     else if (e.amount === 0 && !st.bonus && !st.feature) this.cat('nothing');
@@ -361,10 +368,11 @@ export class GamePresenter implements Presenter {
     this.d.sound.duck(true);
     sc.veilTo(0.34);
     const micros = this.money(e.amount);
-    const el = this.d.ui.showBonusEnd(this.d.t('end.total'), this.d.format(0));
-    // quick roll-up then exact value
+    const dec = this.d.digits(micros);
+    const el = this.d.ui.showBonusEnd(this.d.t('end.total'), this.d.format(0, dec));
+    // quick roll-up (decimals fixed on the final value) then exact value
     const st = { v: 0 };
-    const roll = gsap.to(st, { v: micros, duration: Math.min(2.2, 0.6 + micros / Math.max(1, this.d.baseBet()) / 60) * this.k(), ease: 'power2.out', onUpdate: () => this.d.ui.updateBonusEnd(el, this.d.format(Math.round(st.v))) });
+    const roll = gsap.to(st, { v: micros, duration: Math.min(2.2, 0.6 + micros / Math.max(1, this.d.baseBet()) / 60) * this.k(), ease: 'power2.out', onUpdate: () => this.d.ui.updateBonusEnd(el, this.d.format(Math.round(st.v), dec)) });
     await ctx.play(roll);
     this.d.ui.updateBonusEnd(el, this.d.format(micros));
     this.d.ui.setWin(micros, true);
@@ -399,8 +407,8 @@ export class GamePresenter implements Presenter {
     this.anticipationLoop?.stop(0.1); this.anticipationLoop = null;
     this.label.visible = false;
     this.fsBanner.visible = false;
-    if (cancelled) { sc.veilTo(0, 0.2); sc.resetZoom(0.2); }
-    this.d.ui.setPhase('idle');
+    if (cancelled) { sc.veilTo(0, 0.2); sc.resetZoom(0.2); this.d.ui.setPhase('idle'); }
+    // otherwise the controller switches to idle once the end-round answer is in
   }
 
   // ---------------------------------------------------------------- resume: visuals = state, no animation

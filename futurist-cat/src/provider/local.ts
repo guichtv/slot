@@ -27,6 +27,9 @@ export class LocalProvider implements Provider {
   private roundSeq = 1;
   readonly dev: LocalDevOptions = { forceNext: null, latencyMs: 0, failNext: null, failEndRound: false };
   private cache = new Map<string, unknown>();
+  /** number of /play requests received (QA: one purchase = one request) */
+  plays = 0;
+  endRounds = 0;
 
   constructor(private readonly cfg: GameConfig, private readonly rand: Rand, private readonly baseUrl = './fixtures/', private readonly persist = true) {}
 
@@ -87,6 +90,7 @@ export class LocalProvider implements Provider {
   }
 
   async play(mode: ModeId, baseBetMicros: number): Promise<PlayResult> {
+    this.plays++;
     await this.delay();
     if (this.pending) throw new ProviderError('ERR_BE', 'manche deja active');
     const fail = this.dev.failNext; this.dev.failNext = null;
@@ -110,6 +114,7 @@ export class LocalProvider implements Provider {
     await this.delay();
     if (this.dev.failEndRound) { this.dev.failEndRound = false; throw new ProviderError('NETWORK', 'end-round', true); }
     if (!this.pending) throw new ProviderError('ERR_BNF');
+    this.endRounds++;
     this.balanceMicros += this.pending.payout;
     this.pending = null;
     this.save();

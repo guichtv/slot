@@ -106,7 +106,7 @@ export default [
   ui('ui_bet_up', (r) => uiBet(r, true), -24),
   ui('ui_bet_down', (r) => uiBet(r, false), -24),
   ui('ui_error', uiError, -22),
-  ui('ui_buy_confirm', uiBuyConfirm, -19),
+  ui('ui_buy_confirm', uiBuyConfirm, -19, { master: { maxDur: 1.2, fadeOutMs: 200 } }),
   ui('ui_autoplay_start', uiAutoplay, -22),
 ];
 

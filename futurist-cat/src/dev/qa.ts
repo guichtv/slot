@@ -15,9 +15,10 @@ import type { Celebration } from '../render/celebrate';
 import { Book, type ModeId } from '../contract/events';
 import { el } from '../ui/dom';
 
-interface QaDeps { app: GameApp; clock: GameClock; game: GameController; scene: Scene; presenter: GamePresenter; ui: Ui; audio: unknown; provider: Provider; cfg: GameConfig; cat: () => CatView | null; celebration: Celebration; relayout: () => void; fmt: (m: number) => string }
+interface QaDeps { app: GameApp; clock: GameClock; game: GameController; scene: Scene; presenter: GamePresenter; ui: Ui; audio: unknown; provider: Provider; cfg: GameConfig; cat: () => CatView | null; celebration: Celebration; relayout: () => void; fmt: (m: number) => string; settings: (s: Record<string, unknown>) => void }
 
-const TEST_ANIM = ['F07', 'F25', 'F13', 'F15', 'F17', 'F19', 'F09', 'F22', 'F20'];
+// key moments chained (the full bonuses and the purchase have their own videos)
+const TEST_ANIM = ['F07', 'F25', 'F10', 'F13', 'F12', 'F15', 'F17', 'F19'];
 
 export function installQa(d: QaDeps): void {
   const w = window as unknown as Record<string, unknown>;
@@ -52,19 +53,49 @@ export function installQa(d: QaDeps): void {
     await d.game.replay(Book.parse(f.book), d.game.bet);
     return true;
   };
-  w.__qaStep = (ms: number) => d.app.step(ms);
+  w.__qaStep = (ms: number, render = true) => d.app.step(ms, 60, render ? 1 : 1000);
+  /** background driver for e2e runs on the virtual clock: advances `ms` of game time per tick */
+  let driving = false;
+  w.__qaDrive = (on: boolean, ms = 100) => {
+    if (on === driving) return;
+    driving = on;
+    // paced by requestAnimationFrame: a setTimeout(0) chain starved the compositor (no rAF, no
+    // screenshots, dialogs never received their 'in' class)
+    const loop = () => { if (!driving) return; d.app.step(ms, 60, 6); requestAnimationFrame(loop); };
+    if (on) loop();
+  };
   w.__qaAuto = (on: boolean) => { autoClick = on; armWatch(); };
   w.__qaLayout = () => d.relayout();
+  /** screen rects of the grid frame, the cat zone and the logo/ante (for the HUD overlap test) */
+  w.__qaRects = () => {
+    const l = d.scene.layoutNow!;
+    const g = l.design.grid, c = l.design.cat;
+    const r = (x: number, y: number, ww: number, hh: number) => { const p = l.toScreen(x, y); return { x: p.x, y: p.y, w: ww * l.scale, h: hh * l.scale }; };
+    return { cls: l.cls, grid: r(g.x, g.y, l.gridW + 2 * g.pad, l.gridH + 2 * g.pad), cat: r(c.x - c.height * 0.3, c.y - c.height, c.height * 0.6, c.height), logo: r(l.design.logo.x, l.design.logo.y, l.design.logo.w, l.design.logo.h), ante: r(l.design.ante.x, l.design.ante.y, l.design.ante.w, l.design.ante.h) };
+  };
+  w.__qaSetWin = (units: number) => d.ui.setWin(Math.round(units * 1e6), false);
   w.__qa = () => ({
     state: d.game.fsm.state, phase: d.ui.root.dataset.phase, balance: d.game.balance, bet: d.game.bet, auto: d.game.autoLeft,
     fps: Math.round(d.app.fps), frameMs: +d.app.frameMs.toFixed(2), catMode: d.cat()?.mode ?? 'none', catMs: +(d.cat()?.lastCatMs ?? 0).toFixed(2),
     catFail: d.cat()?.failedReason ?? '', lastBook: d.game.lastBook?.id ?? null, history: d.game.history.length, time: +d.clock.time.toFixed(3),
     particles: d.scene.particles.activeCount, catcher: d.ui.catcher.isArmed, dialog: d.ui.dialogOpen,
+    plays: local?.plays ?? -1, endRounds: local?.endRounds ?? -1, spinsLeft: document.querySelector('.spins-counter.on')?.textContent ?? null, win: document.querySelector('.field.win .val')?.textContent ?? '',
+    popup: document.querySelector('.popup')?.className ?? null, errorDialog: document.querySelector('.dialog.error p')?.textContent ?? null,
   });
   w.__qaTestAnim = () => testAnim();
   w.__qaSetBalance = (units: number) => { local?.setBalance(Math.round(units * 1e6)); d.game.balance = Math.round(units * 1e6); d.game.refreshHud(); };
   w.__qaGame = d.game;
   w.__qaScene = d.scene;
+  /** player settings as the Info menu would set them (turbo, reduced, quality...) */
+  w.__qaSettings = (s: Record<string, unknown>) => d.settings(s);
+  /** 3D context loss, restored after `sec` of GAME time (virtual-clock videos) */
+  w.__qaLoseContext = (sec = 2.5) => {
+    const ext = d.cat()?.stage?.renderer.getContext().getExtension('WEBGL_lose_context');
+    if (!ext) return false;
+    ext.loseContext();
+    d.clock.after(sec, () => ext.restoreContext());
+    return true;
+  };
 
   async function testAnim(): Promise<void> {
     autoClick = true;
@@ -73,7 +104,7 @@ export function installQa(d: QaDeps): void {
       if (!local) break;
       const f = await local.fixture(id);
       while (!d.game.idle) await new Promise((r) => setTimeout(r, 50));
-      await d.game.replay(Book.parse(f.book), d.game.bet);
+      await d.game.replay(Book.parse(f.book), d.game.bet, { bar: false });
       await new Promise((r) => setTimeout(r, 200));
     }
     autoClick = false;

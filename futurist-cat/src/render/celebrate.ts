@@ -13,7 +13,9 @@ import type { TierId } from '../config/game-config';
 import { T } from '../config/timings';
 
 export interface CelebrateHooks {
-  format(micros: number): string;
+  /** digits = fixed number of decimals (a rolling counter keeps the final value's decimals) */
+  format(micros: number, digits?: number): string;
+  digits(micros: number): number;
   sound(id: string, o?: { rate?: number }): void;
   loop(id: string): { stop(fade?: number): void } | null;
   duck(on: boolean): void;
@@ -49,7 +51,7 @@ export class Celebration {
     for (const t of this.titles.values()) t.destroy();
     this.titles.clear();
     for (const id of ORDER) {
-      const txt = new Text({ text: this.hooks.tierName(id), style: { fontFamily: 'Oxanium, Chakra Petch, Noto Sans JP, Noto Sans KR, Noto Sans SC, Noto Sans Arabic, Noto Sans Devanagari, sans-serif', fontWeight: '800', fontSize: 96, fill: id === 'max' ? 0xfff1c8 : 0xffffff, stroke: { color: id === 'max' ? 0x6a4a10 : 0x0b2a78, width: 12, join: 'round' }, dropShadow: { color: 0x3feaff, blur: 16, distance: 0, alpha: 0.8, angle: 0 }, letterSpacing: 4, align: 'center' } });
+      const txt = new Text({ text: this.hooks.tierName(id), style: { fontFamily: 'Oxanium, Exo 2, Chakra Petch, Noto Sans JP, Noto Sans KR, Noto Sans SC, Noto Sans Arabic, Noto Sans Devanagari, sans-serif', fontWeight: '800', fontSize: 96, fill: id === 'max' ? 0xfff1c8 : 0xffffff, stroke: { color: id === 'max' ? 0x6a4a10 : 0x0b2a78, width: 12, join: 'round' }, dropShadow: { color: 0x3feaff, blur: 16, distance: 0, alpha: 0.8, angle: 0 }, letterSpacing: 4, align: 'center' } });
       txt.anchor.set(0.5);
       txt.visible = false;
       this.root.addChildAt(txt, 2);
@@ -161,8 +163,9 @@ export class Celebration {
     const k = turbo ? 0.6 : 1;
     // counter segments: 0 -> each threshold reached -> final value; accelerating into each threshold
     const state = { v: 0 };
-    const digits = this.hooks.format(winMicros).length;
-    const setText = () => { const s = this.hooks.format(Math.round(state.v)); this.amount.set(s.padStart(digits, ' ')); };
+    const dec = this.hooks.digits(winMicros);
+    const len = this.hooks.format(winMicros, dec).length;
+    const setText = () => { const s = this.hooks.format(Math.round(state.v), dec); this.amount.set(s.padStart(len, '\u2007')); };
     let t = 0;
     tl.call(() => { this.hooks.duck(true); this.hooks.sound('bigwin_intro'); this.hooks.cat(top === 'big' ? 'tier1' : top === 'max' ? 'maxWin' : 'tierHigh'); }, undefined, 0);
     tl.add(this.scene.veilTo(0.34, 0.3), 0);
@@ -180,7 +183,7 @@ export class Celebration {
       t += segDur;
     });
     // exact convergence
-    tl.call(() => { state.v = winMicros; setText(); counting?.stop(0.1); this.hooks.sound('win_count_end'); }, undefined, t);
+    tl.call(() => { state.v = winMicros; this.amount.set(this.hooks.format(winMicros, dec)); counting?.stop(0.1); this.hooks.sound('win_count_end'); }, undefined, t);
     tl.fromTo(this.amount.root.scale, { x: this.amount.root.scale.x * 1.18, y: this.amount.root.scale.y * 1.18 }, { x: this.amount.root.scale.x, y: this.amount.root.scale.y, duration: 0.3, ease: 'back.out(3)' }, t);
     tl.eventCallback('onInterrupt', () => counting?.stop(0.1));
     return tl;

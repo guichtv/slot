@@ -64,7 +64,7 @@ export interface LoopHandle extends VoiceHandle {
 export interface AudioEngineOptions {
   /** Folder that holds manifest.json and the encoded files, e.g. './audio/'. */
   baseUrl: string;
-  /** Clock in milliseconds (default performance.now); used to de-duplicate same-instant triggers. */
+  /** Clock in milliseconds (default performance.now); with the audio clock, used to skip same-instant re-triggers of a cue. */
   now?: () => number;
 }
 
@@ -119,7 +119,8 @@ interface BedSlot {
 }
 
 const BUSES: Bus[] = ['master', 'music', 'amb', 'sfx', 'ui'];
-const DEFAULT_VOLUME: Record<Bus, number> = { master: 1, music: 0.75, amb: 0.8, sfx: 1, ui: 0.85 };
+/** Default bus volumes (perceptual 0..1, gain = v^2): music ~-3.7 dB, ambience ~-3.1 dB, UI ~-1.4 dB. */
+const DEFAULT_VOLUME: Record<Bus, number> = { master: 1, music: 0.65, amb: 0.7, sfx: 1, ui: 0.85 };
 const clamp = (x: number, lo: number, hi: number): number => (x < lo ? lo : x > hi ? hi : x);
 
 function decodeAudio(ctx: BaseAudioContext, data: ArrayBuffer): Promise<AudioBuffer> {
@@ -150,7 +151,7 @@ export class AudioEngine {
   private readonly volumes: Record<Bus, number> = { ...DEFAULT_VOLUME };
   private readonly mutes: Record<Bus, boolean> = { master: false, music: false, amb: false, sfx: false, ui: false };
   private voices: Voice[] = [];
-  private readonly lastStart = new Map<CueId, number>();
+  private readonly lastStart = new Map<CueId, { now: number; at: number }>();
   private readonly lastVariant = new Map<CueId, CueId>();
   private readonly beds: BedSlot[] = [0, 1, 2].map(() => ({ wanted: null, playing: null, handle: null, fade: 1 }));
   private readonly format: 'ogg' | 'm4a';
@@ -412,10 +413,13 @@ export class AudioEngine {
         void this.loadOne(chosen);
         return null;
       }
+      // same cue re-triggered within 12 ms (same frame): identical stacking only adds level, skip it.
+      // Both clocks must agree, so a frozen game clock (pause, QA virtual time) never mutes repeats.
       const t = this.now();
+      const at = ctx.currentTime;
       const last = this.lastStart.get(id);
-      if (last !== undefined && t - last >= 0 && t - last < 12 && !(o.delay && o.delay > 0)) return null;
-      this.lastStart.set(id, t);
+      if (last && !(o.delay && o.delay > 0) && t - last.now >= 0 && t - last.now < 12 && at - last.at < 0.012) return null;
+      this.lastStart.set(id, { now: t, at });
       this.enforceCap(id, cue.maxVoices ?? 4);
       let rate = o.rate ?? 1;
       if (useVariant) rate *= Math.pow(2, ((Math.random() * 2 - 1) * 10) / 1200);

@@ -10,7 +10,8 @@ export const T = {
     reelGap: 0.13, // between reel stops
     land: 0.32, // landing tween per reel (with bounce)
     speed: 26, // cell pitches per second at full speed
-    anticipationExtra: 1.8, // per anticipated reel (1.6-2.2)
+    anticipationTotal1: 1.8, // one reel in tension
+    anticipationTotal: 2.1, // several reels: shared (1.3 + 0.8, or 1.1 + 0.5 + 0.5), always within 1.6-2.2 s
     anticipationSpeed: 0.45, // speed factor on anticipated reels
     quickStopLand: 0.16,
   },

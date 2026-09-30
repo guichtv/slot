@@ -47,6 +47,8 @@ export class CatView {
   lastCatMs = 0;
   private lowFpsFor = 0;
   failedReason = '';
+  /** animation cues from the cat director (landing impact, punch, salto apex) */
+  onCue: ((cue: 'punch' | 'land' | 'flipApex') => void) | null = null;
   private breathe = 0;
   private stillPose: StillPose = 'rest';
   private stillFade = 1;
@@ -121,6 +123,7 @@ export class CatView {
       this.stage = stage; this.rig = rig;
       this.director = new CatDirector(rig, this.o.rand);
       this.director.onStill = (p) => this.showStill(p);
+      this.director.onCue = (c) => this.onCue?.(c);
       stage.onContextLost = () => { this.fallbackTo('rest', 'contexte WebGL perdu'); };
       stage.onContextRestored = () => { if (this.stage) { this.useSource(); this.mode = '3d'; this.sprite.visible = true; this.still.visible = false; } };
       this.useSource();
@@ -172,10 +175,21 @@ export class CatView {
   }
   setBackground(bg: Background): void { this.director?.setBackground(bg); }
 
+  /** layout class change (e.g. rotation): new cat height in world units */
+  setHeight(h: number): void {
+    if (Math.abs(h - this.o.catHeight) < 0.5) return;
+    (this.o as { catHeight: number; zoneW: number; zoneH: number }).catHeight = h;
+    (this.o as { zoneW: number }).zoneW = h * 0.8;
+    (this.o as { zoneH: number }).zoneH = h / 0.62;
+    this.drawShadow(1);
+    if (this.stills) this.showStill(this.stillPose);
+    this.renderScale = -1; // force the canvas resize below
+  }
+
   /** Resize the three canvas when the screen scale changes (never every frame). */
   resize(screenScale: number, pixelRatio: number): void {
     if (!this.stage) return;
-    if (Math.abs(screenScale - this.renderScale) < 0.02 && pixelRatio === this.stage.pixelRatio) return;
+    if (this.renderScale > 0 && Math.abs(screenScale - this.renderScale) < 0.02 && pixelRatio === this.stage.pixelRatio) return;
     this.renderScale = screenScale;
     this.stage.resize(Math.round(this.o.zoneW * screenScale), Math.round(this.o.zoneH * screenScale), pixelRatio);
     this.rig?.frame();

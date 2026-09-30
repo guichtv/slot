@@ -330,7 +330,7 @@ function bonusTrigger(rng) {
     const z = fnoise(1.0, { rng, color: 'pink', mode: 'bp', q: 7, f: (t) => 300 * (1 + k * 0.5) * Math.pow(10, t / 0.95), amp: (t) => envBell(t, 0.8, 1.0) });
     m.addPanned(z, 0, 0.3, (t) => 0.8 * Math.sin(TAU * (1.5 + k * 0.7) * t + k));
   }
-  m.add(tone(1.0, { wave: 'sine', f: (t) => hz('D1') * Math.pow(2, t / 0.9), amp: (t) => Math.pow(Math.min(1, t / 0.9), 1.5) * (1 - smoothstep(0.88, 0.98, t)) }), 0, 0.45);
+  m.add(tone(1.0, { wave: 'sine', f: (t) => hz('D2') * Math.pow(2, t / 0.9), amp: (t) => Math.pow(Math.min(1, t / 0.9), 1.5) * (1 - smoothstep(0.88, 0.98, t)) }), 0, 0.3);
   for (const nn of ['D3', 'F3', 'A3']) m.add(superSaw(hz(nn), 0.8, { rng, cut: 300, att: 0.6, rel: 0.15, lfo: (t) => Math.pow(15, Math.min(1, t / 0.9)) }), 0, 0.09);
   bells(m, ['D5', 'A5', 'D6', 'F6', 'A6'], 0.9, { rng, gain: 0.2, tau: 0.6, spread: 0.7, stagger: 0.012 });
   stab(m, ['D4', 'A4', 'D5', 'F5'], 0.9, 0.3, { rng, gain: 0.12, bright: 1.3 });
@@ -389,7 +389,7 @@ function runWhoosh(rng) {
   const b = whoosh(0.8, { rng, f0: 300, f1: 2200, q: 1.1, peak: 0.55 });
   m.addPanned(a, 0, 0.5, (t) => -0.7 + 1.4 * smoothstep(0, 0.8, t));
   m.addPanned(b, 0.015, 0.45, (t) => -0.6 + 1.3 * smoothstep(0, 0.8, t));
-  m.add(fnoise(0.8, { rng, color: 'brown', mode: 'lp', f: 350, q: 0.7, amp: (t) => envBell(t, 0.45, 0.8) }), 0, 0.4);
+  m.add(fnoise(0.8, { rng, color: 'pink', mode: 'lp', f: 420, q: 0.7, amp: (t) => envBell(t, 0.45, 0.8) }), 0, 0.25);
   return m.reverb(IR('lab'), 0.1);
 }
 
@@ -434,7 +434,7 @@ function bonusEnd(rng) {
 /** Landing thud + cyan shockwave ring. */
 function diveImpact(rng) {
   const m = new Mix(1.3, 2);
-  m.add(thump(0.8, { f0: 110, f1: 40, pTau: 0.03, tau: 0.22, drive: 2 }), 0, 0.7);
+  m.add(thump(0.8, { f0: 110, f1: 45, pTau: 0.03, tau: 0.2, drive: 2 }), 0, 0.45);
   m.add(thump(0.35, { f0: 320, f1: 120, pTau: 0.015, tau: 0.07, drive: 1.6 }), 0, 0.6);
   m.add(fnoise(0.3, { rng, color: 'brown', mode: 'lp', f: 500, q: 0.7, amp: (t) => envAD(t, 0.002, 0.06) }), 0, 0.5);
   m.add(tick({ rng, f: 1800, q: 0.7, dur: 0.006 }), 0, 0.4);
@@ -483,28 +483,28 @@ function scanModeOff(rng) {
 
 const big = (id, gen, loud, maxDur, extra = {}) => ({
   id, bus: 'sfx', critical: false, channels: 2, loud, gen, ...extra,
-  master: { limitDb: -2.5, hp: 38, trimDb: -50, fadeOutMs: 280, maxDur, ...(extra.master || {}) },
+  master: { limitDb: -2.5, hp: 38, trimDb: -46, fadeOutMs: 300, maxDur, ...(extra.master || {}) },
 });
 
 export default [
   big('bigwin_intro', bigwinIntro, -16, 1.3, { master: { fadeOutMs: 70 } }),
-  big('tier_big', tierBig, -16, 3.0),
-  big('tier_super', tierSuper, -15.5, 3.3),
-  big('tier_mega', tierMega, -15, 3.6),
-  big('tier_epic', tierEpic, -14.5, 4.0),
-  big('tier_cyber', tierCyber, -14, 4.3),
-  big('maxwin', maxWin, -14, 6.0, { master: { limitDb: -3 } }),
-  big('coin_rain', coinRain, -19, 2.0),
-  big('drone_swarm', droneSwarm, -20, 2.3),
-  big('train_pass', trainPass, -18, 3.0),
-  big('city_lights_on', cityLightsOn, -18, 2.2),
-  big('bonus_trigger', bonusTrigger, -15, 2.6),
-  big('bonus_intro', bonusIntro, -15, 2.8),
+  big('tier_big', tierBig, -17, 2.6),
+  big('tier_super', tierSuper, -16.5, 2.9),
+  big('tier_mega', tierMega, -16, 3.2),
+  big('tier_epic', tierEpic, -15.5, 3.6, { master: { limitDb: -3.5 } }),
+  big('tier_cyber', tierCyber, -14, 4.0, { master: { limitDb: -5 } }),
+  big('maxwin', maxWin, -14, 5.8, { master: { limitDb: -5 } }),
+  big('coin_rain', coinRain, -19, 1.8),
+  big('drone_swarm', droneSwarm, -20, 2.2),
+  big('train_pass', trainPass, -18, 2.8),
+  big('city_lights_on', cityLightsOn, -18, 1.9),
+  big('bonus_trigger', bonusTrigger, -15, 2.0),
+  big('bonus_intro', bonusIntro, -15, 2.5),
   big('punch_tear', punchTear, -18, 0.6, { master: { fadeOutMs: 60 } }),
   big('run_whoosh', runWhoosh, -20, 1.0, { master: { fadeOutMs: 60 } }),
-  big('fs_add', fsAdd, -17, 1.6),
-  big('bonus_end', bonusEnd, -15, 3.5),
-  big('dive_impact', diveImpact, -16, 1.6, { master: { limitDb: -3 } }),
-  big('scan_mode_on', scanModeOn, -18, 1.9),
-  big('scan_mode_off', scanModeOff, -19, 1.6),
+  big('fs_add', fsAdd, -17, 1.2),
+  big('bonus_end', bonusEnd, -15, 3.0),
+  big('dive_impact', diveImpact, -16, 1.2, { master: { limitDb: -3 } }),
+  big('scan_mode_on', scanModeOn, -18, 1.6),
+  big('scan_mode_off', scanModeOff, -19, 1.35),
 ];

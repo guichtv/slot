@@ -10,8 +10,9 @@ import gsap from 'gsap';
 import { GameClock } from './core/clock';
 import { mulberry32, seedFromUrl } from './core/rng';
 import { i18n, t, I18n } from './i18n/i18n';
+import { loadScriptFonts } from './i18n/fonts';
 import { loadGameConfig, type GameConfig } from './config/game-config';
-import { formatMoney } from './contract/money';
+import { formatMoney, displayDigits } from './contract/money';
 import { AssetStore } from './render/assets';
 import { GameApp } from './render/app';
 import { computeLayout, type Layout } from './render/layout';
@@ -29,7 +30,7 @@ import { LocalProvider } from './provider/local';
 import { RgsProvider, fetchReplay } from './provider/rgs';
 import type { Provider, SessionInfo } from './provider/types';
 import { ProviderError, DEFAULT_JURISDICTION } from './provider/types';
-import { AudioEngine } from './audio/audio';
+import { AudioEngine, hopRate, chipLevelRate } from './audio/audio';
 import { Book, type ModeId } from './contract/events';
 
 const q = new URLSearchParams(location.search);
@@ -72,12 +73,15 @@ async function boot(): Promise<void> {
   // ---------------- parallel loading
   const app = new GameApp({ clock, resolution: Math.min(devicePixelRatio || 1, 2), antialias: false });
   const audio = new AudioEngine({ baseUrl: './audio/', now: () => clock.time * 1000 });
+  // while a skip jumps a timeline to its end, cues and cosmetic particles stay silent
+  let jumping = false;
+  const sfx = (id: string, o?: Parameters<AudioEngine['play']>[1]) => (jumping ? null : audio.play(id, o));
   const holder: { session: SessionInfo | null } = { session: null };
   const tasks: Promise<unknown>[] = [
     (async () => {
       const fams = ['800 32px Oxanium', '700 32px Oxanium', '600 16px "Chakra Petch"', '500 16px "Chakra Petch"'];
       let n = 0;
-      await Promise.all(fams.map((f) => document.fonts.load(f).then(() => pFonts(++n / fams.length))));
+      await Promise.all([...fams.map((f) => document.fonts.load(f).then(() => pFonts(++n / (fams.length + 1)))), loadScriptFonts(i18n.lang, t('tier.big') + t('hud.balance')).then(() => pFonts(++n / (fams.length + 1)))]);
     })(),
     (async () => {
       await app.init(gameRoot);
@@ -105,10 +109,11 @@ async function boot(): Promise<void> {
   // ---------------- scene
   const renderer = app.app.renderer;
   const scene = new Scene(assets, renderer, rand, {
-    sound: (id, o) => audio.play(id, { ...(o?.rate ? { rate: o.rate } : {}), variant: true }),
-    quiet: () => false,
+    sound: (id, o) => { sfx(id, { rate: o?.hop !== undefined ? hopRate(o.hop) : o?.level ? chipLevelRate(o.level) : (o?.rate ?? 1), variant: true }); },
+    quiet: () => jumping,
   });
   app.app.stage.addChild(scene.cam, scene.screen);
+  scene.particles.suppress = () => jumping;
   let layout: Layout = computeLayout(innerWidth, innerHeight, matchMedia('(pointer: coarse)').matches);
 
   const ui = new Ui(document.body, {
@@ -125,7 +130,8 @@ async function boot(): Promise<void> {
     replayRound: (id) => { const r = game.history.find((h) => h.id === id); if (r) void game.replay(r.book, r.betMicros); },
     fullscreen: () => { if (document.fullscreenElement) void document.exitFullscreen(); else void document.documentElement.requestFullscreen?.().catch(() => {}); },
   });
-  const fmt = (micros: number) => formatMoney(micros, { currency: session?.currency ?? 'EUR', locale: i18n.locale });
+  const fmt = (micros: number, digits?: number) => formatMoney(micros, { currency: session?.currency ?? 'EUR', locale: i18n.locale }, digits !== undefined ? { digits } : {});
+  const digitsOf = (micros: number) => displayDigits(micros, session?.currency ?? 'EUR');
   ui.setFormatter(fmt);
   // image URLs for the HTML UI (manifest; in dev/QA builds the stand-ins are extracted once)
   const urls: Record<string, string | null> = {};
@@ -147,9 +153,9 @@ async function boot(): Promise<void> {
   void cat.loadStills();
 
   const celebration = new Celebration(scene, assets, renderer, {
-    format: fmt,
-    sound: (id, o) => audio.play(id, o),
-    loop: (id) => audio.loop(id),
+    format: fmt, digits: digitsOf,
+    sound: (id, o) => { sfx(id, o); },
+    loop: (id) => (jumping ? null : audio.loop(id)),
     duck: (on) => audio.duck(on),
     cat: (m) => cat?.request(m),
     tierName: (id) => t(`tier.${id}`),
@@ -158,7 +164,7 @@ async function boot(): Promise<void> {
   celebration.buildTitles();
 
   const sound: SoundPort = {
-    play: (id, o) => audio.play(id, o),
+    play: (id, o) => { sfx(id, o); },
     loop: (id, o) => audio.loop(id, o),
     duck: (on) => audio.duck(on),
     music: (id, f) => audio.music(id, f),
@@ -167,10 +173,10 @@ async function boot(): Promise<void> {
   let game!: GameController;
   const presenter = new GamePresenter({
     scene, celebration, cat: () => cat, ui, sound, cfg,
-    baseBet: () => game.bet, format: fmt, t,
+    baseBet: () => game.bet, format: fmt, digits: digitsOf, t,
     turbo: () => game.turbo, reduced: () => ui.settings.reduced, autoplaying: () => game.autoLeft !== null,
   });
-  game = new GameController({ clock, provider: provider ?? new LocalProvider(cfg, rand), cfg, presenter, ui, format: fmt, onSound: (id) => audio.play(id) });
+  game = new GameController({ clock, provider: provider ?? new LocalProvider(cfg, rand), cfg, presenter, ui, format: fmt, onSound: (id) => audio.play(id), jumping: (on) => { jumping = on; } });
   game.fsm.go('loading');
   if (session) { game.init(session); ui.setJurisdiction(session.jurisdiction); }
 
@@ -221,6 +227,7 @@ async function boot(): Promise<void> {
     layout = computeLayout(innerWidth, innerHeight, matchMedia('(pointer: coarse)').matches);
     scene.layout(layout);
     ui.layout(layout);
+    cat?.setHeight(layout.design.cat.height);
     cat?.resize(layout.scale, Math.min(devicePixelRatio || 1, layout.cls === 'portrait' || layout.cls === 'short' ? 1.5 : 2));
   };
   relayout();
@@ -245,7 +252,7 @@ async function boot(): Promise<void> {
   });
 
   // ---------------- dev / QA
-  if (__DEV_TOOLS__) { const dev = await import('./dev/qa'); dev.installQa({ app, clock, game, scene, presenter, ui, audio, provider: provider as Provider, cfg, cat: () => cat, celebration, relayout, fmt }); }
+  if (__DEV_TOOLS__) { const dev = await import('./dev/qa'); dev.installQa({ app, clock, game, scene, presenter, ui, audio, provider: provider as Provider, cfg, cat: () => cat, celebration, relayout, fmt, settings: (s) => applySettings(s as Partial<typeof ui.settings>) }); }
 
   // ---------------- replay mode (URL)
   if (replay) {
@@ -266,6 +273,7 @@ async function boot(): Promise<void> {
   ]);
   gsap.to(scene.cam, { alpha: 0.35, duration: 0.6, overwrite: true });
   if (!(__DEV_TOOLS__ && q.get('skipWelcome') === '1')) await welcome.wait();
+  const welcomeLogo = welcome.node.querySelector('.w-logo')?.getBoundingClientRect() ?? null;
   await audio.unlock();
   audio.ambience('amb_city', 1.5);
   audio.music('music_base', 2);
@@ -273,17 +281,45 @@ async function boot(): Promise<void> {
   // entrance: decor, grid and HUD settle, the cat lands (dive) or fades in from its still pose
   gsap.to(scene.cam, { alpha: 1, duration: 0.5, overwrite: true });
   ui.hide(false);
+  ui.flyLogoFrom(welcomeLogo);
+  // jurisdiction: net position / session timer
+  if (session && (session.jurisdiction.displayNetPosition || session.jurisdiction.displaySessionTimer)) {
+    const tick = () => {
+      const j = session.jurisdiction;
+      const s = Math.floor((Date.now() - game.sessionStart) / 1000);
+      const hh = String(Math.floor(s / 3600)).padStart(2, '0'), mm = String(Math.floor((s % 3600) / 60)).padStart(2, '0'), ss = String(s % 60).padStart(2, '0');
+      const net = game.sessionWins - game.sessionBets;
+      ui.setSessionInfo(j.displayNetPosition ? `${net >= 0 ? '+' : '−'}${fmt(Math.abs(net))}` : null, j.displaySessionTimer ? `${hh}:${mm}:${ss}` : null);
+    };
+    tick(); setInterval(tick, 1000);
+  }
   const reduced = ui.settings.reduced;
   const ok3d = cat ? await Promise.race([
     loadCatModules().then((m) => cat!.init3d(m.bundle, layout.scale, Math.min(devicePixelRatio || 1, layout.cls === 'portrait' || layout.cls === 'short' ? 1.5 : 2))),
     new Promise<boolean>((r) => setTimeout(() => r(false), 8000)),
   ]).catch(() => false) : false;
+  if (cat) cat.onCue = (c) => {
+    if (c !== 'land') return;
+    // landing: cyan shock wave + dust hide the fist under the floor, short shake, the shadow grows
+    const f = layout.design.cat;
+    scene.shapes.ring(f.x, f.y, 20, f.height * 0.75, 0.6, 0x3feaff, 10);
+    scene.shapes.ring(f.x, f.y, 10, f.height * 0.45, 0.45, 0xffffff, 6);
+    scene.particles.burst({ x: f.x, y: f.y - 8, n: 26, frame: 11, speed: [80, 320], life: [0.4, 0.9], size: [40, 90], gravity: 120, spread: Math.PI * 0.9, dir: -Math.PI / 2, add: false });
+    scene.particles.burst({ x: f.x, y: f.y - 10, n: 16, frame: 0, speed: [120, 420], life: [0.2, 0.5], size: [10, 22], tint: 0x9af6ff });
+    scene.shake(0.08, 8);
+    audio.play('dive_impact');
+  };
   if (ok3d && cat) {
     cat.setTurbo(game.turbo);
     cat.setReduced(reduced);
     cat.go3d('idle');
-    if (!reduced) { cat.request('intro'); audio.play('dive_impact', { delay: 0.35 }); scene.shake(0.08, 7); }
-  }
+    if (!reduced) {
+      cat.request('intro');
+      // a trail falls from the top of the screen onto the cat's spot
+      const f = layout.design.cat, top = -layout.offY / layout.scale;
+      scene.shapes.beam(f.x, top, f.x, f.y - f.height * 0.4, 0.45, 0x9af6ff);
+    } else { cat.root.alpha = 0; gsap.to(cat.root, { alpha: 1, duration: 0.6 }); }
+  } else if (cat) { cat.root.alpha = 0; gsap.to(cat.root, { alpha: 1, duration: 0.6 }); }
   // active round (reload in the middle of a bonus): resume without a new debit
   const active = session?.activeRound;
   game.fsm.go('entering');

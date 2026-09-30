@@ -11,6 +11,15 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const fail = [];
 const warn = [];
+// « démo », « test », « fun », « crédit », « PROVISOIRE », placeholders - in every Engine language
+const FORBIDDEN = [
+  /\bd[ée]mo\b/i, /\btest\b/i, /\bfun\b/i, /\bcr[ée]dits?\b/i, /\bPROVISOIRE\b/i, /placeholder/i, /\blorem\b/i, /\bTODO\b/,
+  /d[ée]monstra/i, /demostraci/i, /\bprueba\b/i, /\bteste\b/i, /\btesti\b/i, /\btestu\b/i, /\bdeneme\b/i, /\buji coba\b/i, /th[ửu] nghi[ệe]m/i, /d[ùu]ng th[ửu]/i,
+  /cr[ée]dito/i, /\bkredi(t|ts|ty|tt)?\b/i, /\bkredyt/i, /krediitti/i, /t[íi]n d[ụu]ng/i, /\bSpa(ß|ss)\b/i, /\bdivers[ãa]o\b/i, /\bdiversi[óo]n\b/i,
+  /демо/i, /тест/i, /кредит/i, /デモ/, /テスト/, /クレジット/, /데모/, /테스트/, /크레딧/, /演示/, /测试/, /试玩/, /信用/,
+  /تجريبي/, /اختبار/, /ائتمان/, /डेमो/, /टेस्ट/, /परीक्षण/, /क्रेडिट/,
+];
+
 
 if (args.includes('--pre')) {
   const plan = JSON.parse(readFileSync(resolve(ROOT, 'assets/plan.json'), 'utf8'));
@@ -30,6 +39,15 @@ if (args.includes('--pre')) {
   }
 }
 
+// every translation file (source), all languages: node tools/check-release.mjs --locales (also run by --pre)
+if (args.includes('--locales') || args.includes('--pre')) {
+  const LOC = resolve(ROOT, 'src/i18n/locales');
+  for (const f of readdirSync(LOC).filter((n) => n.endsWith('.json'))) {
+    const dict = JSON.parse(readFileSync(join(LOC, f), 'utf8'));
+    for (const [k, v] of Object.entries(dict)) for (const re of FORBIDDEN) if (re.test(String(v))) { fail.push(`${f} ${k} : mot interdit (${re}) dans "${String(v).slice(0, 70)}"`); break; }
+  }
+}
+
 if (args.includes('--post')) {
   const dir = resolve(ROOT, args[args.indexOf('--post') + 1] ?? 'dist-public');
   const files = [];
@@ -38,7 +56,6 @@ if (args.includes('--post')) {
   const text = files.filter((f) => ['.js', '.html', '.css', '.json'].includes(extname(f)));
   const DEV_MARKERS = ['__qaPlay', '__qaStep', 'dev-panel', 'TEST ANIM', 'standInTexture', 'stand-ins', 'forcer le prochain', 'test-rig', '__DEV_TOOLS__'];
   // visible-word check on translations + html (JS identifiers like .test( are not visible text)
-  const FORBIDDEN = [/\bd[ée]mo\b/i, /\btest\b/i, /\bfun\b/i, /\bcr[ée]dits?\b/i, /\bPROVISOIRE\b/i, /placeholder/i, /\blorem\b/i];
   for (const f of text) {
     const s = readFileSync(f, 'utf8');
     const rel = relative(dir, f);

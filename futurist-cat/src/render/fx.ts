@@ -15,6 +15,8 @@ export class Particles {
   private frames: Texture[] = [];
   lowQuality = false;
   reduced = false;
+  /** e.g. while a skip jumps a timeline: no burst */
+  suppress: (() => boolean) | null = null;
 
   constructor(private readonly assets: AssetStore, private readonly renderer: Renderer, private readonly rand: Rand, size = 420) {
     this.frames = assets.sheet('fx.sheet', renderer);
@@ -27,7 +29,7 @@ export class Particles {
   }
 
   burst(o: { x: number; y: number; n: number; frame: number; speed: [number, number]; life: [number, number]; size: [number, number]; gravity?: number; tint?: number; spread?: number; dir?: number; add?: boolean; spin?: number; shrink?: boolean }): void {
-    if (this.reduced) return;
+    if (this.reduced || this.suppress?.()) return;
     const n = this.lowQuality ? Math.ceil(o.n / 2) : o.n;
     let made = 0;
     for (const p of this.pool) {

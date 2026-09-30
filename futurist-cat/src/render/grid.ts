@@ -96,8 +96,10 @@ export class ReelView {
     gsap.delayedCall(delay, () => {
       this.phase = 'accel';
       for (const v of this.views) v.setSpinning(true);
-      // anticipation-friendly acceleration: a small lift then full speed
-      gsap.fromTo(this, { offset: this.offset }, { offset: this.offset - this.pitch * 0.12, duration: 0.08, ease: 'power1.out', onComplete: () => { this.targetSpeed = T.spin.speed; this.phase = 'spin'; } });
+      // straight acceleration (no roll-back): speed eases up to full in ~0.14 s
+      this.speed = T.spin.speed * 0.25;
+      this.targetSpeed = T.spin.speed;
+      gsap.delayedCall(T.spin.accel, () => { if (this.phase === 'accel') this.phase = 'spin'; });
     });
   }
 

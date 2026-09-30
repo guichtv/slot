@@ -63,6 +63,8 @@ export class Ui implements UiBridge {
   private images: Record<string, string> = {};
   settings: Settings = { master: 0.8, music: 0.6, sfx: 0.9, turbo: false, reduced: false, quality: 'high' };
   private historyRows: HistoryRow[] = [];
+  private sessionInfo: HTMLDivElement;
+  private replayBar: HTMLDivElement | null = null;
 
   constructor(parent: HTMLElement, private readonly h: UiHandlers) {
     this.root = el('div', { id: 'ui', class: 'ui' });
@@ -71,7 +73,8 @@ export class Ui implements UiBridge {
     this.logo = el('img', { class: 'logo', alt: t('game.name'), draggable: 'false' });
     this.anteBtn = el('button', { class: 'ante', type: 'button', 'aria-pressed': 'false' });
     this.counter = el('div', { class: 'spins-counter', role: 'status', 'aria-live': 'polite' });
-    this.top = el('div', { class: 'top' }, this.logo, this.anteBtn, this.counter);
+    this.sessionInfo = el('div', { class: 'session-info', 'aria-live': 'off' });
+    this.top = el('div', { class: 'top' }, this.logo, this.anteBtn, this.counter, this.sessionInfo);
     // HUD
     this.buyBtn = el('button', { class: 'btn buy', type: 'button' }, el('span', { class: 'buy-label' }));
     this.betDown = el('button', { class: 'btn round minus', type: 'button' });
@@ -159,6 +162,41 @@ export class Ui implements UiBridge {
     this.autoBtn.hidden = j.disabledAutoplay;
     this.buyBtn.hidden = j.disabledBuyFeature;
     this.fsBtn.hidden = j.disabledFullscreen || !document.fullscreenEnabled;
+    this.sessionInfo.hidden = !(j.displayNetPosition || j.displaySessionTimer);
+  }
+
+  /** jurisdiction: net position and/or session timer */
+  setSessionInfo(net: string | null, timer: string | null): void {
+    const parts: string[] = [];
+    if (net !== null) parts.push(`${t('hud.net')} ${net}`);
+    if (timer !== null) parts.push(`${t('hud.session')} ${timer}`);
+    this.sessionInfo.textContent = parts.join('   ');
+  }
+
+  /** replay: badge, bet, win, pause / stop / watch again (no wallet call, no bet) */
+  showReplayBar(o: { bet: string; onStop: () => void; onAgain: () => void; onPause: (paused: boolean) => void }): void {
+    this.hideReplayBar();
+    let paused = false;
+    const pause = el('button', { class: 'btn small', type: 'button', text: t('replay.pause') });
+    pause.addEventListener('click', () => { paused = !paused; pause.textContent = paused ? t('replay.play') : t('replay.pause'); o.onPause(paused); });
+    const stop = el('button', { class: 'btn small', type: 'button', text: t('replay.stop') });
+    stop.addEventListener('click', () => o.onStop());
+    const again = el('button', { class: 'btn small', type: 'button', text: t('replay.again') });
+    again.addEventListener('click', () => o.onAgain());
+    this.replayBar = el('div', { class: 'replay-bar', role: 'toolbar', 'aria-label': t('replay.title') }, el('b', { text: t('replay.title') }), el('span', { class: 'rb-bet', text: t('replay.bet', { v: o.bet }) }), el('span', { class: 'rb-win' }), pause, stop, again);
+    this.root.append(this.replayBar);
+  }
+  setReplayWin(text: string): void { const w = this.replayBar?.querySelector('.rb-win'); if (w) w.textContent = t('replay.win', { v: text }); }
+  hideReplayBar(): void { this.replayBar?.remove(); this.replayBar = null; }
+
+  /** entrance: the logo flies from the welcome screen to its place */
+  flyLogoFrom(r: DOMRect | null): void {
+    if (!r || !this.logo.src) return;
+    const to = this.logo.getBoundingClientRect();
+    if (!to.width) return;
+    const sx = r.width / to.width, sy = r.height / to.height, k = Math.min(sx, sy);
+    const dx = r.left + r.width / 2 - (to.left + to.width / 2), dy = r.top + r.height / 2 - (to.top + to.height / 2);
+    this.logo.animate([{ transform: `translate(${dx}px, ${dy}px) scale(${k})` }, { transform: 'none' }], { duration: 650, easing: 'cubic-bezier(.3,.1,.2,1)' });
   }
 
   layout(l: Layout): void {

@@ -12,7 +12,7 @@ import {
  * relative to the peak. fadeInMs / fadeOutMs: raised-cosine edge fades (ends are exactly 0).
  */
 export function finalizeOneShot(chs, {
-  targetDb = -1, hp = 28, lp = null, limitDb = null, fadeInMs = 0.5, fadeOutMs = 50, trimDb = -54, minDur = 0.05, maxDur = null,
+  targetDb = -1, hp = 28, lp = null, limitDb = null, fadeInMs = 0.5, fadeOutMs = 60, trimDb = -50, minDur = 0.05, maxDur = null,
 } = {}) {
   chs = chs.map((c) => Float32Array.from(c));
   for (const c of chs) {

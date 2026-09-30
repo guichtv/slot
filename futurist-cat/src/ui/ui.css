@@ -3,8 +3,8 @@
 :root {
   --c-white: #eef3f9; --c-shade: #c9d3e0; --c-blue: #2f6fe0; --c-deep: #1b3f8f; --c-cyan: #3feaff; --c-glow: #9af6ff;
   --c-ink: #0a0d14; --c-night: #0b1230; --c-glass: rgba(9, 16, 42, 0.86); --c-magenta: #ff3fa4; --c-amber: #ffb547;
-  --f-display: 'Oxanium', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans Arabic', 'Noto Sans Devanagari', sans-serif;
-  --f-ui: 'Chakra Petch', 'Oxanium', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans Arabic', 'Noto Sans Devanagari', sans-serif;
+  --f-display: 'Oxanium', 'Exo 2', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans Arabic', 'Noto Sans Devanagari', sans-serif;
+  --f-ui: 'Chakra Petch', 'Exo 2', 'Oxanium', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans Arabic', 'Noto Sans Devanagari', sans-serif;
   --hud-bottom: 112px; --hud-right: 0px;
 }
 * { box-sizing: border-box; }
@@ -39,6 +39,10 @@ button:disabled { cursor: default; }
 .spins-counter.on { opacity: 1; }
 .spins-counter.pulse { animation: pulse .45s ease-out; }
 @keyframes pulse { 0% { transform: translate(-50%,-50%) scale(1.25); } 100% { transform: translate(-50%,-50%) scale(1); } }
+
+/* jurisdiction: net position / session timer */
+.session-info { left: 50%; top: max(6px, env(safe-area-inset-top)); transform: translateX(-50%); padding: .2em .9em; border-radius: 99px; background: var(--c-glass); border: 1px solid rgba(238,243,249,.4); font-family: var(--f-display); font-size: 13px; white-space: nowrap; pointer-events: none; }
+.session-info:empty, .session-info[hidden] { display: none; }
 
 /* ---------------------------------------------------------------- HUD (xl default) */
 .hud { position: fixed; left: 0; right: 0; bottom: 0; height: var(--hud-bottom); display: grid; align-items: center; pointer-events: none;
@@ -99,23 +103,25 @@ button:disabled { cursor: default; }
 .ui[data-cls="tablet"] .field.balance, .ui[data-cls="tablet"] .field.win { min-width: 110px; }
 .ui[data-cls="tablet"] .btn.buy { min-width: 130px; height: 58px; padding-left: 54px; }
 .ui[data-cls="tablet"] .buy-label { font-size: 15px; }
-/* portrait: two rows - row 1: bet (- value +), win, balance; row 2: BUY BONUS, turbo, SPIN, autoplay */
-.ui[data-cls="portrait"] .hud { grid-template-columns: auto 1fr 1fr; grid-template-rows: auto 1fr; gap: 4px 8px; padding-top: 14px; align-items: center; }
+/* portrait: row 1 win | balance (full width, 10-digit amounts); row 2 bet (- value +) | turbo SPIN auto;
+   BUY BONUS above the HUD on the left (free space under the grid); system buttons in a row top-right */
+.ui[data-cls="portrait"] .hud { grid-template-columns: auto 1fr; grid-template-rows: auto 1fr; gap: 2px 8px; padding-top: 12px; align-items: center; }
 .ui[data-cls="portrait"] .hud-panel { inset: 8px 6px 4px; border-radius: 30px; }
-.ui[data-cls="portrait"] .grp-bet { grid-column: 1; grid-row: 1; gap: 4px; }
-.ui[data-cls="portrait"] .grp-fields { grid-column: 2 / 4; grid-row: 1; justify-content: space-around; gap: 6px; }
-.ui[data-cls="portrait"] .grp-buy { grid-column: 1; grid-row: 2; }
-.ui[data-cls="portrait"] .grp-spin { grid-column: 2 / 4; grid-row: 2; justify-content: center; }
-.ui[data-cls="portrait"] .grp-sys { position: fixed; right: max(10px, env(safe-area-inset-right)); top: max(10px, env(safe-area-inset-top)); flex-direction: column; gap: 8px; }
-.ui[data-cls="portrait"] .btn.spin { margin-top: 0; width: 96px; height: 96px; }
-.ui[data-cls="portrait"] .spin-label { font-size: 21px; }
-.ui[data-cls="portrait"] .field .val { font-size: 16px; }
+.ui[data-cls="portrait"] .grp-fields { grid-column: 1 / -1; grid-row: 1; justify-content: space-between; gap: 10px; padding: 0 10px; }
+.ui[data-cls="portrait"] .grp-bet { grid-column: 1; grid-row: 2; gap: 4px; }
+.ui[data-cls="portrait"] .grp-spin { grid-column: 2; grid-row: 2; justify-content: flex-end; gap: 8px; }
+.ui[data-cls="portrait"] .grp-buy { position: fixed; left: max(12px, env(safe-area-inset-left)); bottom: calc(var(--hud-bottom) + 10px); }
+.ui[data-cls="portrait"] .grp-sys { position: fixed; right: max(8px, env(safe-area-inset-right)); top: max(8px, env(safe-area-inset-top)); flex-direction: row; gap: 6px; }
+.ui[data-cls="portrait"] .btn.spin { margin-top: 0; width: 92px; height: 92px; }
+.ui[data-cls="portrait"] .spin-label { font-size: 20px; }
+.ui[data-cls="portrait"] .field .val { font-size: 15px; }
 .ui[data-cls="portrait"] .field .lbl { font-size: 10px; }
-.ui[data-cls="portrait"] .field.balance, .ui[data-cls="portrait"] .field.win { min-width: 0; flex: 1; }
-.ui[data-cls="portrait"] .field.bet { min-width: 64px; }
+.ui[data-cls="portrait"] .field.balance, .ui[data-cls="portrait"] .field.win { min-width: 0; flex: 1 1 50%; }
+.ui[data-cls="portrait"] .field.bet { min-width: 58px; }
+.ui[data-cls="portrait"] .field.bet .val { font-size: 14px; }
 .ui[data-cls="portrait"] .btn.round { width: 44px; height: 44px; }
-.ui[data-cls="portrait"] .btn.buy { min-width: 0; height: 52px; padding: 0 12px 0 46px; }
-.ui[data-cls="portrait"] .buy-label { font-size: 13px; white-space: normal; text-align: center; max-width: 5.5em; }
+.ui[data-cls="portrait"] .btn.buy { min-width: 0; height: 52px; padding: 0 14px 0 48px; }
+.ui[data-cls="portrait"] .buy-label { font-size: 13px; }
 /* short landscape: right column */
 .ui[data-cls="short"] .hud { top: 0; left: auto; right: 0; bottom: 0; width: var(--hud-right); height: auto; display: flex; flex-direction: column; justify-content: space-between; align-items: center; gap: 4px;
   padding: max(6px, env(safe-area-inset-top)) max(6px, env(safe-area-inset-right)) max(6px, env(safe-area-inset-bottom)) 6px; }

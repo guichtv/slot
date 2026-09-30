@@ -24,6 +24,7 @@ export interface GameDeps {
   ui: Ui;
   format: (micros: number) => string;
   onSound?: (id: string) => void;
+  jumping?: (on: boolean) => void;
 }
 
 export interface RoundRecord { id: number; mode: ModeId; betMicros: number; winMicros: number; book: Book }
@@ -44,6 +45,10 @@ export class GameController {
   onRoundEnd = new Set<(r: RoundRecord | null) => void>();
   onState = new Set<() => void>();
   replaying = false;
+  /** session net position (wins - bets), for jurisdictions that display it */
+  sessionBets = 0;
+  sessionWins = 0;
+  readonly sessionStart = Date.now();
 
   constructor(private readonly d: GameDeps) {}
 
@@ -122,7 +127,9 @@ export class GameController {
     const started = performance.now();
     const bet = this.bet;
     this.fsm.go('requesting');
-    this.d.presenter.startSpin();
+    // one-spin features show their intro BEFORE the reels move (the reveal starts them)
+    if (mode !== 'SCAN' && mode !== 'DOUBLE_SCAN') this.d.presenter.startSpin();
+    else this.d.ui.setPhase('resolving');
     let res;
     try {
       res = await this.d.provider.play(mode, bet);
@@ -131,6 +138,7 @@ export class GameController {
       this.busy = false;
       return;
     }
+    this.sessionBets += cost;
     this.balance = res.balanceMicros; // server balance after the debit
     this.d.ui.setBalance(this.balance);
     await this.runRound(res.book, mode, bet, res.roundId, res.active, 0, started);
@@ -154,7 +162,7 @@ export class GameController {
     const token = new CancelToken();
     this.roundToken = token;
     const player = new RoundPlayer(book, {
-      clock: this.d.clock, presenter: this.d.presenter, turbo: () => this.turbo, startIndex,
+      clock: this.d.clock, presenter: this.d.presenter, turbo: () => this.turbo, startIndex, ...(this.d.jumping ? { jumping: this.d.jumping } : {}),
       nextClick: (tk) => new Promise<void>((res) => { const p = this.d.ui.catcher.next(); tk.onCancel(() => res()); void p.then(res); }),
       onProgress: async (e) => {
         if (e.type === 'updateFreeSpin' || e.type === 'freeSpinTrigger' || e.type === 'freeSpinEnd') await this.d.provider.saveProgress(String(e.index + 1));
@@ -169,6 +177,7 @@ export class GameController {
     this.player = null;
     await this.finishRound(active);
     const rec: RoundRecord = { id: roundId, mode, betMicros: bet, winMicros: bookToMicros(book.payoutMultiplier, bet), book };
+    this.sessionWins += rec.winMicros;
     this.history.unshift(rec);
     if (this.history.length > 50) this.history.pop();
     this.d.ui.addHistory({ id: rec.id, mode, bet: this.d.format(bet), win: this.d.format(rec.winMicros) });
@@ -269,28 +278,44 @@ export class GameController {
   }
 
   /** local replay of a past round: no wallet call, no bet */
-  async replay(book: Book, betMicros: number): Promise<void> {
+  async replay(book: Book, betMicros: number, o: { bar?: boolean } = {}): Promise<void> {
     if (!this.idle) return;
     this.busy = true;
     this.replaying = true;
     this.d.ui.hide(false);
     this.fsm.go('replay');
-    this.d.presenter.startSpin();
-    const token = new CancelToken();
-    this.roundToken = token;
-    const player = new RoundPlayer(book, { clock: this.d.clock, presenter: this.d.presenter, turbo: () => this.turbo, nextClick: (tk) => new Promise<void>((res) => { void this.d.ui.catcher.next().then(res); tk.onCancel(() => res()); }) });
-    this.player = player;
     const saveBet = this.betIndex;
     const bi = this.session?.betLevels.indexOf(betMicros) ?? -1;
     if (bi >= 0) this.betIndex = bi;
-    try { await player.play(token); } catch (e) { if (!isCancelled(e)) console.error(e); }
-    this.player = null;
+    let again = true;
+    while (again) {
+      again = false;
+      if (o.bar !== false) {
+        this.d.ui.showReplayBar({
+          bet: this.d.format(betMicros),
+          onStop: () => { this.d.clock.speed = 1; this.player?.skipAll(); },
+          onAgain: () => { this.d.clock.speed = 1; again = true; this.player?.skipAll(); },
+          onPause: (p) => { this.d.clock.speed = p ? 0 : 1; },
+        });
+      }
+      this.d.presenter.startSpin();
+      const token = new CancelToken();
+      this.roundToken = token;
+      const player = new RoundPlayer(book, { clock: this.d.clock, presenter: this.d.presenter, turbo: () => this.turbo, ...(this.d.jumping ? { jumping: this.d.jumping } : {}), nextClick: (tk) => new Promise<void>((res) => { void this.d.ui.catcher.next().then(res); tk.onCancel(() => res()); }) });
+      this.player = player;
+      try { await player.play(token); } catch (e) { if (!isCancelled(e)) console.error(e); }
+      this.player = null;
+      this.d.ui.setReplayWin(this.d.format(bookToMicros(book.payoutMultiplier, betMicros)));
+      if (again) this.d.presenter.resetVisuals();
+    }
+    this.d.clock.speed = 1;
     this.betIndex = saveBet;
     this.replaying = false;
     this.fsm.go('idle');
     this.busy = false;
     this.d.ui.setPhase('idle');
     this.refreshHud();
+    if (o.bar !== false) setTimeout(() => this.d.ui.hideReplayBar(), 2500);
   }
 
   stopReplay(): void { this.player?.skipAll(); }

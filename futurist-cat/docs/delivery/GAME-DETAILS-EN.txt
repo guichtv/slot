@@ -1,0 +1,13 @@
+CYBER CAT - Crownforge
+
+A white-and-blue robot cat keeps watch from a glass rooftop lab above a rainy neon city. Cats chase laser dots; this one fires them. When its eyes light up, a cyan dot hops across three to eight cells of the 5x4 grid. Every cell it lands on steps up one level (glyph, better glyph, then premium objects: a can of nano-food, a fibre-optic yarn ball, a chrome robot fish and the mouse-drone at the top). The last cell gets a x2 to x10 multiplier for every way running through it. The cat follows its dot with its head, so the whole move reads without a word of text.
+
+1024 ways, 5 reels x 4 rows, no cascades. WILD (the cat's "C" emblem) on reels 2 to 5, SCATTER (a cat-eye portal) anywhere.
+
+NINE LIVES (3 scatters): 9 free spins, one laser dot per spin. Every visited cell keeps a chip until the end of the bonus, and any symbol landing on a chip arrives levelled up by +1 to +3 (shown by the chevrons and the number). The grid lights up like a circuit board; the city switches to scan mode.
+DOUBLE GAZE (4+ scatters): 9 free spins with two dots per spin, one per eye, and chips already on the grid. Crossing multipliers are shown as the book applies them.
+Features: SCAN (one spin with a guaranteed dot) and DOUBLE SCAN (one spin, two dots), both announced as one spin; direct purchase of both bonuses; Ante for more scatters.
+
+Big wins start at x10 the bet on a single spin, with a new idea at each tier: the city lights up, holo-chips rain, a drone swarm draws the "C", the elevated train races past, the whole city overloads, and for the max win the cat's eyes fill the sky.
+
+The cat is a real-time 3D model (three.js) blended into the 2D scene, with its own lighting, emissive eyes and contact shadow; all illustrations share its white ceramic, anodized blue and cyan light materials.

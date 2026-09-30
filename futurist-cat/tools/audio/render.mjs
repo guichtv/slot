@@ -12,7 +12,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ffmpegPath from 'ffmpeg-static';
 import { CUES } from './cues/index.mjs';
-import { makeRng, seedFrom, SR, toDb, momentaryMax, samplePeak, rms, hasBadSamples, clamp, kWeight } from './lib/dsp.mjs';
+import { makeRng, seedFrom, SR, db, toDb, momentaryMax, samplePeak, rms, hasBadSamples, clamp, kWeight, scale } from './lib/dsp.mjs';
 import { finalizeOneShot, finalizeLoop } from './lib/master.mjs';
 import { encodeWav } from './lib/wav.mjs';
 import { Mix } from './lib/synth.mjs';
@@ -23,13 +23,20 @@ const WORK = join(HERE, '.work');
 const OUT = join(ROOT, 'public/audio');
 const MANIFEST = join(OUT, 'manifest.json');
 
-// Encoder settings per bus. Vorbis quality is VBR (q4 ~ 128 kb/s stereo), AAC is ABR.
-const ENC = {
-  ui: { q: 5, aac: '128k' },
-  sfx: { q: 5, aac: '128k' },
-  music: { q: 4, aac: '128k' },
-  amb: { q: 3, aac: '128k' },
-};
+// Encoder settings. Vorbis is VBR (q4 ~ 128 kb/s stereo), AAC-LC is ABR.
+// Music keeps q4 / 128k. Mono SFX use 96k AAC (= 192k stereo per-channel quality); the ambience
+// beds (noise-like, ~-30 dBFS RMS under the music) use q2 / 80k to keep the bundle small.
+function encSettings(bus, channels) {
+  if (bus === 'music') return { q: 4, aac: '128k' };
+  if (bus === 'amb') return { q: 2, aac: '80k' };
+  return { q: 4, aac: channels === 1 ? '96k' : '128k' };
+}
+// Delivered files must stay below this decoded peak (lossy codecs can overshoot the WAV peak).
+const ENCODED_PEAK_MAX_DB = -0.6;
+// Cue `loud` values are K-weighted momentary-max targets (dBFS, 200 ms window). This offset
+// calibrates them against the music bed (music_base at the runtime's default music volume) so
+// that gameplay SFX sit clearly above the music. gainDb = clamp(loud + offset - measured, -30, 0).
+const LOUDNESS_OFFSET_DB = 3;
 
 function parseArgs(argv) {
   const a = { only: null, encode: true, force: false, list: false };
@@ -66,11 +73,24 @@ function ffmpeg(args) {
   if (r.status !== 0) throw new Error(`ffmpeg failed: ${r.stderr || r.error}`);
 }
 
-function encode(id, wavPath, bus) {
-  const e = ENC[bus];
+function encode(id, wavPath, bus, channels) {
+  const e = encSettings(bus, channels);
   const common = ['-i', wavPath, '-map_metadata', '-1', '-fflags', '+bitexact', '-flags:a', '+bitexact', '-ar', String(SR)];
   ffmpeg([...common, '-c:a', 'libvorbis', '-q:a', String(e.q), join(OUT, `${id}.ogg`)]);
   ffmpeg([...common, '-c:a', 'aac', '-b:a', e.aac, '-movflags', '+faststart', join(OUT, `${id}.m4a`)]);
+}
+
+/** Decoded sample peak (dBFS) of an encoded file. */
+function decodedPeakDb(path) {
+  const r = spawnSync(ffmpegPath, ['-hide_banner', '-loglevel', 'error', '-i', path, '-f', 'f32le', '-acodec', 'pcm_f32le', '-'], { maxBuffer: 1 << 30 });
+  if (r.status !== 0) throw new Error(`ffmpeg decode failed: ${r.stderr}`);
+  const f = new Float32Array(r.stdout.buffer, r.stdout.byteOffset, Math.floor(r.stdout.byteLength / 4));
+  let m = 0;
+  for (let i = 0; i < f.length; i++) {
+    const v = Math.abs(f[i]);
+    if (v > m) m = v;
+  }
+  return toDb(m);
 }
 
 function main() {
@@ -96,19 +116,39 @@ function main() {
     let chs = matchChannels(toChannels(cue.gen(rng)), cue.channels ?? 1);
     chs = cue.loop ? finalizeLoop(chs, cue.master) : finalizeOneShot(chs, cue.master);
     if (hasBadSamples(chs)) throw new Error(`${cue.id}: NaN/Inf in output`);
-    const wav = encodeWav(chs, SR);
     const wavPath = join(WORK, `${cue.id}.wav`);
-    writeFileSync(wavPath, wav);
-    const hash = createHash('sha1').update(wav).digest('hex').slice(0, 10);
     const hashPath = join(WORK, `${cue.id}.hash`);
+    let wav = encodeWav(chs, SR);
+    const baseHash = createHash('sha1').update(wav).digest('hex').slice(0, 10);
+    // encode cache key: rendered WAV content + encoder settings
+    const encKey = createHash('sha1').update(`${baseHash}|${JSON.stringify(encSettings(cue.bus, chs.length))}|${ENCODED_PEAK_MAX_DB}`).digest('hex').slice(0, 10);
     const outOk = existsSync(join(OUT, `${cue.id}.ogg`)) && existsSync(join(OUT, `${cue.id}.m4a`));
-    const same = existsSync(hashPath) && readFileSync(hashPath, 'utf8') === hash && outOk;
-    if (args.encode && (args.force || !same)) {
-      encode(cue.id, wavPath, cue.bus);
-      writeFileSync(hashPath, hash);
+    const cached = existsSync(hashPath) ? readFileSync(hashPath, 'utf8').split(' ') : [];
+    const same = cached[0] === encKey && outOk;
+    // trimDb: gain removed from the WAV because the lossy codecs overshot the peak ceiling
+    let trimDb = same ? Number(cached[1] || 0) : 0;
+    if (trimDb) {
+      scale(chs, db(trimDb));
+      wav = encodeWav(chs, SR);
     }
+    writeFileSync(wavPath, wav);
+    if (args.encode && (args.force || !same)) {
+      for (let pass = 0; pass < 4; pass++) {
+        encode(cue.id, wavPath, cue.bus, chs.length);
+        const pk = Math.max(decodedPeakDb(join(OUT, `${cue.id}.ogg`)), decodedPeakDb(join(OUT, `${cue.id}.m4a`)));
+        if (pk <= ENCODED_PEAK_MAX_DB) break;
+        const g = ENCODED_PEAK_MAX_DB - 0.25 - pk;
+        trimDb += g;
+        scale(chs, db(g));
+        wav = encodeWav(chs, SR);
+        writeFileSync(wavPath, wav);
+      }
+      if (trimDb) console.log(`   ${cue.id}: codec overshoot, WAV trimmed ${trimDb.toFixed(2)} dB`);
+    }
+    const hash = createHash('sha1').update(wav).digest('hex').slice(0, 10);
+    if (args.encode) writeFileSync(hashPath, `${encKey} ${Math.round(trimDb * 1000) / 1000} ${hash}`);
     const mom = toDb(momentaryMax(kWeight(chs)));
-    const gainDb = cue.loud == null ? 0 : Math.round(clamp(cue.loud - mom, -30, 0) * 2) / 2;
+    const gainDb = cue.loud == null ? 0 : Math.round(clamp(cue.loud + LOUDNESS_OFFSET_DB - mom, -30, 0) * 2) / 2;
     const entry = {
       files: { ogg: `${cue.id}.ogg`, m4a: `${cue.id}.m4a` },
       duration: Math.round((chs[0].length / SR) * 10000) / 10000,

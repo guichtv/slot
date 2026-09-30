@@ -17,7 +17,7 @@ interface ChipView { root: Container; sprite: Sprite; label: BitmapText; level: 
 export interface MechHooks {
   eyesWorld(): { x: number; y: number };
   lookAt(p: { x: number; y: number } | null): void;
-  sound(id: string, o?: { rate?: number }): void;
+  sound(id: string, o?: { rate?: number; hop?: number; level?: number }): void;
   quiet(): boolean; // skipping: no cosmetic particles
 }
 
@@ -103,7 +103,7 @@ export class Mechanic {
       c.sprite.texture = this.chipTexture(level);
       c.label.text = `+${level}`;
       this.drawCircuit();
-      this.hooks.sound(level > 1 ? 'chip_level' : 'chip_place', { rate: 1 + (level - 1) * 0.12 });
+      this.hooks.sound(level > 1 ? 'chip_level' : 'chip_place', { level });
     });
     tl.add(() => {
       const cv = this.chips.get(k); if (!cv) return;
@@ -192,7 +192,7 @@ export class Mechanic {
           this.hooks.lookAt({ x, y });
           this.dotTrail.clear().moveTo(a.x, a.y).lineTo(x, y).stroke({ color: 0x3feaff, width: 3, alpha: 0.35 * (1 - st.u) });
         } }, t);
-        tl.call(() => this.hooks.sound('laser_hop', { rate: 1 + i * 0.06 }), undefined, t);
+        tl.call(() => this.hooks.sound('laser_hop', { hop: i }), undefined, t);
         t += hop;
       }
       // landing: ring + upgrade (+ chip)
